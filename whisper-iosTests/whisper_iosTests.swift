@@ -1,10 +1,3 @@
-//
-//  whisper_iosTests.swift
-//  whisper-iosTests
-//
-//  Created by Yasutaka Odo on 2022/12/14.
-//
-
 import XCTest
 @testable import whisper_ios
 

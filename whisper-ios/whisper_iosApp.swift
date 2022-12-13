@@ -1,17 +1,21 @@
-//
-//  whisper_iosApp.swift
-//  whisper-ios
-//
-//  Created by Yasutaka Odo on 2022/12/14.
-//
-
 import SwiftUI
 
 @main
-struct whisper_iosApp: App {
+struct whisperTestApp: App {
+    init() {
+        #if DEBUG
+        var injectionBundlePath = "/Applications/InjectionIII.app/Contents/Resources"
+        #if targetEnvironment(macCatalyst)
+        injectionBundlePath = "\(injectionBundlePath)/macOSInjection.bundle"
+        #elseif os(iOS)
+        injectionBundlePath = "\(injectionBundlePath)/iOSInjection.bundle"
+        #endif
+        Bundle(path: injectionBundlePath)?.load()
+        #endif
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RecordList()
         }
     }
 }

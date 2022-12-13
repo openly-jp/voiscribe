@@ -8,12 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
-		5A8F54F72948CCDB00E87D25 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F62948CCDB00E87D25 /* ContentView.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
 		5A8F55062948CCDD00E87D25 /* whisper_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55052948CCDD00E87D25 /* whisper_iosTests.swift */; };
 		5A8F55102948CCDD00E87D25 /* whisper_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F550F2948CCDD00E87D25 /* whisper_iosUITests.swift */; };
 		5A8F55122948CCDD00E87D25 /* whisper_iosUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55112948CCDD00E87D25 /* whisper_iosUITestsLaunchTests.swift */; };
+		5A8F55202948CD1F00E87D25 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F551F2948CD1F00E87D25 /* Data.swift */; };
+		5A8F55222948CD3900E87D25 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55212948CD3900E87D25 /* Record.swift */; };
+		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
+		5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* RecordList.swift */; };
+		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
+		5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F552D2948CEDB00E87D25 /* recordData.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +41,6 @@
 /* Begin PBXFileReference section */
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
-		5A8F54F62948CCDB00E87D25 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5A8F55012948CCDD00E87D25 /* whisper-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "whisper-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +48,11 @@
 		5A8F550B2948CCDD00E87D25 /* whisper-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "whisper-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F550F2948CCDD00E87D25 /* whisper_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosUITests.swift; sourceTree = "<group>"; };
 		5A8F55112948CCDD00E87D25 /* whisper_iosUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5A8F551F2948CD1F00E87D25 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
+		5A8F55272948CDB700E87D25 /* RecordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordList.swift; sourceTree = "<group>"; };
+		5A8F552D2948CEDB00E87D25 /* recordData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recordData.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A8F552B2948CEA800E87D25 /* Inject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,10 +104,12 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				5A8F552C2948CEBD00E87D25 /* Resources */,
+				5A8F551E2948CD0500E87D25 /* Model */,
 				5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */,
-				5A8F54F62948CCDB00E87D25 /* ContentView.swift */,
 				5A8F54F82948CCDD00E87D25 /* Assets.xcassets */,
 				5A8F54FA2948CCDD00E87D25 /* Preview Content */,
+				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 			);
 			path = "whisper-ios";
 			sourceTree = "<group>";
@@ -127,6 +139,24 @@
 			path = "whisper-iosUITests";
 			sourceTree = "<group>";
 		};
+		5A8F551E2948CD0500E87D25 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5A8F551F2948CD1F00E87D25 /* Data.swift */,
+				5A8F55212948CD3900E87D25 /* Record.swift */,
+				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5A8F552C2948CEBD00E87D25 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A8F552D2948CEDB00E87D25 /* recordData.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +173,9 @@
 			dependencies = (
 			);
 			name = "whisper-ios";
+			packageProductDependencies = (
+				5A8F552A2948CEA800E87D25 /* Inject */,
+			);
 			productName = "whisper-ios";
 			productReference = 5A8F54F12948CCDB00E87D25 /* whisper-ios.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +248,9 @@
 				Base,
 			);
 			mainGroup = 5A8F54E82948CCDB00E87D25;
+			packageReferences = (
+				5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */,
+			);
 			productRefGroup = 5A8F54F22948CCDB00E87D25 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
 			);
@@ -257,8 +294,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A8F54F72948CCDB00E87D25 /* ContentView.swift in Sources */,
+				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
+				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
+				5A8F55222948CD3900E87D25 /* Record.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
+				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +617,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A8F552A2948CEA800E87D25 /* Inject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */;
+			productName = Inject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5A8F54E92948CCDB00E87D25 /* Project object */;
 }

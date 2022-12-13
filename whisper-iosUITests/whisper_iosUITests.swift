@@ -1,10 +1,3 @@
-//
-//  whisper_iosUITests.swift
-//  whisper-iosUITests
-//
-//  Created by Yasutaka Odo on 2022/12/14.
-//
-
 import XCTest
 
 final class whisper_iosUITests: XCTestCase {
