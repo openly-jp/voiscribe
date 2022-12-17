@@ -4,7 +4,7 @@ struct RecordList: View {
     var body: some View {
         NavigationView {
             List(recordsData) { record in
-                NavigationLink(destination: RecordDetails()) {
+                NavigationLink(destination: RecordDetails(record: Record())) {
                     VStack(alignment: .leading) {
                         Text(record.name).font(.headline)
                         Text(record.transcription).font(.subheadline)
