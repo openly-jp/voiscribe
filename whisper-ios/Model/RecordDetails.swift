@@ -3,7 +3,14 @@ import SwiftUI
 struct RecordDetails: View {
     var record: Record
     var body: some View {
-        Text(record.name)
+        VStack(alignment: .leading){
+            Text(record.name).padding(.bottom)
+            Text(record.date.dateToString()).padding(.bottom)
+            Text(String(record.length)).padding(.bottom)
+            Text(record.transcription).padding(.bottom)
+        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .padding()
+            .navigationTitle(record.name);
     }
 }
 
