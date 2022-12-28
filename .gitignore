@@ -36,3 +36,7 @@ xcuserdata/
 
 # ASR
 *.bin
+
+# Reference
+# https://qiita.com/higan96/items/36d3877a85ab8fc36ea7
+# https://ios-docs.dev/xcode-gitignore/
