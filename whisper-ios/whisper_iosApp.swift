@@ -15,7 +15,7 @@ struct whisperTestApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            RecordList()
+            HomeView()
         }
     }
 }
