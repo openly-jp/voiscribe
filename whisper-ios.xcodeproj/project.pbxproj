@@ -10,7 +10,6 @@
 		387B6FCE0F7C83F953692C3A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 387B6489C08FCF766F9D934F /* README.md */; };
 		57C722A0295C979B009C8A20 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C7229F295C979B009C8A20 /* HomeView.swift */; };
 		57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */; };
-		57C722A4295CD32D009C8A20 /* AudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C722A3295CD32D009C8A20 /* AudioViewModel.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -46,7 +45,6 @@
 		387B6489C08FCF766F9D934F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		57C7229F295C979B009C8A20 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonPane.swift; sourceTree = "<group>"; };
-		57C722A3295CD32D009C8A20 /* AudioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewModel.swift; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,7 +87,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		57C7229E295C959A009C8A20 /* View */ = {
+		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				5A8F55212948CD3900E87D25 /* Record.swift */,
@@ -98,7 +96,7 @@
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		5A8F54E82948CCDB00E87D25 = {
@@ -125,13 +123,12 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
-				57C7229E295C959A009C8A20 /* View */,
+				57C7229E295C959A009C8A20 /* Views */,
 				5A8F552C2948CEBD00E87D25 /* Resources */,
-				5A8F551E2948CD0500E87D25 /* Model */,
+				5A8F551E2948CD0500E87D25 /* Models */,
 				5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */,
 				5A8F54F82948CCDD00E87D25 /* Assets.xcassets */,
 				5A8F54FA2948CCDD00E87D25 /* Preview Content */,
-				57C722A3295CD32D009C8A20 /* AudioViewModel.swift */,
 			);
 			path = "whisper-ios";
 			sourceTree = "<group>";
@@ -161,12 +158,12 @@
 			path = "whisper-iosUITests";
 			sourceTree = "<group>";
 		};
-		5A8F551E2948CD0500E87D25 /* Model */ = {
+		5A8F551E2948CD0500E87D25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				5A8F551F2948CD1F00E87D25 /* Data.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
@@ -322,7 +319,6 @@
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
-				57C722A4295CD32D009C8A20 /* AudioViewModel.swift in Sources */,
 				387B6FCE0F7C83F953692C3A /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
