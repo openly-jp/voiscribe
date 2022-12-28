@@ -10,6 +10,11 @@ struct RecordList: View {
                         Text(record.transcription).font(.subheadline)
                     }
                 }
+                NavigationLink {
+                    RecognitionTest()
+                } label: {
+                    Label("音声認識テスト", systemImage: "mic.circle.fill").font(.title)
+                }.buttonStyle(.borderedProminent)
             }
                     .navigationBarTitle("Recordings")
         }
