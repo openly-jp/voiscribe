@@ -11,7 +11,7 @@
 		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
 		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
 		13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* RecognitionTest.swift */; };
-		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; };
+		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
 		13D1E49F295CE4370070090B /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49B295CE4370070090B /* Recognizer.swift */; };
 		13D1E4A0295CE4370070090B /* WhisperRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49C295CE4370070090B /* WhisperRecognizer.swift */; };
