@@ -7,10 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48A295CE4000070090B /* sample_wav2.wav */; };
+		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
+		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
+		13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* RecognitionTest.swift */; };
+		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; };
+		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
+		13D1E49F295CE4370070090B /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49B295CE4370070090B /* Recognizer.swift */; };
+		13D1E4A0295CE4370070090B /* WhisperRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49C295CE4370070090B /* WhisperRecognizer.swift */; };
+		13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49D295CE4370070090B /* RecognizedSpeech.swift */; };
+		13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49E295CE4370070090B /* TranscriptionLine.swift */; };
 		387B6FCE0F7C83F953692C3A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 387B6489C08FCF766F9D934F /* README.md */; };
 		57C722A0295C979B009C8A20 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C7229F295C979B009C8A20 /* HomeView.swift */; };
 		57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */; };
-		57C722A4295CD32D009C8A20 /* AudioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C722A3295CD32D009C8A20 /* AudioViewModel.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -43,10 +52,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13D1E48A295CE4000070090B /* sample_wav2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav2.wav; sourceTree = "<group>"; };
+		13D1E48B295CE4030070090B /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
+		13D1E48C295CE4030070090B /* sample_wav1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav1.wav; sourceTree = "<group>"; };
+		13D1E490295CE40C0070090B /* RecognitionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognitionTest.swift; sourceTree = "<group>"; };
+		13D1E494295CE4120070090B /* whisper-ios-test-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "whisper-ios-test-Bridging-Header.h"; sourceTree = "<group>"; };
+		13D1E495295CE4120070090B /* whisper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whisper.h; sourceTree = "<group>"; };
+		13D1E496295CE4120070090B /* ggml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ggml.c; sourceTree = "<group>"; };
+		13D1E497295CE4120070090B /* whisper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = whisper.cpp; sourceTree = "<group>"; };
+		13D1E498295CE4120070090B /* ggml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ggml.h; sourceTree = "<group>"; };
+		13D1E49B295CE4370070090B /* Recognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
+		13D1E49C295CE4370070090B /* WhisperRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperRecognizer.swift; sourceTree = "<group>"; };
+		13D1E49D295CE4370070090B /* RecognizedSpeech.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizedSpeech.swift; sourceTree = "<group>"; };
+		13D1E49E295CE4370070090B /* TranscriptionLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptionLine.swift; sourceTree = "<group>"; };
 		387B6489C08FCF766F9D934F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		57C7229F295C979B009C8A20 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonPane.swift; sourceTree = "<group>"; };
-		57C722A3295CD32D009C8A20 /* AudioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewModel.swift; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,16 +110,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		57C7229E295C959A009C8A20 /* View */ = {
+		13D1E492295CE4120070090B /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				13D1E493295CE4120070090B /* whisper-cpp */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		13D1E493295CE4120070090B /* whisper-cpp */ = {
+			isa = PBXGroup;
+			children = (
+				13D1E494295CE4120070090B /* whisper-ios-test-Bridging-Header.h */,
+				13D1E495295CE4120070090B /* whisper.h */,
+				13D1E496295CE4120070090B /* ggml.c */,
+				13D1E497295CE4120070090B /* whisper.cpp */,
+				13D1E498295CE4120070090B /* ggml.h */,
+			);
+			path = "whisper-cpp";
+			sourceTree = "<group>";
+		};
+		13D1E4A3295CE4390070090B /* Recognizer */ = {
+			isa = PBXGroup;
+			children = (
+				13D1E49B295CE4370070090B /* Recognizer.swift */,
+				13D1E49C295CE4370070090B /* WhisperRecognizer.swift */,
+			);
+			path = Recognizer;
+			sourceTree = "<group>";
+		};
+		13D1E4A4295CE4430070090B /* RecognizedSpeech */ = {
+			isa = PBXGroup;
+			children = (
+				13D1E49E295CE4370070090B /* TranscriptionLine.swift */,
+				13D1E49D295CE4370070090B /* RecognizedSpeech.swift */,
+			);
+			path = RecognizedSpeech;
+			sourceTree = "<group>";
+		};
+		57C7229E295C959A009C8A20 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				13D1E490295CE40C0070090B /* RecognitionTest.swift */,
 				5A8F55212948CD3900E87D25 /* Record.swift */,
 				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
 				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		5A8F54E82948CCDB00E87D25 = {
@@ -125,13 +185,13 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
-				57C7229E295C959A009C8A20 /* View */,
+				13D1E492295CE4120070090B /* Libraries */,
+				57C7229E295C959A009C8A20 /* Views */,
 				5A8F552C2948CEBD00E87D25 /* Resources */,
-				5A8F551E2948CD0500E87D25 /* Model */,
+				5A8F551E2948CD0500E87D25 /* Models */,
 				5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */,
 				5A8F54F82948CCDD00E87D25 /* Assets.xcassets */,
 				5A8F54FA2948CCDD00E87D25 /* Preview Content */,
-				57C722A3295CD32D009C8A20 /* AudioViewModel.swift */,
 			);
 			path = "whisper-ios";
 			sourceTree = "<group>";
@@ -161,17 +221,22 @@
 			path = "whisper-iosUITests";
 			sourceTree = "<group>";
 		};
-		5A8F551E2948CD0500E87D25 /* Model */ = {
+		5A8F551E2948CD0500E87D25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				13D1E4A4295CE4430070090B /* RecognizedSpeech */,
+				13D1E4A3295CE4390070090B /* Recognizer */,
 				5A8F551F2948CD1F00E87D25 /* Data.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				13D1E48B295CE4030070090B /* ggml-tiny.en.bin */,
+				13D1E48C295CE4030070090B /* sample_wav1.wav */,
+				13D1E48A295CE4000070090B /* sample_wav2.wav */,
 				5A8F552D2948CEDB00E87D25 /* recordData.json */,
 			);
 			path = Resources;
@@ -288,9 +353,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */,
+				13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */,
 				5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
+				13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,15 +383,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13D1E499295CE4130070090B /* ggml.c in Sources */,
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
+				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
+				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
+				13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */,
+				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */,
 				5A8F55222948CD3900E87D25 /* Record.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
-				57C722A4295CD32D009C8A20 /* AudioViewModel.swift in Sources */,
+				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
 				387B6FCE0F7C83F953692C3A /* README.md in Sources */,
+				13D1E4A0295CE4370070090B /* WhisperRecognizer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +573,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -527,6 +602,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
