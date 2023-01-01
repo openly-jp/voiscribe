@@ -157,7 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				13D1E490295CE40C0070090B /* RecognitionTest.swift */,
-				5A8F55212948CD3900E87D25 /* Record.swift */,
 				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
 				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
@@ -235,6 +234,7 @@
 				13D1E4A4295CE4430070090B /* RecognizedSpeech */,
 				13D1E4A3295CE4390070090B /* Recognizer */,
 				5A8F551F2948CD1F00E87D25 /* Data.swift */,
+				5A8F55212948CD3900E87D25 /* Record.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
