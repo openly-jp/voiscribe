@@ -2,7 +2,7 @@ name: Execute Swift package command-line tool
 
 on:
   push:
-    branches: ['*']
+    branches: ['main']
 
 jobs:
   swiftformat:
