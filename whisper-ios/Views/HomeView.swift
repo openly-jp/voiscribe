@@ -9,12 +9,10 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var isActive: Bool = false
     var body: some View {
         VStack{
             RecordList()
-            RecordButtonPane(isActive: $isActive)
-                .frame(height: 150)
+            RecognitionPane()
         }
     }
 }

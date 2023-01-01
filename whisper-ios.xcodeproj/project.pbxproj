@@ -18,6 +18,8 @@
 		13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49D295CE4370070090B /* RecognizedSpeech.swift */; };
 		13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49E295CE4370070090B /* TranscriptionLine.swift */; };
 		387B6FCE0F7C83F953692C3A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 387B6489C08FCF766F9D934F /* README.md */; };
+		5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709E5042960BDFC00352CF3 /* Waveform.swift */; };
+		5766628C296047B100C27512 /* RecognitionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5766628B296047B100C27512 /* RecognitionPane.swift */; };
 		57C722A0295C979B009C8A20 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C7229F295C979B009C8A20 /* HomeView.swift */; };
 		57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
@@ -66,6 +68,9 @@
 		13D1E49D295CE4370070090B /* RecognizedSpeech.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizedSpeech.swift; sourceTree = "<group>"; };
 		13D1E49E295CE4370070090B /* TranscriptionLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptionLine.swift; sourceTree = "<group>"; };
 		387B6489C08FCF766F9D934F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5709E5042960BDFC00352CF3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
+		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
 		57C7229F295C979B009C8A20 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonPane.swift; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +162,8 @@
 				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
+				5766628B296047B100C27512 /* RecognitionPane.swift */,
+				5709E5042960BDFC00352CF3 /* Waveform.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -185,6 +192,7 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				5766628A29603BBF00C27512 /* Info.plist */,
 				13D1E492295CE4120070090B /* Libraries */,
 				57C7229E295C959A009C8A20 /* Views */,
 				5A8F552C2948CEBD00E87D25 /* Resources */,
@@ -384,10 +392,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				13D1E499295CE4130070090B /* ggml.c in Sources */,
+				5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */,
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
 				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
+				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
 				13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */,
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */,
@@ -558,8 +568,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
+				DEVELOPMENT_TEAM = Q9T4GDXH5K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "whisper-ios/Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "使うよ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -570,7 +583,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios.takehisa";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
@@ -587,8 +600,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
+				DEVELOPMENT_TEAM = Q9T4GDXH5K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "whisper-ios/Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "使うよ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -599,7 +615,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios.takehisa";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
