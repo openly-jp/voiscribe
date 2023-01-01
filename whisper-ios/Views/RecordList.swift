@@ -1,22 +1,38 @@
 import SwiftUI
 
 struct RecordList: View {
+    let recognizedSpeechs: [RecognizedSpeech]
+    init (){
+        self.recognizedSpeechs = Array(recognizedSpeechMocks.values)
+    }
+    func getLocaleDateString(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateStyle = .medium
+        dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+        
+        return dateFormatter.string(from: date)
+    }
     var body: some View {
         NavigationView {
-            List(recordsData) { record in
-                NavigationLink(destination: RecordDetails(record: record)) {
-                    VStack(alignment: .leading) {
-                        Text(record.name).font(.headline)
-                        Text(record.transcription).font(.subheadline)
+            List(recognizedSpeechs) { recognizedSpeech in
+                NavigationLink(destination: RecordDetails(id: recognizedSpeech.id)) {
+                    HStack{
+                        Image(systemName: "mic.square.fill")
+                            .resizable()
+                            .frame(width: 30.0, height: 30.0)
+                            .padding()
+                        VStack(alignment: .leading) {
+                            Text(recognizedSpeech.title).font(.headline)
+                            Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                            Text(getLocaleDateString(date: recognizedSpeech.createdAt))
+                                .foregroundColor(Color.gray)
+                        }
                     }
                 }
-                NavigationLink {
-                    RecognitionTest()
-                } label: {
-                    Label("音声認識テスト", systemImage: "mic.circle.fill").font(.title)
-                }.buttonStyle(.borderedProminent)
-            }
-                    .navigationBarTitle("Recordings")
+            }.listStyle(PlainListStyle())
+            .navigationBarTitle("Notes")
+            
         }
     }
 }
@@ -25,12 +41,4 @@ class RecordList_Previews: PreviewProvider {
     static var previews: some View {
         RecordList()
     }
-
-    #if DEBUG
-    @objc class func injected() {
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        windowScene?.windows.first?.rootViewController =
-                UIHostingController(rootView: RecordList())
-    }
-    #endif
 }

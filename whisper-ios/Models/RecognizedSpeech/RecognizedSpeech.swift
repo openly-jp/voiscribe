@@ -1,9 +1,11 @@
 import Foundation
+
 enum Language: String{
     case ja = "ja"
     case en = "en"
 }
-class RecognizedSpeech {
+class RecognizedSpeech: Identifiable {
+    let id: UUID = UUID()
     var title: String
     var audioFileURL: URL
     var language: Language
@@ -12,7 +14,7 @@ class RecognizedSpeech {
     var updatedAt: Date
     
     init(audioFileURL: URL, language: Language, transcriptionLines: [TranscriptionLine]) {
-        self.title = "タイトル未定"
+        self.title = "未定"
         self.audioFileURL = audioFileURL
         self.language = language
         self.transcriptionLines = transcriptionLines
