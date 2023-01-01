@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
+		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
+		13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13516D9E2961B661005013C8 /* ggml-tiny.bin */; };
 		13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48A295CE4000070090B /* sample_wav2.wav */; };
 		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
 		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
@@ -54,6 +57,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
+		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
+		13516D9E2961B661005013C8 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
 		13D1E48A295CE4000070090B /* sample_wav2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav2.wav; sourceTree = "<group>"; };
 		13D1E48B295CE4030070090B /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		13D1E48C295CE4030070090B /* sample_wav1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav1.wav; sourceTree = "<group>"; };
@@ -115,6 +121,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		13516D9729603679005013C8 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				13516D982960369D005013C8 /* RecognizedSpeechMock.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		13D1E492295CE4120070090B /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -161,6 +175,7 @@
 				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
+				13516D9C2961A900005013C8 /* SideMenu.swift */,
 				5766628B296047B100C27512 /* RecognitionPane.swift */,
 				5709E5042960BDFC00352CF3 /* Waveform.swift */,
 			);
@@ -191,6 +206,7 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				13516D9729603679005013C8 /* Mocks */,
 				5766628A29603BBF00C27512 /* Info.plist */,
 				13D1E492295CE4120070090B /* Libraries */,
 				57C7229E295C959A009C8A20 /* Views */,
@@ -242,6 +258,7 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				13516D9E2961B661005013C8 /* ggml-tiny.bin */,
 				13D1E48B295CE4030070090B /* ggml-tiny.en.bin */,
 				13D1E48C295CE4030070090B /* sample_wav1.wav */,
 				13D1E48A295CE4000070090B /* sample_wav2.wav */,
@@ -362,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */,
+				13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */,
 				13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */,
 				5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
@@ -395,11 +413,13 @@
 				5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */,
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
+				13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */,
 				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
 				13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */,
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
+				13516D9D2961A900005013C8 /* SideMenu.swift in Sources */,
 				57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */,
 				5A8F55222948CD3900E87D25 /* Record.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
@@ -568,10 +588,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = Q9T4GDXH5K;
+				DEVELOPMENT_TEAM = Y9HQ3VG5LF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "whisper-ios/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -583,7 +602,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios.takehisa";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
@@ -600,10 +619,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = Q9T4GDXH5K;
+				DEVELOPMENT_TEAM = Y9HQ3VG5LF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "whisper-ios/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -615,7 +633,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios.takehisa";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";

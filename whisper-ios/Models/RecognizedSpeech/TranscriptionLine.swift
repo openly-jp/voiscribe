@@ -1,7 +1,7 @@
 import Foundation
 
-class TranscriptionLine {
-    // Use Mi
+class TranscriptionLine: Identifiable {
+    let id: UUID = UUID()
     var startMSec: Int64
     var endMSec: Int64
     var text: String

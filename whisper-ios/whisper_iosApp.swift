@@ -16,6 +16,7 @@ struct whisperTestApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(WhisperRecognizer(modelName: "ggml-tiny.en"))
         }
     }
 }

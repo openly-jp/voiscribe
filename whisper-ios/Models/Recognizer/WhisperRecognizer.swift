@@ -20,7 +20,7 @@ class WhisperRecognizer: Recognizer{
             whisper_free(whisperContext)
         }
     }
-    private func load_model(modelName: String) throws {
+   func load_model(modelName: String) throws {
         guard let url: URL = Bundle.main.url(forResource: modelName, withExtension: "bin") else {
             throw NSError(domain: "model load error", code: -1)
         }
