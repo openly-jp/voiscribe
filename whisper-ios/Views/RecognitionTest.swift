@@ -3,7 +3,7 @@ import SwiftUI
 struct RecognitionTest: View {
     @State var text = "まだ認識されていません"
     @State var audio_file_name = "sample_wav1"
-    @StateObject var recognizer: WhisperRecognizer = WhisperRecognizer(modelName: "ggml-tiny.en")
+    @EnvironmentObject var recognizer: WhisperRecognizer
     func recognize(audioFileName: String) -> String {
         guard let url: URL = Bundle.main.url(forResource: audioFileName, withExtension: "wav") else {
             return "音声のロードに失敗しました"
