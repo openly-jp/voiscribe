@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct RecordList: View {
-    let recognizedSpeechs: [RecognizedSpeech]
-    init (){
-        self.recognizedSpeechs = Array(recognizedSpeechMocks.values)
-    }
+    @Binding var recognizedSpeeches: [RecognizedSpeech]
+
     func getLocaleDateString(date: Date) -> String{
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
@@ -15,7 +13,7 @@ struct RecordList: View {
     }
     var body: some View {
         NavigationView {
-            List(recognizedSpeechs) { recognizedSpeech in
+            List(recognizedSpeeches) { recognizedSpeech in
                 NavigationLink(destination: RecordDetails(id: recognizedSpeech.id)) {
                     HStack{
                         Image(systemName: "mic.square.fill")
@@ -39,6 +37,6 @@ struct RecordList: View {
 
 class RecordList_Previews: PreviewProvider {
     static var previews: some View {
-        RecordList()
+        RecordList(recognizedSpeeches: .constant(CoreDataRepository.getAll()))
     }
 }
