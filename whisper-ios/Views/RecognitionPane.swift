@@ -10,6 +10,9 @@ import AVFoundation
 import SwiftUI
 
 struct RecognitionPane: View {
+    @EnvironmentObject var recognizer: WhisperRecognizer
+    @Binding var recognizedSpeeches: [RecognizedSpeech]
+
     @State var isActive: Bool = false
     @State var audioRecorder: AVAudioRecorder
     @State var elapsedTime: Int
@@ -24,7 +27,7 @@ struct RecognitionPane: View {
         return "\(minutes):\(seconds)"
     }
     
-    init() {
+    init(recognizedSpeeches: Binding<[RecognizedSpeech]>) {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
         try! session.setActive(true)
@@ -40,6 +43,7 @@ struct RecognitionPane: View {
         
         elapsedTime = 0
         idAmps = []
+        self._recognizedSpeeches = recognizedSpeeches
     }
     
     func onClickRecordButton() {
@@ -75,14 +79,16 @@ struct RecognitionPane: View {
     
     func stop() {
         isActive = false
+        let language: Language = .en
         
         updateRecordingTimeTimer?.invalidate()
         audioRecorder.stop()
         
+        let url = getURL()
         let recognizer = WhisperRecognizer(modelName: "ggml-tiny.en")
         guard let recognizedSpeech = try? recognizer.recognize(
-            audioFileURL: getURL(),
-            language: .ja
+            audioFileURL: url,
+            language: language
         ) else {
             print("認識に失敗しました")
             return
@@ -93,7 +99,13 @@ struct RecognitionPane: View {
             transcription += transcriptionLines[i].text
         }
         
-        print("recognition result:", transcription)
+        let aRecognizedSpeech = RecognizedSpeech(
+            audioFileURL: url,
+            language: language,
+            transcriptionLines: transcriptionLines
+        )
+        CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: aRecognizedSpeech)
+        recognizedSpeeches.append(aRecognizedSpeech)
     }
     
     var body: some View {
@@ -102,26 +114,26 @@ struct RecognitionPane: View {
             startAction: start,
             stopAction: {}
         )
-            .frame(height: 150)
-            .sheet(isPresented: $isActive, content: {
-                HStack(spacing: 10) {
-                    Circle()
-                        .fill(.red)
-                        .frame(width: 10)
-                    Text(timeString)
-                }.padding(50)
+        .frame(height: 150)
+        .sheet(isPresented: $isActive, content: {
+            HStack(spacing: 10) {
+                Circle()
+                    .fill(.red)
+                    .frame(width: 10)
+                Text(timeString)
+            }.padding(50)
                 
-                Waveform(idAmps: $idAmps)
-                    .padding(.top, 40)
-                    .padding(.bottom, 40)
-                Text("I'm going to go to the other side of the wall. I'm going to go to the other side of the wall. I'm going to go to the other side of the wall. I'm going to go to the other side of the wall.").padding(50)
-                RecordButtonPane(
-                    isActive: $isActive,
-                    startAction: {},
-                    stopAction: stop
-                )
+            Waveform(idAmps: $idAmps)
+                .padding(.top, 40)
+                .padding(.bottom, 40)
+            Text("I'm going to go to the other side of the wall. I'm going to go to the other side of the wall. I'm going to go to the other side of the wall. I'm going to go to the other side of the wall.").padding(50)
+            RecordButtonPane(
+                isActive: $isActive,
+                startAction: {},
+                stopAction: stop
+            )
                 
-            })
+        })
     }
 }
 
@@ -134,6 +146,6 @@ func getURL() -> URL {
 
 struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
-        RecognitionPane()
+        RecognitionPane(recognizedSpeeches: .constant(CoreDataRepository.getAll()))
     }
 }
