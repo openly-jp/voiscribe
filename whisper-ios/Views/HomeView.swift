@@ -24,7 +24,6 @@ struct HomeView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30, alignment: .center)
                             .foregroundColor(Color.gray)
-                        
                     })
                     .padding(.horizontal)
                     Spacer()
@@ -65,8 +64,7 @@ struct MainView: View {
     var body: some View {
         VStack{
             RecordList()
-            RecordButtonPane(isActive: $isActive)
-                .frame(height: 150)
+            RecognitionPane()
         }
     }
 }
