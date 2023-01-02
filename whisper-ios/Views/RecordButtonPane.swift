@@ -15,21 +15,22 @@ struct RecordButtonPane: View {
     let startAction: ()->Void
     let stopAction: ()->Void
     
-    @State var buttonColor: Color = .red
-    @State var borderStrokeColor: Color = .red
-    @State var borderStrokeWidth: CGFloat = 2
-    @State var borderSpacing: CGFloat = 10
-    @State var animation: Animation = .easeInOut
-    @State var stoppedStateCornerRadius: CGFloat = 0.10
-    @State var stoppedStateSize: CGFloat = 0.5
+    let circleDiameter: CGFloat = 80
+    let buttonColor: Color = .red
+    let borderStrokeColor: Color = .red
+    let borderStrokeWidth: CGFloat = 2
+    let borderSpacing: CGFloat = 10
+    let animation: Animation = .easeInOut
+    let stoppedStateCornerRadius: CGFloat = 0.10
+    let stoppedStateSize: CGFloat = 0.5
     
     var body: some View {
         ZStack {
             Circle()
                 .stroke(borderStrokeColor, lineWidth: borderStrokeWidth)
-                .frame(width: 100, height: 100)
+                .frame(width: circleDiameter, height: circleDiameter)
             
-            recordButton(size: 100 - borderSpacing)
+            recordButton(size: circleDiameter - borderSpacing)
                 .animation(animation)
                 .foregroundColor(buttonColor)
         }
