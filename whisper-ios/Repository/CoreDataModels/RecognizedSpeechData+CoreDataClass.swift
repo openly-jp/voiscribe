@@ -48,7 +48,7 @@ public class RecognizedSpeechData: NSManagedObject {
             updatedAt: aRecognizedSpeechData.updatedAt
         )
         
-        var transcriptionLines: [TranscriptionLine] = []
+        let transcriptionLines: [TranscriptionLine] = []
         for tld in aRecognizedSpeechData.transcriptionLines {
             let tldEntity = tld as! TranscriptionLineData
             let tlModel = TranscriptionLine (
