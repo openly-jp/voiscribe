@@ -1,13 +1,42 @@
 import SwiftUI
+import AVFoundation
 
-struct SwiftUIView: View {
+
+struct StopButtonPane: View {
+    let stopAction: ()->Void
+
+    let circleDiameter: CGFloat = 80
+    let buttonColor: Color = .red
+    let borderStrokeColor: Color = .red
+    let borderStrokeWidth: CGFloat = 2
+    let borderSpacing: CGFloat = 10
+    let animation: Animation = .easeInOut
+    let stoppedStateCornerRadius: CGFloat = 0.10
+    let stoppedStateSize: CGFloat = 0.5
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Circle()
+                .stroke(borderStrokeColor, lineWidth: borderStrokeWidth)
+                .frame(width: circleDiameter, height: circleDiameter)
+
+            recordButton(size: circleDiameter - borderSpacing)
+                .animation(animation)
+                .foregroundColor(buttonColor)
+        }
+    }
+
+
+    private func recordButton(size: CGFloat) -> some View {
+        return Button(action: stopAction){
+            RoundedRectangle(cornerRadius: size * stoppedStateCornerRadius)
+                .frame(width: size * stoppedStateSize, height: size * stoppedStateSize)
+        }
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct StopButtonPane_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUIView()
+        return StopButtonPane(stopAction: {})
     }
 }
