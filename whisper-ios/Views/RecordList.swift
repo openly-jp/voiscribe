@@ -14,7 +14,7 @@ struct RecordList: View {
     var body: some View {
         NavigationView {
             List(recognizedSpeeches) { recognizedSpeech in
-                NavigationLink(destination: RecordDetails(id: recognizedSpeech.id)) {
+                NavigationLink(destination: RecordDetails(recognizedSpeech: recognizedSpeech)) {
                     HStack{
                         Image(systemName: "mic.square.fill")
                             .resizable()
@@ -37,6 +37,9 @@ struct RecordList: View {
 
 class RecordList_Previews: PreviewProvider {
     static var previews: some View {
-        RecordList(recognizedSpeeches: .constant(Array(recognizedSpeechMocks.values)))
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeechs: [RecognizedSpeech] = [
+        recognizedSpeech]
+        RecordList(recognizedSpeeches: .constant(recognizedSpeechs))
     }
 }

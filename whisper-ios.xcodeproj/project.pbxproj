@@ -10,6 +10,8 @@
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
 		13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13516D9E2961B661005013C8 /* ggml-tiny.bin */; };
+		136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 136E05192962EC3A00DEC112 /* sample_ja.csv */; };
+		136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 136E051B2962EC4700DEC112 /* sample_ja.wav */; };
 		13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48A295CE4000070090B /* sample_wav2.wav */; };
 		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
 		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
@@ -67,6 +69,8 @@
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		13516D9E2961B661005013C8 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
+		136E05192962EC3A00DEC112 /* sample_ja.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
+		136E051B2962EC4700DEC112 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
 		13D1E48A295CE4000070090B /* sample_wav2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav2.wav; sourceTree = "<group>"; };
 		13D1E48B295CE4030070090B /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		13D1E48C295CE4030070090B /* sample_wav1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav1.wav; sourceTree = "<group>"; };
@@ -295,6 +299,8 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				136E05192962EC3A00DEC112 /* sample_ja.csv */,
+				136E051B2962EC4700DEC112 /* sample_ja.wav */,
 				13516D9E2961B661005013C8 /* ggml-tiny.bin */,
 				13D1E48B295CE4030070090B /* ggml-tiny.en.bin */,
 				13D1E48C295CE4030070090B /* sample_wav1.wav */,
@@ -415,9 +421,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */,
 				13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */,
 				13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */,
 				13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */,
+				136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */,
 				5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
