@@ -75,4 +75,13 @@ extension CoreDataRepository {
         guard context.hasChanges else { return }
         context.rollback()
     }
+    
+    static func fetch<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) -> [T] {
+        do {
+            return try context.fetch(request)
+        } catch let error as NSError {
+            debugPrint("Error: \(error), \(error.userInfo)")
+            return []
+        }
+    }
 }

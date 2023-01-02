@@ -117,7 +117,7 @@ struct RecognitionPane: View {
 
         renameAudioFileURL(recognizedSpeech: recognizedSpeech)
         CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizedSpeech)
-        recognizedSpeeches.append(recognizedSpeech)
+        recognizedSpeeches.insert(recognizedSpeech, at: 0)
     }
 
     var body: some View {
