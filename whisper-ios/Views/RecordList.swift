@@ -14,7 +14,7 @@ struct RecordList: View {
     var body: some View {
         NavigationView {
             List(recognizedSpeeches) { recognizedSpeech in
-                NavigationLink(destination: RecordDetails(id: recognizedSpeech.id)) {
+                NavigationLink(destination: RecordDetails(recognizedSpeech: recognizedSpeech)) {
                     HStack{
                         Image(systemName: "mic.square.fill")
                             .resizable()
