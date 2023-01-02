@@ -60,7 +60,7 @@ struct HomeView: View {
 }
 
 struct MainView: View {
-    @State var isActive: Bool = false
+    @State var isRecording: Bool = false
     @State var recognizedSpeeches: [RecognizedSpeech]
     init (){
         self.recognizedSpeeches = CoreDataRepository.getAll()

@@ -13,7 +13,7 @@ struct RecognitionPane: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @Binding var recognizedSpeeches: [RecognizedSpeech]
 
-    @State var isActive: Bool = false
+    @State var isRecording: Bool = false
     @State var audioRecorder: AVAudioRecorder
     @State var elapsedTime: Int
     @State var idAmps: [IdAmp]
@@ -47,11 +47,11 @@ struct RecognitionPane: View {
     }
     
     func onClickRecordButton() {
-        if isActive { start() } else { stop() }
+        if isRecording { start() } else { stop() }
     }
     
     func start() {
-        isActive = true
+        isRecording = true
         audioRecorder.record()
         
         updateRecordingTimeTimer = Timer.scheduledTimer(
@@ -78,7 +78,7 @@ struct RecognitionPane: View {
     }
     
     func stop() {
-        isActive = false
+        isRecording = false
         let language: Language = .en
         
         updateRecordingTimeTimer?.invalidate()
@@ -110,28 +110,33 @@ struct RecognitionPane: View {
     
     var body: some View {
         RecordButtonPane(
-            isActive: $isActive,
+            isRecording: $isRecording,
             startAction: start,
             stopAction: {}
         )
         .frame(height: 150)
-        .sheet(isPresented: $isActive, content: {
-            HStack(spacing: 10) {
-                Circle()
-                    .fill(.red)
-                    .frame(width: 10)
-                Text(timeString)
-            }.padding(50)
+        .sheet(isPresented: $isRecording, content: {
+            VStack {
+                HStack(spacing: 10) {
+                    Circle()
+                        .fill(.red)
+                        .frame(width: 10)
+                    Text(timeString)
+                }.padding(50)
                 
-            Waveform(idAmps: $idAmps)
-                .padding(.top, 40)
-                .padding(.bottom, 40)
-            Text("I'm going to go to the other side of the wall. I'm going to go to the other side of the wall. I'm going to go to the other side of the wall. I'm going to go to the other side of the wall.").padding(50)
-            RecordButtonPane(
-                isActive: $isActive,
-                startAction: {},
-                stopAction: stop
-            )
+                Waveform(idAmps: $idAmps)
+                    .padding(.top, 40)
+                    .padding(.bottom, 40)
+                HStack(spacing: 50) {
+                    StopButtonPane {}
+                    RecordButtonPane(
+                        isRecording: $isRecording,
+                        startAction: {},
+                        stopAction: stop
+                    )
+                }
+                    .padding(.bottom, 30)
+            }
                 
         })
     }

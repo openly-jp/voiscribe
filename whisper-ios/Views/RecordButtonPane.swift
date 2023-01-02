@@ -11,7 +11,7 @@ import AVFoundation
 
 
 struct RecordButtonPane: View {
-    @Binding var isActive: Bool
+    @Binding var isRecording: Bool
     let startAction: ()->Void
     let stopAction: ()->Void
     
@@ -38,7 +38,7 @@ struct RecordButtonPane: View {
     
     
     private func recordButton(size: CGFloat) -> some View {
-        if !isActive {
+        if !isRecording {
             return Button(action: startAction){ RoundedRectangle(cornerRadius: size)
                 .frame(width: size, height: size)
                    }
@@ -56,7 +56,7 @@ struct RecordButtonPane: View {
 struct RecordButton_Previews: PreviewProvider {
     
     static var previews: some View {
-        return RecordButtonPane(isActive: .constant(false), startAction: {}, stopAction: {})
+        return RecordButtonPane(isRecording: .constant(false), startAction: {}, stopAction: {})
     }
 }
 
