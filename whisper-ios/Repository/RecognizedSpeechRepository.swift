@@ -14,8 +14,10 @@ extension CoreDataRepository {
     }
 
     static func getAllRecognizedSpeeches() -> [RecognizedSpeech] {
-        let list: [RecognizedSpeechData] = CoreDataRepository.array()
-        return list.map { rsd in RecognizedSpeechData.toModel(aRecognizedSpeechData: rsd)}
+        let request = RecognizedSpeechData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+        let res = CoreDataRepository.fetch(request)
+        return res.map { rsd in RecognizedSpeechData.toModel(aRecognizedSpeechData: rsd)}
     }
 
     static func deleteRecognizedSpeech(recognizedSpeech: RecognizedSpeech) {
