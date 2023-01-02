@@ -40,13 +40,13 @@ struct HomeView: View {
                     MainView()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .offset(x: self.showSideMenu ? geometry.size.width * 0.6 : 0)
-                        .disabled(self.showSideMenu ? true : false)
+                        .disabled(self.showSideMenu)
                         .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
                 } else if page == 1 {
                     RecognitionTest()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .offset(x: self.showSideMenu ? geometry.size.width * 0.6 : 0)
-                        .disabled(self.showSideMenu ? true : false)
+                        .disabled(self.showSideMenu)
                         .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
                 }
                 if self.showSideMenu {
@@ -54,7 +54,7 @@ struct HomeView: View {
                         .frame(width: geometry.size.width * 0.6)
                         .transition(.move(edge: .leading))
                 }
-            }.gesture(drag)
+            }.gesture(self.showSideMenu ? drag : nil)
         }
     }
 }

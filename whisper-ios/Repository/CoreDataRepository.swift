@@ -41,6 +41,16 @@ extension CoreDataRepository {
         }
     }
 
+    static func getById<T: NSManagedObject>(uuid: UUID) -> T? {
+        do {
+            let request = NSFetchRequest<T>(entityName: String(describing: T.self))
+            request.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
+            return try context.fetch(request).first
+        } catch {
+            fatalError()
+        }
+    }
+
     static func add(_ object: NSManagedObject) {
         context.insert(object)
     }
