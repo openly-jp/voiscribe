@@ -7,7 +7,7 @@
         <attribute name="language" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="transcriptionLines" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TranscriptionLineData" inverseName="recognizedSpeech" inverseEntity="TranscriptionLineData"/>
+        <relationship name="transcriptionLines" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TranscriptionLineData" inverseName="recognizedSpeech" inverseEntity="TranscriptionLineData"/>
     </entity>
     <entity name="TranscriptionLineData" representedClassName="TranscriptionLineData" syncable="YES">
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>

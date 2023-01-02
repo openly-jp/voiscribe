@@ -25,7 +25,7 @@ struct Waveform: View {
         GeometryReader { geometry in
             Group {
                 ForEach(idAmps) { idAmp in
-                    let amp = CGFloat(powf(e, idAmp.amp / 10))
+                    let amp = CGFloat(powf(e, idAmp.amp / 10) * 2)
 
                     let numRightRecs = CGFloat(idAmps.count - 1 - idAmp.idx)
                     let rightX = numRightRecs * (rectangleWidth + spacingWidth)
