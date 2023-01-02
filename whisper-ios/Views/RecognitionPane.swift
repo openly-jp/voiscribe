@@ -178,7 +178,7 @@ func getTmpURL() -> URL {
 }
 
 func getAudioFileURL(id: UUID) -> URL {
-    return getURLByName(fileName: id.uuidString)
+    return getURLByName(fileName: "\(id.uuidString).m4a")
 }
 
 func getURLByName(fileName: String) -> URL {
