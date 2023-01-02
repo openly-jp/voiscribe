@@ -193,6 +193,6 @@ func getURLByName(fileName: String) -> URL {
 
 struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
-        RecognitionPane(recognizedSpeeches: .constant(CoreDataRepository.getAll()))
+        RecognitionPane(recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]))
     }
 }

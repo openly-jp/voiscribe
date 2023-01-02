@@ -63,7 +63,7 @@ struct MainView: View {
     @State var isRecording: Bool = false
     @State var recognizedSpeeches: [RecognizedSpeech]
     init (){
-        self.recognizedSpeeches = CoreDataRepository.getAll()
+        self.recognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
     }
     var body: some View {
         VStack{

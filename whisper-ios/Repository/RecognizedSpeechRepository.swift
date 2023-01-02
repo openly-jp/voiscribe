@@ -13,8 +13,8 @@ extension CoreDataRepository {
         CoreDataRepository.save()
     }
 
-    static func getAll() -> [RecognizedSpeech] {
-        var list: [RecognizedSpeechData] = CoreDataRepository.array()
+    static func getAllRecognizedSpeeches() -> [RecognizedSpeech] {
+        let list: [RecognizedSpeechData] = CoreDataRepository.array()
         return list.map { rsd in RecognizedSpeechData.toModel(aRecognizedSpeechData: rsd)}
     }
 
