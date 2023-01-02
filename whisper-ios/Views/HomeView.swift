@@ -61,14 +61,28 @@ struct HomeView: View {
 
 struct MainView: View {
     @State var isRecording: Bool = false
+    @State var recognizingSpeechIds: [UUID]
     @State var recognizedSpeeches: [RecognizedSpeech]
+    @State var isActives: [Bool]
+
     init (){
-        self.recognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
+        let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
+        self.recognizingSpeechIds = []
+        self.recognizedSpeeches = initialRecognizedSpeeches
+        self.isActives = Array<Bool>(repeating: false, count: initialRecognizedSpeeches.count)
     }
     var body: some View {
         VStack{
-            RecordList(recognizedSpeeches: $recognizedSpeeches)
-            RecognitionPane(recognizedSpeeches: $recognizedSpeeches)
+            RecordList(
+                recognizingSpeechIds: $recognizingSpeechIds,
+                recognizedSpeeches: $recognizedSpeeches,
+                isActives: $isActives
+            )
+            RecognitionPane(
+                recognizingSpeechIds: $recognizingSpeechIds,
+                recognizedSpeeches: $recognizedSpeeches,
+                isActives: $isActives
+            )
         }
     }
 }

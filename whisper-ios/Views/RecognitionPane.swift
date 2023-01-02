@@ -11,7 +11,9 @@ import SwiftUI
 
 struct RecognitionPane: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
+    @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
+    @Binding var isActives: [Bool]
 
     @State var isRecording: Bool = false
     @State var isPaused: Bool = false
@@ -30,7 +32,11 @@ struct RecognitionPane: View {
         return "\(minutes):\(seconds)"
     }
 
-    init(recognizedSpeeches: Binding<[RecognizedSpeech]>) {
+    init(
+        recognizingSpeechIds: Binding<[UUID]>,
+        recognizedSpeeches: Binding<[RecognizedSpeech]>,
+        isActives: Binding<[Bool]>
+    ) {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
         try! session.setActive(true)
@@ -47,7 +53,9 @@ struct RecognitionPane: View {
 
         elapsedTime = 0
         idAmps = []
+        self._recognizingSpeechIds = recognizingSpeechIds
         self._recognizedSpeeches = recognizedSpeeches
+        self._isActives = isActives
     }
 
     func onClickRecordButton() {
@@ -106,18 +114,30 @@ struct RecognitionPane: View {
         elapsedTime = 0
         idAmps = []
 
-        let recognizer = WhisperRecognizer(modelName: "ggml-tiny.en")
-        guard let recognizedSpeech = try? recognizer.recognize(
+        guard let recognizingSpeech = try? recognizer.recognize(
             audioFileURL: getTmpURL(),
-            language: .ja
+            language: .ja,
+            callback: { rs in
+                var removeIdx: Int? = nil
+                for idx in (0..<recognizingSpeechIds.count) {
+                    if recognizingSpeechIds[idx] == rs.id {
+                        removeIdx = idx
+                        break
+                    }
+                }
+                if let removeIdx {
+                    recognizingSpeechIds.remove(at: removeIdx)
+                }
+                renameAudioFileURL(recognizedSpeech: rs)
+                CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: rs)
+            }
         ) else {
             print("認識に失敗しました")
             return
         }
-
-        renameAudioFileURL(recognizedSpeech: recognizedSpeech)
-        CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizedSpeech)
-        recognizedSpeeches.insert(recognizedSpeech, at: 0)
+        recognizingSpeechIds.insert(recognizingSpeech.id, at: 0)
+        recognizedSpeeches.insert(recognizingSpeech, at: 0)
+        isActives.insert(true, at: 0)
     }
 
     var body: some View {
@@ -193,6 +213,10 @@ func getURLByName(fileName: String) -> URL {
 
 struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
-        RecognitionPane(recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]))
+        RecognitionPane(
+            recognizingSpeechIds: .constant([]),
+            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
+            isActives: .constant([])
+        )
     }
 }

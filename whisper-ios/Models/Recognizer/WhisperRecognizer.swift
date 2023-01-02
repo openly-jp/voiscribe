@@ -1,13 +1,13 @@
-import Foundation
 import AVFoundation
+import Dispatch
+import Foundation
 
-class WhisperRecognizer: Recognizer{
-    private var whisperContext: OpaquePointer? = nil
+class WhisperRecognizer: Recognizer {
+    private var whisperContext: OpaquePointer?
     var is_ready: Bool {
-        get{
-            return whisperContext != nil
-        }
+        return whisperContext != nil
     }
+
     init(modelName: String) {
         do {
             try load_model(modelName: modelName)
@@ -15,12 +15,14 @@ class WhisperRecognizer: Recognizer{
             return
         }
     }
+
     deinit {
         if whisperContext != nil {
             whisper_free(whisperContext)
         }
     }
-   func load_model(modelName: String) throws {
+
+    func load_model(modelName: String) throws {
         guard let url: URL = Bundle.main.url(forResource: modelName, withExtension: "bin") else {
             throw NSError(domain: "model load error", code: -1)
         }
@@ -29,8 +31,9 @@ class WhisperRecognizer: Recognizer{
             throw NSError(domain: "model load error", code: -1)
         }
     }
-    private func load_audio(url: URL) throws -> Array<Float32> {
-        guard let audio = try? AVAudioFile(forReading: url, commonFormat: .pcmFormatFloat32, interleaved: false) else{
+
+    private func load_audio(url: URL) throws -> [Float32] {
+        guard let audio = try? AVAudioFile(forReading: url, commonFormat: .pcmFormatFloat32, interleaved: false) else {
             throw NSError(domain: "audio load error", code: -1)
         }
         guard let buffer = AVAudioPCMBuffer(pcmFormat: audio.processingFormat, frameCapacity: AVAudioFrameCount(audio.length)) else {
@@ -48,11 +51,25 @@ class WhisperRecognizer: Recognizer{
         return audioData
     }
     
-    func recognize(audioFileURL: URL, language: Language) throws -> RecognizedSpeech{
-        if whisperContext != nil {
-            guard let audioData = try? load_audio(url: audioFileURL) else{
-                throw NSError(domain: "audio load error", code: -1)
-            }
+    func recognize(
+        audioFileURL: URL,
+        language: Language,
+        callback: @escaping (RecognizedSpeech) -> Void
+    ) throws -> RecognizedSpeech {
+        guard let whisperContext else {
+            throw NSError(domain: "model load error", code: -1)
+        }
+        
+        guard let audioData = try? load_audio(url: audioFileURL) else {
+            throw NSError(domain: "audio load error", code: -1)
+        }
+        
+        let recognizedSpeech = RecognizedSpeech(
+            audioFileURL: audioFileURL,
+            language: language,
+            transcriptionLines: []
+        )
+        DispatchQueue.global(qos: .userInteractive).async {
             let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
             var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
             language.rawValue.withCString { en in
@@ -70,28 +87,25 @@ class WhisperRecognizer: Recognizer{
                 
                 whisper_reset_timings(whisperContext)
                 audioData.withUnsafeBufferPointer { data in
-                    if (whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0) {
+                    if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
                     } else {
                         whisper_print_timings(whisperContext)
                     }
                 }
             }
-            var transcription = ""
+
             let n_segments = whisper_full_n_segments(whisperContext)
-            var transcriptionLines: [TranscriptionLine] = []
-            for i in 0..<n_segments {
-                let text = String.init(cString: whisper_full_get_segment_text(whisperContext, i))
+            for i in 0 ..< n_segments {
+                let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
                 let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
                 let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
                 let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: i)
-                transcriptionLines.append(transcriptionLine)
-                transcription += text
+                recognizedSpeech.transcriptionLines.append(transcriptionLine)
             }
-            let recognizedSpeech = RecognizedSpeech(audioFileURL: audioFileURL, language: language, transcriptionLines: transcriptionLines)
             
-            return recognizedSpeech
-        } else {
-            throw NSError(domain: "model load error", code: -1)
+            callback(recognizedSpeech)
         }
+        
+        return recognizedSpeech
     }
 }

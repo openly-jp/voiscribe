@@ -8,16 +8,20 @@ struct RecognitionTest: View {
         guard let url: URL = Bundle.main.url(forResource: audioFileName, withExtension: "wav") else {
             return "音声のロードに失敗しました"
         }
-        guard let recognizedSpeech = try? recognizer.recognize(audioFileURL: url, language: Language.en) else{
+        guard let recognizedSpeech = try? recognizer.recognize(
+            audioFileURL: url,
+            language: Language.en,
+            callback: { rs in
+                let transcriptionLines = rs.transcriptionLines
+                for i in 0..<transcriptionLines.count {
+                    text += transcriptionLines[i].text
+                }
+                print("inside callback", text)
+            }
+        ) else{
             return "認識に失敗しました"
         }
-        let transcriptionLines = recognizedSpeech.transcriptionLines
-        var transcription = ""
-        for i in 0..<transcriptionLines.count {
-            transcription += transcriptionLines[i].text
-        }
-        return transcription
-        
+        return ""
     }
     var body: some View {
         VStack {

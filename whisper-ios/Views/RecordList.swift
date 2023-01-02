@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct RecordList: View {
+    @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
+    @Binding var isActives: [Bool]
 
     func getLocaleDateString(date: Date) -> String{
         let dateFormatter = DateFormatter()
@@ -14,8 +16,14 @@ struct RecordList: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(recognizedSpeeches, id: \.self.id) { recognizedSpeech in
-                    NavigationLink(destination: RecordDetails(recognizedSpeech: recognizedSpeech)) {
+                ForEach(Array(recognizedSpeeches.enumerated()), id: \.offset) { idx, recognizedSpeech in
+                    NavigationLink(
+                        destination: RecordDetails(
+                            recognizedSpeech: recognizedSpeech,
+                            isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
+                        ),
+                        isActive: $isActives[idx]
+                    ) {
                         HStack{
                             Image(systemName: "mic.square.fill")
                                 .resizable()
@@ -24,7 +32,11 @@ struct RecordList: View {
 
                             VStack(alignment: .leading) {
                                 Text(recognizedSpeech.title).font(.headline)
-                                Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                if recognizingSpeechIds.contains(recognizedSpeech.id) {
+                                    Text("認識中").foregroundColor(.red)
+                                } else {
+                                    Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                }
                                 Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                                     .foregroundColor(Color.gray)
                             }
@@ -43,6 +55,7 @@ struct RecordList: View {
             CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
         }
         recognizedSpeeches.remove(atOffsets: indexSet)
+        isActives.remove(atOffsets: indexSet)
     }
 }
 
@@ -50,6 +63,10 @@ class RecordList_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
-        RecordList(recognizedSpeeches: .constant(recognizedSpeechs))
+        RecordList(
+            recognizingSpeechIds: .constant([]),
+            recognizedSpeeches: .constant(recognizedSpeechs),
+            isActives: .constant([])
+        )
     }
 }
