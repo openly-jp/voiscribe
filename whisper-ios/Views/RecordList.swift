@@ -37,6 +37,6 @@ struct RecordList: View {
 
 class RecordList_Previews: PreviewProvider {
     static var previews: some View {
-        RecordList(recognizedSpeeches: .constant(CoreDataRepository.getAll()))
+        RecordList(recognizedSpeeches: .constant(Array(recognizedSpeechMocks.values)))
     }
 }
