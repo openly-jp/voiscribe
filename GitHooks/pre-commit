@@ -1,0 +1,60 @@
+#!/usr/bin/env sh
+
+# SwiftFormat
+command="swift run --package-path BuildTools swiftformat"
+
+color_red () {
+  ESC=$(printf '\033')
+  printf "$ESC[31m$1$ESC[m"
+}
+
+command -v $command 1>/dev/null 2>&1
+if [ $? -gt 0 ]; then
+  echo $(color_red "😓 swiftformat コマンドが見つかりません。")
+  exit 1
+fi
+
+should_fail=false
+staged_swift_files=`git diff --diff-filter=d --staged --name-only | grep -e '\(.*\).swift$'`
+if [ -z "$staged_swift_files" ]; then
+  # no swift file found
+  exit 0
+fi
+
+while read file; do
+  # stagingされていない変更のパッチを作成
+  unstaged_patch=$(git diff "$file")
+  if [ ! -z "$unstaged_patch" ]; then
+    # stagingされていない変更があれば削除
+    git restore $file
+  fi
+  # stagingの変更部分のみSwiftFormatでチェック (変更は起こらない)
+  echo "👁 SwiftFormat: 確認中... $file"
+  $command --lint $file
+  if [ $? -eq 0 ]; then
+    # no error
+    if [ ! -z "$unstaged_patch" ]; then
+      # パッチがあれば適用して戻す
+      echo "$unstaged_patch" | git apply --whitespace=nowarn
+    fi
+    printf "\n"
+    continue
+  fi
+  
+  should_fail=true
+  if [ ! -z "$unstaged_patch" ]; then
+    # パッチがあれば適用して戻す
+    echo "$unstaged_patch" | git apply --whitespace=nowarn
+  fi
+  # SwiftFormatを適用 (変更が起こる)
+  echo "🪬 SwiftFormat: 適用中... $file"
+  $command $file
+  printf "\n"
+done <<< "$staged_swift_files"
+# ↑doneの後ろから読み込ませる方法でなければ、should_fail変数の変更が反映されない
+
+if "$should_fail" ; then
+  echo $(color_red "⛔️ SwiftFormatによってコードに変更が生じました。")
+  echo "変更を取り入れるなどの対応をお願いします。"
+  exit 1
+fi
