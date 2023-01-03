@@ -18,14 +18,15 @@ struct RecognitionTest: View {
                 }
                 print("inside callback", text)
             }
-        ) else{
+        ) else {
             return "認識に失敗しました"
         }
         return ""
     }
+
     var body: some View {
         VStack {
-            HStack{
+            HStack {
                 Text("音声認識テスト").font(.title).fontWeight(.bold)
                 Image(systemName: "mic.circle.fill").resizable()
                     .frame(width: 30.0, height: 30.0)
@@ -33,8 +34,8 @@ struct RecognitionTest: View {
             Spacer().frame(height: 30)
             Text("選択中サンプル: \(audio_file_name)")
             Text("認識結果: \(text)")
-            HStack{
-                Button("サンプル1", action: {audio_file_name = "sample_wav1"}).buttonStyle(.bordered)
+            HStack {
+                Button("サンプル1", action: { audio_file_name = "sample_wav1" }).buttonStyle(.bordered)
                 Button("サンプル2", action: {
                     audio_file_name = "sample_wav2"
                 }).buttonStyle(.bordered)

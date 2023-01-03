@@ -1,5 +1,5 @@
-import Foundation
 import CoreData
+import Foundation
 
 class CoreDataRepository {
     init() {}
@@ -15,11 +15,12 @@ class CoreDataRepository {
     }()
 
     private static var context: NSManagedObjectContext {
-        return CoreDataRepository.persistentContainer.viewContext
+        CoreDataRepository.persistentContainer.viewContext
     }
 }
 
 // MARK: for Create
+
 extension CoreDataRepository {
     static func entity<T: NSManagedObject>() -> T {
         let entityDescription = NSEntityDescription.entity(
@@ -31,6 +32,7 @@ extension CoreDataRepository {
 }
 
 // MARK: CRUD
+
 extension CoreDataRepository {
     static func array<T: NSManagedObject>() -> [T] {
         do {
@@ -61,6 +63,7 @@ extension CoreDataRepository {
 }
 
 // MARK: context CRUD
+
 extension CoreDataRepository {
     static func save() {
         guard context.hasChanges else { return }
@@ -75,7 +78,7 @@ extension CoreDataRepository {
         guard context.hasChanges else { return }
         context.rollback()
     }
-    
+
     static func fetch<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) -> [T] {
         do {
             return try context.fetch(request)

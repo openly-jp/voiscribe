@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct IdAmp : Identifiable {
+struct IdAmp: Identifiable {
     var id: UUID
     var amp: Float
     var idx: Int
@@ -16,7 +16,7 @@ struct IdAmp : Identifiable {
 
 struct Waveform: View {
     @Binding var idAmps: [IdAmp]
-    
+
     let e: Float = 2.718281828459
     let rectangleWidth: CGFloat = 2.0
     let spacingWidth: CGFloat = 2.0

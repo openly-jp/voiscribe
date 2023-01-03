@@ -6,7 +6,7 @@ struct SideMenu: View {
     var body: some View {
         List {
             Section {
-                VStack(alignment: .leading){
+                VStack(alignment: .leading) {
                     Button(action: {
                         do {
                             try recognizer.load_model(modelName: "ggml-tiny.en")
@@ -24,7 +24,7 @@ struct SideMenu: View {
                         } catch {
                             print("model load failed")
                         }
-                        
+
                     }, label: {
                         Text("ggml-tiny")
                     })

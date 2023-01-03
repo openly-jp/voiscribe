@@ -5,7 +5,7 @@ struct RecordList: View {
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @Binding var isActives: [Bool]
 
-    func getLocaleDateString(date: Date) -> String{
+    func getLocaleDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateStyle = .medium
@@ -13,6 +13,7 @@ struct RecordList: View {
 
         return dateFormatter.string(from: date)
     }
+
     var body: some View {
         NavigationView {
             List {
@@ -24,7 +25,7 @@ struct RecordList: View {
                         ),
                         isActive: $isActives[idx]
                     ) {
-                        HStack{
+                        HStack {
                             Image(systemName: "mic.square.fill")
                                 .resizable()
                                 .frame(width: 30.0, height: 30.0)

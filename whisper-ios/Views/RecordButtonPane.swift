@@ -26,7 +26,7 @@ struct RecordButtonPane: View {
 
     var body: some View {
         ZStack {
-            if isRecording && !isPaused {
+            if isRecording, !isPaused {
                 Circle()
                     .stroke(.gray, lineWidth: borderStrokeWidth)
                     .frame(width: circleDiameter, height: circleDiameter)
@@ -44,8 +44,8 @@ struct RecordButtonPane: View {
 
                 let size = circleDiameter - borderSpacing
                 Button(action: startAction) { RoundedRectangle(cornerRadius: size)
-                        .frame(width:  size, height: size)
-                        .foregroundColor(buttonColor)
+                    .frame(width: size, height: size)
+                    .foregroundColor(buttonColor)
                 }
             }
         }
@@ -54,7 +54,7 @@ struct RecordButtonPane: View {
 
 struct RecordButton_Previews: PreviewProvider {
     static var previews: some View {
-        return RecordButtonPane(
+        RecordButtonPane(
             isRecording: .constant(false),
             isPaused: .constant(false),
             startAction: {},

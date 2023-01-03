@@ -7,8 +7,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(RecognizedSpeechData)
 public class RecognizedSpeechData: NSManagedObject {
@@ -20,7 +20,7 @@ public class RecognizedSpeechData: NSManagedObject {
         rsEntity.language = aRecognizedSpeech.language.rawValue
         rsEntity.createdAt = aRecognizedSpeech.createdAt
         rsEntity.updatedAt = aRecognizedSpeech.updatedAt
-        
+
         for aTranscriptionLine in aRecognizedSpeech.transcriptionLines {
             let tlEntity: TranscriptionLineData = CoreDataRepository.entity()
             tlEntity.id = aTranscriptionLine.id
@@ -30,13 +30,13 @@ public class RecognizedSpeechData: NSManagedObject {
             tlEntity.ordering = aTranscriptionLine.ordering
             tlEntity.createdAt = aTranscriptionLine.createdAt
             tlEntity.updatedAt = aTranscriptionLine.updatedAt
-            
+
             tlEntity.recognizedSpeech = rsEntity
             rsEntity.addToTranscriptionLines(tlEntity)
         }
         return rsEntity
     }
-    
+
     static func toModel(aRecognizedSpeechData: RecognizedSpeechData) -> RecognizedSpeech {
         let rsModel = RecognizedSpeech(
             id: aRecognizedSpeechData.id,
@@ -47,11 +47,11 @@ public class RecognizedSpeechData: NSManagedObject {
             createdAt: aRecognizedSpeechData.createdAt,
             updatedAt: aRecognizedSpeechData.updatedAt
         )
-        
+
         let transcriptionLines: [TranscriptionLine] = []
         for tld in aRecognizedSpeechData.transcriptionLines {
             let tldEntity = tld as! TranscriptionLineData
-            let tlModel = TranscriptionLine (
+            let tlModel = TranscriptionLine(
                 id: tldEntity.id,
                 startMSec: tldEntity.startMSec,
                 endMSec: tldEntity.endMSec,

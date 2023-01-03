@@ -1,9 +1,8 @@
-import SwiftUI
 import AVFoundation
-
+import SwiftUI
 
 struct StopButtonPane: View {
-    let stopAction: ()->Void
+    let stopAction: () -> Void
 
     let circleDiameter: CGFloat = 80
     let buttonColor: Color = .red
@@ -26,9 +25,8 @@ struct StopButtonPane: View {
         }
     }
 
-
     private func recordButton(size: CGFloat) -> some View {
-        return Button(action: stopAction){
+        Button(action: stopAction) {
             RoundedRectangle(cornerRadius: size * stoppedStateCornerRadius)
                 .frame(width: size * stoppedStateSize, height: size * stoppedStateSize)
         }
@@ -37,6 +35,6 @@ struct StopButtonPane: View {
 
 struct StopButtonPane_Previews: PreviewProvider {
     static var previews: some View {
-        return StopButtonPane(stopAction: {})
+        StopButtonPane(stopAction: {})
     }
 }
