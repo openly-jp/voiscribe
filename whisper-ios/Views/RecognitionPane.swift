@@ -1,4 +1,5 @@
 import AVFoundation
+import DequeModule
 import SwiftUI
 
 let UserDefaultASRLanguageKey = "asr-language"
@@ -10,7 +11,7 @@ struct RecognitionPane: View {
     @State var isPaused: Bool = false
 
     @State var elapsedTime: Int
-    @State var idAmps: [IdAmp]
+    @State var idAmps: Deque<IdAmp>
 
     @State var updateRecordingTimeTimer: Timer?
     @State var updateWaveformTimer: Timer?
@@ -87,8 +88,7 @@ struct RecognitionPane: View {
 
             let idAmp = IdAmp(
                 id: UUID(),
-                amp: audioRecorder.averagePower(forChannel: 0),
-                idx: idAmps.count
+                amp: audioRecorder.averagePower(forChannel: 0)
             )
             idAmps.append(idAmp)
         }
