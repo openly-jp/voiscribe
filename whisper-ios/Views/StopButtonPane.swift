@@ -3,7 +3,7 @@ import AVFoundation
 
 
 struct StopButtonPane: View {
-    let stopAction: ()->Void
+    let stopAction: () -> Void
 
     let circleDiameter: CGFloat = 80
     let buttonColor: Color = .red
