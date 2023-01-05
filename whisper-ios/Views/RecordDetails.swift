@@ -29,11 +29,11 @@ struct RecordDetails: View {
         let url = getURLByName(fileName: recognizedSpeech.audioFileURL.lastPathComponent)
         do {
             player = try AVAudioPlayer(contentsOf: url)
+            player.enableRate = true
         } catch {
             player = try! AVAudioPlayer()
             debugPrint("fail to init audio player")
         }
-        
     }
 
     var body: some View {
@@ -50,7 +50,12 @@ struct RecordDetails: View {
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
             if isRecognizing {
-                Text("認識中")
+                Spacer()
+                HStack {
+                    Spacer()
+                    Text("認識中")
+                    Spacer()
+                }
                 Spacer()
             } else {
                 ScrollView{
