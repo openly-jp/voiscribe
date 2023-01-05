@@ -9,7 +9,7 @@ struct RecordList: View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(Array(recognizedSpeeches.enumerated()), id: \.offset) { idx, recognizedSpeech in
+                    ForEach(Array(recognizedSpeeches.enumerated()), id: \.element.id) { idx, recognizedSpeech in
                         NavigationLink(
                             destination: LazyView(RecordDetails(
                                 recognizedSpeech: recognizedSpeech,
