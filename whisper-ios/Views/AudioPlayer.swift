@@ -5,7 +5,7 @@ import SwiftUI
 
 struct AudioPlayer: View {
     @Binding var player: AVAudioPlayer
-    @State var currentPlayingTime: Double = 0
+    @Binding var currentPlayingTime: Double
     @State var isEditing = false
     @State var isPlaying = false
 

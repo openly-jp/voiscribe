@@ -12,7 +12,11 @@ struct RecordDetails: View {
 
         return dateFormatter.string(from: date)
     }
+
+    // MARK: - state about player
     @State var player: AVAudioPlayer
+    @State var currentPlayingTime: Double = 0
+    @State var currentLineIdx: Int = 0
 
     init(
         recognizedSpeech: RecognizedSpeech,
@@ -50,31 +54,44 @@ struct RecordDetails: View {
                 Spacer()
             } else {
                 ScrollView{
-                    ForEach(recognizedSpeech.transcriptionLines) {
-                        transcriptionLine in
-                        HStack(alignment: .center){
-                            Button {
-                                player.currentTime = Double(transcriptionLine.startMSec) / 1000
-                            } label: {
-                                Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
-                                    .frame(width: 50, alignment: .center)
-                                    .foregroundColor(Color.blue)
-                                    .padding()
+                    ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.self.offset) {
+                        idx, transcriptionLine in
+                        Group{
+                            HStack(alignment: .center){
+                                Button {
+                                    player.currentTime = Double(transcriptionLine.startMSec) / 1000
+                                    currentPlayingTime = Double(transcriptionLine.startMSec) / 1000
+                                } label: {
+                                    Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
+                                        .frame(width: 50, alignment: .center)
+                                        .foregroundColor(Color.blue)
+                                        .padding()
+                                }
+                                Spacer()
+                                Text(transcriptionLine.text)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            Spacer()
-                            Text(transcriptionLine.text)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        Divider()
+                           Divider()
+                        }.background(getTextColor(idx))
                     }
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
                 .padding()
                 .navigationBarTitle("", displayMode: .inline)
-                AudioPlayer(player: $player)
+                AudioPlayer(player: $player, currentPlayingTime: $currentPlayingTime)
                     .padding(20)
             }
         }
+    }
+
+    func getTextColor(_ idx: Int) -> Color {
+        let lines = recognizedSpeech.transcriptionLines
+        let startMSec = Double(lines[idx].startMSec)
+        let endMSec: Double = idx < lines.count - 1 ? Double(lines[idx + 1].startMSec) : .infinity
+        let currentMSec = currentPlayingTime * 1000
+        let isInside = startMSec <= currentMSec && currentMSec < endMSec
+        let uiColor: UIColor = isInside ? .systemGray5 : .systemBackground
+        return Color(uiColor)
     }
 }
 
