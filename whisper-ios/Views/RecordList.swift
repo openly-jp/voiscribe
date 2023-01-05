@@ -19,10 +19,10 @@ struct RecordList: View {
                 List {
                     ForEach(Array(recognizedSpeeches.enumerated()), id: \.offset) { idx, recognizedSpeech in
                         NavigationLink(
-                            destination: RecordDetails(
+                            destination: LazyView(RecordDetails(
                                 recognizedSpeech: recognizedSpeech,
                                 isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
-                            ),
+                            )),
                             isActive: $isActives[idx]
                         ) {
                             HStack{
