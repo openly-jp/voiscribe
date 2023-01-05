@@ -23,6 +23,7 @@ struct whisperTestApp: App {
 struct startView: View {
     @State var isLoading: Bool = true
     @State var recognizer: WhisperRecognizer?
+    @AppStorage(UserDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
 
     var body: some View {
         if isLoading {
@@ -31,7 +32,7 @@ struct startView: View {
                 .frame(width: 60, height: 60)
                 .onAppear {
                     DispatchQueue.global(qos: .userInteractive).async {
-                        recognizer = WhisperRecognizer(modelName: "ggml-tiny.en")
+                        recognizer = WhisperRecognizer(modelName: defaultModelName)
                         isLoading = false
                     }
                 }

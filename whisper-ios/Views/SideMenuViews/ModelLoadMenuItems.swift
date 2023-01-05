@@ -1,5 +1,7 @@
 import SwiftUI
 
+let UserDefaultASRModelNameKey = "user-default-asr-model-name"
+
 struct ModelLoadMenuItemView: View {
     var body: some View{
         HStack {
@@ -15,6 +17,7 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
+    @AppStorage(UserDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
     let modelName: String
     let modelDisplayName: String
     @State private var showDialogue = false
@@ -42,7 +45,11 @@ struct ModelLoadSubMenuItemView: View {
                   message: Text("一部のモデルはダウンロードが行われます"),
                   primaryButton: .cancel(Text("キャンセル")),
                   secondaryButton: .default(Text("変更"), action: {
-                _ = changeModel()
+                let isSucceed = changeModel()
+                if isSucceed {
+                    // change default model name for next model loading time
+                    defaultModelName = modelName
+                }
             })
             )
         }
