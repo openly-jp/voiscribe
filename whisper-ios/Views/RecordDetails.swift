@@ -18,13 +18,18 @@ struct RecordDetails: View {
         recognizedSpeech: RecognizedSpeech,
         isRecognizing: Bool
     ) {
-        let rs = recognizedSpeech
         self.recognizedSpeech = recognizedSpeech
         self.isRecognizing = isRecognizing
 
         // TODO: fix this (issue #25)
         let url = getURLByName(fileName: recognizedSpeech.audioFileURL.lastPathComponent)
-        player = try! AVAudioPlayer(contentsOf: url)
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+        } catch {
+            player = try! AVAudioPlayer()
+            debugPrint("fail to init audio player")
+        }
+        
     }
 
     var body: some View {
