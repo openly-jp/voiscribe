@@ -28,13 +28,13 @@ struct AudioPlayer: View {
             .font(.caption)
 
             HStack {
-                PlayerButton(name: "gobackward.5", size: 40) {
+                PlayerButton(name: "gobackward.5", size: 35) {
                     player.currentTime -= 5
                 }
                 Spacer()
                 PlayerButton(
                     name: isPlaying ? "pause.circle.fill" : "play.circle.fill",
-                    size: 60
+                    size: 55
                 ) {
                     if !isPlaying {
                         updateRecordingTimeTimer = Timer.scheduledTimer(
@@ -55,7 +55,7 @@ struct AudioPlayer: View {
 
                 Spacer()
 
-                PlayerButton(name: "goforward.5", size: 40) {
+                PlayerButton(name: "goforward.5", size: 35) {
                     player.currentTime += 5
                 }
             }
