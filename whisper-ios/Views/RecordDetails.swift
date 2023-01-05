@@ -51,11 +51,7 @@ struct RecordDetails: View {
                 .padding(.horizontal)
             if isRecognizing {
                 Spacer()
-                HStack {
-                    Spacer()
-                    Text("認識中")
-                    Spacer()
-                }
+                RecognizingView()
                 Spacer()
             } else {
                 ScrollView{
@@ -103,6 +99,23 @@ struct RecordDetails: View {
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
-        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
+        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: true)
+    }
+}
+
+struct RecognizingView: View {
+    var body: some View {
+        HStack {
+            Spacer()
+            ProgressView()
+                .scaleEffect(2)
+                .padding(30)
+            Spacer()
+        }
+        HStack {
+            Spacer()
+            Text("認識中")
+            Spacer()
+        }
     }
 }
