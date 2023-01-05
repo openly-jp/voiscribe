@@ -29,12 +29,6 @@ struct RecognitionPane: View {
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
 
-    var timeString: String {
-        let minutes = String(format: "%02d", elapsedTime / 60)
-        let seconds = String(format: "%02d", elapsedTime % 60)
-        return "\(minutes):\(seconds)"
-    }
-
     init(
         recognizingSpeechIds: Binding<[UUID]>,
         recognizedSpeeches: Binding<[RecognizedSpeech]>,
@@ -52,7 +46,7 @@ struct RecognitionPane: View {
         ]
 
         self.audioRecorder = try! AVAudioRecorder(url: getTmpURL(), settings: settings)
-        audioRecorder.isMeteringEnabled = true
+        self.audioRecorder.isMeteringEnabled = true
 
         self.elapsedTime = 0
         self.idAmps = []
@@ -182,7 +176,8 @@ struct RecognitionPane: View {
                                 title: Text("録音を終了しますか？"),
                                 message: Text("録音された音声は破棄されます。本当に終了しますか？"),
                                 primaryButton: .destructive(Text("終了"), action: finishRecording),
-                                secondaryButton: .cancel())
+                                secondaryButton: .cancel()
+                            )
                         }
                         Spacer()
                     }
@@ -195,7 +190,7 @@ struct RecognitionPane: View {
                                 .fill(.red)
                                 .frame(width: 10)
                         }
-                        Text(timeString)
+                        Text(formatTime(Double(elapsedTime)))
                     }.padding(40)
 
                     Waveform(idAmps: $idAmps)
@@ -235,7 +230,11 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
     let newURL = getAudioFileURL(id: recognizedSpeech.id)
 
     recognizedSpeech.audioFileURL = newURL
-    try! FileManager.default.moveItem(at: tmpURL, to: newURL)
+    do {
+        try FileManager.default.moveItem(at: tmpURL, to: newURL)
+    } catch {
+        debugPrint("fail to move file:", error)
+    }
 }
 
 /// get temporary url to save audio file
