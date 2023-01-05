@@ -1,11 +1,9 @@
 import SwiftUI
 
 struct SideMenu: View {
-    @EnvironmentObject var recognizer: WhisperRecognizer
-    @Binding var page: Int
     @Binding var isOpen: Bool
     let width: CGFloat = 270
-    let menuItems: [MenuItem] = [modelLoadMenuItem, languageSelectMenuItem]
+    let menuItems: [MenuItem] = [modelLoadMenuItem, languageSelectMenuItem, developerMenuItem]
     
     var body: some View {
         ZStack {
@@ -43,6 +41,6 @@ struct SideMenu_Previews: PreviewProvider {
     @State static var page = 0
     @State static var isOpen = true
     static var previews: some View {
-        SideMenu(page: $page, isOpen: $isOpen)
+        SideMenu(isOpen: $isOpen)
     }
 }

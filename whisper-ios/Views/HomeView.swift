@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var showSideMenu = false
-    @State var page = 0
+    @AppStorage(UserModeNumKey) var userModeNum = 0
     var body: some View {
         VStack{
             ZStack{
@@ -27,19 +27,19 @@ struct HomeView: View {
             }
             GeometryReader {
                 geometry in
-                if page == 0 {
+                if userModeNum == 0 {
                     MainView()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .disabled(self.showSideMenu)
                         .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
-                } else if page == 1 {
-                    RecognitionTest()
+                } else if userModeNum == 1{
+                    DeveloperMainView()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .disabled(self.showSideMenu)
                         .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
                 }
                 
-                SideMenu(page: self.$page, isOpen: self.$showSideMenu)
+                SideMenu(isOpen: self.$showSideMenu)
             }
         }
     }
