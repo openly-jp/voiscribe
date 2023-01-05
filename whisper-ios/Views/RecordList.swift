@@ -5,14 +5,6 @@ struct RecordList: View {
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @Binding var isActives: [Bool]
 
-    func getLocaleDateString(date: Date) -> String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateStyle = .medium
-        dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
-
-        return dateFormatter.string(from: date)
-    }
     var body: some View {
         NavigationView {
             List {
@@ -49,7 +41,16 @@ struct RecordList: View {
             .navigationBarTitle("Notes")
         }
     }
+    
+    private func getLocaleDateString(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateStyle = .medium
+        dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
 
+        return dateFormatter.string(from: date)
+    }
+    
     private func deleteRecognizedSpeech(indexSet: IndexSet) {
         for i in indexSet {
             CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])

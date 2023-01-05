@@ -4,15 +4,6 @@ struct HomeView: View {
     @State var showSideMenu = false
     @State var page = 0
     var body: some View {
-        let drag = DragGesture()
-            .onEnded{
-                value in
-                if value.translation.width < -100 {
-                    withAnimation{
-                        self.showSideMenu = false
-                    }
-                }
-            }
         VStack{
             ZStack{
                 HStack(alignment: .center){
@@ -39,22 +30,17 @@ struct HomeView: View {
                 if page == 0 {
                     MainView()
                         .frame(width: geometry.size.width, height: geometry.size.height)
-                        .offset(x: self.showSideMenu ? geometry.size.width * 0.6 : 0)
                         .disabled(self.showSideMenu)
                         .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
                 } else if page == 1 {
                     RecognitionTest()
                         .frame(width: geometry.size.width, height: geometry.size.height)
-                        .offset(x: self.showSideMenu ? geometry.size.width * 0.6 : 0)
                         .disabled(self.showSideMenu)
                         .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
                 }
-                if self.showSideMenu {
-                    SideMenu(page: self.$page)
-                        .frame(width: geometry.size.width * 0.6)
-                        .transition(.move(edge: .leading))
-                }
-            }.gesture(self.showSideMenu ? drag : nil)
+                
+                SideMenu(page: self.$page, isOpen: self.$showSideMenu)
+            }
         }
     }
 }
