@@ -27,6 +27,10 @@ struct RecordDetails: View {
 
         // TODO: fix this (issue #25)
         let url = getURLByName(fileName: recognizedSpeech.audioFileURL.lastPathComponent)
+        
+        let session = AVAudioSession.sharedInstance()
+        try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
+        try! session.setActive(true)
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player.enableRate = true
