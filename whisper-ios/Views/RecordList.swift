@@ -7,39 +7,47 @@ struct RecordList: View {
 
     var body: some View {
         NavigationView {
-            List {
-                ForEach(Array(recognizedSpeeches.enumerated()), id: \.offset) { idx, recognizedSpeech in
-                    NavigationLink(
-                        destination: RecordDetails(
-                            recognizedSpeech: recognizedSpeech,
-                            isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
-                        ),
-                        isActive: $isActives[idx]
-                    ) {
-                        HStack{
-                            Image(systemName: "mic.square.fill")
-                                .resizable()
-                                .frame(width: 30.0, height: 30.0)
-                                .padding()
+            VStack {
+                List {
+                    ForEach(Array(recognizedSpeeches.enumerated()), id: \.offset) { idx, recognizedSpeech in
+                        NavigationLink(
+                            destination: LazyView(RecordDetails(
+                                recognizedSpeech: recognizedSpeech,
+                                isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
+                            )),
+                            isActive: $isActives[idx]
+                        ) {
+                            HStack{
+                                Image(systemName: "mic.square.fill")
+                                    .resizable()
+                                    .frame(width: 30.0, height: 30.0)
+                                    .padding()
 
-                            VStack(alignment: .leading) {
-                                Text(recognizedSpeech.title).font(.headline)
-                                if recognizingSpeechIds.contains(recognizedSpeech.id) {
-                                    Text("認識中").foregroundColor(.red)
-                                } else {
-                                    Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                VStack(alignment: .leading) {
+                                    Text(recognizedSpeech.title).font(.headline)
+                                    if recognizingSpeechIds.contains(recognizedSpeech.id) {
+                                        Text("認識中").foregroundColor(.red)
+                                    } else {
+                                        Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                    }
+                                    Text(getLocaleDateString(date: recognizedSpeech.createdAt))
+                                        .foregroundColor(Color.gray)
                                 }
-                                Text(getLocaleDateString(date: recognizedSpeech.createdAt))
-                                    .foregroundColor(Color.gray)
                             }
                         }
                     }
+                    .onDelete(perform: deleteRecognizedSpeech)
                 }
-                .onDelete(perform: deleteRecognizedSpeech)
+                .listStyle(PlainListStyle())
+                .navigationBarTitle("Notes")
+                RecognitionPane(
+                    recognizingSpeechIds: $recognizingSpeechIds,
+                    recognizedSpeeches: $recognizedSpeeches,
+                    isActives: $isActives
+                )
             }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("Notes")
         }
+
     }
     
     private func getLocaleDateString(date: Date) -> String{
@@ -67,7 +75,7 @@ class RecordList_Previews: PreviewProvider {
         RecordList(
             recognizingSpeechIds: .constant([]),
             recognizedSpeeches: .constant(recognizedSpeechs),
-            isActives: .constant([])
+            isActives: .constant(Array<Bool>(repeating: false, count: recognizedSpeechs.count))
         )
     }
 }

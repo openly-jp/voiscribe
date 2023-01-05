@@ -58,18 +58,11 @@ struct MainView: View {
         self.isActives = Array<Bool>(repeating: false, count: initialRecognizedSpeeches.count)
     }
     var body: some View {
-        VStack{
-            RecordList(
-                recognizingSpeechIds: $recognizingSpeechIds,
-                recognizedSpeeches: $recognizedSpeeches,
-                isActives: $isActives
-            )
-            RecognitionPane(
-                recognizingSpeechIds: $recognizingSpeechIds,
-                recognizedSpeeches: $recognizedSpeeches,
-                isActives: $isActives
-            )
-        }
+        RecordList(
+            recognizingSpeechIds: $recognizingSpeechIds,
+            recognizedSpeeches: $recognizedSpeeches,
+            isActives: $isActives
+        )
     }
 }
 
