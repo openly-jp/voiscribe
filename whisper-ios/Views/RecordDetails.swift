@@ -47,6 +47,7 @@ struct RecordDetails: View {
                 .padding(.horizontal)
             if isRecognizing {
                 Text("認識中")
+                Spacer()
             } else {
                 ScrollView{
                     ForEach(recognizedSpeech.transcriptionLines) {
