@@ -6,7 +6,7 @@ struct ModelLoadMenuItemView: View {
             Image(systemName: "hearingdevice.ear.fill")
                 .imageScale(.large)
                 .frame(width: 32)
-            Text("認識モデル一覧")
+            Text("認識モデル")
                 .font(.headline)
             Spacer()
         }

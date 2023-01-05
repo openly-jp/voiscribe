@@ -13,6 +13,7 @@
 		136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 136E05192962EC3A00DEC112 /* sample_ja.csv */; };
 		136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 136E051B2962EC4700DEC112 /* sample_ja.wav */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
+		139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */; };
 		13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48A295CE4000070090B /* sample_wav2.wav */; };
 		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
 		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
@@ -79,6 +80,7 @@
 		136E05192962EC3A00DEC112 /* sample_ja.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
 		136E051B2962EC4700DEC112 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
 		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
+		139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectMenuItems.swift; sourceTree = "<group>"; };
 		13D1E48A295CE4000070090B /* sample_wav2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav2.wav; sourceTree = "<group>"; };
 		13D1E48B295CE4030070090B /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		13D1E48C295CE4030070090B /* sample_wav1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav1.wav; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
+				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
 			);
 			path = SideMenuViews;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */,
 				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
 				574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */,
+				139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,

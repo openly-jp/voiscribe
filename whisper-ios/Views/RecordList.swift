@@ -28,7 +28,12 @@ struct RecordList: View {
                                     if recognizingSpeechIds.contains(recognizedSpeech.id) {
                                         Text("認識中").foregroundColor(.red)
                                     } else {
-                                        Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                        if recognizedSpeech.transcriptionLines.count > 0 {
+                                            Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                        } else {
+                                            Text("認識結果なし")
+                                                .foregroundColor(Color.red)
+                                        }
                                     }
                                     Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                                         .foregroundColor(Color.gray)

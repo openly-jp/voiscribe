@@ -5,7 +5,7 @@ struct SideMenu: View {
     @Binding var page: Int
     @Binding var isOpen: Bool
     let width: CGFloat = 270
-    let menuItems: [MenuItem] = [modelLoadMenuItem]
+    let menuItems: [MenuItem] = [modelLoadMenuItem, languageSelectMenuItem]
     
     var body: some View {
         ZStack {
@@ -36,24 +36,6 @@ struct MenuItem: Identifiable {
     let id = UUID()
     let view: AnyView
     let subMenuItems: [MenuItem]?
-}
-
-
-
-private struct SideMenuItemView: View {
-    let systemName: String
-    let text: String
-    var body: some View {
-        HStack {
-            Image(systemName: systemName)
-                .imageScale(.large)
-                .frame(width: 32)
-            Text(text)
-                .font(.headline)
-            Spacer()
-        }
-        .padding(.leading, 16)
-    }
 }
 
 
