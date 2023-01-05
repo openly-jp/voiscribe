@@ -13,7 +13,7 @@ struct AudioPlayer: View {
 
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
-    
+
     @State var updateRecordingTimeTimer: Timer? = nil
 
     var body: some View {
@@ -47,7 +47,7 @@ struct AudioPlayer: View {
                 Spacer()
                 PlayerButton(name: "goforward.5", size: 35) { player.currentTime += 5 }
                 Spacer()
-                
+
                 // the following component is only for aligning components equally
                 Button("1x"){}.hidden()
             }
@@ -60,7 +60,7 @@ struct AudioPlayer: View {
             }
         }
     }
-    
+
     var changeSpeedSheetView: some View {
         Group {
             NavigationView {
@@ -92,7 +92,7 @@ struct AudioPlayer: View {
             }
         }
     }
-    
+
     func playOrPause() {
         if !isPlaying {
             updateRecordingTimeTimer = Timer.scheduledTimer(
@@ -105,11 +105,12 @@ struct AudioPlayer: View {
             }
             player.play()
         } else {
+            updateRecordingTimeTimer?.invalidate()
             player.pause()
         }
         isPlaying = !isPlaying
     }
-    
+
     func speedRate2String(_ speedRate: Double) -> String {
         return "\(String(format: "%g", speedRate))x"
     }

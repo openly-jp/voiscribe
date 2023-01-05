@@ -16,7 +16,6 @@ struct RecordDetails: View {
     // MARK: - state about player
     @State var player: AVAudioPlayer
     @State var currentPlayingTime: Double = 0
-    @State var currentLineIdx: Int = 0
 
     init(
         recognizedSpeech: RecognizedSpeech,
@@ -27,7 +26,7 @@ struct RecordDetails: View {
 
         // TODO: fix this (issue #25)
         let url = getURLByName(fileName: recognizedSpeech.audioFileURL.lastPathComponent)
-        
+
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
         try! session.setActive(true)
@@ -64,8 +63,13 @@ struct RecordDetails: View {
                         Group{
                             HStack(alignment: .center){
                                 Button {
-                                    player.currentTime = Double(transcriptionLine.startMSec) / 1000
-                                    currentPlayingTime = Double(transcriptionLine.startMSec) / 1000
+                                    // actual currentTime become earlier than the specified time
+                                    // e.g. player.currentTime = 1.25 -> actually player.currentTime shows 1.245232..
+                                    // thus previous transcription line is highlighted uncorrectly
+                                    // 0.1 is added to avoid this
+                                    let updatedTime = Double(transcriptionLine.startMSec) / 1000 + 0.1
+                                    player.currentTime = updatedTime
+                                    currentPlayingTime = updatedTime
                                 } label: {
                                     Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
                                         .frame(width: 50, alignment: .center)
@@ -103,7 +107,7 @@ struct RecordDetails: View {
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
-        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: true)
+        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
     }
 }
 
