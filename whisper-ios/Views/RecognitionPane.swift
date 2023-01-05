@@ -148,8 +148,8 @@ struct RecognitionPane: View {
         recognizingSpeechIds.insert(recognizingSpeech.id, at: 0)
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
         isActives.insert(true, at: 0)
-
-        saveUserLanguage(language)
+        // Changing default language is allowed only on SideMenu
+        //saveUserLanguage(language)
     }
 
     var body: some View {
@@ -209,6 +209,7 @@ struct RecognitionPane: View {
                     HStack(spacing: 50) {
                         StopButtonPane {
                             pauseRecording()
+                            language = getUserLanguage()
                             isConfirmOpen = true
                         }
                         RecordButtonPane(
@@ -268,6 +269,7 @@ func getUserLanguage() -> Language {
     return .en
 }
 
+// DEPRECATED: This operation will be done only on SideMenu
 func saveUserLanguage(_ language: Language) {
     UserDefaults.standard.set(language.rawValue, forKey: UserDefaultASRLanguageKey)
 }

@@ -5,14 +5,6 @@ struct RecordList: View {
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @Binding var isActives: [Bool]
 
-    func getLocaleDateString(date: Date) -> String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateStyle = .medium
-        dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
-
-        return dateFormatter.string(from: date)
-    }
     var body: some View {
         NavigationView {
             VStack {
@@ -36,7 +28,12 @@ struct RecordList: View {
                                     if recognizingSpeechIds.contains(recognizedSpeech.id) {
                                         Text("認識中").foregroundColor(.red)
                                     } else {
-                                        Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                        if recognizedSpeech.transcriptionLines.count > 0 {
+                                            Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
+                                        } else {
+                                            Text("認識結果なし")
+                                                .foregroundColor(Color.red)
+                                        }
                                     }
                                     Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                                         .foregroundColor(Color.gray)
@@ -57,7 +54,16 @@ struct RecordList: View {
         }
 
     }
+    
+    private func getLocaleDateString(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateStyle = .medium
+        dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
 
+        return dateFormatter.string(from: date)
+    }
+    
     private func deleteRecognizedSpeech(indexSet: IndexSet) {
         for i in indexSet {
             CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])

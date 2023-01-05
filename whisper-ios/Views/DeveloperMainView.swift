@@ -1,6 +1,7 @@
 import SwiftUI
 
-struct RecognitionTest: View {
+struct DeveloperMainView: View {
+    // This will be utilized as a developer main view
     @State var text = "まだ認識されていません"
     @State var audio_file_name = "sample_wav1"
     @EnvironmentObject var recognizer: WhisperRecognizer
@@ -47,8 +48,8 @@ struct RecognitionTest: View {
     }
 }
 
-struct RecognitionTest_Previews: PreviewProvider {
+struct DeveloperMainView_Previews: PreviewProvider {
     static var previews: some View {
-        RecognitionTest()
+        DeveloperMainView()
     }
 }

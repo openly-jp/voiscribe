@@ -12,10 +12,13 @@
 		13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13516D9E2961B661005013C8 /* ggml-tiny.bin */; };
 		136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 136E05192962EC3A00DEC112 /* sample_ja.csv */; };
 		136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 136E051B2962EC4700DEC112 /* sample_ja.wav */; };
+		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
+		139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */; };
+		139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */; };
 		13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48A295CE4000070090B /* sample_wav2.wav */; };
 		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
 		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
-		13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* RecognitionTest.swift */; };
+		13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* DeveloperMainView.swift */; };
 		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
 		13D1E49F295CE4370070090B /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49B295CE4370070090B /* Recognizer.swift */; };
@@ -77,10 +80,13 @@
 		13516D9E2961B661005013C8 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
 		136E05192962EC3A00DEC112 /* sample_ja.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
 		136E051B2962EC4700DEC112 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
+		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
+		139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectMenuItems.swift; sourceTree = "<group>"; };
+		139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenuItems.swift; sourceTree = "<group>"; };
 		13D1E48A295CE4000070090B /* sample_wav2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav2.wav; sourceTree = "<group>"; };
 		13D1E48B295CE4030070090B /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		13D1E48C295CE4030070090B /* sample_wav1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav1.wav; sourceTree = "<group>"; };
-		13D1E490295CE40C0070090B /* RecognitionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognitionTest.swift; sourceTree = "<group>"; };
+		13D1E490295CE40C0070090B /* DeveloperMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperMainView.swift; sourceTree = "<group>"; };
 		13D1E494295CE4120070090B /* whisper-ios-test-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "whisper-ios-test-Bridging-Header.h"; sourceTree = "<group>"; };
 		13D1E495295CE4120070090B /* whisper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whisper.h; sourceTree = "<group>"; };
 		13D1E496295CE4120070090B /* ggml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ggml.c; sourceTree = "<group>"; };
@@ -159,6 +165,16 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
+		136E051D2965F53500DEC112 /* SideMenuViews */ = {
+			isa = PBXGroup;
+			children = (
+				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
+				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
+				139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */,
+			);
+			path = SideMenuViews;
+			sourceTree = "<group>";
+		};
 		13D1E492295CE4120070090B /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,7 +216,8 @@
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				13D1E490295CE40C0070090B /* RecognitionTest.swift */,
+				136E051D2965F53500DEC112 /* SideMenuViews */,
+				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
 				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
 				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
@@ -474,6 +491,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13D1E499295CE4130070090B /* ggml.c in Sources */,
+				136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */,
 				5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */,
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				57EAB6E02961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift in Sources */,
@@ -484,11 +502,13 @@
 				57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */,
 				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
 				574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */,
+				139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
-				13D1E491295CE40C0070090B /* RecognitionTest.swift in Sources */,
+				13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */,
 				57B26A2D2965E04D007A7B9B /* utils.swift in Sources */,
+				139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */,
 				57CF69D42967019C00DF0E3F /* LazyView.swift in Sources */,
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				13516D9D2961A900005013C8 /* SideMenu.swift in Sources */,

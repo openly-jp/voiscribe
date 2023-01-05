@@ -4,6 +4,7 @@ import Foundation
 
 class WhisperRecognizer: Recognizer {
     private var whisperContext: OpaquePointer?
+    @Published var usedModelName: String?
     var is_ready: Bool {
         return whisperContext != nil
     }
@@ -11,7 +12,9 @@ class WhisperRecognizer: Recognizer {
     init(modelName: String) {
         do {
             try load_model(modelName: modelName)
+            self.usedModelName = modelName
         } catch {
+            self.usedModelName = "ggml-tiny"
             return
         }
     }
@@ -30,6 +33,7 @@ class WhisperRecognizer: Recognizer {
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
+        self.usedModelName = modelName
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
