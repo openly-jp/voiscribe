@@ -8,6 +8,7 @@ struct IdAmp : Identifiable {
 
 struct Waveform: View {
     @Binding var idAmps: Deque<IdAmp>
+    @Binding var isPaused: Bool
     
     let e: Float = 2.718281828459
     let rectangleWidth: CGFloat = 2.0
@@ -33,6 +34,7 @@ struct Waveform: View {
                 Rectangle()
                     .frame(width: rectangleWidth, height: amp * 50)
                     .position(x: x)
+                    .foregroundColor(isPaused ? Color(.label) : .red)
             }
         }
     }
