@@ -72,7 +72,7 @@ struct RecordDetails: View {
             } else {
                 ScrollViewReader { scrollReader in
                     ScrollView {
-                        LazyVStack {
+                        LazyVStack(spacing: 0) {
                             ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.self.offset) {
                                 idx, transcriptionLine in
                                 Group {
@@ -88,16 +88,16 @@ struct RecordDetails: View {
                                                 .foregroundColor(Color.blue)
                                                 .padding()
                                             Spacer()
-
                                             Text(transcriptionLine.text)
                                                 .foregroundColor(Color(.label))
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                                 .multilineTextAlignment(.leading)
                                         }
                                     }
+                                    .padding(10)
+                                    .background(getTextColor(idx))
                                     Divider()
                                 }
-                                .background(getTextColor(idx))
                                 .id(idx)
                             }
                         }
