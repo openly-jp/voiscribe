@@ -53,8 +53,7 @@ struct RecordList: View {
                     isActives: $isActives
                 )
             }
-        }
-
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     
     private func getLocaleDateString(date: Date) -> String{
@@ -84,5 +83,13 @@ class RecordList_Previews: PreviewProvider {
             recognizedSpeeches: .constant(recognizedSpeechs),
             isActives: .constant(Array<Bool>(repeating: false, count: recognizedSpeechs.count))
         )
+        
+        RecordList(
+            recognizingSpeechIds: .constant([]),
+            recognizedSpeeches: .constant(recognizedSpeechs),
+            isActives: .constant(Array<Bool>(repeating: false, count: recognizedSpeechs.count))
+        )
+        .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+        .previewDisplayName("ipad")
     }
 }
