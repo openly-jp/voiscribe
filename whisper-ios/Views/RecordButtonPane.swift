@@ -26,18 +26,7 @@ struct RecordButtonPane: View {
 
     var body: some View {
         ZStack {
-            if isRecording && !isPaused {
-                Circle()
-                    .stroke(.gray, lineWidth: borderStrokeWidth)
-                    .frame(width: circleDiameter, height: circleDiameter)
-                Button(action: stopAction) {
-                    Image(systemName: "pause.fill")
-                        .resizable()
-                        .frame(width: circleDiameter / 3, height: circleDiameter / 3)
-                        .foregroundColor(.gray)
-                }
-
-            } else {
+            if !isRecording {
                 Circle()
                     .stroke(borderStrokeColor, lineWidth: borderStrokeWidth)
                     .frame(width: circleDiameter, height: circleDiameter)
@@ -47,6 +36,33 @@ struct RecordButtonPane: View {
                         .frame(width:  size, height: size)
                         .foregroundColor(buttonColor)
                 }
+            }
+            else if isRecording && !isPaused {
+                Circle()
+                    .stroke(.gray, lineWidth: borderStrokeWidth)
+                    .frame(width: circleDiameter, height: circleDiameter)
+                Button(action: stopAction) {
+                    Image(systemName: "pause.fill")
+                        .resizable()
+                        .frame(width: circleDiameter / 3, height: circleDiameter / 3)
+                        .foregroundColor(.gray)
+                }
+            } else {
+                Circle()
+                    .stroke(borderStrokeColor, lineWidth: borderStrokeWidth)
+                    .frame(width: circleDiameter, height: circleDiameter)
+
+                let size = circleDiameter - borderSpacing
+                Button(action: startAction) {
+                    Text("再開")
+                        .foregroundColor(buttonColor)
+                        .font(.title3)
+                    
+                }
+                RoundedRectangle(cornerRadius: size)
+                        .frame(width:  size, height: size)
+                        .foregroundColor(buttonColor)
+                        .opacity(0.15)
             }
         }
     }
