@@ -194,7 +194,7 @@ struct RecognitionPane: View {
                     }.padding(40)
 
                     Waveform(idAmps: $idAmps, isPaused: $isPaused)
-                        .padding(.top, 40)
+                        .padding(.top, 60)
                         .padding(.bottom, 40)
 
                     NavigationLink(

@@ -24,7 +24,7 @@ struct Waveform: View {
         removeUndisplayedAmp(geometry)
         return Group {
             ForEach(Array(idAmps.enumerated()), id: \.self.offset) { idx, idAmp in
-                let amp = CGFloat(powf(e, idAmp.amp / 10) * 2)
+                let amp = CGFloat(powf(e, idAmp.amp / 10) * 4)
                 let x = getX(
                     idAmpIdx: idx,
                     numIdAmps: idAmps.count,
@@ -67,10 +67,12 @@ struct Waveform_Previews: PreviewProvider {
     static var previews: some View {
         var idAmps: Deque<IdAmp> = []
         var idx = 0
-        for amp in [-50, -2, -14, -14, -11, -42, -21, -100, -14] {
-            idAmps.append(IdAmp(id: UUID(), amp: Float(amp)))
-            idx += 1
+        for _ in (0...100) {
+            for amp in [-50, -2, -14, -14, -11, -42, -21, -100, -14] {
+                idAmps.append(IdAmp(id: UUID(), amp: Float(amp)))
+                idx += 1
+            }
         }
-        return Waveform(idAmps: .constant(idAmps))
+        return Waveform(idAmps: .constant(idAmps), isPaused: .constant(false))
     }
 }
