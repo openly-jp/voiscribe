@@ -31,8 +31,10 @@ struct RecordList: View {
                                         if recognizedSpeech.transcriptionLines.count > 0 {
                                             Text(recognizedSpeech.transcriptionLines[0].text).lineLimit(1).font(.subheadline)
                                         } else {
-                                            Text("認識結果なし")
-                                                .foregroundColor(Color.red)
+                                            HStack(spacing: 2) {
+                                                Image(systemName: "exclamationmark.triangle.fill")
+                                                Text("認識結果なし")
+                                            }.foregroundColor(Color.red)
                                         }
                                     }
                                     Text(getLocaleDateString(date: recognizedSpeech.createdAt))
