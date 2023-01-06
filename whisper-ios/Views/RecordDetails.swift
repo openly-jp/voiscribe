@@ -4,7 +4,8 @@ import SwiftUI
 struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
     let isRecognizing: Bool
-    func getLocaleDateString(date: Date) -> String{
+
+    func getLocaleDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateStyle = .medium
@@ -44,7 +45,7 @@ struct RecordDetails: View {
     }
 
     var body: some View {
-        return VStack(alignment: .leading){
+        return VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
@@ -71,33 +72,32 @@ struct RecordDetails: View {
             } else {
                 ScrollViewReader { scrollReader in
                     ScrollView {
-                        LazyVStack{
+                        LazyVStack(spacing: 0) {
                             ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.self.offset) {
                                 idx, transcriptionLine in
-                                Group{
-                                    HStack(alignment: .center){
-                                        Button {
-                                            // actual currentTime become earlier than the specified time
-                                            // e.g. player.currentTime = 1.25 -> actually player.currentTime shows 1.245232..
-                                            // thus previous transcription line is highlighted uncorrectly
-                                            // 0.1 is added to avoid this
-                                            let updatedTime = Double(transcriptionLine.startMSec) / 1000 + 0.1
-                                            player.currentTime = updatedTime
-                                            currentPlayingTime = updatedTime
-                                            withAnimation (.easeInOut){ scrollReader.scrollTo(idx) }
-                                        } label: {
+                                Group {
+                                    let action = moveTranscriptionLine(
+                                        idx: idx,
+                                        transcriptionLine: transcriptionLine,
+                                        scrollReader: scrollReader
+                                    )
+                                    Button(action: action) {
+                                        HStack(alignment: .center) {
                                             Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
                                                 .frame(width: 50, alignment: .center)
                                                 .foregroundColor(Color.blue)
                                                 .padding()
+                                            Spacer()
+                                            Text(transcriptionLine.text)
+                                                .foregroundColor(Color(.label))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .multilineTextAlignment(.leading)
                                         }
-                                        Spacer()
-                                        Text(transcriptionLine.text)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
                                     }
+                                    .padding(10)
+                                    .background(getTextColor(idx))
                                     Divider()
                                 }
-                                .background(getTextColor(idx))
                                 .id(idx)
                             }
                         }
@@ -111,6 +111,23 @@ struct RecordDetails: View {
                 AudioPlayer(player: $player, currentPlayingTime: $currentPlayingTime)
                     .padding(20)
             }
+        }
+    }
+
+    func moveTranscriptionLine(
+        idx: Int,
+        transcriptionLine: TranscriptionLine,
+        scrollReader: ScrollViewProxy
+    ) -> () -> Void {
+        return {
+            // actual currentTime become earlier than the specified time
+            // e.g. player.currentTime = 1.25 -> actually player.currentTime shows 1.245232..
+            // thus previous transcription line is highlighted uncorrectly
+            // 0.1 is added to avoid this
+            let updatedTime = Double(transcriptionLine.startMSec) / 1000 + 0.1
+            player.currentTime = updatedTime
+            currentPlayingTime = updatedTime
+            withAnimation(.easeInOut) { scrollReader.scrollTo(idx) }
         }
     }
 
@@ -156,13 +173,6 @@ struct RecordDetails: View {
     }
 }
 
-class RecordDetails_Previews: PreviewProvider {
-    static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
-        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
-    }
-}
-
 struct RecognizingView: View {
     var body: some View {
         HStack {
@@ -177,5 +187,20 @@ struct RecognizingView: View {
             Text("認識中")
             Spacer()
         }
+    }
+}
+
+class RecordDetails_Previews: PreviewProvider {
+    static var previews: some View {
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+
+        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+            .previewDisplayName("ipad")
+
+        RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: true)
+            .previewDisplayName("Record Details (recognizing)")
     }
 }
