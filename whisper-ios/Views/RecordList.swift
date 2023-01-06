@@ -53,8 +53,7 @@ struct RecordList: View {
                     isActives: $isActives
                 )
             }
-        }
-
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     
     private func getLocaleDateString(date: Date) -> String{
@@ -79,10 +78,22 @@ class RecordList_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
-        RecordList(
-            recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant(recognizedSpeechs),
-            isActives: .constant(Array<Bool>(repeating: false, count: recognizedSpeechs.count))
-        )
+        Group {
+            RecordList(
+                recognizingSpeechIds: .constant([]),
+                recognizedSpeeches: .constant(recognizedSpeechs),
+                isActives: .constant(Array<Bool>(repeating: false, count: recognizedSpeechs.count))
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+            .previewDisplayName("iphone")
+            
+            RecordList(
+                recognizingSpeechIds: .constant([]),
+                recognizedSpeeches: .constant(recognizedSpeechs),
+                isActives: .constant(Array<Bool>(repeating: false, count: recognizedSpeechs.count))
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+            .previewDisplayName("ipad")
+        }
     }
 }
