@@ -193,8 +193,8 @@ struct RecognitionPane: View {
                         Text(formatTime(Double(elapsedTime)))
                     }.padding(40)
 
-                    Waveform(idAmps: $idAmps)
-                        .padding(.top, 40)
+                    Waveform(idAmps: $idAmps, isPaused: $isPaused)
+                        .padding(.top, 60)
                         .padding(.bottom, 40)
 
                     NavigationLink(
