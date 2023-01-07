@@ -37,6 +37,7 @@
 		57C722A0295C979B009C8A20 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C7229F295C979B009C8A20 /* HomeView.swift */; };
 		57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */; };
 		57CF69D42967019C00DF0E3F /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CF69D32967019B00DF0E3F /* LazyView.swift */; };
+		57CF69D62968897800DF0E3F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CF69D52968897800DF0E3F /* Constant.swift */; };
 		57EAB6E02961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6DC2961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift */; };
 		57EAB6E22961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6DE2961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift */; };
 		57EAB6E72962041000BB59BE /* CoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6E62962041000BB59BE /* CoreDataRepository.swift */; };
@@ -108,6 +109,7 @@
 		57C7229F295C979B009C8A20 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonPane.swift; sourceTree = "<group>"; };
 		57CF69D32967019B00DF0E3F /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
+		57CF69D52968897800DF0E3F /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		57EAB6DC2961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecognizedSpeechData+CoreDataClass.swift"; path = "whisper-ios/Repository/CoreDataModels/RecognizedSpeechData+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6DE2961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranscriptionLineData+CoreDataClass.swift"; path = "whisper-ios/Repository/CoreDataModels/TranscriptionLineData+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6E62962041000BB59BE /* CoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataRepository.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				57B26A252963FFC7007A7B9B /* ConfirmPane.swift */,
 				57B26A2A2965743F007A7B9B /* AudioPlayer.swift */,
 				57CF69D32967019B00DF0E3F /* LazyView.swift */,
+				57CF69D52968897800DF0E3F /* Constant.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
+				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
 				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
 				387B6FCE0F7C83F953692C3A /* README.md in Sources */,

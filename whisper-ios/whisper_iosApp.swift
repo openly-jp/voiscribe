@@ -36,7 +36,7 @@ struct startView: View {
                         isLoading = false
                     }
                 }
-            Text("Whisper iOS")
+            Text(APP_NAME)
         } else {
             HomeView()
                 .environmentObject(recognizer!)
