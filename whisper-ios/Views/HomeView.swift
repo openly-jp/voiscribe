@@ -20,7 +20,7 @@ struct HomeView: View {
                     Spacer()
                 }
                 HStack(alignment: .center){
-                    Text("Whisper iOS")
+                    Text(APP_NAME)
                         .font(.title)
                         .fontWeight(.bold)
                 }
