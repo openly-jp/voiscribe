@@ -15,6 +15,8 @@ struct AudioPlayer: View {
 
     @State var updateRecordingTimeTimer: Timer? = nil
 
+    let transcription: String
+
     var body: some View {
         VStack(spacing: 10) {
             Slider(value: $currentPlayingTime, in: 0...player.duration) { editing in
@@ -47,8 +49,7 @@ struct AudioPlayer: View {
                 PlayerButton(name: "goforward.5", size: 35) { player.currentTime += 5 }
                 Spacer()
 
-                // the following component is only for aligning components equally
-                Button("1x"){}.hidden()
+                ShareButton(transcription: transcription)
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
@@ -133,6 +134,10 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let url = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")?.audioFileURL
         let player = try! AVAudioPlayer(contentsOf: url!)
-        AudioPlayer(player: .constant(player), currentPlayingTime: .constant(0))
+        AudioPlayer(
+            player: .constant(player),
+            currentPlayingTime: .constant(0),
+            transcription: "認識結果です"
+        )
     }
 }

@@ -108,10 +108,18 @@ struct RecordDetails: View {
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
                 .padding()
                 .navigationBarTitle("", displayMode: .inline)
-                AudioPlayer(player: $player, currentPlayingTime: $currentPlayingTime)
+                AudioPlayer(
+                    player: $player,
+                    currentPlayingTime: $currentPlayingTime,
+                    transcription: allTranscription
+                )
                     .padding(20)
             }
         }
+    }
+    
+    var allTranscription: String {
+        recognizedSpeech.transcriptionLines.reduce("") { $0 + $1.text }
     }
 
     func moveTranscriptionLine(
