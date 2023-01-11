@@ -3,7 +3,7 @@ import SwiftUI
 let UserDefaultASRModelNameKey = "user-default-asr-model-name"
 
 struct ModelLoadMenuItemView: View {
-    var body: some View{
+    var body: some View {
         HStack {
             Image(systemName: "hearingdevice.ear.fill")
                 .imageScale(.large)
@@ -21,7 +21,7 @@ struct ModelLoadSubMenuItemView: View {
     let modelName: String
     let modelDisplayName: String
     @State private var showDialogue = false
-    
+
     var body: some View {
         HStack {
             if recognizer.usedModelName == modelName {
@@ -36,25 +36,24 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
         }
         .onTapGesture(perform: {
-                if recognizer.usedModelName != modelName {
-                    self.showDialogue = true
-                }
+            if recognizer.usedModelName != modelName {
+                self.showDialogue = true
+            }
         })
-        .alert(isPresented: $showDialogue){
+        .alert(isPresented: $showDialogue) {
             Alert(title: Text("モデルを変更しますか？"),
                   message: Text("一部のモデルはダウンロードが行われます"),
                   primaryButton: .cancel(Text("キャンセル")),
                   secondaryButton: .default(Text("変更"), action: {
-                let isSucceed = changeModel()
-                if isSucceed {
-                    // change default model name for next model loading time
-                    defaultModelName = modelName
-                }
-            })
-            )
+                      let isSucceed = changeModel()
+                      if isSucceed {
+                          // change default model name for next model loading time
+                          defaultModelName = modelName
+                      }
+                  }))
         }
     }
-    
+
     private func changeModel() -> Bool {
         do {
             if recognizer.usedModelName != self.modelName {

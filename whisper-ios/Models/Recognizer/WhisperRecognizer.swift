@@ -6,7 +6,7 @@ class WhisperRecognizer: Recognizer {
     private var whisperContext: OpaquePointer?
     @Published var usedModelName: String?
     var is_ready: Bool {
-        return whisperContext != nil
+        whisperContext != nil
     }
 
     init(modelName: String) {
@@ -54,7 +54,7 @@ class WhisperRecognizer: Recognizer {
         let audioData = Array(UnsafeBufferPointer(start: float32Data[0], count: Int(buffer.frameLength)))
         return audioData
     }
-    
+
     func recognize(
         audioFileURL: URL,
         language: Language,
@@ -63,11 +63,11 @@ class WhisperRecognizer: Recognizer {
         guard let whisperContext else {
             throw NSError(domain: "model load error", code: -1)
         }
-        
+
         guard let audioData = try? load_audio(url: audioFileURL) else {
             throw NSError(domain: "audio load error", code: -1)
         }
-        
+
         let recognizedSpeech = RecognizedSpeech(
             audioFileURL: audioFileURL,
             language: language,
@@ -88,7 +88,7 @@ class WhisperRecognizer: Recognizer {
                 params.offset_ms = 0
                 params.no_context = true
                 params.single_segment = false
-                
+
                 whisper_reset_timings(whisperContext)
                 audioData.withUnsafeBufferPointer { data in
                     if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
@@ -99,17 +99,17 @@ class WhisperRecognizer: Recognizer {
             }
 
             let n_segments = whisper_full_n_segments(whisperContext)
-            for i in 0 ..< n_segments {
+            for i in 0..<n_segments {
                 let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
                 let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
                 let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
                 let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: i)
                 recognizedSpeech.transcriptionLines.append(transcriptionLine)
             }
-            
+
             callback(recognizedSpeech)
         }
-        
+
         return recognizedSpeech
     }
 }

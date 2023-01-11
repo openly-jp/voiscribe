@@ -5,7 +5,7 @@ func formatTime(_ seconds: Double, duration: Double? = nil) -> String {
     if d == nil {
         d = seconds
     }
-    
+
     let f = DateComponentsFormatter()
     f.allowedUnits = d! >= 3600 ? [.hour, .minute, .second] : [.minute, .second]
     f.unitsStyle = .positional

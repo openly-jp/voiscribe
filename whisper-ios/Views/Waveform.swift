@@ -1,7 +1,7 @@
 import DequeModule
 import SwiftUI
 
-struct IdAmp : Identifiable {
+struct IdAmp: Identifiable {
     var id: UUID
     var amp: Float
 }
@@ -9,7 +9,7 @@ struct IdAmp : Identifiable {
 struct Waveform: View {
     @Binding var idAmps: Deque<IdAmp>
     @Binding var isPaused: Bool
-    
+
     let e: Float = 2.718281828459
     let rectangleWidth: CGFloat = 2.0
     let spacingWidth: CGFloat = 2.0
@@ -19,7 +19,7 @@ struct Waveform: View {
             returnView(geometry)
         }
     }
-    
+
     func returnView(_ geometry: GeometryProxy) -> some View {
         removeUndisplayedAmp(geometry)
         return Group {
@@ -38,7 +38,7 @@ struct Waveform: View {
             }
         }
     }
-    
+
     /// remove amps that is not displayed
     ///
     /// amplitude obtained from AVAudioRecorder is added every 0.5s.
@@ -51,7 +51,7 @@ struct Waveform: View {
             numIdAmps -= 1
         }
     }
-    
+
     func getX(
         idAmpIdx: Int,
         numIdAmps: Int,

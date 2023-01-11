@@ -1,9 +1,10 @@
 import Foundation
 
 enum Language: String, CaseIterable {
-    case ja = "ja"
-    case en = "en"
+    case ja
+    case en
 }
+
 class RecognizedSpeech: Identifiable {
     let id: UUID
     var title: String
@@ -23,7 +24,7 @@ class RecognizedSpeech: Identifiable {
         self.createdAt = Date()
         self.updatedAt = Date()
     }
-    
+
     init(
         id: UUID,
         title: String,

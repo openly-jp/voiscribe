@@ -1,9 +1,8 @@
-//import UIKit
+// import UIKit
 import AVFoundation
 import SwiftUI
 
 let availableSpeedRates = [0.5, 0.8, 1, 1.2, 1.5, 2, 2.5, 3.5, 4]
-
 
 struct AudioPlayer: View {
     @Binding var player: AVAudioPlayer
@@ -83,7 +82,7 @@ struct AudioPlayer: View {
                 .navigationBarTitle("再生速度の変更")
                 .listStyle(.inset)
             }
-            HStack{
+            HStack {
                 Spacer()
                 Button("閉じる") {
                     isChangingSpeedRate = false
@@ -111,7 +110,7 @@ struct AudioPlayer: View {
     }
 
     func speedRate2String(_ speedRate: Double) -> String {
-        return "\(String(format: "%g", speedRate))x"
+        "\(String(format: "%g", speedRate))x"
     }
 }
 
@@ -128,7 +127,6 @@ struct PlayerButton: View {
         }
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

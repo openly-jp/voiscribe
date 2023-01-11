@@ -3,7 +3,7 @@ import SwiftUI
 let UserModeNumKey = "user-mode-num"
 
 struct DeveloperMenuItemView: View {
-    var body: some View{
+    var body: some View {
         HStack {
             Image(systemName: "person.badge.shield.checkmark.fill")
                 .imageScale(.large)
@@ -19,7 +19,7 @@ struct UserModeSubMenuItemView: View {
     @AppStorage(UserModeNumKey) var currentUserModeNum = 0
     let userModeNum: Int
     let userModeDisplayName: String
-    
+
     var body: some View {
         HStack {
             if currentUserModeNum == userModeNum {
@@ -34,9 +34,9 @@ struct UserModeSubMenuItemView: View {
             Spacer()
         }
         .onTapGesture(perform: {
-                if currentUserModeNum != userModeNum {
-                    currentUserModeNum = userModeNum
-                }
+            if currentUserModeNum != userModeNum {
+                currentUserModeNum = userModeNum
+            }
         })
     }
 }
@@ -47,4 +47,3 @@ let developerSubMenuItems = [
 ]
 
 let developerMenuItem = MenuItem(view: AnyView(DeveloperMenuItemView()), subMenuItems: developerSubMenuItems)
-

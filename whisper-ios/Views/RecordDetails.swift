@@ -15,10 +15,12 @@ struct RecordDetails: View {
     }
 
     // MARK: - state about player
+
     @State var player: AVAudioPlayer
     @State var currentPlayingTime: Double = 0
 
     // MARK: - timer to update automatic scroll
+
     // this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
 
@@ -45,7 +47,7 @@ struct RecordDetails: View {
     }
 
     var body: some View {
-        return VStack(alignment: .leading) {
+        VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
@@ -113,11 +115,11 @@ struct RecordDetails: View {
                     currentPlayingTime: $currentPlayingTime,
                     transcription: allTranscription
                 )
-                    .padding(20)
+                .padding(20)
             }
         }
     }
-    
+
     var allTranscription: String {
         recognizedSpeech.transcriptionLines.reduce("") { $0 + $1.text }
     }
@@ -127,7 +129,7 @@ struct RecordDetails: View {
         transcriptionLine: TranscriptionLine,
         scrollReader: ScrollViewProxy
     ) -> () -> Void {
-        return {
+        {
             // actual currentTime become earlier than the specified time
             // e.g. player.currentTime = 1.25 -> actually player.currentTime shows 1.245232..
             // thus previous transcription line is highlighted uncorrectly

@@ -6,6 +6,7 @@ let UserDefaultASRLanguageKey = "asr-language"
 
 struct RecognitionPane: View {
     // MARK: - Recording state
+
     let audioRecorder: AVAudioRecorder
     @State var isRecording: Bool = false
     @State var isPaused: Bool = false
@@ -17,6 +18,7 @@ struct RecognitionPane: View {
     @State var updateWaveformTimer: Timer?
 
     // MARK: - ASR state
+
     @EnvironmentObject var recognizer: WhisperRecognizer
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
@@ -25,6 +27,7 @@ struct RecognitionPane: View {
     @State var title = ""
 
     // MARK: - pane management state
+
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
@@ -116,6 +119,7 @@ struct RecognitionPane: View {
     }
 
     // MARK: - function about ASR
+
     func startRecognition() {
         finishRecording()
 
@@ -124,7 +128,7 @@ struct RecognitionPane: View {
             language: language,
             callback: { rs in
                 var removeIdx: Int?
-                for idx in 0 ..< recognizingSpeechIds.count {
+                for idx in 0..<recognizingSpeechIds.count {
                     if recognizingSpeechIds[idx] == rs.id {
                         removeIdx = idx
                         break
@@ -149,7 +153,7 @@ struct RecognitionPane: View {
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
         isActives.insert(true, at: 0)
         // Changing default language is allowed only on SideMenu
-        //saveUserLanguage(language)
+        // saveUserLanguage(language)
     }
 
     var body: some View {
@@ -243,11 +247,11 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
 /// When starting recording, the id of RecognizedSpeech is not detemined yet.
 /// Thus recorded audio is firstly saved to a temporary file and it is renamed after.
 func getTmpURL() -> URL {
-    return getURLByName(fileName: "tmp.m4a")
+    getURLByName(fileName: "tmp.m4a")
 }
 
 func getAudioFileURL(id: UUID) -> URL {
-    return getURLByName(fileName: "\(id.uuidString).m4a")
+    getURLByName(fileName: "\(id.uuidString).m4a")
 }
 
 func getURLByName(fileName: String) -> URL {

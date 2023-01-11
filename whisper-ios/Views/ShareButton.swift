@@ -29,7 +29,7 @@ struct ActivityView: UIViewControllerRepresentable {
     let text: String
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityView>) -> UIActivityViewController {
-        return UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        UIActivityViewController(activityItems: [text], applicationActivities: nil)
     }
 
     func updateUIViewController(

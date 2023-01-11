@@ -33,11 +33,10 @@ struct RecordButtonPane: View {
 
                 let size = circleDiameter - borderSpacing
                 Button(action: startAction) { RoundedRectangle(cornerRadius: size)
-                        .frame(width:  size, height: size)
-                        .foregroundColor(buttonColor)
+                    .frame(width: size, height: size)
+                    .foregroundColor(buttonColor)
                 }
-            }
-            else if isRecording && !isPaused {
+            } else if isRecording, !isPaused {
                 Circle()
                     .stroke(.gray, lineWidth: borderStrokeWidth)
                     .frame(width: circleDiameter, height: circleDiameter)
@@ -57,12 +56,11 @@ struct RecordButtonPane: View {
                     Text("再開")
                         .foregroundColor(buttonColor)
                         .font(.title3)
-                    
                 }
                 RoundedRectangle(cornerRadius: size)
-                        .frame(width:  size, height: size)
-                        .foregroundColor(buttonColor)
-                        .opacity(0.15)
+                    .frame(width: size, height: size)
+                    .foregroundColor(buttonColor)
+                    .opacity(0.15)
             }
         }
     }
@@ -70,7 +68,7 @@ struct RecordButtonPane: View {
 
 struct RecordButton_Previews: PreviewProvider {
     static var previews: some View {
-        return RecordButtonPane(
+        RecordButtonPane(
             isRecording: .constant(false),
             isPaused: .constant(false),
             startAction: {},

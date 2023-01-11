@@ -7,14 +7,12 @@
 //
 //
 
-import Foundation
 import CoreData
-
+import Foundation
 
 extension RecognizedSpeechData {
-
     @nonobjc public class func fetchRequest() -> NSFetchRequest<RecognizedSpeechData> {
-        return NSFetchRequest<RecognizedSpeechData>(entityName: "RecognizedSpeechData")
+        NSFetchRequest<RecognizedSpeechData>(entityName: "RecognizedSpeechData")
     }
 
     @NSManaged public var id: UUID
@@ -24,12 +22,11 @@ extension RecognizedSpeechData {
     @NSManaged public var createdAt: Date
     @NSManaged public var updatedAt: Date
     @NSManaged public var transcriptionLines: NSOrderedSet
-
 }
 
 // MARK: Generated accessors for transcriptionLines
-extension RecognizedSpeechData {
 
+extension RecognizedSpeechData {
     @objc(insertObject:inTranscriptionLinesAtIndex:)
     @NSManaged public func insertIntoTranscriptionLines(_ value: TranscriptionLineData, at idx: Int)
 
@@ -59,9 +56,6 @@ extension RecognizedSpeechData {
 
     @objc(removeTranscriptionLines:)
     @NSManaged public func removeFromTranscriptionLines(_ values: NSOrderedSet)
-
 }
 
-extension RecognizedSpeechData : Identifiable {
-
-}
+extension RecognizedSpeechData: Identifiable {}
