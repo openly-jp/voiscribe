@@ -8,7 +8,7 @@ class TranscriptionLine: Identifiable {
     var ordering: Int32
     var createdAt: Date
     var updatedAt: Date
-
+    
     init(startMSec: Int64, endMSec: Int64, text: String, ordering: Int32) {
         self.id = UUID()
         self.startMSec = startMSec
@@ -19,7 +19,7 @@ class TranscriptionLine: Identifiable {
         self.createdAt = Date()
         self.updatedAt = Date()
     }
-
+    
     init(
         id: UUID,
         startMSec: Int64,

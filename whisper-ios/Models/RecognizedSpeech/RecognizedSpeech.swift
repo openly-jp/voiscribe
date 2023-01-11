@@ -1,10 +1,9 @@
 import Foundation
 
-enum Language: String {
-    case ja
-    case en
+enum Language: String{
+    case ja = "ja"
+    case en = "en"
 }
-
 class RecognizedSpeech: Identifiable {
     let id: UUID
     var title: String
@@ -24,7 +23,7 @@ class RecognizedSpeech: Identifiable {
         self.createdAt = Date()
         self.updatedAt = Date()
     }
-
+    
     init(
         id: UUID,
         title: String,

@@ -1,6 +1,7 @@
 import XCTest
 
 final class whisper_iosUITestsLaunchTests: XCTestCase {
+
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

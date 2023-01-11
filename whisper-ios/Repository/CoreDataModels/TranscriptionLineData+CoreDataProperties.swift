@@ -7,12 +7,14 @@
 //
 //
 
-import CoreData
 import Foundation
+import CoreData
+
 
 extension TranscriptionLineData {
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<TranscriptionLineData> {
-        NSFetchRequest<TranscriptionLineData>(entityName: "TranscriptionLineData")
+        return NSFetchRequest<TranscriptionLineData>(entityName: "TranscriptionLineData")
     }
 
     @NSManaged public var id: UUID
@@ -23,6 +25,9 @@ extension TranscriptionLineData {
     @NSManaged public var createdAt: Date
     @NSManaged public var updatedAt: Date
     @NSManaged public var recognizedSpeech: RecognizedSpeechData?
+
 }
 
-extension TranscriptionLineData: Identifiable {}
+extension TranscriptionLineData : Identifiable {
+
+}

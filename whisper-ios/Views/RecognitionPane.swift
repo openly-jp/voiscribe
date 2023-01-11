@@ -92,6 +92,7 @@ struct RecognitionPane: View {
             )
             idAmps.append(idAmp)
         }
+
     }
 
     func pause() {
@@ -117,7 +118,7 @@ struct RecognitionPane: View {
             audioFileURL: getTmpURL(),
             language: .ja,
             callback: { rs in
-                var removeIdx: Int?
+                var removeIdx: Int? = nil
                 for idx in (0..<recognizingSpeechIds.count) {
                     if recognizingSpeechIds[idx] == rs.id {
                         removeIdx = idx
@@ -150,7 +151,7 @@ struct RecognitionPane: View {
         .sheet(isPresented: $isPaneOpen, content: {
             VStack {
                 HStack(spacing: 10) {
-                    if isPaused {
+                    if isPaused{
                         Image(systemName: "pause.fill")
                             .foregroundColor(.gray)
                     } else {
@@ -193,11 +194,11 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
 /// When starting recording, the id of RecognizedSpeech is not detemined yet.
 /// Thus recorded audio is firstly saved to a temporary file and it is renamed after.
 func getTmpURL() -> URL {
-    getURLByName(fileName: "tmp.m4a")
+    return getURLByName(fileName: "tmp.m4a")
 }
 
 func getAudioFileURL(id: UUID) -> URL {
-    getURLByName(fileName: "\(id.uuidString).m4a")
+    return getURLByName(fileName: "\(id.uuidString).m4a")
 }
 
 func getURLByName(fileName: String) -> URL {

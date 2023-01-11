@@ -5,17 +5,17 @@ struct HomeView: View {
     @State var page = 0
     var body: some View {
         let drag = DragGesture()
-            .onEnded {
+            .onEnded{
                 value in
                 if value.translation.width < -100 {
-                    withAnimation {
+                    withAnimation{
                         self.showSideMenu = false
                     }
                 }
             }
-        VStack {
-            ZStack {
-                HStack(alignment: .center) {
+        VStack{
+            ZStack{
+                HStack(alignment: .center){
                     Button(action: {
                         self.showSideMenu = !self.showSideMenu
                     }, label: {
@@ -28,7 +28,7 @@ struct HomeView: View {
                     .padding(.horizontal)
                     Spacer()
                 }
-                HStack(alignment: .center) {
+                HStack(alignment: .center){
                     Text("Whisper iOS")
                         .font(.title)
                         .fontWeight(.bold)
@@ -65,15 +65,14 @@ struct MainView: View {
     @State var recognizedSpeeches: [RecognizedSpeech]
     @State var isActives: [Bool]
 
-    init() {
+    init (){
         let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
         self.recognizingSpeechIds = []
         self.recognizedSpeeches = initialRecognizedSpeeches
-        self.isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+        self.isActives = Array<Bool>(repeating: false, count: initialRecognizedSpeeches.count)
     }
-
     var body: some View {
-        VStack {
+        VStack{
             RecordList(
                 recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
