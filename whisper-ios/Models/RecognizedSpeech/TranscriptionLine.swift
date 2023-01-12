@@ -10,14 +10,14 @@ class TranscriptionLine: Identifiable {
     var updatedAt: Date
 
     init(startMSec: Int64, endMSec: Int64, text: String, ordering: Int32) {
-        self.id = UUID()
+        id = UUID()
         self.startMSec = startMSec
         self.endMSec = endMSec
         self.text = text
         self.ordering = ordering
         // NOTE: This is a UNIX Time
-        self.createdAt = Date()
-        self.updatedAt = Date()
+        createdAt = Date()
+        updatedAt = Date()
     }
 
     init(

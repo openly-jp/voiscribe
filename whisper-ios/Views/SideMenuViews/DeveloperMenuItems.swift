@@ -43,7 +43,7 @@ struct UserModeSubMenuItemView: View {
 
 let developerSubMenuItems = [
     MenuItem(view: AnyView(UserModeSubMenuItemView(userModeNum: 0, userModeDisplayName: "ユーザー画面")), subMenuItems: nil),
-    MenuItem(view: AnyView(UserModeSubMenuItemView(userModeNum: 1, userModeDisplayName: "開発者画面")), subMenuItems: nil)
+    MenuItem(view: AnyView(UserModeSubMenuItemView(userModeNum: 1, userModeDisplayName: "開発者画面")), subMenuItems: nil),
 ]
 
 let developerMenuItem = MenuItem(view: AnyView(DeveloperMenuItemView()), subMenuItems: developerSubMenuItems)

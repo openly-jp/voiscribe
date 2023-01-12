@@ -10,52 +10,52 @@
 import CoreData
 import Foundation
 
-extension RecognizedSpeechData {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<RecognizedSpeechData> {
+public extension RecognizedSpeechData {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<RecognizedSpeechData> {
         NSFetchRequest<RecognizedSpeechData>(entityName: "RecognizedSpeechData")
     }
 
-    @NSManaged public var id: UUID
-    @NSManaged public var title: String
-    @NSManaged public var audioFileURL: URL
-    @NSManaged public var language: String
-    @NSManaged public var createdAt: Date
-    @NSManaged public var updatedAt: Date
-    @NSManaged public var transcriptionLines: NSOrderedSet
+    @NSManaged var id: UUID
+    @NSManaged var title: String
+    @NSManaged var audioFileURL: URL
+    @NSManaged var language: String
+    @NSManaged var createdAt: Date
+    @NSManaged var updatedAt: Date
+    @NSManaged var transcriptionLines: NSOrderedSet
 }
 
 // MARK: Generated accessors for transcriptionLines
 
-extension RecognizedSpeechData {
+public extension RecognizedSpeechData {
     @objc(insertObject:inTranscriptionLinesAtIndex:)
-    @NSManaged public func insertIntoTranscriptionLines(_ value: TranscriptionLineData, at idx: Int)
+    @NSManaged func insertIntoTranscriptionLines(_ value: TranscriptionLineData, at idx: Int)
 
     @objc(removeObjectFromTranscriptionLinesAtIndex:)
-    @NSManaged public func removeFromTranscriptionLines(at idx: Int)
+    @NSManaged func removeFromTranscriptionLines(at idx: Int)
 
     @objc(insertTranscriptionLines:atIndexes:)
-    @NSManaged public func insertIntoTranscriptionLines(_ values: [TranscriptionLineData], at indexes: NSIndexSet)
+    @NSManaged func insertIntoTranscriptionLines(_ values: [TranscriptionLineData], at indexes: NSIndexSet)
 
     @objc(removeTranscriptionLinesAtIndexes:)
-    @NSManaged public func removeFromTranscriptionLines(at indexes: NSIndexSet)
+    @NSManaged func removeFromTranscriptionLines(at indexes: NSIndexSet)
 
     @objc(replaceObjectInTranscriptionLinesAtIndex:withObject:)
-    @NSManaged public func replaceTranscriptionLines(at idx: Int, with value: TranscriptionLineData)
+    @NSManaged func replaceTranscriptionLines(at idx: Int, with value: TranscriptionLineData)
 
     @objc(replaceTranscriptionLinesAtIndexes:withTranscriptionLines:)
-    @NSManaged public func replaceTranscriptionLines(at indexes: NSIndexSet, with values: [TranscriptionLineData])
+    @NSManaged func replaceTranscriptionLines(at indexes: NSIndexSet, with values: [TranscriptionLineData])
 
     @objc(addTranscriptionLinesObject:)
-    @NSManaged public func addToTranscriptionLines(_ value: TranscriptionLineData)
+    @NSManaged func addToTranscriptionLines(_ value: TranscriptionLineData)
 
     @objc(removeTranscriptionLinesObject:)
-    @NSManaged public func removeFromTranscriptionLines(_ value: TranscriptionLineData)
+    @NSManaged func removeFromTranscriptionLines(_ value: TranscriptionLineData)
 
     @objc(addTranscriptionLines:)
-    @NSManaged public func addToTranscriptionLines(_ values: NSOrderedSet)
+    @NSManaged func addToTranscriptionLines(_ values: NSOrderedSet)
 
     @objc(removeTranscriptionLines:)
-    @NSManaged public func removeFromTranscriptionLines(_ values: NSOrderedSet)
+    @NSManaged func removeFromTranscriptionLines(_ values: NSOrderedSet)
 }
 
 extension RecognizedSpeechData: Identifiable {}

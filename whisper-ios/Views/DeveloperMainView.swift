@@ -14,7 +14,7 @@ struct DeveloperMainView: View {
             language: Language.en,
             callback: { rs in
                 let transcriptionLines = rs.transcriptionLines
-                for i in 0..<transcriptionLines.count {
+                for i in 0 ..< transcriptionLines.count {
                     text += transcriptionLines[i].text
                 }
                 print("inside callback", text)

@@ -67,7 +67,7 @@ struct Waveform_Previews: PreviewProvider {
     static var previews: some View {
         var idAmps: Deque<IdAmp> = []
         var idx = 0
-        for _ in (0...100) {
+        for _ in 0 ... 100 {
             for amp in [-50, -2, -14, -14, -11, -42, -21, -100, -14] {
                 idAmps.append(IdAmp(id: UUID(), amp: Float(amp)))
                 idx += 1

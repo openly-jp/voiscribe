@@ -7,7 +7,7 @@ struct SideMenu: View {
 
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
+            GeometryReader { _ in
                 EmptyView()
             }
             .background(Color.gray.opacity(0.3))

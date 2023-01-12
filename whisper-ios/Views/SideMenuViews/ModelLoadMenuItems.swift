@@ -56,8 +56,8 @@ struct ModelLoadSubMenuItemView: View {
 
     private func changeModel() -> Bool {
         do {
-            if recognizer.usedModelName != self.modelName {
-                try recognizer.load_model(modelName: self.modelName)
+            if recognizer.usedModelName != modelName {
+                try recognizer.load_model(modelName: modelName)
             }
         } catch {
             return false
@@ -68,7 +68,7 @@ struct ModelLoadSubMenuItemView: View {
 
 let modeLoadSubMenuItems = [
     MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny", modelDisplayName: "Tiny")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")), subMenuItems: nil)
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")), subMenuItems: nil),
 ]
 
 let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: modeLoadSubMenuItems)

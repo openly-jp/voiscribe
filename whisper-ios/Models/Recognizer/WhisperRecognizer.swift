@@ -12,9 +12,9 @@ class WhisperRecognizer: Recognizer {
     init(modelName: String) {
         do {
             try load_model(modelName: modelName)
-            self.usedModelName = modelName
+            usedModelName = modelName
         } catch {
-            self.usedModelName = "ggml-tiny"
+            usedModelName = "ggml-tiny"
             return
         }
     }
@@ -33,7 +33,7 @@ class WhisperRecognizer: Recognizer {
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        self.usedModelName = modelName
+        usedModelName = modelName
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
@@ -99,7 +99,7 @@ class WhisperRecognizer: Recognizer {
             }
 
             let n_segments = whisper_full_n_segments(whisperContext)
-            for i in 0..<n_segments {
+            for i in 0 ..< n_segments {
                 let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
                 let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
                 let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10

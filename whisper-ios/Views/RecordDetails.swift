@@ -160,7 +160,7 @@ struct RecordDetails: View {
 
     func getCurrentTranscriptionIndex() -> Int {
         let lines = recognizedSpeech.transcriptionLines
-        for idx in 0..<lines.count {
+        for idx in 0 ..< lines.count {
             let startMSec = Double(lines[idx].startMSec)
             let endMSec: Double = idx < lines.count - 1 ? Double(lines[idx + 1].startMSec) : .infinity
             let currentMSec = currentPlayingTime * 1000

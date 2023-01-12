@@ -10,19 +10,19 @@
 import CoreData
 import Foundation
 
-extension TranscriptionLineData {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<TranscriptionLineData> {
+public extension TranscriptionLineData {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<TranscriptionLineData> {
         NSFetchRequest<TranscriptionLineData>(entityName: "TranscriptionLineData")
     }
 
-    @NSManaged public var id: UUID
-    @NSManaged public var startMSec: Int64
-    @NSManaged public var endMSec: Int64
-    @NSManaged public var text: String
-    @NSManaged public var ordering: Int32
-    @NSManaged public var createdAt: Date
-    @NSManaged public var updatedAt: Date
-    @NSManaged public var recognizedSpeech: RecognizedSpeechData?
+    @NSManaged var id: UUID
+    @NSManaged var startMSec: Int64
+    @NSManaged var endMSec: Int64
+    @NSManaged var text: String
+    @NSManaged var ordering: Int32
+    @NSManaged var createdAt: Date
+    @NSManaged var updatedAt: Date
+    @NSManaged var recognizedSpeech: RecognizedSpeechData?
 }
 
 extension TranscriptionLineData: Identifiable {}

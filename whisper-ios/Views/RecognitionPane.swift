@@ -45,17 +45,17 @@ struct RecognitionPane: View {
             AVFormatIDKey: Int(kAudioFormatLinearPCM),
             AVSampleRateKey: 16000,
             AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
         ]
 
-        self.audioRecorder = try! AVAudioRecorder(url: getTmpURL(), settings: settings)
-        self.audioRecorder.isMeteringEnabled = true
+        audioRecorder = try! AVAudioRecorder(url: getTmpURL(), settings: settings)
+        audioRecorder.isMeteringEnabled = true
 
-        self.elapsedTime = 0
-        self.idAmps = []
-        self._recognizingSpeechIds = recognizingSpeechIds
-        self._recognizedSpeeches = recognizedSpeeches
-        self._isActives = isActives
+        elapsedTime = 0
+        idAmps = []
+        _recognizingSpeechIds = recognizingSpeechIds
+        _recognizedSpeeches = recognizedSpeeches
+        _isActives = isActives
     }
 
     // MARK: - functions about recording
@@ -128,7 +128,7 @@ struct RecognitionPane: View {
             language: language,
             callback: { rs in
                 var removeIdx: Int?
-                for idx in 0..<recognizingSpeechIds.count {
+                for idx in 0 ..< recognizingSpeechIds.count {
                     if recognizingSpeechIds[idx] == rs.id {
                         removeIdx = idx
                         break

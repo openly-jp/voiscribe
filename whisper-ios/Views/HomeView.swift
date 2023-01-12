@@ -53,9 +53,9 @@ struct MainView: View {
 
     init() {
         let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
-        self.recognizingSpeechIds = []
-        self.recognizedSpeeches = initialRecognizedSpeeches
-        self.isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+        recognizingSpeechIds = []
+        recognizedSpeeches = initialRecognizedSpeeches
+        isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
     }
 
     var body: some View {

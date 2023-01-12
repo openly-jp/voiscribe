@@ -18,7 +18,7 @@ struct AudioPlayer: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Slider(value: $currentPlayingTime, in: 0...player.duration) { editing in
+            Slider(value: $currentPlayingTime, in: 0 ... player.duration) { editing in
                 isEditing = editing
                 if !editing {
                     player.currentTime = currentPlayingTime
