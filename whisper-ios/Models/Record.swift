@@ -7,9 +7,9 @@ class Record: Codable, Identifiable {
     var length: Int
 
     init() {
-        self.name = "Record name"
-        self.date = Date()
-        self.transcription = "transcription"
-        self.length = 0
+        name = "Record name"
+        date = Date()
+        transcription = "transcription"
+        length = 0
     }
 }

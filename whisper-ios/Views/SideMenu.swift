@@ -4,10 +4,10 @@ struct SideMenu: View {
     @Binding var isOpen: Bool
     let width: CGFloat = 270
     let menuItems: [MenuItem] = [modelLoadMenuItem, languageSelectMenuItem, developerMenuItem]
-    
+
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
+            GeometryReader { _ in
                 EmptyView()
             }
             .background(Color.gray.opacity(0.3))
@@ -16,9 +16,8 @@ struct SideMenu: View {
             .onTapGesture(perform: {
                 self.isOpen = false
             })
-            HStack{
+            HStack {
                 List(menuItems, children: \.subMenuItems) {
-                    
                     item in item.view
                 }
                 .frame(width: width)
@@ -35,7 +34,6 @@ struct MenuItem: Identifiable {
     let view: AnyView
     let subMenuItems: [MenuItem]?
 }
-
 
 struct SideMenu_Previews: PreviewProvider {
     @State static var page = 0

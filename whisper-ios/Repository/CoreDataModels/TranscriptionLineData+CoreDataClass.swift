@@ -7,10 +7,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(TranscriptionLineData)
-public class TranscriptionLineData: NSManagedObject {
-
-}
+public class TranscriptionLineData: NSManagedObject {}

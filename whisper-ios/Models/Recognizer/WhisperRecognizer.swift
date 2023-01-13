@@ -6,15 +6,15 @@ class WhisperRecognizer: Recognizer {
     private var whisperContext: OpaquePointer?
     @Published var usedModelName: String?
     var is_ready: Bool {
-        return whisperContext != nil
+        whisperContext != nil
     }
 
     init(modelName: String) {
         do {
             try load_model(modelName: modelName)
-            self.usedModelName = modelName
+            usedModelName = modelName
         } catch {
-            self.usedModelName = "ggml-tiny"
+            usedModelName = "ggml-tiny"
             return
         }
     }
@@ -33,7 +33,7 @@ class WhisperRecognizer: Recognizer {
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        self.usedModelName = modelName
+        usedModelName = modelName
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
@@ -54,7 +54,7 @@ class WhisperRecognizer: Recognizer {
         let audioData = Array(UnsafeBufferPointer(start: float32Data[0], count: Int(buffer.frameLength)))
         return audioData
     }
-    
+
     func recognize(
         audioFileURL: URL,
         language: Language,
@@ -63,11 +63,11 @@ class WhisperRecognizer: Recognizer {
         guard let whisperContext else {
             throw NSError(domain: "model load error", code: -1)
         }
-        
+
         guard let audioData = try? load_audio(url: audioFileURL) else {
             throw NSError(domain: "audio load error", code: -1)
         }
-        
+
         let recognizedSpeech = RecognizedSpeech(
             audioFileURL: audioFileURL,
             language: language,
@@ -88,7 +88,7 @@ class WhisperRecognizer: Recognizer {
                 params.offset_ms = 0
                 params.no_context = true
                 params.single_segment = false
-                
+
                 whisper_reset_timings(whisperContext)
                 audioData.withUnsafeBufferPointer { data in
                     if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
@@ -106,10 +106,10 @@ class WhisperRecognizer: Recognizer {
                 let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: i)
                 recognizedSpeech.transcriptionLines.append(transcriptionLine)
             }
-            
+
             callback(recognizedSpeech)
         }
-        
+
         return recognizedSpeech
     }
 }

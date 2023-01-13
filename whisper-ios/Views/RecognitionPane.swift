@@ -6,6 +6,7 @@ let UserDefaultASRLanguageKey = "asr-language"
 
 struct RecognitionPane: View {
     // MARK: - Recording state
+
     let audioRecorder: AVAudioRecorder
     @State var isRecording: Bool = false
     @State var isPaused: Bool = false
@@ -17,6 +18,7 @@ struct RecognitionPane: View {
     @State var updateWaveformTimer: Timer?
 
     // MARK: - ASR state
+
     @EnvironmentObject var recognizer: WhisperRecognizer
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
@@ -25,6 +27,7 @@ struct RecognitionPane: View {
     @State var title = ""
 
     // MARK: - pane management state
+
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
@@ -42,17 +45,17 @@ struct RecognitionPane: View {
             AVFormatIDKey: Int(kAudioFormatLinearPCM),
             AVSampleRateKey: 16000,
             AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
         ]
 
-        self.audioRecorder = try! AVAudioRecorder(url: getTmpURL(), settings: settings)
-        self.audioRecorder.isMeteringEnabled = true
+        audioRecorder = try! AVAudioRecorder(url: getTmpURL(), settings: settings)
+        audioRecorder.isMeteringEnabled = true
 
-        self.elapsedTime = 0
-        self.idAmps = []
-        self._recognizingSpeechIds = recognizingSpeechIds
-        self._recognizedSpeeches = recognizedSpeeches
-        self._isActives = isActives
+        elapsedTime = 0
+        idAmps = []
+        _recognizingSpeechIds = recognizingSpeechIds
+        _recognizedSpeeches = recognizedSpeeches
+        _isActives = isActives
     }
 
     // MARK: - functions about recording
@@ -116,6 +119,7 @@ struct RecognitionPane: View {
     }
 
     // MARK: - function about ASR
+
     func startRecognition() {
         finishRecording()
 
@@ -149,7 +153,7 @@ struct RecognitionPane: View {
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
         isActives.insert(true, at: 0)
         // Changing default language is allowed only on SideMenu
-        //saveUserLanguage(language)
+        // saveUserLanguage(language)
     }
 
     var body: some View {
@@ -243,11 +247,11 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
 /// When starting recording, the id of RecognizedSpeech is not detemined yet.
 /// Thus recorded audio is firstly saved to a temporary file and it is renamed after.
 func getTmpURL() -> URL {
-    return getURLByName(fileName: "tmp.m4a")
+    getURLByName(fileName: "tmp.m4a")
 }
 
 func getAudioFileURL(id: UUID) -> URL {
-    return getURLByName(fileName: "\(id.uuidString).m4a")
+    getURLByName(fileName: "\(id.uuidString).m4a")
 }
 
 func getURLByName(fileName: String) -> URL {

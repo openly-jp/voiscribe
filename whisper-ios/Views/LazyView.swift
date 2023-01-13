@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 
-
 /// use with views used as the destination of navigationLink
 ///
 /// motivation: https://note.com/kauche/n/n09ed8b640ac6#d65484fd-3bd0-4ba4-8074-4854ecee82fd
@@ -11,6 +10,7 @@ struct LazyView<Content: View>: View {
     init(_ build: @autoclosure @escaping () -> Content) {
         self.build = build
     }
+
     var body: Content {
         build()
     }
