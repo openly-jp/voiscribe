@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct ConfirmPane: View {
-    let startRecognition: () -> Void
-    let reset: () -> Void
+    let finishRecording: () -> Void
+    let abortRecording: () -> Void
 
     @Binding var language: Language
     @Binding var title: String
@@ -32,10 +32,10 @@ struct ConfirmPane: View {
                     .pickerStyle(.segmented)
                 }
                 HStack(spacing: 30) {
-                    Button("録音中止", action: reset)
+                    Button("録音中止", action: abortRecording)
                         .foregroundColor(.red)
                     Spacer()
-                    Button("認識開始", action: startRecognition)
+                    Button("終了", action: finishRecording)
                         .padding()
                         .accentColor(Color(.label))
                         .background(Color(.systemGray4))
@@ -51,8 +51,8 @@ struct ConfirmPane: View {
 struct ConfirmPane_Previews: PreviewProvider {
     static var previews: some View {
         ConfirmPane(
-            startRecognition: {},
-            reset: {},
+            finishRecording: {},
+            abortRecording: {},
             language: .constant(.ja),
             title: .constant("タイトル")
         )
