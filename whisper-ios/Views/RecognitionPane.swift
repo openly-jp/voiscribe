@@ -70,6 +70,7 @@ struct RecognitionPane: View {
         isPaused = false
         isPaneOpen = true
 
+        language = getUserLanguage()
         elapsedTime = 0
         idAmps = []
         title = ""
