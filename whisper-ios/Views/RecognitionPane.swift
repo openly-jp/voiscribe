@@ -335,8 +335,8 @@ struct RecognitionPane: View {
                     Waveform(idAmps: $idAmps, isPaused: $isPaused)
                         .padding(.top, 60)
                         .padding(.bottom, 20)
-                    Divider()
                     if onGoingTranscriptionLines != nil, onGoingTranscriptionLines!.count > 0 {
+                        Divider()
                         ScrollViewReader { scrollReader in
                             ScrollView {
                                 LazyVStack(spacing: 0) {
