@@ -34,32 +34,32 @@ struct RecordDetails: View {
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateStyle = .medium
         dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
-        
+
         return dateFormatter.string(from: date)
     }
-    
+
     // MARK: - state about player
-    
+
     @ObservedObject var playerWrapper = PlayerWrapper()
     @State var currentPlayingTime: Double = 0
-    
+
     // MARK: - timer to update automatic scroll
-    
+
     /// this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
-    
+
     init(
         recognizedSpeech: RecognizedSpeech,
         isRecognizing: Bool
     ) {
         self.recognizedSpeech = recognizedSpeech
         self.isRecognizing = isRecognizing
-        
+
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
         try! session.setActive(true)
     }
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
@@ -141,11 +141,11 @@ struct RecordDetails: View {
             }
         }
     }
-    
+
     var allTranscription: String {
         recognizedSpeech.transcriptionLines.reduce("") { $0 + $1.text }
     }
-    
+
     func moveTranscriptionLine(
         idx: Int,
         transcriptionLine: TranscriptionLine,
@@ -162,7 +162,7 @@ struct RecordDetails: View {
             withAnimation(.easeInOut) { scrollReader.scrollTo(idx) }
         }
     }
-    
+
     func initUpdateScrollTimer(_ scrollReader: ScrollViewProxy) {
         updateScrollTimer = Timer.scheduledTimer(
             withTimeInterval: 1,
@@ -179,7 +179,7 @@ struct RecordDetails: View {
             }
         }
     }
-    
+
     func getCurrentTranscriptionIndex() -> Int {
         let lines = recognizedSpeech.transcriptionLines
         for idx in 0 ..< lines.count {
@@ -193,7 +193,7 @@ struct RecordDetails: View {
         }
         return 0
     }
-    
+
     func getTextColor(_ idx: Int) -> Color {
         let lines = recognizedSpeech.transcriptionLines
         let startMSec = Double(lines[idx].startMSec)
@@ -225,13 +225,13 @@ struct RecognizingView: View {
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
-        
+
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
             .previewDisplayName("ipad")
-        
+
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: true)
             .previewDisplayName("Record Details (recognizing)")
     }

@@ -9,13 +9,13 @@ struct AudioPlayer: View {
     @Binding var currentPlayingTime: Double
     @State var isEditing = false
     @State var isPlaying = false
-    
+
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
-    
+
     @State var updateRecordingTimeTimer: Timer? = nil
     let transcription: String
-    
+
     var body: some View {
         VStack(spacing: 10) {
             Slider(value: $currentPlayingTime, in: 0 ... playerWrapper.player.duration) { editing in
@@ -25,14 +25,14 @@ struct AudioPlayer: View {
                     currentPlayingTime = playerWrapper.player.currentTime
                 }
             }
-            
+
             HStack {
                 Text(formatTime(playerWrapper.player.currentTime, duration: playerWrapper.player.duration))
                 Spacer()
                 Text(formatTime(playerWrapper.player.duration - playerWrapper.player.currentTime, duration: playerWrapper.player.duration))
             }
             .font(.caption)
-            
+
             HStack {
                 Button(speedRate2String(availableSpeedRates[speedRateIdx])) { isChangingSpeedRate = true }
                     .foregroundColor(Color(.secondaryLabel))
@@ -54,7 +54,7 @@ struct AudioPlayer: View {
                     currentPlayingTime = playerWrapper.player.currentTime
                 }
                 Spacer()
-                
+
                 ShareButton(transcription: transcription)
             }
             .padding(.horizontal, 30)
@@ -66,7 +66,7 @@ struct AudioPlayer: View {
             }
         }
     }
-    
+
     var changeSpeedSheetView: some View {
         Group {
             NavigationView {
@@ -98,7 +98,7 @@ struct AudioPlayer: View {
             }
         }
     }
-    
+
     func playOrPause() {
         if !isPlaying {
             updateRecordingTimeTimer = Timer.scheduledTimer(
@@ -117,7 +117,7 @@ struct AudioPlayer: View {
             isPlaying = false
         }
     }
-    
+
     func speedRate2String(_ speedRate: Double) -> String {
         "\(String(format: "%g", speedRate))x"
     }
@@ -127,7 +127,7 @@ struct PlayerButton: View {
     let name: String
     let size: Int
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Image(systemName: name)

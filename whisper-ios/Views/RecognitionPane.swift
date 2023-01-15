@@ -6,31 +6,31 @@ let UserDefaultASRLanguageKey = "asr-language"
 
 struct RecognitionPane: View {
     // MARK: - Recording state
-    
+
     @State var audioRecorder: AVAudioRecorder?
     @State var audioFileNumber: Int = 0
     @State var isRecording: Bool = false
     @State var isPaused: Bool = false
-    
+
     @State var elapsedTime: Int = 0
     @State var idAmps: Deque<IdAmp> = []
-    
+
     @State var updateRecordingTimeTimer: Timer?
     @State var updateWaveformTimer: Timer?
     @State var streamingRecognitionTimer: Timer?
     @State var recognizedResultsScrollTimer: Timer?
-    
+
     @State var tmpAudioDataList: [[Float32]] = []
-    
+
     let recordSettings = [
         AVFormatIDKey: Int(kAudioFormatLinearPCM),
         AVSampleRateKey: 16000,
         AVNumberOfChannelsKey: 1,
         AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
     ]
-    
+
     // MARK: - ASR state
-    
+
     @EnvironmentObject var recognizer: WhisperRecognizer
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
@@ -41,13 +41,13 @@ struct RecognitionPane: View {
     @State var onGoingTranscriptionLineStartOrdering: Int32 = 0
     @State var onGoingTranscriptionLineStartMSec: Int64 = 0
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
-    
+
     // MARK: - pane management state
-    
+
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
-    
+
     init(
         recognizingSpeechIds: Binding<[UUID]>,
         recognizedSpeeches: Binding<[RecognizedSpeech]>,
@@ -56,20 +56,20 @@ struct RecognitionPane: View {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
         try! session.setActive(true)
-        
+
         _recognizingSpeechIds = recognizingSpeechIds
         _recognizedSpeeches = recognizedSpeeches
         _isActives = isActives
     }
-    
+
     // MARK: - functions about recording
-    
+
     /// start recording
     func startRecording() {
         isRecording = true
         isPaused = false
         isPaneOpen = true
-        
+
         elapsedTime = 0
         idAmps = []
         title = ""
@@ -78,13 +78,13 @@ struct RecognitionPane: View {
         audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: audioFileNumber), settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
-        
+
         onGoingTranscriptionLines = []
         onGoingTranscriptionLineStartOrdering = 0
         onGoingTranscriptionLineStartMSec = 0
         resetTimers()
     }
-    
+
     func resumeRecording() {
         isRecording = true
         isPaused = false
@@ -92,16 +92,16 @@ struct RecognitionPane: View {
         audioRecorder!.record()
         resetTimers()
     }
-    
+
     func pauseRecording() {
         isPaused = true
         audioRecorder!.pause()
-        
+
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
     }
-    
+
     /// discard all information about recording and close the pane
     ///
     /// reset timers for updateting recording time and waveform.
@@ -110,16 +110,16 @@ struct RecognitionPane: View {
     /// this function does not reset information about `RecognizedSpeech` like title.
     func finishRecording() {
         audioRecorder!.stop()
-        
+
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
         recognizedResultsScrollTimer?.invalidate()
-        
+
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
-        
+
         /// execute last streaming ASR、and create RecognizedSpeech model
         let url = getTmpURLByNumber(number: audioFileNumber)
         let recognizingSpeech = RecognizedSpeech(audioFileURL: url, language: language, transcriptionLines: [])
@@ -134,7 +134,7 @@ struct RecognitionPane: View {
                     onGoingTranscriptionLines?.append(transcriptionLine)
                 }
                 recognizingSpeech.transcriptionLines = onGoingTranscriptionLines ?? []
-                
+
                 var audioData: [Float32] = []
                 for tmpAudioData in tmpAudioDataList {
                     audioData = audioData + tmpAudioData
@@ -156,7 +156,7 @@ struct RecognitionPane: View {
                     }
                 }
                 CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizingSpeech)
-                
+
                 var removeIdx: Int?
                 for idx in 0 ..< recognizingSpeechIds.count {
                     if recognizingSpeechIds[idx] == recognizingSpeech.id {
@@ -187,15 +187,15 @@ struct RecognitionPane: View {
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
         isActives.insert(true, at: 0)
     }
-    
+
     func abortRecording() {
         audioRecorder!.stop()
-        
+
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
         recognizedResultsScrollTimer?.invalidate()
-        
+
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
@@ -207,13 +207,13 @@ struct RecognitionPane: View {
             print("音声一時ファイルの削除に失敗しました")
         }
     }
-    
+
     // MARK: - function about ASR
-    
+
     /// recognition function called in a timer
     func streamingRecognitionTimerFunc() {
         audioRecorder!.stop()
-        
+
         let url = getTmpURLByNumber(number: audioFileNumber)
         guard let tmpAudioData = try? recognizer.streamingRecognize(
             audioFileURL: url,
@@ -240,7 +240,7 @@ struct RecognitionPane: View {
         audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
-        
+
         /// use append of 2D array instead of cocate of 1D array to reduce computation time
         tmpAudioDataList.append(tmpAudioData)
         do {
@@ -249,9 +249,9 @@ struct RecognitionPane: View {
             print("音声一時ファイルの削除に失敗しました")
         }
     }
-    
+
     // MARK: - general function
-    
+
     func resetTimers() {
         updateRecordingTimeTimer = Timer.scheduledTimer(
             withTimeInterval: 1,
@@ -259,20 +259,20 @@ struct RecognitionPane: View {
         ) { _ in
             self.elapsedTime += 1
         }
-        
+
         updateWaveformTimer = Timer.scheduledTimer(
             withTimeInterval: 0.1,
             repeats: true
         ) { _ in
             audioRecorder!.updateMeters()
-            
+
             let idAmp = IdAmp(
                 id: UUID(),
                 amp: audioRecorder!.averagePower(forChannel: 0)
             )
             idAmps.append(idAmp)
         }
-        
+
         streamingRecognitionTimer = Timer.scheduledTimer(
             withTimeInterval: Double(recognitionFrequencySec),
             repeats: true
@@ -280,7 +280,7 @@ struct RecognitionPane: View {
             streamingRecognitionTimerFunc()
         }
     }
-    
+
     func getTextColor(_ idx: Int) -> Color {
         let lines = onGoingTranscriptionLines!
         let startMSec = Double(lines[idx].startMSec)
@@ -290,7 +290,7 @@ struct RecognitionPane: View {
         let uiColor: UIColor = isInside ? .systemGray5 : .systemBackground
         return Color(uiColor)
     }
-    
+
     var body: some View {
         RecordButtonPane(
             isRecording: $isRecording,
@@ -331,12 +331,12 @@ struct RecognitionPane: View {
                         }
                         Text(formatTime(Double(elapsedTime)))
                     }.padding(40)
-                    
+
                     Waveform(idAmps: $idAmps, isPaused: $isPaused)
                         .padding(.top, 60)
                         .padding(.bottom, 20)
                     Divider()
-                    if onGoingTranscriptionLines != nil && onGoingTranscriptionLines!.count > 0 {
+                    if onGoingTranscriptionLines != nil, onGoingTranscriptionLines!.count > 0 {
                         ScrollViewReader { scrollReader in
                             ScrollView {
                                 LazyVStack(spacing: 0) {
@@ -406,7 +406,7 @@ struct RecognitionPane: View {
 private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
     let tmpURL = getTmpURL()
     let newURL = getAudioFileURL(id: recognizedSpeech.id)
-    
+
     recognizedSpeech.audioFileURL = newURL
     do {
         try FileManager.default.moveItem(at: tmpURL, to: newURL)
@@ -445,7 +445,7 @@ func getUserLanguage() -> Language {
     if let language = UserDefaults.standard.string(forKey: UserDefaultASRLanguageKey) {
         return Language(rawValue: language)!
     }
-    
+
     // default language
     return .en
 }

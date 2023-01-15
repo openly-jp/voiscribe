@@ -15,7 +15,7 @@ struct RecognitionFrequencySecMenuItemView: View {
 
 struct RecognitionFrequencySecSubMenuItemView: View {
     let frequencySec:
-    let languageDisplayName: String
+        let languageDisplayName: String
     @AppStorage(UserDefaultASRLanguageKey) var defaultLanguageRawValue = Language.en.rawValue
 
     var body: some View {
