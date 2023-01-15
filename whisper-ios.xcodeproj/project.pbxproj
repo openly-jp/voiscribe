@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
 		13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13516D9E2961B661005013C8 /* ggml-tiny.bin */; };
@@ -77,6 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		13516D9E2961B661005013C8 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
 				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
 				139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */,
+				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
 			);
 			path = SideMenuViews;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
+				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
 				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
 				387B6FCE0F7C83F953692C3A /* README.md in Sources */,

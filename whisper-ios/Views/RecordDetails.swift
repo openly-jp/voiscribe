@@ -1,10 +1,34 @@
 import AVFoundation
 import SwiftUI
 
+/// is needed to update player wrapper after finishing all of recognitions
+/// 認識終了後にすぐに音声再生ができるようにするためのクラス
+class PlayerWrapper: ObservableObject {
+    @Published var player: AVAudioPlayer
+    var recognizeState = true
+    init() {
+        player = try! AVAudioPlayer()
+    }
+
+    func reloadPlayer(isRecognizing: Bool, fileName: String) {
+        if isRecognizing != recognizeState {
+            recognizeState = isRecognizing
+            do {
+                // TODO: fix this (issue #25)
+                let url = getURLByName(fileName: fileName)
+                player = try AVAudioPlayer(contentsOf: url)
+                player.enableRate = true
+            } catch {
+                player = try! AVAudioPlayer()
+                debugPrint("fail to init audio player")
+            }
+        }
+    }
+}
+
 struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
     let isRecognizing: Bool
-
     func getLocaleDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
@@ -16,12 +40,12 @@ struct RecordDetails: View {
 
     // MARK: - state about player
 
-    @State var player: AVAudioPlayer
+    @ObservedObject var playerWrapper = PlayerWrapper()
     @State var currentPlayingTime: Double = 0
 
     // MARK: - timer to update automatic scroll
 
-    // this is initialized in .onAppear method
+    /// this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
 
     init(
@@ -31,19 +55,9 @@ struct RecordDetails: View {
         self.recognizedSpeech = recognizedSpeech
         self.isRecognizing = isRecognizing
 
-        // TODO: fix this (issue #25)
-        let url = getURLByName(fileName: recognizedSpeech.audioFileURL.lastPathComponent)
-
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
         try! session.setActive(true)
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player.enableRate = true
-        } catch {
-            player = try! AVAudioPlayer()
-            debugPrint("fail to init audio player")
-        }
     }
 
     var body: some View {
@@ -69,7 +83,8 @@ struct RecordDetails: View {
                     HStack { Spacer(); Text("申し訳ございません。"); Spacer() }
                     HStack { Spacer(); Text("認識結果がありません。"); Spacer() }
                     HStack { Spacer(); Text("もう一度認識をお願いいたします。"); Spacer() }
-                }.foregroundColor(.red)
+                }
+                .foregroundColor(.red)
                 Spacer()
             } else {
                 ScrollViewReader { scrollReader in
@@ -111,11 +126,18 @@ struct RecordDetails: View {
                 .padding()
                 .navigationBarTitle("", displayMode: .inline)
                 AudioPlayer(
-                    player: $player,
+                    playerWrapper: playerWrapper,
                     currentPlayingTime: $currentPlayingTime,
                     transcription: allTranscription
                 )
                 .padding(20)
+                .onAppear {
+                    /// update player to enable user to play recorded sound after finishing recognition
+                    /// 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
+                    DispatchQueue.main.async {
+                        playerWrapper.reloadPlayer(isRecognizing: isRecognizing, fileName: recognizedSpeech.audioFileURL.lastPathComponent)
+                    }
+                }
             }
         }
     }
@@ -135,7 +157,7 @@ struct RecordDetails: View {
             // thus previous transcription line is highlighted uncorrectly
             // 0.1 is added to avoid this
             let updatedTime = Double(transcriptionLine.startMSec) / 1000 + 0.1
-            player.currentTime = updatedTime
+            playerWrapper.player.currentTime = updatedTime
             currentPlayingTime = updatedTime
             withAnimation(.easeInOut) { scrollReader.scrollTo(idx) }
         }
@@ -146,7 +168,7 @@ struct RecordDetails: View {
             withTimeInterval: 1,
             repeats: true
         ) { _ in
-            if player.isPlaying {
+            if playerWrapper.player.isPlaying {
                 // because user may want to know context of the current playing line
                 // lines before the current line is also displayed
                 var topIdx = getCurrentTranscriptionIndex() - 2
