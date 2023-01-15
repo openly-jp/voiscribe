@@ -29,7 +29,6 @@ struct RecognitionPane: View {
         AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
     ]
     
-    
     // MARK: - ASR state
     
     @EnvironmentObject var recognizer: WhisperRecognizer
@@ -140,15 +139,15 @@ struct RecognitionPane: View {
                 for tmpAudioData in tmpAudioDataList {
                     audioData = audioData + tmpAudioData
                 }
-                if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false){
+                if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) {
                     let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
-                    for i in 0..<audioData.count {
+                    for i in 0 ..< audioData.count {
                         pcmBuffer?.floatChannelData!.pointee[i] = Float(audioData[i])
                     }
                     pcmBuffer?.frameLength = AVAudioFrameCount(audioData.count)
                     let new_url = getURLByName(fileName: "\(recognizingSpeech.id.uuidString).m4a")
                     let audioFile = try? AVAudioFile(forWriting: new_url, settings: recordSettings)
-                    do{
+                    do {
                         try audioFile?.write(from: pcmBuffer!)
                         recognizingSpeech.audioFileURL = new_url
                         print(new_url)
@@ -187,7 +186,6 @@ struct RecognitionPane: View {
         recognizingSpeechIds.insert(recognizingSpeech.id, at: 0)
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
         isActives.insert(true, at: 0)
-        
     }
     
     func abortRecording() {
@@ -208,7 +206,6 @@ struct RecognitionPane: View {
         } catch {
             print("音声一時ファイルの削除に失敗しました")
         }
-        
     }
     
     // MARK: - function about ASR
@@ -219,21 +216,21 @@ struct RecognitionPane: View {
         
         let url = getTmpURLByNumber(number: audioFileNumber)
         guard let tmpAudioData = try? recognizer.streamingRecognize(
-                audioFileURL: url,
-                language: language,
-                callback: { tls in
-                    tls.forEach { transcriptionLine in
-                        transcriptionLine.startMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.startMSec
-                        transcriptionLine.endMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.endMSec
-                        transcriptionLine.ordering = onGoingTranscriptionLineStartOrdering + transcriptionLine.ordering
-                        onGoingTranscriptionLines?.append(transcriptionLine)
-                    }
-                    if let lastTranscriptionLine = tls.last {
-                        onGoingTranscriptionLineStartOrdering = lastTranscriptionLine.ordering + 1
-                        onGoingTranscriptionLineStartMSec = lastTranscriptionLine.endMSec
-                    }
+            audioFileURL: url,
+            language: language,
+            callback: { tls in
+                tls.forEach { transcriptionLine in
+                    transcriptionLine.startMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.startMSec
+                    transcriptionLine.endMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.endMSec
+                    transcriptionLine.ordering = onGoingTranscriptionLineStartOrdering + transcriptionLine.ordering
+                    onGoingTranscriptionLines?.append(transcriptionLine)
                 }
-            ) else {
+                if let lastTranscriptionLine = tls.last {
+                    onGoingTranscriptionLineStartOrdering = lastTranscriptionLine.ordering + 1
+                    onGoingTranscriptionLineStartMSec = lastTranscriptionLine.endMSec
+                }
+            }
+        ) else {
             print("認識に失敗しました")
             return
         }
@@ -252,7 +249,6 @@ struct RecognitionPane: View {
             print("音声一時ファイルの削除に失敗しました")
         }
     }
-    
     
     // MARK: - general function
     
@@ -340,7 +336,7 @@ struct RecognitionPane: View {
                         .padding(.top, 60)
                         .padding(.bottom, 20)
                     Divider()
-                    if onGoingTranscriptionLines != nil && onGoingTranscriptionLines!.count > 0{
+                    if onGoingTranscriptionLines != nil && onGoingTranscriptionLines!.count > 0 {
                         ScrollViewReader { scrollReader in
                             ScrollView {
                                 LazyVStack(spacing: 0) {
@@ -371,7 +367,7 @@ struct RecognitionPane: View {
                                     withTimeInterval: 1,
                                     repeats: true
                                 ) { _ in
-                                    withAnimation{
+                                    withAnimation {
                                         scrollReader.scrollTo(onGoingTranscriptionLines!.count - 1, anchor: .bottom)
                                     }
                                 }

@@ -136,6 +136,7 @@ struct PlayerButton: View {
         }
     }
 }
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let url = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")?.audioFileURL
@@ -147,4 +148,3 @@ struct ContentView_Previews: PreviewProvider {
         )
     }
 }
-

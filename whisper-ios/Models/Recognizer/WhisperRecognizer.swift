@@ -113,6 +113,7 @@ class WhisperRecognizer: Recognizer {
 
         return recognizedSpeech
     }
+
     func streamingRecognize(
         audioFileURL: URL,
         language: Language,

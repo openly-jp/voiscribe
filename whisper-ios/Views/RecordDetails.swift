@@ -9,7 +9,8 @@ class PlayerWrapper: ObservableObject {
     init() {
         player = try! AVAudioPlayer()
     }
-    func reloadPlayer(isRecognizing: Bool, fileName: String){
+
+    func reloadPlayer(isRecognizing: Bool, fileName: String) {
         if isRecognizing != recognizeState {
             recognizeState = isRecognizing
             do {
@@ -130,7 +131,7 @@ struct RecordDetails: View {
                     transcription: allTranscription
                 )
                 .padding(20)
-                .onAppear{
+                .onAppear {
                     /// update player to enable user to play recorded sound after finishing recognition
                     /// 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
                     DispatchQueue.main.async {
