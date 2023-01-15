@@ -17,6 +17,7 @@ struct ConfirmPane: View {
             VStack(alignment: .leading, spacing: 40) {
                 TextField("タイトル", text: $title)
                     .font(.title3)
+                /*
                 VStack(alignment: .leading) {
                     Text("認識言語")
                     Picker("認識言語", selection: $language) {
@@ -31,6 +32,7 @@ struct ConfirmPane: View {
                     }
                     .pickerStyle(.segmented)
                 }
+                 */
                 HStack(spacing: 30) {
                     Button("録音中止", action: abortRecording)
                         .foregroundColor(.red)
