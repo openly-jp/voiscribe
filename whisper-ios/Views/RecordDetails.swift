@@ -1,51 +1,63 @@
 import AVFoundation
 import SwiftUI
 
+/// 認識終了後にすぐに音声再生ができるようにWrapperクラスを用意する
+class PlayerWrapper: ObservableObject {
+    @Published var player: AVAudioPlayer
+    var recognizeState = true
+    init() {
+        player = try! AVAudioPlayer()
+    }
+    func reloadPlayer(isRecognizing: Bool, fileName: String){
+        if isRecognizing != recognizeState {
+            recognizeState = isRecognizing
+            do {
+                // TODO: fix this (issue #25)
+                let url = getURLByName(fileName: fileName)
+                player = try AVAudioPlayer(contentsOf: url)
+                player.enableRate = true
+            } catch {
+                player = try! AVAudioPlayer()
+                debugPrint("fail to init audio player")
+            }
+        }
+    }
+}
+
 struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
     let isRecognizing: Bool
-
     func getLocaleDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateStyle = .medium
         dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
-
+        
         return dateFormatter.string(from: date)
     }
-
+    
     // MARK: - state about player
-
-    @State var player: AVAudioPlayer
+    
+    @ObservedObject var playerWrapper = PlayerWrapper()
     @State var currentPlayingTime: Double = 0
-
+    
     // MARK: - timer to update automatic scroll
-
+    
     // this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
-
+    
     init(
         recognizedSpeech: RecognizedSpeech,
         isRecognizing: Bool
     ) {
         self.recognizedSpeech = recognizedSpeech
         self.isRecognizing = isRecognizing
-
-        // TODO: fix this (issue #25)
-        let url = getURLByName(fileName: recognizedSpeech.audioFileURL.lastPathComponent)
-
+        
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
         try! session.setActive(true)
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player.enableRate = true
-        } catch {
-            player = try! AVAudioPlayer()
-            debugPrint("fail to init audio player")
-        }
     }
-
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
@@ -69,7 +81,8 @@ struct RecordDetails: View {
                     HStack { Spacer(); Text("申し訳ございません。"); Spacer() }
                     HStack { Spacer(); Text("認識結果がありません。"); Spacer() }
                     HStack { Spacer(); Text("もう一度認識をお願いいたします。"); Spacer() }
-                }.foregroundColor(.red)
+                }
+                .foregroundColor(.red)
                 Spacer()
             } else {
                 ScrollViewReader { scrollReader in
@@ -111,19 +124,25 @@ struct RecordDetails: View {
                 .padding()
                 .navigationBarTitle("", displayMode: .inline)
                 AudioPlayer(
-                    player: $player,
+                    playerWrapper: playerWrapper,
                     currentPlayingTime: $currentPlayingTime,
                     transcription: allTranscription
                 )
                 .padding(20)
+                .onAppear{
+                    // 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
+                    DispatchQueue.main.async {
+                        playerWrapper.reloadPlayer(isRecognizing: isRecognizing, fileName: recognizedSpeech.audioFileURL.lastPathComponent)
+                    }
+                }
             }
         }
     }
-
+    
     var allTranscription: String {
         recognizedSpeech.transcriptionLines.reduce("") { $0 + $1.text }
     }
-
+    
     func moveTranscriptionLine(
         idx: Int,
         transcriptionLine: TranscriptionLine,
@@ -135,18 +154,18 @@ struct RecordDetails: View {
             // thus previous transcription line is highlighted uncorrectly
             // 0.1 is added to avoid this
             let updatedTime = Double(transcriptionLine.startMSec) / 1000 + 0.1
-            player.currentTime = updatedTime
+            playerWrapper.player.currentTime = updatedTime
             currentPlayingTime = updatedTime
             withAnimation(.easeInOut) { scrollReader.scrollTo(idx) }
         }
     }
-
+    
     func initUpdateScrollTimer(_ scrollReader: ScrollViewProxy) {
         updateScrollTimer = Timer.scheduledTimer(
             withTimeInterval: 1,
             repeats: true
         ) { _ in
-            if player.isPlaying {
+            if playerWrapper.player.isPlaying {
                 // because user may want to know context of the current playing line
                 // lines before the current line is also displayed
                 var topIdx = getCurrentTranscriptionIndex() - 2
@@ -157,7 +176,7 @@ struct RecordDetails: View {
             }
         }
     }
-
+    
     func getCurrentTranscriptionIndex() -> Int {
         let lines = recognizedSpeech.transcriptionLines
         for idx in 0 ..< lines.count {
@@ -171,7 +190,7 @@ struct RecordDetails: View {
         }
         return 0
     }
-
+    
     func getTextColor(_ idx: Int) -> Color {
         let lines = recognizedSpeech.transcriptionLines
         let startMSec = Double(lines[idx].startMSec)
@@ -203,13 +222,13 @@ struct RecognizingView: View {
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
-
+        
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
             .previewDisplayName("ipad")
-
+        
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: true)
             .previewDisplayName("Record Details (recognizing)")
     }

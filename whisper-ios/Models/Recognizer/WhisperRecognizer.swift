@@ -116,10 +116,8 @@ class WhisperRecognizer: Recognizer {
     func streamingRecognize(
         audioFileURL: URL,
         language: Language,
-        nextOrdering: Int32,
-        nextStartMSec: Int64,
         callback: @escaping ([TranscriptionLine]) -> Void
-    ) throws -> Void {
+    ) throws -> [Float32] {
         guard let whisperContext else {
             throw NSError(domain: "model load error", code: -1)
         }
@@ -154,14 +152,14 @@ class WhisperRecognizer: Recognizer {
             let n_segments = whisper_full_n_segments(whisperContext)
             for i in 0 ..< n_segments {
                 let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
-                let startMSec = nextStartMSec + whisper_full_get_segment_t0(whisperContext, i) * 10
-                let endMSec = nextStartMSec + whisper_full_get_segment_t1(whisperContext, i) * 10
-                let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: nextOrdering + i)
+                let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
+                let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
+                let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: i)
                 transcriptionLines.append(transcriptionLine)
             }
 
             callback(transcriptionLines)
         }
-        return
+        return audioData
     }
 }

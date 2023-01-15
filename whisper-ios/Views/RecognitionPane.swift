@@ -20,6 +20,8 @@ struct RecognitionPane: View {
     @State var streamingRecognitionTimer: Timer?
     @State var recognizedResultsScrollTimer: Timer?
     
+    @State var tmpAudioDataList: [[Float32]] = []
+    
     let recordSettings = [
         AVFormatIDKey: Int(kAudioFormatLinearPCM),
         AVSampleRateKey: 16000,
@@ -54,7 +56,7 @@ struct RecognitionPane: View {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
         try! session.setActive(true)
-
+        
         _recognizingSpeechIds = recognizingSpeechIds
         _recognizedSpeeches = recognizedSpeeches
         _isActives = isActives
@@ -110,7 +112,7 @@ struct RecognitionPane: View {
     /// this function does not reset information about `RecognizedSpeech` like title.
     func finishRecording() {
         audioRecorder!.stop()
-
+        
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
@@ -123,33 +125,62 @@ struct RecognitionPane: View {
         // 最後のストリーミング認識を行い、認識結果を非同期に作成する
         let url = getTmpURLByNumber(number: audioFileNumber)
         let recognizingSpeech = RecognizedSpeech(audioFileURL: url, language: language, transcriptionLines: [])
-        do {
-            try recognizer.streamingRecognize(
-                audioFileURL: url,
-                language: language,
-                nextOrdering: onGoingTranscriptionLineStartOrdering,
-                nextStartMSec: onGoingTranscriptionLineStartMSec,
-                callback: { tls in
-                    tls.forEach { transcriptionLine in
-                        onGoingTranscriptionLines?.append(transcriptionLine)
-                    }
-                    recognizingSpeech.transcriptionLines = onGoingTranscriptionLines ?? []
-                    var removeIdx: Int?
-                    for idx in 0 ..< recognizingSpeechIds.count {
-                        if recognizingSpeechIds[idx] == recognizingSpeech.id {
-                            removeIdx = idx
-                            break
-                        }
-                    }
-                    if let removeIdx {
-                        recognizingSpeechIds.remove(at: removeIdx)
-                    }
-                    // TODO: concat all audio files
-                    CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizingSpeech)
+        guard let tmpAudioData = try? recognizer.streamingRecognize(
+            audioFileURL: url,
+            language: language,
+            callback: { tls in
+                tls.forEach { transcriptionLine in
+                    transcriptionLine.startMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.startMSec
+                    transcriptionLine.endMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.endMSec
+                    transcriptionLine.ordering = onGoingTranscriptionLineStartOrdering + transcriptionLine.ordering
+                    onGoingTranscriptionLines?.append(transcriptionLine)
                 }
-            )
-        } catch {
+                recognizingSpeech.transcriptionLines = onGoingTranscriptionLines ?? []
+                
+                var audioData: [Float32] = []
+                for tmpAudioData in tmpAudioDataList {
+                    audioData = audioData + tmpAudioData
+                }
+                if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false){
+                    let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
+                    for i in 0..<audioData.count {
+                        pcmBuffer?.floatChannelData!.pointee[i] = Float(audioData[i])
+                    }
+                    pcmBuffer?.frameLength = AVAudioFrameCount(audioData.count)
+                    let new_url = getURLByName(fileName: "\(recognizingSpeech.id.uuidString).m4a")
+                    let audioFile = try? AVAudioFile(forWriting: new_url, settings: recordSettings)
+                    do{
+                        try audioFile?.write(from: pcmBuffer!)
+                        recognizingSpeech.audioFileURL = new_url
+                        print(new_url)
+                    } catch {
+                        print("音声書き込みエラー")
+                    }
+                }
+                CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizingSpeech)
+                
+                var removeIdx: Int?
+                for idx in 0 ..< recognizingSpeechIds.count {
+                    if recognizingSpeechIds[idx] == recognizingSpeech.id {
+                        removeIdx = idx
+                        break
+                    }
+                }
+                if let removeIdx {
+                    recognizingSpeechIds.remove(at: removeIdx)
+                }
+            }
+        ) else {
             print("認識に失敗しました")
+            return
+        }
+        // FIXME: ここ以下が非同期処理よりも先に実行されることを保証しないとバグりそう
+        // MEMO: Use append of 2D array instead of cocate of 1D array to reduce computation time
+        tmpAudioDataList.append(tmpAudioData)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            print("音声一時ファイルの削除に失敗しました")
         }
         if title != "" {
             recognizingSpeech.title = title
@@ -162,7 +193,7 @@ struct RecognitionPane: View {
     
     func abortRecording() {
         audioRecorder!.stop()
-
+        
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
@@ -171,6 +202,7 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
+        // TODO: remove tmp audio files
     }
     
     // MARK: - function about ASR
@@ -181,14 +213,14 @@ struct RecognitionPane: View {
         
         // async recognize
         let url = getTmpURLByNumber(number: audioFileNumber)
-        do {
-            try recognizer.streamingRecognize(
+        guard let tmpAudioData = try? recognizer.streamingRecognize(
                 audioFileURL: url,
                 language: language,
-                nextOrdering: onGoingTranscriptionLineStartOrdering,
-                nextStartMSec: onGoingTranscriptionLineStartMSec,
                 callback: { tls in
                     tls.forEach { transcriptionLine in
+                        transcriptionLine.startMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.startMSec
+                        transcriptionLine.endMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.endMSec
+                        transcriptionLine.ordering = onGoingTranscriptionLineStartOrdering + transcriptionLine.ordering
                         onGoingTranscriptionLines?.append(transcriptionLine)
                     }
                     if let lastTranscriptionLine = tls.last {
@@ -196,17 +228,22 @@ struct RecognitionPane: View {
                         onGoingTranscriptionLineStartMSec = lastTranscriptionLine.endMSec
                     }
                 }
-            )
-        } catch {
+            ) else {
             print("認識に失敗しました")
+            return
         }
-        
+        // MEMO: Use append of 2D array instead of cocate of 1D array to reduce computation time
+        tmpAudioDataList.append(tmpAudioData)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            print("音声一時ファイルの削除に失敗しました")
+        }
         audioFileNumber = audioFileNumber + 1
         let new_url = getTmpURLByNumber(number: audioFileNumber)
         audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
-        
     }
     
     
