@@ -1,7 +1,8 @@
 import AVFoundation
 import SwiftUI
 
-/// 認識終了後にすぐに音声再生ができるようにWrapperクラスを用意する
+/// is needed to update player wrapper after finishing all of recognitions
+/// 認識終了後にすぐに音声再生ができるようにするためのクラス
 class PlayerWrapper: ObservableObject {
     @Published var player: AVAudioPlayer
     var recognizeState = true
@@ -43,7 +44,7 @@ struct RecordDetails: View {
     
     // MARK: - timer to update automatic scroll
     
-    // this is initialized in .onAppear method
+    /// this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
     
     init(
@@ -130,7 +131,8 @@ struct RecordDetails: View {
                 )
                 .padding(20)
                 .onAppear{
-                    // 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
+                    /// update player to enable user to play recorded sound after finishing recognition
+                    /// 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
                     DispatchQueue.main.async {
                         playerWrapper.reloadPlayer(isRecognizing: isRecognizing, fileName: recognizedSpeech.audioFileURL.lastPathComponent)
                     }

@@ -41,6 +41,7 @@ struct RecognitionPane: View {
     @State var onGoingTranscriptionLines: [TranscriptionLine]?
     @State var onGoingTranscriptionLineStartOrdering: Int32 = 0
     @State var onGoingTranscriptionLineStartMSec: Int64 = 0
+    @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
     
     // MARK: - pane management state
     
@@ -74,6 +75,7 @@ struct RecognitionPane: View {
         idAmps = []
         title = ""
         audioFileNumber = 0
+        tmpAudioDataList = []
         audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: audioFileNumber), settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
@@ -89,7 +91,6 @@ struct RecognitionPane: View {
         isPaused = false
         isPaneOpen = true
         audioRecorder!.record()
-        // TODO: 再開時はストリーミングASRタイマーは前回の残り分を引き継ぐべき
         resetTimers()
     }
     
@@ -100,8 +101,6 @@ struct RecognitionPane: View {
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
-        // TODO: 負荷軽減のため、一時停止時はスクロールタイマーを停止するべき
-        recognizedResultsScrollTimer?.invalidate()
     }
     
     /// discard all information about recording and close the pane
@@ -122,7 +121,7 @@ struct RecognitionPane: View {
         isPaneOpen = false
         isConfirmOpen = false
         
-        // 最後のストリーミング認識を行い、認識結果を非同期に作成する
+        /// execute last streaming ASR、and create RecognizedSpeech model
         let url = getTmpURLByNumber(number: audioFileNumber)
         let recognizingSpeech = RecognizedSpeech(audioFileURL: url, language: language, transcriptionLines: [])
         guard let tmpAudioData = try? recognizer.streamingRecognize(
@@ -174,7 +173,7 @@ struct RecognitionPane: View {
             print("認識に失敗しました")
             return
         }
-        // FIXME: ここ以下が非同期処理よりも先に実行されることを保証しないとバグりそう
+        // FIXME: ここ以下が非同期処理よりも先に実行されることを保証するべきである
         // MEMO: Use append of 2D array instead of cocate of 1D array to reduce computation time
         tmpAudioDataList.append(tmpAudioData)
         do {
@@ -202,16 +201,22 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
-        // TODO: remove tmp audio files
+        /// remove tmp audio file
+        let url = getTmpURLByNumber(number: audioFileNumber)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            print("音声一時ファイルの削除に失敗しました")
+        }
+        
     }
     
     // MARK: - function about ASR
     
-    /// 30sごとに呼び出される関数
+    /// recognition function called in a timer
     func streamingRecognitionTimerFunc() {
         audioRecorder!.stop()
         
-        // async recognize
         let url = getTmpURLByNumber(number: audioFileNumber)
         guard let tmpAudioData = try? recognizer.streamingRecognize(
                 audioFileURL: url,
@@ -232,18 +237,20 @@ struct RecognitionPane: View {
             print("認識に失敗しました")
             return
         }
-        // MEMO: Use append of 2D array instead of cocate of 1D array to reduce computation time
+        /// resume recording as soon as possible
+        audioFileNumber = audioFileNumber + 1
+        let new_url = getTmpURLByNumber(number: audioFileNumber)
+        audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
+        audioRecorder!.isMeteringEnabled = true
+        audioRecorder!.record()
+        
+        /// use append of 2D array instead of cocate of 1D array to reduce computation time
         tmpAudioDataList.append(tmpAudioData)
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
             print("音声一時ファイルの削除に失敗しました")
         }
-        audioFileNumber = audioFileNumber + 1
-        let new_url = getTmpURLByNumber(number: audioFileNumber)
-        audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
-        audioRecorder!.isMeteringEnabled = true
-        audioRecorder!.record()
     }
     
     
@@ -271,7 +278,7 @@ struct RecognitionPane: View {
         }
         
         streamingRecognitionTimer = Timer.scheduledTimer(
-            withTimeInterval: 10,
+            withTimeInterval: Double(recognitionFrequencySec),
             repeats: true
         ) { _ in
             streamingRecognitionTimerFunc()
@@ -359,8 +366,7 @@ struct RecognitionPane: View {
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
                             .padding()
                             .onAppear {
-                                // TODO: 毎秒スクロールを試行するのは負荷が大きそう
-                                //       そのため、認識ごとにスクロールするようにしたい
+                                // TODO: 毎秒スクロールを試行するのは負荷が大きいため、認識ごとにスクロールするようにしたい
                                 recognizedResultsScrollTimer = Timer.scheduledTimer(
                                     withTimeInterval: 1,
                                     repeats: true
