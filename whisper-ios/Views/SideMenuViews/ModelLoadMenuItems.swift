@@ -2,6 +2,15 @@ import SwiftUI
 
 let UserDefaultASRModelNameKey = "user-default-asr-model-name"
 
+let modelURLs: [String: String] = [
+    "ggml-tiny": "models.openly.jp/ggml-tiny.bin",
+    "ggml-tiny.en": "models.openly.jp/ggml-tiny.en.bin",
+    "ggml-base": "models.openly.jp/ggml-base.bin",
+    "ggml-base.en": "models.openly.jp/ggml-base.en.bin",
+    "ggml-small": "models.openly.jp/ggml-small.bin",
+    "ggml-small.en": "models.openly.jp/ggml-small.en.bin",
+]
+
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
@@ -69,6 +78,10 @@ struct ModelLoadSubMenuItemView: View {
 let modeLoadSubMenuItems = [
     MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny", modelDisplayName: "Tiny")), subMenuItems: nil),
     MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-base", modelDisplayName: "Base")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-base.en", modelDisplayName: "Base(En)")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-small", modelDisplayName: "Small")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-small.en", modelDisplayName: "Small(En)")), subMenuItems: nil),
 ]
 
 let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: modeLoadSubMenuItems)
