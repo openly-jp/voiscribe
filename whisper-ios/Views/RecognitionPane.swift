@@ -70,11 +70,11 @@ struct RecognitionPane: View {
         language = getUserLanguage()
         tmpAudioFileNumber = 0
         recognizingSpeech = RecognizedSpeech(audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber), language: language)
+        recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
 
         elapsedTime = 0
         idAmps = []
         title = ""
-        tmpAudioFileNumber = 0
 
         audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: tmpAudioFileNumber), settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
@@ -117,8 +117,8 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
-        
-        if recognizingSpeech != nil{
+
+        if recognizingSpeech != nil {
             /// execute last streaming ASR、and create RecognizedSpeech model
             let url = getTmpURLByNumber(number: tmpAudioFileNumber)
             /// change title based on the confirm pane
@@ -153,9 +153,11 @@ struct RecognitionPane: View {
                     CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: rs)
 
                     recognizingSpeechIds.removeAll(where: { $0 == rs.id })
+                },
+                feasibilityCheck: { rs in
+                    recognizingSpeechIds.contains(rs.id)
                 }
             )
-            recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
             recognizedSpeeches.insert(recognizingSpeech!, at: 0)
             isActives.insert(true, at: 0)
         } else {
@@ -174,6 +176,8 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
+
+        recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
     }
 
     // MARK: - function about ASR
@@ -182,17 +186,19 @@ struct RecognitionPane: View {
     func streamingRecognitionTimerFunc() {
         audioRecorder!.stop()
         let url = getTmpURLByNumber(number: tmpAudioFileNumber)
-        
+
         /// resume recording as soon as possible
         tmpAudioFileNumber = tmpAudioFileNumber + 1
         let new_url = getTmpURLByNumber(number: tmpAudioFileNumber)
         audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
-        
+
         if recognizingSpeech != nil {
             /// recognize past 10 ~ 30 sec speech
-            recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech!, callback: { _ in })
+            recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech!, callback: { _ in }, feasibilityCheck: { rs in
+                recognizingSpeechIds.contains(rs.id)
+            })
         } else {
             print("recognizingSpeech is nil.")
         }
