@@ -8,7 +8,7 @@ struct RecognitionPane: View {
     // MARK: - Recording state
 
     @State var audioRecorder: AVAudioRecorder?
-    @State var audioFileNumber: Int = 0
+    @State var tmpAudioFileNumber: Int = 0
     @State var isRecording: Bool = false
     @State var isPaused: Bool = false
 
@@ -19,8 +19,6 @@ struct RecognitionPane: View {
     @State var updateWaveformTimer: Timer?
     @State var streamingRecognitionTimer: Timer?
     @State var recognizedResultsScrollTimer: Timer?
-
-    @State var tmpAudioDataList: [[Float32]] = []
 
     let recordSettings = [
         AVFormatIDKey: Int(kAudioFormatLinearPCM),
@@ -34,12 +32,11 @@ struct RecognitionPane: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
+    @State var recognizingSpeech: RecognizedSpeech?
     @Binding var isActives: [Bool]
     @State var language: Language = getUserLanguage()
     @State var title = ""
-    @State var onGoingTranscriptionLines: [TranscriptionLine]?
-    @State var onGoingTranscriptionLineStartOrdering: Int32 = 0
-    @State var onGoingTranscriptionLineStartMSec: Int64 = 0
+
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
 
     // MARK: - pane management state
@@ -71,18 +68,17 @@ struct RecognitionPane: View {
         isPaneOpen = true
 
         language = getUserLanguage()
+        recognizingSpeech = RecognizedSpeech(language: language)
+
         elapsedTime = 0
         idAmps = []
         title = ""
-        audioFileNumber = 0
-        tmpAudioDataList = []
-        audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: audioFileNumber), settings: recordSettings)
+        tmpAudioFileNumber = 0
+
+        audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: tmpAudioFileNumber), settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
 
-        onGoingTranscriptionLines = []
-        onGoingTranscriptionLineStartOrdering = 0
-        onGoingTranscriptionLineStartMSec = 0
         resetTimers()
     }
 
@@ -120,23 +116,20 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
-
+        
+        /// change title based on the confirm pane
+        if title != "" {
+            recognizingSpeech!.title = title
+        }
         /// execute last streaming ASR、and create RecognizedSpeech model
-        let url = getTmpURLByNumber(number: audioFileNumber)
-        let recognizingSpeech = RecognizedSpeech(audioFileURL: url, language: language, transcriptionLines: [])
-        guard let tmpAudioData = try? recognizer.streamingRecognize(
+        let url = getTmpURLByNumber(number: tmpAudioFileNumber)
+        recognizer.streamingRecognize(
             audioFileURL: url,
             language: language,
-            callback: { tls in
-                tls.forEach { transcriptionLine in
-                    transcriptionLine.startMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.startMSec
-                    transcriptionLine.endMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.endMSec
-                    transcriptionLine.ordering = onGoingTranscriptionLineStartOrdering + transcriptionLine.ordering
-                    onGoingTranscriptionLines?.append(transcriptionLine)
-                }
-                recognizingSpeech.transcriptionLines = onGoingTranscriptionLines ?? []
-
+            recognizingSpeech: recognizingSpeech!,
+            callback: { rs in
                 var audioData: [Float32] = []
+                let tmpAudioDataList = rs.tmpAudioDataList
                 for tmpAudioData in tmpAudioDataList {
                     audioData = audioData + tmpAudioData
                 }
@@ -146,46 +139,23 @@ struct RecognitionPane: View {
                         pcmBuffer?.floatChannelData!.pointee[i] = Float(audioData[i])
                     }
                     pcmBuffer?.frameLength = AVAudioFrameCount(audioData.count)
-                    let new_url = getURLByName(fileName: "\(recognizingSpeech.id.uuidString).m4a")
+                    let new_url = getURLByName(fileName: "\(rs.id.uuidString).m4a")
                     let audioFile = try? AVAudioFile(forWriting: new_url, settings: recordSettings)
                     do {
                         try audioFile?.write(from: pcmBuffer!)
-                        recognizingSpeech.audioFileURL = new_url
+                        rs.audioFileURL = new_url
                         print(new_url)
                     } catch {
                         print("音声書き込みエラー")
                     }
                 }
-                CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizingSpeech)
+                CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: rs)
 
-                var removeIdx: Int?
-                for idx in 0 ..< recognizingSpeechIds.count {
-                    if recognizingSpeechIds[idx] == recognizingSpeech.id {
-                        removeIdx = idx
-                        break
-                    }
-                }
-                if let removeIdx {
-                    recognizingSpeechIds.remove(at: removeIdx)
-                }
+                recognizingSpeechIds.removeAll(where: { $0 == rs.id })
             }
-        ) else {
-            print("認識に失敗しました")
-            return
-        }
-        // FIXME: ここ以下が非同期処理よりも先に実行されることを保証するべきである
-        // MEMO: Use append of 2D array instead of cocate of 1D array to reduce computation time
-        tmpAudioDataList.append(tmpAudioData)
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            print("音声一時ファイルの削除に失敗しました")
-        }
-        if title != "" {
-            recognizingSpeech.title = title
-        }
-        recognizingSpeechIds.insert(recognizingSpeech.id, at: 0)
-        recognizedSpeeches.insert(recognizingSpeech, at: 0)
+        )
+        recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
+        recognizedSpeeches.insert(recognizingSpeech!, at: 0)
         isActives.insert(true, at: 0)
     }
 
@@ -200,13 +170,6 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
-        /// remove tmp audio file
-        let url = getTmpURLByNumber(number: audioFileNumber)
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            print("音声一時ファイルの削除に失敗しました")
-        }
     }
 
     // MARK: - function about ASR
@@ -214,41 +177,17 @@ struct RecognitionPane: View {
     /// recognition function called in a timer
     func streamingRecognitionTimerFunc() {
         audioRecorder!.stop()
-
-        let url = getTmpURLByNumber(number: audioFileNumber)
-        guard let tmpAudioData = try? recognizer.streamingRecognize(
-            audioFileURL: url,
-            language: language,
-            callback: { tls in
-                tls.forEach { transcriptionLine in
-                    transcriptionLine.startMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.startMSec
-                    transcriptionLine.endMSec = onGoingTranscriptionLineStartMSec + transcriptionLine.endMSec
-                    transcriptionLine.ordering = onGoingTranscriptionLineStartOrdering + transcriptionLine.ordering
-                    onGoingTranscriptionLines?.append(transcriptionLine)
-                }
-                if let lastTranscriptionLine = tls.last {
-                    onGoingTranscriptionLineStartOrdering = lastTranscriptionLine.ordering + 1
-                    onGoingTranscriptionLineStartMSec = lastTranscriptionLine.endMSec
-                }
-            }
-        ) else {
-            print("認識に失敗しました")
-            return
-        }
+        let url = getTmpURLByNumber(number: tmpAudioFileNumber)
+        
         /// resume recording as soon as possible
-        audioFileNumber = audioFileNumber + 1
-        let new_url = getTmpURLByNumber(number: audioFileNumber)
+        tmpAudioFileNumber = tmpAudioFileNumber + 1
+        let new_url = getTmpURLByNumber(number: tmpAudioFileNumber)
         audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
-
-        /// use append of 2D array instead of cocate of 1D array to reduce computation time
-        tmpAudioDataList.append(tmpAudioData)
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            print("音声一時ファイルの削除に失敗しました")
-        }
+        
+        /// recognize past 10 ~ 30 sec speech
+        recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech!, callback: { _ in })
     }
 
     // MARK: - general function
@@ -283,7 +222,7 @@ struct RecognitionPane: View {
     }
 
     func getTextColor(_ idx: Int) -> Color {
-        let lines = onGoingTranscriptionLines!
+        let lines = recognizingSpeech?.transcriptionLines ?? []
         let startMSec = Double(lines[idx].startMSec)
         let endMSec: Double = idx < lines.count - 1 ? Double(lines[idx + 1].startMSec) : .infinity
         let currentMSec = Double(elapsedTime * 1000)
@@ -336,12 +275,12 @@ struct RecognitionPane: View {
                     Waveform(idAmps: $idAmps, isPaused: $isPaused)
                         .padding(.top, 60)
                         .padding(.bottom, 20)
-                    if onGoingTranscriptionLines != nil, onGoingTranscriptionLines!.count > 0 {
+                    if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
                         Divider()
                         ScrollViewReader { scrollReader in
                             ScrollView {
                                 LazyVStack(spacing: 0) {
-                                    ForEach(Array(onGoingTranscriptionLines!.enumerated()), id: \.self.offset) {
+                                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
                                         idx, onGoingTranscriptionLine in
                                         HStack(alignment: .center) {
                                             Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
@@ -369,7 +308,7 @@ struct RecognitionPane: View {
                                     repeats: true
                                 ) { _ in
                                     withAnimation {
-                                        scrollReader.scrollTo(onGoingTranscriptionLines!.count - 1, anchor: .bottom)
+                                        scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
                                     }
                                 }
                             }
