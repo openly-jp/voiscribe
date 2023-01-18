@@ -8,7 +8,7 @@ enum Language: String, CaseIterable {
 class RecognizedSpeech: Identifiable {
     let id: UUID
     var title: String
-    var audioFileURL: URL?
+    var audioFileURL: URL
     var language: Language
     var transcriptionLines: [TranscriptionLine]
     var createdAt: Date
@@ -16,10 +16,11 @@ class RecognizedSpeech: Identifiable {
 
     var tmpAudioDataList: [[Float32]] = []
 
-    init(language: Language) {
+    init(audioFileURL: URL, language: Language) {
         /// this is used in streaming recognition
         id = UUID()
         title = "未定"
+        self.audioFileURL = audioFileURL
         self.language = language
         transcriptionLines = []
         createdAt = Date()

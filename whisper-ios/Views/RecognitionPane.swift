@@ -68,7 +68,8 @@ struct RecognitionPane: View {
         isPaneOpen = true
 
         language = getUserLanguage()
-        recognizingSpeech = RecognizedSpeech(language: language)
+        tmpAudioFileNumber = 0
+        recognizingSpeech = RecognizedSpeech(audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber), language: language)
 
         elapsedTime = 0
         idAmps = []
@@ -117,46 +118,49 @@ struct RecognitionPane: View {
         isPaneOpen = false
         isConfirmOpen = false
         
-        /// change title based on the confirm pane
-        if title != "" {
-            recognizingSpeech!.title = title
-        }
-        /// execute last streaming ASR、and create RecognizedSpeech model
-        let url = getTmpURLByNumber(number: tmpAudioFileNumber)
-        recognizer.streamingRecognize(
-            audioFileURL: url,
-            language: language,
-            recognizingSpeech: recognizingSpeech!,
-            callback: { rs in
-                var audioData: [Float32] = []
-                let tmpAudioDataList = rs.tmpAudioDataList
-                for tmpAudioData in tmpAudioDataList {
-                    audioData = audioData + tmpAudioData
-                }
-                if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) {
-                    let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
-                    for i in 0 ..< audioData.count {
-                        pcmBuffer?.floatChannelData!.pointee[i] = Float(audioData[i])
-                    }
-                    pcmBuffer?.frameLength = AVAudioFrameCount(audioData.count)
-                    let new_url = getURLByName(fileName: "\(rs.id.uuidString).m4a")
-                    let audioFile = try? AVAudioFile(forWriting: new_url, settings: recordSettings)
-                    do {
-                        try audioFile?.write(from: pcmBuffer!)
-                        rs.audioFileURL = new_url
-                        print(new_url)
-                    } catch {
-                        print("音声書き込みエラー")
-                    }
-                }
-                CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: rs)
-
-                recognizingSpeechIds.removeAll(where: { $0 == rs.id })
+        if recognizingSpeech != nil{
+            /// execute last streaming ASR、and create RecognizedSpeech model
+            let url = getTmpURLByNumber(number: tmpAudioFileNumber)
+            /// change title based on the confirm pane
+            if title != "" {
+                recognizingSpeech!.title = title
             }
-        )
-        recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
-        recognizedSpeeches.insert(recognizingSpeech!, at: 0)
-        isActives.insert(true, at: 0)
+            recognizer.streamingRecognize(
+                audioFileURL: url,
+                language: language,
+                recognizingSpeech: recognizingSpeech!,
+                callback: { rs in
+                    var audioData: [Float32] = []
+                    let tmpAudioDataList = rs.tmpAudioDataList
+                    for tmpAudioData in tmpAudioDataList {
+                        audioData = audioData + tmpAudioData
+                    }
+                    if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) {
+                        let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
+                        for i in 0 ..< audioData.count {
+                            pcmBuffer?.floatChannelData!.pointee[i] = Float(audioData[i])
+                        }
+                        pcmBuffer?.frameLength = AVAudioFrameCount(audioData.count)
+                        let new_url = getURLByName(fileName: "\(rs.id.uuidString).m4a")
+                        let audioFile = try? AVAudioFile(forWriting: new_url, settings: recordSettings)
+                        do {
+                            try audioFile?.write(from: pcmBuffer!)
+                            rs.audioFileURL = new_url
+                        } catch {
+                            print("音声書き込みエラー")
+                        }
+                    }
+                    CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: rs)
+
+                    recognizingSpeechIds.removeAll(where: { $0 == rs.id })
+                }
+            )
+            recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
+            recognizedSpeeches.insert(recognizingSpeech!, at: 0)
+            isActives.insert(true, at: 0)
+        } else {
+            print("recognizingSpeech is nil")
+        }
     }
 
     func abortRecording() {
@@ -186,8 +190,12 @@ struct RecognitionPane: View {
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
         
-        /// recognize past 10 ~ 30 sec speech
-        recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech!, callback: { _ in })
+        if recognizingSpeech != nil {
+            /// recognize past 10 ~ 30 sec speech
+            recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech!, callback: { _ in })
+        } else {
+            print("recognizingSpeech is nil.")
+        }
     }
 
     // MARK: - general function
@@ -221,8 +229,7 @@ struct RecognitionPane: View {
         }
     }
 
-    func getTextColor(_ idx: Int) -> Color {
-        let lines = recognizingSpeech?.transcriptionLines ?? []
+    func getTextColor(lines: inout [TranscriptionLine], _ idx: Int) -> Color {
         let startMSec = Double(lines[idx].startMSec)
         let endMSec: Double = idx < lines.count - 1 ? Double(lines[idx + 1].startMSec) : .infinity
         let currentMSec = Double(elapsedTime * 1000)
@@ -294,7 +301,7 @@ struct RecognitionPane: View {
                                                 .multilineTextAlignment(.leading)
                                         }
                                         .padding(10)
-                                        .background(getTextColor(idx))
+                                        .background(getTextColor(lines: &recognizingSpeech!.transcriptionLines, idx))
                                         Divider()
                                     }
                                 }

@@ -135,7 +135,7 @@ struct RecordDetails: View {
                     /// update player to enable user to play recorded sound after finishing recognition
                     /// 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
                     DispatchQueue.main.async {
-                        playerWrapper.reloadPlayer(isRecognizing: isRecognizing, fileName: recognizedSpeech.audioFileURL!.lastPathComponent)
+                        playerWrapper.reloadPlayer(isRecognizing: isRecognizing, fileName: recognizedSpeech.audioFileURL.lastPathComponent)
                     }
                 }
             }
