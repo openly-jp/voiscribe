@@ -151,9 +151,8 @@ struct RecognitionPane: View {
                     do {
                         try audioFile?.write(from: pcmBuffer!)
                         recognizingSpeech.audioFileURL = new_url
-                        print(new_url)
                     } catch {
-                        print("音声書き込みエラー")
+                        Logger.error("Failed to write audio data.", error)
                     }
                 }
                 CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizingSpeech)
@@ -170,7 +169,7 @@ struct RecognitionPane: View {
                 }
             }
         ) else {
-            print("認識に失敗しました")
+            Logger.error("Failed to recognize audio.")
             return
         }
         // FIXME: ここ以下が非同期処理よりも先に実行されることを保証するべきである
@@ -179,7 +178,7 @@ struct RecognitionPane: View {
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
-            print("音声一時ファイルの削除に失敗しました")
+            Logger.error("Failed to remove audio data at \(url)", error)
         }
         if title != "" {
             recognizingSpeech.title = title
@@ -205,7 +204,7 @@ struct RecognitionPane: View {
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
-            print("音声一時ファイルの削除に失敗しました")
+            Logger.error("Failed to remove audio data at \(url)", error)
         }
     }
 
@@ -232,7 +231,7 @@ struct RecognitionPane: View {
                 }
             }
         ) else {
-            print("認識に失敗しました")
+            Logger.error("Failed to recognize audio.")
             return
         }
         /// resume recording as soon as possible
@@ -247,7 +246,7 @@ struct RecognitionPane: View {
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
-            print("音声一時ファイルの削除に失敗しました")
+            Logger.error("Failed to remove audio data at \(url)", error)
         }
     }
 
@@ -412,7 +411,7 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
     do {
         try FileManager.default.moveItem(at: tmpURL, to: newURL)
     } catch {
-        debugPrint("fail to move file:", error)
+        Logger.error("Failed to move file:", error)
     }
 }
 
