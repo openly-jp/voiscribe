@@ -70,7 +70,7 @@ extension CoreDataRepository {
         do {
             try context.save()
         } catch let error as NSError {
-            debugPrint("Error: \(error), \(error.userInfo)")
+            Logger.error("\(error), \(error.userInfo)")
         }
     }
 
@@ -83,7 +83,7 @@ extension CoreDataRepository {
         do {
             return try context.fetch(request)
         } catch let error as NSError {
-            debugPrint("Error: \(error), \(error.userInfo)")
+            Logger.error("\(error), \(error.userInfo)")
             return []
         }
     }
