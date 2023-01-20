@@ -15,6 +15,8 @@ class RecognizedSpeech: Identifiable {
     var updatedAt: Date
 
     var tmpAudioDataList: [[Float32]] = []
+    var promptTokens: [Int32] = []
+    var remainingAudioData: [Float32] = []
 
     /// this is used in streaming recognition
     init(audioFileURL: URL, language: Language) {
