@@ -118,51 +118,25 @@ struct RecognitionPane: View {
         isPaneOpen = false
         isConfirmOpen = false
 
-        if recognizingSpeech != nil {
-            /// execute last streaming ASR、and create RecognizedSpeech model
-            let url = getTmpURLByNumber(number: tmpAudioFileNumber)
-            /// change title based on the confirm pane
-            if title != "" {
-                recognizingSpeech!.title = title
-            }
-            recognizer.streamingRecognize(
-                audioFileURL: url,
-                language: language,
-                recognizingSpeech: recognizingSpeech!,
-                callback: { rs in
-                    var audioData: [Float32] = []
-                    let tmpAudioDataList = rs.tmpAudioDataList
-                    for tmpAudioData in tmpAudioDataList {
-                        audioData = audioData + tmpAudioData
-                    }
-                    if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) {
-                        let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
-                        for i in 0 ..< audioData.count {
-                            pcmBuffer?.floatChannelData!.pointee[i] = Float(audioData[i])
-                        }
-                        pcmBuffer?.frameLength = AVAudioFrameCount(audioData.count)
-                        let new_url = getURLByName(fileName: "\(rs.id.uuidString).m4a")
-                        let audioFile = try? AVAudioFile(forWriting: new_url, settings: recordSettings)
-                        do {
-                            try audioFile?.write(from: pcmBuffer!)
-                            rs.audioFileURL = new_url
-                        } catch {
-                            print("音声書き込みエラー")
-                        }
-                    }
-                    CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: rs)
-
-                    recognizingSpeechIds.removeAll(where: { $0 == rs.id })
-                },
-                feasibilityCheck: { rs in
-                    recognizingSpeechIds.contains(rs.id)
-                }
-            )
-            recognizedSpeeches.insert(recognizingSpeech!, at: 0)
-            isActives.insert(true, at: 0)
-        } else {
+        guard let recognizingSpeech else {
             print("recognizingSpeech is nil")
+            return
         }
+        // execute last streaming ASR、and create RecognizedSpeech model
+        let url = getTmpURLByNumber(number: tmpAudioFileNumber)
+        // change title based on the confirm pane
+        if title != "" {
+            recognizingSpeech.title = title
+        }
+        recognizer.streamingRecognize(
+            audioFileURL: url,
+            language: language,
+            recognizingSpeech: recognizingSpeech,
+            callback: streamingRecognitionPostProcess,
+            feasibilityCheck: streamingRecognitionFeasibilityCheck
+        )
+        recognizedSpeeches.insert(recognizingSpeech, at: 0)
+        isActives.insert(true, at: 0)
     }
 
     func abortRecording() {
@@ -187,21 +161,61 @@ struct RecognitionPane: View {
         audioRecorder!.stop()
         let url = getTmpURLByNumber(number: tmpAudioFileNumber)
 
-        /// resume recording as soon as possible
+        // resume recording as soon as possible
         tmpAudioFileNumber = tmpAudioFileNumber + 1
-        let new_url = getTmpURLByNumber(number: tmpAudioFileNumber)
-        audioRecorder = try! AVAudioRecorder(url: new_url, settings: recordSettings)
+        let newURL = getTmpURLByNumber(number: tmpAudioFileNumber)
+        audioRecorder = try! AVAudioRecorder(url: newURL, settings: recordSettings)
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
 
-        if recognizingSpeech != nil {
-            /// recognize past 10 ~ 30 sec speech
-            recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech!, callback: { _ in }, feasibilityCheck: { rs in
-                recognizingSpeechIds.contains(rs.id)
-            })
-        } else {
+        guard let recognizingSpeech else {
             print("recognizingSpeech is nil.")
+            return
         }
+        // recognize past 10 ~ 30 sec speech
+        recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech, callback: { _ in }, feasibilityCheck: streamingRecognitionFeasibilityCheck)
+    }
+
+    /// check whether ASR has to be executed or not
+    /// this func is called in streaming recognizer
+    func streamingRecognitionFeasibilityCheck(recognizedSpeech: RecognizedSpeech) -> Bool {
+        recognizingSpeechIds.contains(recognizedSpeech.id)
+    }
+
+    /// post process (e.g. audio concatenation)
+    /// this func is called in streaming recognizer
+    func streamingRecognitionPostProcess(recognizedSpeech: RecognizedSpeech) {
+        var audioData: [Float32] = []
+        let tmpAudioDataList = recognizedSpeech.tmpAudioDataList
+        for tmpAudioData in tmpAudioDataList {
+            audioData = audioData + tmpAudioData
+        }
+        guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) else {
+            print("format load error")
+            return
+        }
+        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count)) else {
+            print("audio load error")
+            return
+        }
+        for i in 0 ..< audioData.count {
+            pcmBuffer.floatChannelData!.pointee[i] = Float(audioData[i])
+        }
+        pcmBuffer.frameLength = AVAudioFrameCount(audioData.count)
+        let newURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
+        guard let audioFile = try? AVAudioFile(forWriting: newURL, settings: recordSettings) else {
+            print("audio load error")
+            return
+        }
+        guard let _ = try? audioFile.write(from: pcmBuffer) else {
+            print("音声書き込みエラー")
+            return
+        }
+        recognizedSpeech.audioFileURL = newURL
+
+        CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizedSpeech)
+
+        recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
 
     // MARK: - general function
@@ -403,7 +417,7 @@ func getUserLanguage() -> Language {
     return .en
 }
 
-// DEPRECATED: This operation will be done only on SideMenu
+/// DEPRECATED: This operation will be done only on SideMenu
 func saveUserLanguage(_ language: Language) {
     UserDefaults.standard.set(language.rawValue, forKey: UserDefaultASRLanguageKey)
 }

@@ -135,7 +135,7 @@ class WhisperRecognizer: Recognizer {
             } catch {
                 print("音声一時ファイルの削除に失敗しました")
             }
-            /// check whether recognizingSpeech was removed (i.e. abort recording) or not
+            // check whether recognizingSpeech was removed (i.e. abort recording) or not
             if feasibilityCheck(recognizingSpeech) {
                 let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
                 var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)

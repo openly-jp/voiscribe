@@ -16,8 +16,8 @@ class RecognizedSpeech: Identifiable {
 
     var tmpAudioDataList: [[Float32]] = []
 
+    /// this is used in streaming recognition
     init(audioFileURL: URL, language: Language) {
-        /// this is used in streaming recognition
         id = UUID()
         title = "未定"
         self.audioFileURL = audioFileURL
