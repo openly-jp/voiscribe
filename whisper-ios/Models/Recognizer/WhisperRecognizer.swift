@@ -118,10 +118,14 @@ class WhisperRecognizer: Recognizer {
         audioFileURL: URL,
         language: Language,
         recognizingSpeech: RecognizedSpeech,
+        is_prompting: Bool,
+        is_remaining_audio_concat: Bool,
         callback: @escaping (RecognizedSpeech) -> Void,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
+            Logger.debug("Prompting: \(is_prompting ? "active" : "inactive")")
+            Logger.debug("Remaining Audio Concat: \(is_remaining_audio_concat ? "active" : "inactive")")
             guard let whisperContext = self.whisperContext else {
                 Logger.error("model load error")
                 return
@@ -156,7 +160,7 @@ class WhisperRecognizer: Recognizer {
                     
                     whisper_reset_timings(whisperContext)
                     // append remaining previous audioData to audioData
-                    audioData = audioData + recognizingSpeech.remainingAudioData
+                    audioData = recognizingSpeech.remainingAudioData + audioData
                     audioData.withUnsafeBufferPointer { data in
                         if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
                         } else {
@@ -178,23 +182,26 @@ class WhisperRecognizer: Recognizer {
                     recognizingSpeech.transcriptionLines.append(transcriptionLine)
                 }
                 // update promptTokens
-                recognizingSpeech.promptTokens.removeAll()
-                for i in 0 ..< nSegments {
-                    let tokenCount = whisper_full_n_tokens(whisperContext, i)
-                    for j in 0 ..< tokenCount {
-                        let tokenId = whisper_full_get_token_id(whisperContext, i, j)
-                        recognizingSpeech.promptTokens.append(tokenId)
+                if is_prompting {
+                    recognizingSpeech.promptTokens.removeAll()
+                    for i in 0 ..< nSegments {
+                        let tokenCount = whisper_full_n_tokens(whisperContext, i)
+                        for j in 0 ..< tokenCount {
+                            let tokenId = whisper_full_get_token_id(whisperContext, i, j)
+                            recognizingSpeech.promptTokens.append(tokenId)
+                        }
                     }
                 }
                 // update remaining audioData
-                let originalAudioDataCount: Int = audioData.count
-                let usedAudioDataCount: Int = Int(Float(lastEndMSec) / Float(1000) * Float(16000))
-                let remainingAudioDataCount: Int = originalAudioDataCount - usedAudioDataCount
-                if remainingAudioDataCount > 0 {
-                    recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< originalAudioDataCount])
-                    Logger.info("remain")
-                } else {
-                    recognizingSpeech.remainingAudioData = []
+                if is_remaining_audio_concat {
+                    let originalAudioDataCount: Int = audioData.count
+                    let usedAudioDataCount: Int = Int(Float(lastEndMSec) / Float(1000) * Float(16000))
+                    let remainingAudioDataCount: Int = originalAudioDataCount - usedAudioDataCount
+                    if remainingAudioDataCount > 0 {
+                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< originalAudioDataCount])
+                    } else {
+                        recognizingSpeech.remainingAudioData = []
+                    }
                 }
                 
                 
