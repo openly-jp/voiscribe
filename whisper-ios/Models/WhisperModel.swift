@@ -47,4 +47,8 @@ class WhisperModel: Identifiable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
+
+    var name: String {
+        "\(size.rawValue)-\(language.rawValue)"
+    }
 }
