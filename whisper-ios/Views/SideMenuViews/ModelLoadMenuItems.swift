@@ -2,15 +2,6 @@ import SwiftUI
 
 let UserDefaultASRModelNameKey = "user-default-asr-model-name"
 
-let modelURLs: [String: String] = [
-    "ggml-tiny": "models.openly.jp/ggml-tiny.bin",
-    "ggml-tiny.en": "models.openly.jp/ggml-tiny.en.bin",
-    "ggml-base": "models.openly.jp/ggml-base.bin",
-    "ggml-base.en": "models.openly.jp/ggml-base.en.bin",
-    "ggml-small": "models.openly.jp/ggml-small.bin",
-    "ggml-small.en": "models.openly.jp/ggml-small.en.bin",
-]
-
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
