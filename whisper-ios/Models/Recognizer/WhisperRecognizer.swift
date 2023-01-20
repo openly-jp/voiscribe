@@ -123,17 +123,17 @@ class WhisperRecognizer: Recognizer {
     ) {
         serialDispatchQueue.async {
             guard let whisperContext = self.whisperContext else {
-                print("model load error")
+                Logger.error("model load error")
                 return
             }
             guard let audioData = try? self.load_audio(url: audioFileURL) else {
-                print("audio load error")
+                Logger.error("audio load error")
                 return
             }
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
             } catch {
-                print("音声一時ファイルの削除に失敗しました")
+                Logger.warning("failed to remove audio file")
             }
             // check whether recognizingSpeech was removed (i.e. abort recording) or not
             if feasibilityCheck(recognizingSpeech) {

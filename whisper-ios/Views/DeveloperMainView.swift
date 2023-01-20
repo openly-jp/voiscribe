@@ -17,7 +17,6 @@ struct DeveloperMainView: View {
                 for i in 0 ..< transcriptionLines.count {
                     text += transcriptionLines[i].text
                 }
-                print("inside callback", text)
             }
         ) else {
             return "認識に失敗しました"

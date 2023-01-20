@@ -119,7 +119,7 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         guard let recognizingSpeech else {
-            print("recognizingSpeech is nil")
+            Logger.error("recognizingSpeech is nil")
             return
         }
         // execute last streaming ASR、and create RecognizedSpeech model
@@ -169,7 +169,7 @@ struct RecognitionPane: View {
         audioRecorder!.record()
 
         guard let recognizingSpeech else {
-            print("recognizingSpeech is nil.")
+            Logger.error("recognizingSpeech is nil.")
             return
         }
         // recognize past 10 ~ 30 sec speech
@@ -191,11 +191,11 @@ struct RecognitionPane: View {
             audioData = audioData + tmpAudioData
         }
         guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) else {
-            print("format load error")
+            Logger.error("format load error")
             return
         }
         guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count)) else {
-            print("audio load error")
+            Logger.error("audio load error")
             return
         }
         for i in 0 ..< audioData.count {
@@ -204,11 +204,11 @@ struct RecognitionPane: View {
         pcmBuffer.frameLength = AVAudioFrameCount(audioData.count)
         let newURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
         guard let audioFile = try? AVAudioFile(forWriting: newURL, settings: recordSettings) else {
-            print("audio load error")
+            Logger.error("audio load error")
             return
         }
         guard let _ = try? audioFile.write(from: pcmBuffer) else {
-            print("音声書き込みエラー")
+            Logger.error("audio write error")
             return
         }
         recognizedSpeech.audioFileURL = newURL
@@ -378,7 +378,7 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
     do {
         try FileManager.default.moveItem(at: tmpURL, to: newURL)
     } catch {
-        debugPrint("fail to move file:", error)
+        Logger.error("Failed to move file:", error)
     }
 }
 

@@ -12,3 +12,35 @@ func formatTime(_ seconds: Double, duration: Double? = nil) -> String {
     f.zeroFormattingBehavior = .pad
     return f.string(from: seconds)!
 }
+
+enum Logger {
+    static func info(_ items: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+        let filename = URL(fileURLWithPath: file).lastPathComponent
+        for item in items {
+            print("💡 [\(filename) \(line):\(function)] : \(item)")
+        }
+    }
+
+    static func debug(_ items: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+        #if DEBUG
+            let filename = URL(fileURLWithPath: file).lastPathComponent
+            for item in items {
+                print("⚙️ [\(filename) \(line):\(function)] : \(item)")
+            }
+        #endif
+    }
+
+    static func warning(_ items: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+        let filename = URL(fileURLWithPath: file).lastPathComponent
+        for item in items {
+            print("⚠️ [\(filename) \(line):\(function)] : \(item)")
+        }
+    }
+
+    static func error(_ items: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+        let filename = URL(fileURLWithPath: file).lastPathComponent
+        for item in items {
+            print("🚨 [\(filename) \(line):\(function)] : \(item)")
+        }
+    }
+}
