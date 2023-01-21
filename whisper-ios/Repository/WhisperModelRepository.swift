@@ -51,7 +51,7 @@ enum WhisperModelRepository {
      */
     static func deleteWhisperModel(model: WhisperModel) {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let destinationURL = documentsURL.appendingPathComponent(model.localPath.path)
+        let destinationURL = documentsURL.appendingPathComponent(model.localPath!.path)
         try? FileManager.default.removeItem(at: destinationURL)
     }
 }
