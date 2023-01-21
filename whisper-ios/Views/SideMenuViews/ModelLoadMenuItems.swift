@@ -60,7 +60,7 @@ struct ModelLoadSubMenuItemView: View {
         do {
             if recognizer.usedModelName != modelName {
                 whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription)
-                try recognizer.load_model(whisperModel: whisperModel)
+                try recognizer.load_model(whisperModel)
             }
         } catch {
             return false
