@@ -1,27 +1,17 @@
 import SwiftUI
 
 @main
-struct whisperTestApp: App {
-    init() {
-        #if DEBUG
-            var injectionBundlePath = "/Applications/InjectionIII.app/Contents/Resources"
-            #if targetEnvironment(macCatalyst)
-                injectionBundlePath = "\(injectionBundlePath)/macOSInjection.bundle"
-            #elseif os(iOS)
-                injectionBundlePath = "\(injectionBundlePath)/iOSInjection.bundle"
-            #endif
-            Bundle(path: injectionBundlePath)?.load()
-        #endif
-    }
+struct WhisperTestApp: App {
+    init() {}
 
     var body: some Scene {
         WindowGroup {
-            startView()
+            StartView()
         }
     }
 }
 
-struct startView: View {
+struct StartView: View {
     @State var isLoading: Bool = true
     @State var recognizer: WhisperRecognizer?
     @AppStorage(UserDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
