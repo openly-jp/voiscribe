@@ -20,7 +20,7 @@ class PlayerWrapper: ObservableObject {
                 player.enableRate = true
             } catch {
                 player = try! AVAudioPlayer()
-                debugPrint("fail to init audio player")
+                Logger.error("Failed to init AudioPlayer.", error)
             }
         }
     }

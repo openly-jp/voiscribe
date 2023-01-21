@@ -117,50 +117,63 @@ class WhisperRecognizer: Recognizer {
     func streamingRecognize(
         audioFileURL: URL,
         language: Language,
-        callback: @escaping ([TranscriptionLine]) -> Void
-    ) throws -> [Float32] {
-        guard let whisperContext else {
-            throw NSError(domain: "model load error", code: -1)
-        }
-        guard let audioData = try? load_audio(url: audioFileURL) else {
-            throw NSError(domain: "audio load error", code: -1)
-        }
+        recognizingSpeech: RecognizedSpeech,
+        callback: @escaping (RecognizedSpeech) -> Void,
+        feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
+    ) {
         serialDispatchQueue.async {
-            let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
-            var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
-            language.rawValue.withCString { lang in
-                // Adapted from whisper.objc
-                params.print_realtime = true
-                params.print_progress = false
-                params.print_timestamps = true
-                params.print_special = false
-                params.translate = false
-                params.language = lang
-                params.n_threads = Int32(maxThreads)
-                params.offset_ms = 0
-                params.no_context = true
-                params.single_segment = false
+            guard let whisperContext = self.whisperContext else {
+                Logger.error("model load error")
+                return
+            }
+            guard let audioData = try? self.load_audio(url: audioFileURL) else {
+                Logger.error("audio load error")
+                return
+            }
+            do {
+                try FileManager.default.removeItem(at: audioFileURL)
+            } catch {
+                Logger.warning("failed to remove audio file")
+            }
+            // check whether recognizingSpeech was removed (i.e. abort recording) or not
+            if feasibilityCheck(recognizingSpeech) {
+                let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
+                var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
+                language.rawValue.withCString { lang in
+                    // Adapted from whisper.objc
+                    params.print_realtime = true
+                    params.print_progress = false
+                    params.print_timestamps = true
+                    params.print_special = false
+                    params.translate = false
+                    params.language = lang
+                    params.n_threads = Int32(maxThreads)
+                    params.offset_ms = 0
+                    params.no_context = true
+                    params.single_segment = false
 
-                whisper_reset_timings(whisperContext)
-                audioData.withUnsafeBufferPointer { data in
-                    if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
-                    } else {
-                        whisper_print_timings(whisperContext)
+                    whisper_reset_timings(whisperContext)
+                    audioData.withUnsafeBufferPointer { data in
+                        if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
+                        } else {
+                            whisper_print_timings(whisperContext)
+                        }
                     }
                 }
-            }
-            var transcriptionLines: [TranscriptionLine] = []
-            let n_segments = whisper_full_n_segments(whisperContext)
-            for i in 0 ..< n_segments {
-                let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
-                let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
-                let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
-                let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: i)
-                transcriptionLines.append(transcriptionLine)
-            }
 
-            callback(transcriptionLines)
+                let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
+                let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil ? recognizingSpeech.transcriptionLines.last!.ordering + 1 : 0
+                let n_segments = whisper_full_n_segments(whisperContext)
+                for i in 0 ..< n_segments {
+                    let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
+                    let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10 + baseStartMSec
+                    let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10 + baseStartMSec
+                    let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: baseOrdering + i)
+                    recognizingSpeech.transcriptionLines.append(transcriptionLine)
+                }
+                recognizingSpeech.tmpAudioDataList.append(audioData)
+                callback(recognizingSpeech)
+            }
         }
-        return audioData
     }
 }
