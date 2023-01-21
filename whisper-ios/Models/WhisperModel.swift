@@ -21,11 +21,12 @@ class WhisperModel: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    init(localPath _: str, size: Size, language: Lang) {
+    init(size: Size, language: Lang, needsSubscription: Bool = false) {
         id = UUID()
         self.size = size
         self.language = language
-        needsSubscription = false
+        self.needsSubscription = needsSubscription
+        localPath = WhisperModelRepository.fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription)
         // NOTE: This is a UNIX Time
         createdAt = Date()
         updatedAt = Date()
@@ -33,7 +34,7 @@ class WhisperModel: Identifiable {
 
     init(
         id: UUID,
-        localPath _: String,
+        localPath: String,
         size: Size,
         language: Lang,
         needsSubscription: Bool,
@@ -41,6 +42,7 @@ class WhisperModel: Identifiable {
         updatedAt: Date
     ) {
         self.id = id
+        self.localPath = localPath
         self.size = size
         self.language = language
         self.needsSubscription = needsSubscription
