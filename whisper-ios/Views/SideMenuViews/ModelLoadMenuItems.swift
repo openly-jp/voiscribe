@@ -1,6 +1,6 @@
 import SwiftUI
 
-let UserDefaultASRModelNameKey = "user-default-asr-model-name"
+let userDefaultASRModelNameKey = "user-default-asr-model-name"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
@@ -17,8 +17,10 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(UserDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
-    let modelName: String
+    @AppStorage(userDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
+    let modelSize: Size
+    let language: Lang
+    let needsSubscription: Bool
     let modelDisplayName: String
     @State private var showDialogue = false
 
@@ -57,7 +59,8 @@ struct ModelLoadSubMenuItemView: View {
     private func changeModel() -> Bool {
         do {
             if recognizer.usedModelName != modelName {
-                try recognizer.load_model(modelName: modelName)
+                whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription)
+                try recognizer.load_model(whisperModel: whisperModel)
             }
         } catch {
             return false
@@ -67,12 +70,11 @@ struct ModelLoadSubMenuItemView: View {
 }
 
 let modeLoadSubMenuItems = [
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny", modelDisplayName: "Tiny")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-base", modelDisplayName: "Base")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-base.en", modelDisplayName: "Base(En)")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-small", modelDisplayName: "Small")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-small.en", modelDisplayName: "Small(En)")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelSize: "tiny", language: "multi", needsSubscription: false, modelDisplayName: "Tiny")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelSize: "tiny", language: "en", needsSubscription: false, modelDisplayName: "Tiny(En)")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelSize: "base", language: "multi", needsSubscription: false, modelDisplayName: "Base")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelSize: "base", language: "en", needsSubscription: false, modelDisplayName: "Base(En)")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelSize: "small", language: "multi", needsSubscription: false, modelDisplayName: "Small")), subMenuItems: nil),
+    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelSize: "small", language: "en", needsSubscription: false, modelDisplayName: "Small(En)")), subMenuItems: nil),
 ]
-
 let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: modeLoadSubMenuItems)
