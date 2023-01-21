@@ -19,11 +19,11 @@ enum WhisperModelRepository {
 
      - Returns: local path of the model
      */
-    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool) -> String {
+    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool) -> URL {
         // if model is in bundled resource or in local storage, return it
         if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
             // return the bundled resource path of the model
-            return Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!
+            return URL(string: Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
         }
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
@@ -41,7 +41,7 @@ enum WhisperModelRepository {
             }
             task.resume()
         }
-        return destinationURL.path
+        return destinationURL
     }
 
     /**
@@ -51,7 +51,7 @@ enum WhisperModelRepository {
      */
     static func deleteWhisperModel(model: WhisperModel) {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let destinationURL = documentsURL.appendingPathComponent(model.localPath)
+        let destinationURL = documentsURL.appendingPathComponent(model.localPath.path)
         try? FileManager.default.removeItem(at: destinationURL)
     }
 }
