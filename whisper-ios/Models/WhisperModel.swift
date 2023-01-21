@@ -14,7 +14,7 @@ enum Lang: String {
 
 class WhisperModel: Identifiable {
     let id: UUID
-    var localPath: URL
+    var localPath: URL?
     var size: Size
     var language: Lang
     var needsSubscription: Bool
@@ -34,7 +34,7 @@ class WhisperModel: Identifiable {
 
     init(
         id: UUID,
-        localPath: URL,
+        localPath: URL?,
         size: Size,
         language: Lang,
         needsSubscription: Bool,
