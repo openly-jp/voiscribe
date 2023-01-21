@@ -4,18 +4,17 @@ import Foundation
 
 class WhisperRecognizer: Recognizer {
     private var whisperContext: OpaquePointer?
-    @Published var usedModelName: String?
+    @Published var whisperModel: WhisperModel?
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     var is_ready: Bool {
         whisperContext != nil
     }
 
-    init(modelName: String) {
+    init(whisperModel: WhisperModel) {
         do {
-            try load_model(modelName: modelName)
-            usedModelName = modelName
+            try load_model(whisperModel: whisperModel)
         } catch {
-            usedModelName = "ggml-tiny"
+            self.whisperModel = WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false)
             return
         }
     }
@@ -26,15 +25,15 @@ class WhisperRecognizer: Recognizer {
         }
     }
 
-    func load_model(modelName: String) throws {
-        guard let url: URL = Bundle.main.url(forResource: modelName, withExtension: "bin") else {
+    func load_model(whisperModel: WhisperModel) throws {
+        guard let url: URL = whisperModel.localPath else {
             throw NSError(domain: "model load error", code: -1)
         }
         whisperContext = whisper_init(url.path())
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        usedModelName = modelName
+        self.whisperModel = whisperModel
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
@@ -61,7 +60,7 @@ class WhisperRecognizer: Recognizer {
         language: Language,
         callback: @escaping (RecognizedSpeech) -> Void
     ) throws -> RecognizedSpeech {
-        guard let whisperContext else {
+        guard let whisperContext: OpaquePointer else {
             throw NSError(domain: "model load error", code: -1)
         }
 
