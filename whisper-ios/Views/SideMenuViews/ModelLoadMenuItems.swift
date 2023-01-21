@@ -1,7 +1,5 @@
 import SwiftUI
 
-let userDefaultASRModelNameKey = "user-default-asr-model-name"
-
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
@@ -17,10 +15,9 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultASRModelNameKey) var defaultModelName = "tiny-en"
-    let modelSize: Size
-    let language: Lang
-    let needsSubscription: Bool
+    @AppStorage(userDefaultModelSize) var modelSize: Size
+    @AppStorage(userDefaultModelLanguage) var language: Lang
+    @AppStorage(userDefaultModelNeedsSubscription) var needsSubscription: Bool
     let modelDisplayName: String
     @State private var showDialogue = false
 
@@ -49,8 +46,9 @@ struct ModelLoadSubMenuItemView: View {
                   secondaryButton: .default(Text("変更"), action: {
                       let isSucceed = changeModel()
                       if isSucceed {
-                          // change default model name for next model loading time
-                          defaultModelName = "\(modelSize.rawValue)-\(language.rawValue)"
+                          self.modelSize = self.WhisperRecognizer.whisperModel?.size!
+                          self.language = self.WhisperRecognizer.whisperModel?.language!
+                          self.needsSubscription = self.WhisperRecognizer.whisperModel?.needsSubscription!
                       }
                   }))
         }
