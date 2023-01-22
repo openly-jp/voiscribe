@@ -1,7 +1,6 @@
 import AVFoundation
 import SwiftUI
 
-
 struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
     let isRecognizing: Bool
@@ -15,6 +14,7 @@ struct RecordDetails: View {
     }
 
     // MARK: - state about player
+
     @State var player: AVAudioPlayer? = nil
     @State var currentPlayingTime: Double = 0
 
