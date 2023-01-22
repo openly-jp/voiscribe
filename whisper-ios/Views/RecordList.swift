@@ -6,22 +6,20 @@ struct RecordList: View {
     @Binding var isActives: [Bool]
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if recognizedSpeeches.count == 0 {
-                    Spacer()
-                    initialPage
-                    Spacer()
-                } else {
-                    recordList
-                }
-                RecognitionPane(
-                    recognizingSpeechIds: $recognizingSpeechIds,
-                    recognizedSpeeches: $recognizedSpeeches,
-                    isActives: $isActives
-                )
+        VStack {
+            if recognizedSpeeches.count == 0 {
+                Spacer()
+                initialPage
+                Spacer()
+            } else {
+                recordList
             }
-        }.navigationViewStyle(StackNavigationViewStyle())
+            RecognitionPane(
+                recognizingSpeechIds: $recognizingSpeechIds,
+                recognizedSpeeches: $recognizedSpeeches,
+                isActives: $isActives
+            )
+        }
     }
 
     var initialPage: some View {
@@ -79,7 +77,6 @@ struct RecordList: View {
             .onDelete(perform: deleteRecognizedSpeech)
         }
         .listStyle(PlainListStyle())
-        .navigationBarTitle("Notes")
     }
 
     private func getLocaleDateString(date: Date) -> String {
