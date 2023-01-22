@@ -157,7 +157,7 @@ class WhisperRecognizer: Recognizer {
                     params.single_segment = false
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
-                    
+
                     whisper_reset_timings(whisperContext)
                     // append remaining previous audioData to audioData
                     audioData = recognizingSpeech.remainingAudioData + audioData
@@ -195,7 +195,7 @@ class WhisperRecognizer: Recognizer {
                 // update remaining audioData
                 if is_remaining_audio_concat {
                     let originalAudioDataCount: Int = audioData.count
-                    let usedAudioDataCount: Int = Int(Float(lastEndMSec) / Float(1000) * Float(16000))
+                    let usedAudioDataCount = Int(Float(lastEndMSec) / Float(1000) * Float(16000))
                     let remainingAudioDataCount: Int = originalAudioDataCount - usedAudioDataCount
                     if remainingAudioDataCount > 0 {
                         recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< originalAudioDataCount])
@@ -203,8 +203,7 @@ class WhisperRecognizer: Recognizer {
                         recognizingSpeech.remainingAudioData = []
                     }
                 }
-                
-                
+
                 recognizingSpeech.tmpAudioDataList.append(audioData)
                 callback(recognizingSpeech)
             }
