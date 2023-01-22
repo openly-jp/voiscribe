@@ -4,7 +4,7 @@ struct HomeView: View {
     @State var showSideMenu = false
     @AppStorage(UserModeNumKey) var userModeNum = 0
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack {
                 ZStack {
                     HStack(alignment: .center) {
@@ -44,7 +44,7 @@ struct HomeView: View {
                     SideMenu(isOpen: self.$showSideMenu)
                 }
             }
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
