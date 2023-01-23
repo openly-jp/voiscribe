@@ -6,7 +6,7 @@ enum Size: String {
     case small
 
     init() {
-        self = "tiny"
+        self = .tiny
     }
 }
 
@@ -16,7 +16,7 @@ enum Lang: String {
     case multi
 
     init() {
-        self = "en"
+        self = .en
     }
 }
 
