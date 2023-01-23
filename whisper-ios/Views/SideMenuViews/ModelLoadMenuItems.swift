@@ -1,5 +1,9 @@
 import SwiftUI
 
+let userDefaultModelSize: String = "modelSize"
+let userDefaultModelLanguage: String = "modelLanguage"
+let userDefaultModelNeedsSubscription: String = "modelNeedsSubscription"
+
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
