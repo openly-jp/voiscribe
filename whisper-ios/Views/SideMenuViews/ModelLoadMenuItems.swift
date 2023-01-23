@@ -50,9 +50,9 @@ struct ModelLoadSubMenuItemView: View {
                   secondaryButton: .default(Text("変更"), action: {
                       let isSucceed = changeModel()
                       if isSucceed {
-                          self.modelSize = self.WhisperRecognizer.whisperModel?.size!
-                          self.language = self.WhisperRecognizer.whisperModel?.language!
-                          self.needsSubscription = self.WhisperRecognizer.whisperModel?.needsSubscription!
+                          self.modelSize = modelSize
+                          self.language = language
+                          self.needsSubscription = needsSubscription
                       }
                   }))
         }
