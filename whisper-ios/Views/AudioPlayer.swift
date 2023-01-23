@@ -9,7 +9,6 @@ struct AudioPlayer: View {
 
     @Binding var currentPlayingTime: Double
     @State var isEditing = false
-    @State var isPlaying = false
 
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
@@ -45,7 +44,7 @@ struct AudioPlayer: View {
                 }
                 Spacer()
                 PlayerButton(
-                    name: isPlaying ? "pause.circle.fill" : "play.circle.fill",
+                    name: player.isPlaying ? "pause.circle.fill" : "play.circle.fill",
                     size: 55,
                     action: playOrPause
                 )
@@ -101,7 +100,7 @@ struct AudioPlayer: View {
     }
 
     func playOrPause() {
-        if !isPlaying {
+        if !player.isPlaying {
             updateRecordingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
@@ -111,11 +110,9 @@ struct AudioPlayer: View {
                 }
             }
             player.play()
-            isPlaying = true
         } else {
             updateRecordingTimeTimer?.invalidate()
             player.pause()
-            isPlaying = false
         }
     }
 
