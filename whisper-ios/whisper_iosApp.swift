@@ -14,10 +14,9 @@ struct WhisperTestApp: App {
 struct StartView: View {
     @State var isLoading: Bool = true
     @State var recognizer: WhisperRecognizer?
-    @AppStorage(userDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
-    @AppStorage(userDefaultASRModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
-    @AppStorage(userDefaultASRModelLanguageKey) var defaultModelLanguage = Lang(rawValue: "en")!
-    @AppStorage(userDefaultASRModelNeedsSubscriptionKey) var defaultModelNeedsSubscription = false
+    @AppStorage(userDefaultModelSize) var defaultModelSize = Size(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguage) var defaultModelLanguage = Lang(rawValue: "en")!
+    @AppStorage(userDefaultModelNeedsSubscription) var defaultModelNeedsSubscription = false
 
     var body: some View {
         if isLoading {
@@ -26,8 +25,8 @@ struct StartView: View {
                 .frame(width: 60, height: 60)
                 .onAppear {
                     DispatchQueue.global(qos: .userInteractive).async {
-                        whisperModel = WhisperModel(size: defaultModelSize, language: defaultModelLanguage, needsSubscription: defaultModelNeedsSubscription)
-                        recognizer = WhisperRecognizer(whisperModel: whisperModel!)
+                        let whisperModel = WhisperModel(size: defaultModelSize, language: defaultModelLanguage, needsSubscription: defaultModelNeedsSubscription)
+                        recognizer = WhisperRecognizer(whisperModel: whisperModel)
                         isLoading = false
                     }
                 }
