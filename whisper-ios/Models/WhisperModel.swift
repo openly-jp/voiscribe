@@ -4,12 +4,20 @@ enum Size: String {
     case tiny
     case base
     case small
+
+    init() {
+        self = "tiny"
+    }
 }
 
 enum Lang: String {
     case ja
     case en
     case multi
+
+    init() {
+        self = "en"
+    }
 }
 
 class WhisperModel: Identifiable {

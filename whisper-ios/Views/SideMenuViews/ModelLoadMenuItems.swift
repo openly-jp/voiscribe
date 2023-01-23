@@ -19,9 +19,9 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelSize) var modelSize: Size
-    @AppStorage(userDefaultModelLanguage) var language: Lang
-    @AppStorage(userDefaultModelNeedsSubscription) var needsSubscription: Bool
+    @AppStorage(userDefaultModelSize) var modelSize: Size = .init(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguage) var language: Lang = .init(rawValue: "en")!
+    @AppStorage(userDefaultModelNeedsSubscription) var needsSubscription: Bool = false
     let modelDisplayName: String
     @State private var showDialogue = false
 
