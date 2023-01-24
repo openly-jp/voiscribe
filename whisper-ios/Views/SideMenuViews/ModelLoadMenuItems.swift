@@ -19,9 +19,12 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelSizeKey) var modelSize: Size = .init(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguageKey) var language: Lang = .init(rawValue: "en")!
-    @AppStorage(userDefaultModelNeedsSubscriptionKey) var needsSubscription: Bool = false
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize: Size = .init(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
+    @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
+    let modelSize: Size
+    let language: Lang
+    let needsSubscription: Bool
     let modelDisplayName: String
     @State private var showDialogue = false
 
@@ -53,9 +56,9 @@ struct ModelLoadSubMenuItemView: View {
                   secondaryButton: .default(Text("変更"), action: {
                       let isSucceed = changeModel()
                       if isSucceed {
-                          self.modelSize = modelSize
-                          self.language = language
-                          self.needsSubscription = needsSubscription
+                          defaultModelSize = modelSize
+                          defaultLanguage = language
+                          dafaultNeedsSubscription = needsSubscription
                       }
                   }))
         }
