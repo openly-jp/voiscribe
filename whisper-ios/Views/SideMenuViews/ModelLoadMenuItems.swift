@@ -1,8 +1,8 @@
 import SwiftUI
 
-let userDefaultModelSize: String = "modelSize"
-let userDefaultModelLanguage: String = "modelLanguage"
-let userDefaultModelNeedsSubscription: String = "modelNeedsSubscription"
+let userDefaultModelSizeKey = "user-default-model-size"
+let userDefaultModelLanguageKey = "user-default-model-language"
+let userDefaultModelNeedsSubscriptionKey = "user-default-model-needs-subscription"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
@@ -19,9 +19,9 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelSize) var modelSize: Size = .init(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguage) var language: Lang = .init(rawValue: "en")!
-    @AppStorage(userDefaultModelNeedsSubscription) var needsSubscription: Bool = false
+    @AppStorage(userDefaultModelSizeKey) var modelSize: Size = .init(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguageKey) var language: Lang = .init(rawValue: "en")!
+    @AppStorage(userDefaultModelNeedsSubscriptionKey) var needsSubscription: Bool = false
     let modelDisplayName: String
     @State private var showDialogue = false
 
@@ -39,6 +39,9 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
         }
         .onTapGesture(perform: {
+            print(recognizer.whisperModel?.name)
+            print("\(modelSize.rawValue)-\(language.rawValue)")
+
             if recognizer.whisperModel?.name == "\(modelSize.rawValue)-\(language.rawValue)" {
                 self.showDialogue = true
             }
