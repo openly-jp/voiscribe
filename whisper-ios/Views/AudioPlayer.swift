@@ -4,6 +4,19 @@ import SwiftUI
 
 let availableSpeedRates = [0.5, 0.8, 1, 1.2, 1.5, 2, 2.5, 3.5, 4]
 
+class IsPlayingObject: NSObject, ObservableObject, AVAudioPlayerDelegate {
+    // This state is used for moitoring playing state
+    // because SwiftUI doesn't detect state change of isPlaying in AVAudioPlayer
+    @Published var isPlaying = false
+
+    func audioPlayerDidFinishPlaying(
+        _ player: AVAudioPlayer,
+        successfully flag: Bool
+    ) {
+        isPlaying = false
+    }
+}
+
 struct AudioPlayer: View {
     var player: AVAudioPlayer
 
@@ -15,6 +28,10 @@ struct AudioPlayer: View {
 
     @State var updateRecordingTimeTimer: Timer? = nil
     let transcription: String
+
+    // `audioPlayerDidFinishPlaying` method is delegated to
+    // the following object from `AVAudioPlayer`
+    @StateObject var isPlaingObject = IsPlayingObject()
 
     var body: some View {
         VStack(spacing: 10) {
@@ -44,7 +61,7 @@ struct AudioPlayer: View {
                 }
                 Spacer()
                 PlayerButton(
-                    name: player.isPlaying ? "pause.circle.fill" : "play.circle.fill",
+                    name: isPlaingObject.isPlaying ? "pause.circle.fill" : "play.circle.fill",
                     size: 55,
                     action: playOrPause
                 )
@@ -59,7 +76,9 @@ struct AudioPlayer: View {
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
-        }.onDisappear {
+        }
+        .onAppear { player.delegate = isPlaingObject }
+        .onDisappear {
             player.stop()
             if let updateRecordingTimeTimer {
                 updateRecordingTimeTimer.invalidate()
@@ -100,7 +119,7 @@ struct AudioPlayer: View {
     }
 
     func playOrPause() {
-        if !player.isPlaying {
+        if !isPlaingObject.isPlaying {
             updateRecordingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
@@ -114,6 +133,7 @@ struct AudioPlayer: View {
             updateRecordingTimeTimer?.invalidate()
             player.pause()
         }
+        isPlaingObject.isPlaying = !isPlaingObject.isPlaying
     }
 
     func speedRate2String(_ speedRate: Double) -> String {
