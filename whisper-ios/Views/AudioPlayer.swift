@@ -5,10 +5,10 @@ import SwiftUI
 let availableSpeedRates = [0.5, 0.8, 1, 1.2, 1.5, 2, 2.5, 3.5, 4]
 
 struct AudioPlayer: View {
-    @StateObject var playerWrapper: PlayerWrapper
+    var player: AVAudioPlayer
+
     @Binding var currentPlayingTime: Double
     @State var isEditing = false
-    @State var isPlaying = false
 
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
@@ -18,18 +18,18 @@ struct AudioPlayer: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Slider(value: $currentPlayingTime, in: 0 ... playerWrapper.player.duration) { editing in
+            Slider(value: $currentPlayingTime, in: 0 ... player.duration) { editing in
                 isEditing = editing
                 if !editing {
-                    playerWrapper.player.currentTime = currentPlayingTime
-                    currentPlayingTime = playerWrapper.player.currentTime
+                    player.currentTime = currentPlayingTime
+                    currentPlayingTime = player.currentTime
                 }
             }
 
             HStack {
-                Text(formatTime(playerWrapper.player.currentTime, duration: playerWrapper.player.duration))
+                Text(formatTime(player.currentTime, duration: player.duration))
                 Spacer()
-                Text(formatTime(playerWrapper.player.duration - playerWrapper.player.currentTime, duration: playerWrapper.player.duration))
+                Text(formatTime(player.duration - player.currentTime, duration: player.duration))
             }
             .font(.caption)
 
@@ -39,19 +39,19 @@ struct AudioPlayer: View {
                     .sheet(isPresented: $isChangingSpeedRate) { changeSpeedSheetView }
                 Spacer()
                 PlayerButton(name: "gobackward.5", size: 35) {
-                    playerWrapper.player.currentTime -= 5
-                    currentPlayingTime = playerWrapper.player.currentTime
+                    player.currentTime -= 5
+                    currentPlayingTime = player.currentTime
                 }
                 Spacer()
                 PlayerButton(
-                    name: isPlaying ? "pause.circle.fill" : "play.circle.fill",
+                    name: player.isPlaying ? "pause.circle.fill" : "play.circle.fill",
                     size: 55,
                     action: playOrPause
                 )
                 Spacer()
                 PlayerButton(name: "goforward.5", size: 35) {
-                    playerWrapper.player.currentTime += 5
-                    currentPlayingTime = playerWrapper.player.currentTime
+                    player.currentTime += 5
+                    currentPlayingTime = player.currentTime
                 }
                 Spacer()
 
@@ -60,7 +60,7 @@ struct AudioPlayer: View {
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
         }.onDisappear {
-            playerWrapper.player.stop()
+            player.stop()
             if let updateRecordingTimeTimer {
                 updateRecordingTimeTimer.invalidate()
             }
@@ -74,7 +74,7 @@ struct AudioPlayer: View {
                     ForEach(Array(availableSpeedRates.enumerated()), id: \.self.offset) { idx, speedRate in
                         Button {
                             speedRateIdx = idx
-                            playerWrapper.player.rate = Float(speedRate)
+                            player.rate = Float(speedRate)
                         } label: {
                             HStack {
                                 Text(speedRate2String(speedRate))
@@ -100,21 +100,19 @@ struct AudioPlayer: View {
     }
 
     func playOrPause() {
-        if !isPlaying {
+        if !player.isPlaying {
             updateRecordingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
             ) { _ in
                 if !isEditing {
-                    currentPlayingTime = playerWrapper.player.currentTime
+                    currentPlayingTime = player.currentTime
                 }
             }
-            playerWrapper.player.play()
-            isPlaying = true
+            player.play()
         } else {
             updateRecordingTimeTimer?.invalidate()
-            playerWrapper.player.pause()
-            isPlaying = false
+            player.pause()
         }
     }
 
@@ -140,9 +138,9 @@ struct PlayerButton: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let url = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")?.audioFileURL
-        let playerWrapper = PlayerWrapper()
+        let player = try! AVAudioPlayer(contentsOf: url!)
         AudioPlayer(
-            playerWrapper: playerWrapper,
+            player: player,
             currentPlayingTime: .constant(0),
             transcription: "認識結果です"
         )
