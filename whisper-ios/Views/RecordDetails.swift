@@ -1,31 +1,6 @@
 import AVFoundation
 import SwiftUI
 
-/// is needed to update player wrapper after finishing all of recognitions
-/// 認識終了後にすぐに音声再生ができるようにするためのクラス
-class PlayerWrapper: ObservableObject {
-    @Published var player: AVAudioPlayer
-    var recognizeState = true
-    init() {
-        player = try! AVAudioPlayer()
-    }
-
-    func reloadPlayer(isRecognizing: Bool, fileName: String) {
-        if isRecognizing != recognizeState {
-            recognizeState = isRecognizing
-            do {
-                // TODO: fix this (issue #25)
-                let url = getURLByName(fileName: fileName)
-                player = try AVAudioPlayer(contentsOf: url)
-                player.enableRate = true
-            } catch {
-                player = try! AVAudioPlayer()
-                Logger.error("Failed to init AudioPlayer.", error)
-            }
-        }
-    }
-}
-
 struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
     let isRecognizing: Bool
@@ -40,7 +15,7 @@ struct RecordDetails: View {
 
     // MARK: - state about player
 
-    @ObservedObject var playerWrapper = PlayerWrapper()
+    @State var player: AVAudioPlayer? = nil
     @State var currentPlayingTime: Double = 0
 
     // MARK: - timer to update automatic scroll
@@ -125,18 +100,15 @@ struct RecordDetails: View {
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
                 .padding()
                 .navigationBarTitle("", displayMode: .inline)
-                AudioPlayer(
-                    playerWrapper: playerWrapper,
-                    currentPlayingTime: $currentPlayingTime,
-                    transcription: allTranscription
-                )
-                .padding(20)
-                .onAppear {
-                    /// update player to enable user to play recorded sound after finishing recognition
-                    /// 認識終了後すぐに音声再生ができるようにプレイヤーの更新を行う
-                    DispatchQueue.main.async {
-                        playerWrapper.reloadPlayer(isRecognizing: isRecognizing, fileName: recognizedSpeech.audioFileURL.lastPathComponent)
-                    }
+                .onAppear(perform: initAudioPlayer)
+
+                if let player {
+                    AudioPlayer(
+                        player: player,
+                        currentPlayingTime: $currentPlayingTime,
+                        transcription: allTranscription
+                    )
+                    .padding(20)
                 }
             }
         }
@@ -144,6 +116,24 @@ struct RecordDetails: View {
 
     var allTranscription: String {
         recognizedSpeech.transcriptionLines.reduce("") { $0 + $1.text }
+    }
+
+    /// initialize AVAudioPlayer
+    ///
+    /// The URL of the audio file is needed to initialize AVAudioPlayer.
+    /// However, streaming ASR creates multiple audio files,
+    /// which are combined into one file after ASR is completed.
+    /// Therefore, initialization of AVAudioPlayer must wait for the completion of ASR.
+    func initAudioPlayer() {
+        // TODO: fix this (issue #25)
+        let fileName = recognizedSpeech.audioFileURL.lastPathComponent
+        let url = getURLByName(fileName: fileName)
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            player!.enableRate = true
+        } catch {
+            Logger.error("failed to init AVAudioPlayer.")
+        }
     }
 
     func moveTranscriptionLine(
@@ -154,10 +144,10 @@ struct RecordDetails: View {
         {
             // actual currentTime become earlier than the specified time
             // e.g. player.currentTime = 1.25 -> actually player.currentTime shows 1.245232..
-            // thus previous transcription line is highlighted uncorrectly
+            // thus previous transcription line is highlighted incorrectly
             // 0.1 is added to avoid this
             let updatedTime = Double(transcriptionLine.startMSec) / 1000 + 0.1
-            playerWrapper.player.currentTime = updatedTime
+            player!.currentTime = updatedTime
             currentPlayingTime = updatedTime
             withAnimation(.easeInOut) { scrollReader.scrollTo(idx) }
         }
@@ -168,7 +158,7 @@ struct RecordDetails: View {
             withTimeInterval: 1,
             repeats: true
         ) { _ in
-            if playerWrapper.player.isPlaying {
+            if player!.isPlaying {
                 // because user may want to know context of the current playing line
                 // lines before the current line is also displayed
                 var topIdx = getCurrentTranscriptionIndex() - 2
