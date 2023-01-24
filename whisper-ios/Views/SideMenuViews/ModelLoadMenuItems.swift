@@ -45,7 +45,7 @@ struct ModelLoadSubMenuItemView: View {
             print(recognizer.whisperModel?.name)
             print("\(modelSize.rawValue)-\(language.rawValue)")
 
-            if recognizer.whisperModel?.name == "\(modelSize.rawValue)-\(language.rawValue)" {
+            if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
                 self.showDialogue = true
             }
         })
@@ -71,6 +71,7 @@ struct ModelLoadSubMenuItemView: View {
                 try recognizer.load_model(whisperModel: whisperModel)
             }
         } catch {
+            print("model loading failed")
             return false
         }
         return true
