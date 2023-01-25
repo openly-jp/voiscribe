@@ -54,12 +54,7 @@ struct RecordDetails: View {
                 Spacer()
             } else if recognizedSpeech.transcriptionLines.count == 0 {
                 Spacer()
-                Group {
-                    HStack { Spacer(); Text("申し訳ございません。"); Spacer() }
-                    HStack { Spacer(); Text("認識結果がありません。"); Spacer() }
-                    HStack { Spacer(); Text("もう一度認識をお願いいたします。"); Spacer() }
-                }
-                .foregroundColor(.red)
+                NoRecognitionView()
                 Spacer()
             } else {
                 ScrollViewReader { scrollReader in
@@ -211,6 +206,16 @@ struct RecognizingView: View {
         }
     }
 }
+
+ struct NoRecognitionView: View {
+    var body: some View {
+        Group {
+            HStack { Spacer(); Text("申し訳ございません。"); Spacer() }
+            HStack { Spacer(); Text("認識結果がありません。"); Spacer() }
+            HStack { Spacer(); Text("もう一度認識をお願いいたします。"); Spacer() }
+        }
+    }
+ }
 
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
