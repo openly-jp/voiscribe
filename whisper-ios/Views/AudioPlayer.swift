@@ -10,8 +10,8 @@ class IsPlayingObject: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var isPlaying = false
 
     func audioPlayerDidFinishPlaying(
-        _ player: AVAudioPlayer,
-        successfully flag: Bool
+        _ _: AVAudioPlayer,
+        successfully _: Bool
     ) {
         isPlaying = false
     }
