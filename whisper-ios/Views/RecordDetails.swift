@@ -38,8 +38,6 @@ struct RecordDetails: View {
             }
         }
     }
-
-
 }
 
 struct RecognizingView: View {
