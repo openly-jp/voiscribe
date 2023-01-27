@@ -41,7 +41,8 @@ struct StreamingRecognitionTestView: View {
     @State var recognizedTranscriptionLines: [TranscriptionLine] = []
     @State var recognizedTranscript: String?
     @State var charErrorRate: Float?
-    
+    @State var startDate: Date?
+    @State var elapsedTime: Double?
     
     // display handling
     @State var isSelectSampleReady: Bool = true
@@ -70,10 +71,20 @@ struct StreamingRecognitionTestView: View {
                     .menuStyle(ButtonMenuStyle())
                     .disabled(!isSelectSampleReady)
                 }
-                
+                HStack {
+                    switch selectedMetaInfo?.language {
+                    case .ja:
+                        Text("日本語")
+                    case .en:
+                        Text("英語")
+                    case .none:
+                        Text("未選択")
+                    }
+                }
                 Button("認識開始", action: {
                     isRecognitionReady = false
                     isSelectSampleReady = false
+                    startDate = Date()
                     for (idx, audioFileURL) in audioFileURLList.enumerated() {
                         recognizer.streamingRecognize(
                             audioFileURL: audioFileURL,
@@ -94,6 +105,7 @@ struct StreamingRecognitionTestView: View {
                                     isSelectSampleReady = true
                                     isRecognitionReady = false
                                     selectedMetaInfo = nil
+                                    elapsedTime = Date().timeIntervalSince(startDate!)
                                 }
                             },
                             feasibilityCheck: { _ in
@@ -144,9 +156,14 @@ struct StreamingRecognitionTestView: View {
                     }
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: geometry.size.height / 3, maxHeight: geometry.size.height / 3, alignment: .topLeading)
-                Text("CER: \((charErrorRate ?? -1) < 0 ? "認識完了前" : "\(charErrorRate!)")")
-                    .font(.title3)
-                    .fontWeight(.bold)
+                HStack{
+                    Text("CER: \(charErrorRate == nil ? "認識完了前" : String(format: "%.2f", charErrorRate!))")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text("経過時間: \(elapsedTime == nil ? "認識完了前" : String(format: "%.2f", elapsedTime!) + "s")")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                }
             }
         }
     }
@@ -155,6 +172,7 @@ struct StreamingRecognitionTestView: View {
         recognizingSpeech = RecognizedSpeech(audioFileURL: audioFileURL, language: language)
         recognizedTranscriptionLines = []
         charErrorRate = nil
+        elapsedTime = nil
         
         guard let audioData = try? loadAudio(url: audioFileURL) else {
             Logger.error("audio load error")
