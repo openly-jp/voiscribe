@@ -104,9 +104,9 @@ struct RecognitionPane: View {
 
     /// discard all information about recording and close the pane
     ///
-    /// reset timers for updateting recording time and waveform.
+    /// reset timers for updating recording time and waveform.
     /// stop recording and reset recording time and waveform.
-    /// this funciton also close recognition pane.
+    /// this function also close recognition pane.
     /// this function does not reset information about `RecognizedSpeech` like title.
     func finishRecording() {
         audioRecorder!.stop()
@@ -388,7 +388,7 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
 
 /// get temporary url to save audio file
 ///
-/// When starting recording, the id of RecognizedSpeech is not detemined yet.
+/// When starting recording, the id of RecognizedSpeech is not determined yet.
 /// Thus recorded audio is firstly saved to a temporary file and it is renamed after.
 func getTmpURL() -> URL {
     getURLByName(fileName: "tmp.m4a")
