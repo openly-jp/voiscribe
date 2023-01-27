@@ -31,18 +31,17 @@ struct StreamingRecognitionTestView: View {
     
     // recognition related
     @State var recognizingSpeech: RecognizedSpeech?
-    @State var audioFileURL: URL?
     @State var audioFileURLList: [URL] = []
-    @State var language: Language?
-    @State var transcripts: [String] = []
     
     let metaInfoList = getAllMetaInfoList()
     @State var selectedMetaInfo: MetaInfo?
+    @State var answerTranscripts: [String] = []
     
     // recognition result related
     @State var recognizedTranscriptionLines: [TranscriptionLine] = []
     @State var recognizedTranscript: String?
     @State var charErrorRate: Float?
+    
     
     // display handling
     @State var isSelectSampleReady: Bool = true
@@ -63,10 +62,8 @@ struct StreamingRecognitionTestView: View {
                             metaInfo in
                             Button(metaInfo.label, action: {
                                 selectedMetaInfo = metaInfo
-                                audioFileURL = metaInfo.audioFileURL
-                                language = metaInfo.language
-                                transcripts = metaInfo.transcripts
-                                preprocess(audioFileURL: audioFileURL!, language: language!)
+                                answerTranscripts = metaInfo.transcripts
+                                preprocess(audioFileURL: metaInfo.audioFileURL, language: metaInfo.language)
                             })
                         }
                     }
@@ -80,7 +77,7 @@ struct StreamingRecognitionTestView: View {
                     for (idx, audioFileURL) in audioFileURLList.enumerated() {
                         recognizer.streamingRecognize(
                             audioFileURL: audioFileURL,
-                            language: language ?? Language.ja,
+                            language: selectedMetaInfo?.language ?? Language.ja,
                             recognizingSpeech: recognizingSpeech!,
                             is_prompting: promptingActive,
                             is_remaining_audio_concat: remainingAudioConcatActive,
@@ -90,12 +87,13 @@ struct StreamingRecognitionTestView: View {
                                     recognizedTranscript = recognizedTranscriptionLines.reduce("", {
                                         (old: String, new: TranscriptionLine) -> String in return old + new.text
                                     })
-                                    let transcript = transcripts.reduce("", {
+                                    let transcript = (selectedMetaInfo?.transcripts ?? []).reduce("", {
                                         (old: String, new: String) -> String in return old + new
                                     })
                                     charErrorRate = calculateCER(ref: transcript, out: recognizedTranscript ?? "")
                                     isSelectSampleReady = true
-                                    isRecognitionReady = true
+                                    isRecognitionReady = false
+                                    selectedMetaInfo = nil
                                 }
                             },
                             feasibilityCheck: { _ in
@@ -113,7 +111,7 @@ struct StreamingRecognitionTestView: View {
                     .fontWeight(.bold)
                 ScrollView {
                     VStack(spacing: 0) {
-                        ForEach(Array(transcripts.enumerated()), id: \.self.offset){
+                        ForEach(Array(answerTranscripts.enumerated()), id: \.self.offset){
                             index, transcript in
                             HStack{
                                 Text(transcript)
@@ -171,7 +169,7 @@ struct StreamingRecognitionTestView: View {
             }
         }
         audioFileURLList.removeAll()
-        for i in 0..<audioData.count/audioDataSplitSize + 1 {
+        for i in 0..<Int(ceil(Float(audioData.count) / Float(audioDataSplitSize))) {
             let start = i * audioDataSplitSize
             let end = (i + 1) * audioDataSplitSize
             var splittedAudioData: [Float32] = []
