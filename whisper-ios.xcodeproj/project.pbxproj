@@ -8,17 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
+		1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */; };
+		1331B48A29842D5F00FEBE24 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1331B48929842D5F00FEBE24 /* ggml-tiny.bin */; };
+		1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */; };
+		1331B49C298439FF00FEBE24 /* StreamingRecognitionTest in Resources */ = {isa = PBXBuildFile; fileRef = 1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
-		13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13516D9E2961B661005013C8 /* ggml-tiny.bin */; };
-		136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 136E05192962EC3A00DEC112 /* sample_ja.csv */; };
-		136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 136E051B2962EC4700DEC112 /* sample_ja.wav */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
 		139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */; };
 		139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */; };
-		13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48A295CE4000070090B /* sample_wav2.wav */; };
-		13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48B295CE4030070090B /* ggml-tiny.en.bin */; };
-		13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13D1E48C295CE4030070090B /* sample_wav1.wav */; };
 		13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* DeveloperMainView.swift */; };
 		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
@@ -57,7 +55,6 @@
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* RecordList.swift */; };
 		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
-		5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F552D2948CEDB00E87D25 /* recordData.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,17 +76,15 @@
 
 /* Begin PBXFileReference section */
 		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
+		1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingRecognitionTest.swift; sourceTree = "<group>"; };
+		1331B48929842D5F00FEBE24 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
+		1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
+		1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */ = {isa = PBXFileReference; lastKnownFileType = folder; path = StreamingRecognitionTest; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
-		13516D9E2961B661005013C8 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
-		136E05192962EC3A00DEC112 /* sample_ja.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
-		136E051B2962EC4700DEC112 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
 		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
 		139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectMenuItems.swift; sourceTree = "<group>"; };
 		139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenuItems.swift; sourceTree = "<group>"; };
-		13D1E48A295CE4000070090B /* sample_wav2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav2.wav; sourceTree = "<group>"; };
-		13D1E48B295CE4030070090B /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
-		13D1E48C295CE4030070090B /* sample_wav1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_wav1.wav; sourceTree = "<group>"; };
 		13D1E490295CE40C0070090B /* DeveloperMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperMainView.swift; sourceTree = "<group>"; };
 		13D1E494295CE4120070090B /* whisper-ios-test-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "whisper-ios-test-Bridging-Header.h"; sourceTree = "<group>"; };
 		13D1E495295CE4120070090B /* whisper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whisper.h; sourceTree = "<group>"; };
@@ -133,7 +128,6 @@
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* RecordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordList.swift; sourceTree = "<group>"; };
-		5A8F552D2948CEDB00E87D25 /* recordData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recordData.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +157,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1331B465297D902400FEBE24 /* DeveloperViews */ = {
+			isa = PBXGroup;
+			children = (
+				1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */,
+			);
+			path = DeveloperViews;
+			sourceTree = "<group>";
+		};
 		13516D9729603679005013C8 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +225,7 @@
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1331B465297D902400FEBE24 /* DeveloperViews */,
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
 				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
@@ -342,13 +345,9 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				136E05192962EC3A00DEC112 /* sample_ja.csv */,
-				136E051B2962EC4700DEC112 /* sample_ja.wav */,
-				13516D9E2961B661005013C8 /* ggml-tiny.bin */,
-				13D1E48B295CE4030070090B /* ggml-tiny.en.bin */,
-				13D1E48C295CE4030070090B /* sample_wav1.wav */,
-				13D1E48A295CE4000070090B /* sample_wav2.wav */,
-				5A8F552D2948CEDB00E87D25 /* recordData.json */,
+				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
+				1331B48929842D5F00FEBE24 /* ggml-tiny.bin */,
+				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -466,15 +465,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */,
-				13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */,
-				13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */,
-				13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */,
-				136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */,
-				5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */,
+				1331B49C298439FF00FEBE24 /* StreamingRecognitionTest in Resources */,
+				1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
-				13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */,
+				1331B48A29842D5F00FEBE24 /* ggml-tiny.bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +525,7 @@
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
+				1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
 				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
