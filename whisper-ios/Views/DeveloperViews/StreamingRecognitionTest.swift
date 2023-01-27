@@ -1,8 +1,8 @@
-import SwiftUI
 import AVFoundation
 import Foundation
+import SwiftUI
 
-struct MetaInfo: Hashable{
+struct MetaInfo: Hashable {
     var audioFileURL: URL
     var language: Language
     var label: String
@@ -28,30 +28,30 @@ struct StreamingRecognitionTestView: View {
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
     @AppStorage(PromptingActiveKey) var promptingActive = true
     @AppStorage(RemainingAudioConcatActiveKey) var remainingAudioConcatActive = true
-    
+
     // recognition related
     @State var recognizingSpeech: RecognizedSpeech?
     @State var audioFileURLList: [URL] = []
-    
+
     let metaInfoList = getAllMetaInfoList()
     @State var selectedMetaInfo: MetaInfo?
     @State var answerTranscripts: [String] = []
-    
+
     // recognition result related
     @State var recognizedTranscriptionLines: [TranscriptionLine] = []
     @State var recognizedTranscript: String?
     @State var charErrorRate: Float?
     @State var startDate: Date?
     @State var elapsedTime: Double?
-    
+
     // display handling
     @State var isSelectSampleReady: Bool = true
     @State var isRecognitionReady: Bool = false
-    
+
     var body: some View {
         GeometryReader {
             geometry in
-            VStack(alignment: .center){
+            VStack(alignment: .center) {
                 Text("ストリーミング認識テスト")
                     .font(.title)
                     .fontWeight(.bold)
@@ -95,12 +95,12 @@ struct StreamingRecognitionTestView: View {
                             callback: { rs in
                                 recognizedTranscriptionLines = rs.transcriptionLines
                                 if idx == audioFileURLList.count - 1 {
-                                    recognizedTranscript = recognizedTranscriptionLines.reduce("", {
-                                        (old: String, new: TranscriptionLine) -> String in return old + new.text
-                                    })
-                                    let transcript = (selectedMetaInfo?.transcripts ?? []).reduce("", {
-                                        (old: String, new: String) -> String in return old + new
-                                    })
+                                    recognizedTranscript = recognizedTranscriptionLines.reduce("") {
+                                        (old: String, new: TranscriptionLine) -> String in old + new.text
+                                    }
+                                    let transcript = (selectedMetaInfo?.transcripts ?? []).reduce("") {
+                                        (old: String, new: String) -> String in old + new
+                                    }
                                     charErrorRate = calculateCER(ref: transcript, out: recognizedTranscript ?? "")
                                     isSelectSampleReady = true
                                     isRecognitionReady = false
@@ -109,23 +109,23 @@ struct StreamingRecognitionTestView: View {
                                 }
                             },
                             feasibilityCheck: { _ in
-                                return true
+                                true
                             }
                         )
                     }
                 })
                 .buttonStyle(.bordered)
                 .disabled(!isRecognitionReady)
-                
+
                 Divider()
                 Text("正解")
                     .font(.title2)
                     .fontWeight(.bold)
                 ScrollView {
                     VStack(spacing: 0) {
-                        ForEach(Array(answerTranscripts.enumerated()), id: \.self.offset){
+                        ForEach(Array(answerTranscripts.enumerated()), id: \.self.offset) {
                             index, transcript in
-                            HStack{
+                            HStack {
                                 Text(transcript)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
@@ -142,9 +142,9 @@ struct StreamingRecognitionTestView: View {
                 ScrollView {
                     if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
                         VStack(spacing: 0) {
-                            ForEach(Array(recognizedTranscriptionLines.enumerated()), id: \.self.offset){
+                            ForEach(Array(recognizedTranscriptionLines.enumerated()), id: \.self.offset) {
                                 index, transcriptionLine in
-                                HStack{
+                                HStack {
                                     Text(transcriptionLine.text)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
@@ -156,7 +156,7 @@ struct StreamingRecognitionTestView: View {
                     }
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: geometry.size.height / 3, maxHeight: geometry.size.height / 3, alignment: .topLeading)
-                HStack{
+                HStack {
                     Text("CER: \(charErrorRate == nil ? "認識完了前" : String(format: "%.2f", charErrorRate!))")
                         .font(.title3)
                         .fontWeight(.bold)
@@ -167,13 +167,13 @@ struct StreamingRecognitionTestView: View {
             }
         }
     }
-    
+
     func preprocess(audioFileURL: URL, language: Language) {
         recognizingSpeech = RecognizedSpeech(audioFileURL: audioFileURL, language: language)
         recognizedTranscriptionLines = []
         charErrorRate = nil
         elapsedTime = nil
-        
+
         guard let audioData = try? loadAudio(url: audioFileURL) else {
             Logger.error("audio load error")
             return
@@ -187,14 +187,14 @@ struct StreamingRecognitionTestView: View {
             }
         }
         audioFileURLList.removeAll()
-        for i in 0..<Int(ceil(Float(audioData.count) / Float(audioDataSplitSize))) {
+        for i in 0 ..< Int(ceil(Float(audioData.count) / Float(audioDataSplitSize))) {
             let start = i * audioDataSplitSize
             let end = (i + 1) * audioDataSplitSize
             var splittedAudioData: [Float32] = []
             if end > audioData.count {
-                splittedAudioData = Array(audioData[start..<audioData.count])
+                splittedAudioData = Array(audioData[start ..< audioData.count])
             } else {
-                splittedAudioData = Array(audioData[start..<end])
+                splittedAudioData = Array(audioData[start ..< end])
             }
             let url = getURLByName(fileName: "tmp\(i).m4a")
             do {
@@ -251,21 +251,21 @@ func writeAudio(audioData: [Float32], url: URL) throws {
 }
 
 func calculateCER(ref: String, out: String) -> Float {
-    var dpTable = Array(repeating: Array(repeating: 0, count: out.count+1), count: ref.count+1)
-    for rowIdx in 0..<ref.count + 1 {
+    var dpTable = Array(repeating: Array(repeating: 0, count: out.count + 1), count: ref.count + 1)
+    for rowIdx in 0 ..< ref.count + 1 {
         dpTable[rowIdx][0] = rowIdx
     }
-    for colIdx in 0..<out.count + 1 {
+    for colIdx in 0 ..< out.count + 1 {
         dpTable[0][colIdx] = colIdx
     }
-    for rowIdx in 1..<ref.count + 1 {
-        for colIdx in 1..<out.count + 1 {
-            let refPos = ref.index(ref.startIndex, offsetBy: rowIdx-1)
-            let outPos = out.index(out.startIndex, offsetBy: colIdx-1)
+    for rowIdx in 1 ..< ref.count + 1 {
+        for colIdx in 1 ..< out.count + 1 {
+            let refPos = ref.index(ref.startIndex, offsetBy: rowIdx - 1)
+            let outPos = out.index(out.startIndex, offsetBy: colIdx - 1)
             if ref[refPos] == out[outPos] {
-                dpTable[rowIdx][colIdx] = dpTable[rowIdx-1][colIdx-1]
+                dpTable[rowIdx][colIdx] = dpTable[rowIdx - 1][colIdx - 1]
             } else {
-                dpTable[rowIdx][colIdx] = min(dpTable[rowIdx-1][colIdx] + 1, min(dpTable[rowIdx][colIdx-1] + 1, dpTable[rowIdx-1][colIdx-1] + 1))
+                dpTable[rowIdx][colIdx] = min(dpTable[rowIdx - 1][colIdx] + 1, min(dpTable[rowIdx][colIdx - 1] + 1, dpTable[rowIdx - 1][colIdx - 1] + 1))
             }
         }
     }
