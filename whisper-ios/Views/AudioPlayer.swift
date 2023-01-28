@@ -31,7 +31,7 @@ struct AudioPlayer: View {
 
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
-    @StateObject var isPlaingObject = IsPlayingObject()
+    @StateObject var isPlayingObject = IsPlayingObject()
 
     var body: some View {
         VStack(spacing: 10) {
@@ -61,7 +61,7 @@ struct AudioPlayer: View {
                 }
                 Spacer()
                 PlayerButton(
-                    name: isPlaingObject.isPlaying ? "pause.circle.fill" : "play.circle.fill",
+                    name: isPlayingObject.isPlaying ? "pause.circle.fill" : "play.circle.fill",
                     size: 55,
                     action: playOrPause
                 )
@@ -77,7 +77,7 @@ struct AudioPlayer: View {
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
         }
-        .onAppear { player.delegate = isPlaingObject }
+        .onAppear { player.delegate = isPlayingObject }
         .onDisappear {
             player.stop()
             if let updateRecordingTimeTimer {
@@ -119,7 +119,7 @@ struct AudioPlayer: View {
     }
 
     func playOrPause() {
-        if !isPlaingObject.isPlaying {
+        if !isPlayingObject.isPlaying {
             updateRecordingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
@@ -133,7 +133,7 @@ struct AudioPlayer: View {
             updateRecordingTimeTimer?.invalidate()
             player.pause()
         }
-        isPlaingObject.isPlaying = !isPlaingObject.isPlaying
+        isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
 
     func speedRate2String(_ speedRate: Double) -> String {
