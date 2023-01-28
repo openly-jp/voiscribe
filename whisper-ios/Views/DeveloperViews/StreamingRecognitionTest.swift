@@ -26,8 +26,8 @@ let recordSettings = [
 struct StreamingRecognitionTestView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
-    @AppStorage(PromptingActiveKey) var promptingActive = true
-    @AppStorage(RemainingAudioConcatActiveKey) var remainingAudioConcatActive = true
+    @AppStorage(PromptingActiveKey) var isPromptingActive = true
+    @AppStorage(RemainingAudioConcatActiveKey) var isRemainingAudioConcatActive = true
 
     // recognition related
     @State var recognizingSpeech: RecognizedSpeech?
@@ -90,8 +90,8 @@ struct StreamingRecognitionTestView: View {
                             audioFileURL: audioFileURL,
                             language: selectedMetaInfo?.language ?? Language.ja,
                             recognizingSpeech: recognizingSpeech!,
-                            is_prompting: promptingActive,
-                            is_remaining_audio_concat: remainingAudioConcatActive,
+                            isPromptingActive: isPromptingActive,
+                            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
                             callback: { rs in
                                 recognizedTranscriptionLines = rs.transcriptionLines
                                 if idx == audioFileURLList.count - 1 {
