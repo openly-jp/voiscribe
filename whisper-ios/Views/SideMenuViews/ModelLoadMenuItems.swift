@@ -42,6 +42,8 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
         }
         .onTapGesture(perform: {
+            print("model_name", recognizer.whisperModel?.name)
+            print("\(modelSize.rawValue)-\(language.rawValue)")
 
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
                 self.showDialogue = true

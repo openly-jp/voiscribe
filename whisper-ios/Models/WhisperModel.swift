@@ -41,13 +41,12 @@ class WhisperModel: Identifiable {
     }
 
     init(
-        id: UUID,
         localPath: URL?,
         size: Size,
         language: Lang,
         needsSubscription: Bool
     ) {
-        self.id = id
+        self.id = UUID()
         self.localPath = localPath
         self.size = size
         self.language = language

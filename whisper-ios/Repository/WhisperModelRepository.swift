@@ -48,9 +48,6 @@ enum WhisperModelRepository {
             task.resume()
         }
         // check if model is downloaded
-        if FileManager.default.fileExists(atPath: destinationURL.path) {
-            print("model successfully downloaded at ", destinationURL)
-        }
         return destinationURL
     }
 
