@@ -2,7 +2,7 @@ import CoreData
 import Foundation
 
 extension CoreDataRepository {
-    static func saveRecognizedSpeech(aRecognizedSpeech: RecognizedSpeech) {
+    static func saveRecognizedSpeech(_ aRecognizedSpeech: RecognizedSpeech) {
         let rsEntity = RecognizedSpeechData.new(aRecognizedSpeech: aRecognizedSpeech)
 
         for tl in rsEntity.transcriptionLines {
