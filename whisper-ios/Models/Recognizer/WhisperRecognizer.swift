@@ -31,7 +31,6 @@ class WhisperRecognizer: Recognizer {
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        DispatchQueue.main.async { [self] in self.whisperModel = whisperModel}
     }
 
     private func load_audio(url: URL) throws -> [Float32] {

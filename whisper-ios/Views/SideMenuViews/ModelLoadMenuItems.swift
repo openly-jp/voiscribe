@@ -42,8 +42,6 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
         }
         .onTapGesture(perform: {
-            print(recognizer.whisperModel?.name)
-            print("\(modelSize.rawValue)-\(language.rawValue)")
 
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
                 self.showDialogue = true
@@ -64,9 +62,9 @@ struct ModelLoadSubMenuItemView: View {
         }
     }
 
-    private func loadWhisperModel(url: URL) -> Void {
+    private func loadWhisperModelURL(whisperModelURL: URL) -> Void {
         do {
-            try recognizer.load_model(whisperModelURL: url)
+            try recognizer.load_model(whisperModelURL: whisperModelURL)
         } catch {
             print("model loading failed in loadModel")
         }
@@ -75,7 +73,8 @@ struct ModelLoadSubMenuItemView: View {
     private func changeModel() -> Bool {
         do {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
-                let whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModel)
+                let whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModelURL)
+                recognizer.whisperModel = whisperModel
             }
         } catch {
             print("model loading failed")
