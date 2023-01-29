@@ -15,9 +15,8 @@ struct TranscriptionLines: View {
     // MARK: - states for editing transcriptions
 
     @Binding var isEditing: Bool
-    @State var editingTranscriptionLineId: UUID? = nil
     @State var editedTranscriptionTexts = [String]()
-    @FocusState var focus: Bool
+    @FocusState var focus: UUID?
 
     var body: some View {
         ScrollViewReader { scrollReader in
@@ -46,7 +45,7 @@ struct TranscriptionLines: View {
                                     if isEditing {
                                         TextEditor(text: $editedTranscriptionTexts[idx])
                                             .multilineTextAlignment(.leading)
-                                            .focused($focus)
+                                            .focused($focu, equals: transcriptionLine.id)
                                             .border(Color(.systemGray5), width: 1)
                                     } else {
                                         Text(transcriptionLine.text)
@@ -60,9 +59,8 @@ struct TranscriptionLines: View {
                             .background(getTextColor(idx))
                             .contextMenu {
                                 Button {
-                                    editingTranscriptionLineId = transcriptionLine.id
                                     isEditing = true
-                                    focus = true
+                                    focus = transcriptionLine.id
                                 } label: {
                                     Label("編集", systemImage: "pencil")
                                 }
@@ -110,8 +108,7 @@ struct TranscriptionLines: View {
                     updateTranscriptionLines()
 
                     isEditing = false
-                    focus = false
-                    editingTranscriptionLineId = nil
+                    focus = nil
                 }
             }
         }
@@ -199,14 +196,16 @@ struct TranscriptionLines_Previews: PreviewProvider {
             recognizedSpeech: recognizedSpeech,
             player: .constant(player),
             currentPlayingTime: .constant(20.0),
-            isEditing: .constant(true)
+            isEditing: .constant(true),
+            focus: FocusState<UUID?>()
         )
 
         TranscriptionLines(
             recognizedSpeech: recognizedSpeech,
             player: .constant(player),
             currentPlayingTime: .constant(20.0),
-            isEditing: .constant(false)
+            isEditing: .constant(true),
+            focus: FocusState<UUID?>()
         )
     }
 }

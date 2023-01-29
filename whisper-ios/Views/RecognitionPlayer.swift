@@ -10,7 +10,7 @@ struct RecognitionPlayer: View {
     // MARK: - states for editing transcription
 
     @State var isEditing = false
-    @FocusState var focus: Bool
+    @FocusState var focus: UUID?
 
     var recognizedSpeech: RecognizedSpeech
 

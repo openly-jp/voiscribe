@@ -15,7 +15,7 @@ struct EditingAudioPlayer: View {
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
 
-    @FocusState var focus: Bool
+    @FocusState var focus: UUID?
 
     var body: some View {
         HStack {
@@ -41,7 +41,7 @@ struct EditingAudioPlayer: View {
             Spacer()
 
             PlayerButton(name: "keyboard.chevron.compact.down", size: 20) {
-                focus = false
+                focus = nil
             }
         }
         .padding(.horizontal, 30)
