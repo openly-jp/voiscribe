@@ -12,11 +12,12 @@ class WhisperRecognizer: Recognizer {
 
     init(whisperModel: WhisperModel) {
         do {
-            try load_model(whisperModel: whisperModel)
+            try load_model(whisperModelURL: whisperModel.localPath!)
         } catch {
-            self.whisperModel = WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false)
+            self.whisperModel = WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false, callBack: { _ in })
             return
         }
+        print(whisperModel.size.rawValue, " model is successfully loaded")
     }
 
     deinit {
@@ -25,15 +26,12 @@ class WhisperRecognizer: Recognizer {
         }
     }
 
-    func load_model(whisperModel: WhisperModel) throws {
-        guard let url: URL = whisperModel.localPath else {
-            throw NSError(domain: "model load error", code: -1)
-        }
-        whisperContext = whisper_init(url.path())
+    func load_model(whisperModelURL: URL) throws {
+        whisperContext = whisper_init(whisperModelURL.path())
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        self.whisperModel = whisperModel
+        DispatchQueue.main.async { [self] in self.whisperModel = whisperModel}
     }
 
     private func load_audio(url: URL) throws -> [Float32] {

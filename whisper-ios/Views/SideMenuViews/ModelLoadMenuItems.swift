@@ -64,11 +64,18 @@ struct ModelLoadSubMenuItemView: View {
         }
     }
 
+    private func loadWhisperModel(url: URL) -> Void {
+        do {
+            try recognizer.load_model(whisperModelURL: url)
+        } catch {
+            print("model loading failed in loadModel")
+        }
+    }
+
     private func changeModel() -> Bool {
         do {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
-                let whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription)
-                try recognizer.load_model(whisperModel: whisperModel)
+                let whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModel)
             }
         } catch {
             print("model loading failed")

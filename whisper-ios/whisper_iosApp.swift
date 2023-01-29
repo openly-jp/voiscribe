@@ -25,7 +25,7 @@ struct StartView: View {
                 .frame(width: 60, height: 60)
                 .onAppear {
                     DispatchQueue.global(qos: .userInteractive).async {
-                        let whisperModel = WhisperModel(size: defaultModelSize, language: defaultModelLanguage, needsSubscription: defaultModelNeedsSubscription)
+                        let whisperModel = WhisperModel(size: defaultModelSize, language: defaultModelLanguage, needsSubscription: defaultModelNeedsSubscription, callBack: { _ in })
                         recognizer = WhisperRecognizer(whisperModel: whisperModel)
                         isLoading = false
                     }
