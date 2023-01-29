@@ -16,7 +16,7 @@ struct TranscriptionLines: View {
 
     @Binding var isEditing: Bool
     @State var editingTranscriptionLineId: UUID? = nil
-    @State var editedText: String = ""
+    @State var editedTranscriptionTexts = [String]()
     @FocusState var focus: Bool
 
     var body: some View {
@@ -43,12 +43,11 @@ struct TranscriptionLines: View {
 
                                     Spacer()
 
-                                    if editingTranscriptionLineId == transcriptionLine.id {
-                                        TextEditor(text: $editedText)
+                                    if isEditing {
+                                        TextEditor(text: $editedTranscriptionTexts[idx])
                                             .multilineTextAlignment(.leading)
                                             .focused($focus)
                                             .border(Color(.systemGray5), width: 1)
-                                            .toolbar { editingToolBar }
                                     } else {
                                         Text(transcriptionLine.text)
                                             .foregroundColor(Color(.label))
@@ -62,7 +61,6 @@ struct TranscriptionLines: View {
                             .contextMenu {
                                 Button {
                                     editingTranscriptionLineId = transcriptionLine.id
-                                    editedText = transcriptionLine.text
                                     isEditing = true
                                     focus = true
                                 } label: {
@@ -81,7 +79,10 @@ struct TranscriptionLines: View {
                     }
                 }
             }
-            .onAppear { initUpdateScrollTimer(scrollReader) }
+            .onAppear {
+                initUpdateScrollTimer(scrollReader)
+                initTranscriptionTexts()
+            }
             .onDisappear { updateScrollTimer?.invalidate() }
         }
         .frame(
@@ -92,7 +93,7 @@ struct TranscriptionLines: View {
             alignment: .topLeading
         )
         .padding(.top)
-        .navigationBarTitle("", displayMode: .inline)
+        .toolbar { if isEditing { editingToolBar } }
     }
 
     var editingToolBar: some ToolbarContent {
@@ -107,7 +108,6 @@ struct TranscriptionLines: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("編集終了") {
                     updateTranscriptionLines()
-                    CoreDataRepository.saveRecognizedSpeech(recognizedSpeech)
 
                     isEditing = false
                     focus = false
@@ -120,9 +120,14 @@ struct TranscriptionLines: View {
     func updateTranscriptionLines() {
         for idx in 0 ..< recognizedSpeech.transcriptionLines.count {
             let transcriptionLine = recognizedSpeech.transcriptionLines[idx]
-            if transcriptionLine.id == editingTranscriptionLineId {
-                transcriptionLine.text = editedText
-            }
+            transcriptionLine.text = editedTranscriptionTexts[idx]
+            TranscriptionLineData.update(transcriptionLine)
+        }
+    }
+
+    func initTranscriptionTexts() {
+        for transcriptionLine in recognizedSpeech.transcriptionLines {
+            editedTranscriptionTexts.append(transcriptionLine.text)
         }
     }
 
