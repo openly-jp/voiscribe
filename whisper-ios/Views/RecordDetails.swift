@@ -65,7 +65,7 @@ struct RecognizingView: View {
             HStack { Spacer(); Text("もう一度認識をお願いいたします。"); Spacer() }
         }
     }
- }
+}
 
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
