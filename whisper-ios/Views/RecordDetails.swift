@@ -57,7 +57,7 @@ struct RecognizingView: View {
     }
 }
 
- struct NoRecognitionView: View {
+struct NoRecognitionView: View {
     var body: some View {
         Group {
             HStack { Spacer(); Text("申し訳ございません。"); Spacer() }
