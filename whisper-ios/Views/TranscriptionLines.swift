@@ -106,10 +106,22 @@ struct TranscriptionLines: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("編集終了") {
+                    updateTranscriptionLines()
+                    CoreDataRepository.saveRecognizedSpeech(recognizedSpeech)
+
                     isEditing = false
                     focus = false
                     editingTranscriptionLineId = nil
                 }
+            }
+        }
+    }
+
+    func updateTranscriptionLines() {
+        for idx in 0 ..< recognizedSpeech.transcriptionLines.count {
+            let transcriptionLine = recognizedSpeech.transcriptionLines[idx]
+            if transcriptionLine.id == editingTranscriptionLineId {
+                transcriptionLine.text = editedText
             }
         }
     }
