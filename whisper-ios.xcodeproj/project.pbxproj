@@ -10,7 +10,6 @@
 		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
-		13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 13516D9E2961B661005013C8 /* ggml-tiny.bin */; };
 		136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 136E05192962EC3A00DEC112 /* sample_ja.csv */; };
 		136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 136E051B2962EC4700DEC112 /* sample_ja.wav */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
@@ -48,6 +47,7 @@
 		57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */; };
 		5A0DE9C8298695100071EE82 /* WhisperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C7298695100071EE82 /* WhisperModel.swift */; };
 		5A0DE9CA298695910071EE82 /* WhisperModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */; };
+		5A0DE9D02986F2CE0071EE82 /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -83,7 +83,6 @@
 		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
-		13516D9E2961B661005013C8 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
 		136E05192962EC3A00DEC112 /* sample_ja.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
 		136E051B2962EC4700DEC112 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
 		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
@@ -124,6 +123,7 @@
 		57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecognizedSpeechData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/RecognizedSpeechData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		5A0DE9C7298695100071EE82 /* WhisperModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModel.swift; sourceTree = "<group>"; };
 		5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModelRepository.swift; sourceTree = "<group>"; };
+		5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.multi.bin"; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -348,9 +348,9 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */,
 				136E05192962EC3A00DEC112 /* sample_ja.csv */,
 				136E051B2962EC4700DEC112 /* sample_ja.wav */,
-				13516D9E2961B661005013C8 /* ggml-tiny.bin */,
 				13D1E48B295CE4030070090B /* ggml-tiny.en.bin */,
 				13D1E48C295CE4030070090B /* sample_wav1.wav */,
 				13D1E48A295CE4000070090B /* sample_wav2.wav */,
@@ -474,13 +474,13 @@
 			files = (
 				136E051C2962EC4700DEC112 /* sample_ja.wav in Resources */,
 				13D1E48D295CE4030070090B /* sample_wav2.wav in Resources */,
-				13516D9F2961B661005013C8 /* ggml-tiny.bin in Resources */,
 				13D1E48E295CE4030070090B /* ggml-tiny.en.bin in Resources */,
 				136E051A2962EC3A00DEC112 /* sample_ja.csv in Resources */,
 				5A8F552E2948CEDB00E87D25 /* recordData.json in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
 				13D1E48F295CE4030070090B /* sample_wav1.wav in Resources */,
+				5A0DE9D02986F2CE0071EE82 /* ggml-tiny.multi.bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
