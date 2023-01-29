@@ -43,10 +43,21 @@ struct TranscriptionLines: View {
                                     Spacer()
 
                                     if isEditing {
-                                        TextEditor(text: $editedTranscriptionTexts[idx])
-                                            .multilineTextAlignment(.leading)
-                                            .focused($focu, equals: transcriptionLine.id)
-                                            .border(Color(.systemGray5), width: 1)
+                                        // The size of default `TextEditor` is somehow smaller
+                                        // than text box (`Text`), resulting text is hidden partialy.
+                                        // To make `TextEditor` the same size as `Text`,
+                                        // create `Text` that is not shown by setting opacity 0
+                                        // under `TextEditor`. Refer #102 for the detail.
+                                        ZStack{
+                                            Text(transcriptionLine.text)
+                                                .multilineTextAlignment(.leading)
+                                                .opacity(0)
+                                                .padding(9)
+
+                                            TextEditor(text: $editedTranscriptionTexts[idx])
+                                                .multilineTextAlignment(.leading)
+                                                .focused($focus, equals: transcriptionLine.id)
+                                        }
                                     } else {
                                         Text(transcriptionLine.text)
                                             .foregroundColor(Color(.label))
