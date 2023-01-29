@@ -18,6 +18,26 @@ struct TranscriptionLines: View {
     @State var editedTranscriptionTexts = [String]()
     @FocusState var focus: UUID?
 
+    init(
+        recognizedSpeech: RecognizedSpeech,
+        player: Binding<AVAudioPlayer?>,
+        currentPlayingTime: Binding<Double>,
+        isEditing: Binding<Bool>,
+        focus: FocusState<UUID?>
+    ) {
+        self.recognizedSpeech = recognizedSpeech
+        _player = player
+        _currentPlayingTime = currentPlayingTime
+        _isEditing = isEditing
+        self._focus = focus
+
+        // By default, scroll inside `TextEditor` is enabled
+        // and this causes difficulities in scrolling transcrition lines
+        // The following code is to avoid this problem. Refer to #101 for the detail.
+        UITextView.appearance().textDragInteraction?.isEnabled = false
+        UITextView.appearance().isScrollEnabled  = false
+    }
+
     var body: some View {
         ScrollViewReader { scrollReader in
             ScrollView {
