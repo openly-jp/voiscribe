@@ -7,6 +7,11 @@ struct RecognitionPlayer: View {
     @State var player: AVAudioPlayer? = nil
     @State var currentPlayingTime: Double = 0
 
+    // MARK: - states for editing transcription
+
+    @State var isEditing = false
+    @FocusState var focus: Bool
+
     var recognizedSpeech: RecognizedSpeech
 
     init(recognizedSpeech: RecognizedSpeech) {
@@ -18,22 +23,33 @@ struct RecognitionPlayer: View {
     }
 
     var body: some View {
-        Group {
+        VStack(spacing: 0) {
             TranscriptionLines(
                 recognizedSpeech: recognizedSpeech,
                 player: $player,
-                currentPlayingTime: $currentPlayingTime
+                currentPlayingTime: $currentPlayingTime,
+                isEditing: $isEditing,
+                focus: _focus
             )
 
             if let player {
-                AudioPlayer(
-                    player: player,
-                    currentPlayingTime: $currentPlayingTime,
-                    transcription: allTranscription
-                )
-                .padding(20)
+                if !isEditing {
+                    AudioPlayer(
+                        player: player,
+                        currentPlayingTime: $currentPlayingTime,
+                        transcription: allTranscription
+                    )
+                    .padding(20)
+                } else {
+                    EditingAudioPlayer(
+                        player: player,
+                        currentPlayingTime: $currentPlayingTime,
+                        focus: _focus
+                    )
+                }
             }
-        }.onAppear(perform: initAudioPlayer)
+        }
+        .onAppear(perform: initAudioPlayer)
     }
 
     var allTranscription: String {
@@ -57,8 +73,6 @@ struct RecognitionPlayer: View {
             Logger.error("failed to init AVAudioPlayer.")
         }
     }
-
-
 }
 
 struct RecognitionPlayer_Previews: PreviewProvider {

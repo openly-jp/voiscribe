@@ -12,6 +12,13 @@ struct TranscriptionLines: View {
     /// this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
 
+    // MARK: - states for editing transcriptions
+
+    @Binding var isEditing: Bool
+    @State var editingTranscriptionLineId: UUID? = nil
+    @State var editedText: String = ""
+    @FocusState var focus: Bool
+
     var body: some View {
         ScrollViewReader { scrollReader in
             ScrollView {
@@ -36,14 +43,38 @@ struct TranscriptionLines: View {
 
                                     Spacer()
 
-                                    Text(transcriptionLine.text)
-                                        .foregroundColor(Color(.label))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .multilineTextAlignment(.leading)
+                                    if editingTranscriptionLineId == transcriptionLine.id {
+                                        TextEditor(text: $editedText)
+                                            .multilineTextAlignment(.leading)
+                                            .focused($focus)
+                                            .border(Color(.systemGray5), width: 1)
+                                            .toolbar { editingToolBar }
+                                    } else {
+                                        Text(transcriptionLine.text)
+                                            .foregroundColor(Color(.label))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .multilineTextAlignment(.leading)
+                                    }
                                 }
                             }
                             .padding(10)
                             .background(getTextColor(idx))
+                            .contextMenu {
+                                Button {
+                                    editingTranscriptionLineId = transcriptionLine.id
+                                    editedText = transcriptionLine.text
+                                    isEditing = true
+                                    focus = true
+                                } label: {
+                                    Label("編集", systemImage: "pencil")
+                                }
+
+                                Button {
+                                    UIPasteboard.general.string = transcriptionLine.text
+                                } label: {
+                                    Label("コピー", systemImage: "doc.on.doc")
+                                }
+                            }
                             Divider()
                         }
                         .id(idx)
@@ -53,9 +84,34 @@ struct TranscriptionLines: View {
             .onAppear { initUpdateScrollTimer(scrollReader) }
             .onDisappear { updateScrollTimer?.invalidate() }
         }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-        .padding()
+        .frame(
+            minWidth: 0,
+            maxWidth: .infinity,
+            minHeight: 0,
+            maxHeight: .infinity,
+            alignment: .topLeading
+        )
+        .padding(.top)
         .navigationBarTitle("", displayMode: .inline)
+    }
+
+    var editingToolBar: some ToolbarContent {
+        Group {
+            ToolbarItem(placement: .principal) {
+                Text("書き起こし編集")
+                    .foregroundColor(Color(.label))
+                    .font(.title3)
+                    .bold()
+                    .padding()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("編集終了") {
+                    isEditing = false
+                    focus = false
+                    editingTranscriptionLineId = nil
+                }
+            }
+        }
     }
 
     func initUpdateScrollTimer(_ scrollReader: ScrollViewProxy) {
@@ -125,7 +181,15 @@ struct TranscriptionLines_Previews: PreviewProvider {
         TranscriptionLines(
             recognizedSpeech: recognizedSpeech,
             player: .constant(player),
-            currentPlayingTime: .constant(20.0)
+            currentPlayingTime: .constant(20.0),
+            isEditing: .constant(true)
+        )
+
+        TranscriptionLines(
+            recognizedSpeech: recognizedSpeech,
+            player: .constant(player),
+            currentPlayingTime: .constant(20.0),
+            isEditing: .constant(false)
         )
     }
 }
