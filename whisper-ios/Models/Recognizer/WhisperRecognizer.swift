@@ -13,11 +13,12 @@ class WhisperRecognizer: Recognizer {
     init(whisperModel: WhisperModel) {
         do {
             try load_model(whisperModelURL: whisperModel.localPath!)
+            self.whisperModel = whisperModel
         } catch {
             self.whisperModel = WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false, callBack: { _ in })
             return
         }
-        print(whisperModel.size.rawValue, " model is successfully loaded")
+
     }
 
     deinit {
