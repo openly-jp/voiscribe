@@ -18,6 +18,8 @@ struct TranscriptionLines: View {
     @State var editedTranscriptionTexts = [String]()
     @FocusState var focus: UUID?
 
+    @State var isOpenCancelAlert: Bool = false
+
     init(
         recognizedSpeech: RecognizedSpeech,
         player: Binding<AVAudioPlayer?>,
@@ -35,7 +37,7 @@ struct TranscriptionLines: View {
         // and this causes difficulities in scrolling transcrition lines
         // The following code is to avoid this problem. Refer to #101 for the detail.
         UITextView.appearance().textDragInteraction?.isEnabled = false
-        UITextView.appearance().isScrollEnabled  = false
+        UITextView.appearance().isScrollEnabled = false
     }
 
     var body: some View {
@@ -68,7 +70,7 @@ struct TranscriptionLines: View {
                                         // To make `TextEditor` the same size as `Text`,
                                         // create `Text` that is not shown by setting opacity 0
                                         // under `TextEditor`. Refer #102 for the detail.
-                                        ZStack{
+                                        ZStack {
                                             Text(transcriptionLine.text)
                                                 .multilineTextAlignment(.leading)
                                                 .opacity(0)
@@ -114,6 +116,7 @@ struct TranscriptionLines: View {
             }
             .onDisappear { updateScrollTimer?.invalidate() }
         }
+        .navigationBarBackButtonHidden(isEditing)
         .frame(
             minWidth: 0,
             maxWidth: .infinity,
@@ -127,6 +130,24 @@ struct TranscriptionLines: View {
 
     var editingToolBar: some ToolbarContent {
         Group {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("キャンセル") {
+                    if isEdited { isOpenCancelAlert = true }
+                    else { isEditing = false; focus = nil }
+                }.alert(isPresented: $isOpenCancelAlert) {
+                    Alert(
+                        title: Text("変更を破棄しますか？"),
+                        message: Text("変更は完全に失われます。変更を破棄しますか？"),
+                        primaryButton: .cancel(Text("キャンセル")) { isOpenCancelAlert = false },
+                        secondaryButton: .destructive(Text("変更を破棄")) {
+                            isOpenCancelAlert = false
+                            isEditing = false
+                            focus = nil
+                        }
+                    )
+                }
+            }
+
             ToolbarItem(placement: .principal) {
                 Text("書き起こし編集")
                     .foregroundColor(Color(.label))
@@ -135,7 +156,7 @@ struct TranscriptionLines: View {
                     .padding()
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("編集終了") {
+                Button("保存") {
                     updateTranscriptionLines()
 
                     isEditing = false
@@ -143,6 +164,10 @@ struct TranscriptionLines: View {
                 }
             }
         }
+    }
+    
+    var isEdited: Bool {
+        return editedTranscriptionTexts != recognizedSpeech.transcriptionLines.map({$0.text})
     }
 
     func updateTranscriptionLines() {
