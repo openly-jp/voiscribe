@@ -44,6 +44,7 @@ struct RecordList: View {
                 NavigationLink(
                     destination: LazyView(RecordDetails(
                         recognizedSpeech: recognizedSpeech,
+                        recognizedSpeeches: $recognizedSpeeches,
                         isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
                     )),
                     isActive: $isActives[idx]

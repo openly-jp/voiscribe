@@ -13,9 +13,16 @@ struct RecognitionPlayer: View {
     @FocusState var focus: UUID?
 
     var recognizedSpeech: RecognizedSpeech
+    @Binding var recognizedSpeeches: [RecognizedSpeech]
 
-    init(recognizedSpeech: RecognizedSpeech) {
+    @Environment(\.presentationMode) var presentationMode
+
+    init(
+        recognizedSpeech: RecognizedSpeech,
+        recognizedSpeeches: Binding<[RecognizedSpeech]>
+    ) {
         self.recognizedSpeech = recognizedSpeech
+        self._recognizedSpeeches = recognizedSpeeches
 
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
@@ -68,6 +75,16 @@ struct RecognitionPlayer: View {
                 } label: {
                     Label("全文をコピー", systemImage: "doc.on.doc")
                 }
+                Button(role: .destructive) {
+                    if let removeIdx = recognizedSpeeches.firstIndex {$0.id == recognizedSpeech.id} {
+                        recognizedSpeeches.remove(at: removeIdx)
+                        CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeech)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                } label: {
+                    Label("削除", systemImage: "trash")
+                        .foregroundColor(.red)
+                }
             } label: {
                 Image(systemName: "ellipsis")
                     .foregroundColor(Color(.label))
@@ -103,6 +120,9 @@ struct RecognitionPlayer_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
 
-        RecognitionPlayer(recognizedSpeech: recognizedSpeech)
+        RecognitionPlayer(
+            recognizedSpeech: recognizedSpeech,
+            recognizedSpeeches: .constant([])
+        )
     }
 }
