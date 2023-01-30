@@ -50,6 +50,30 @@ struct RecognitionPlayer: View {
             }
         }
         .onAppear(perform: initAudioPlayer)
+        .toolbar { if !isEditing { toolBar } }
+    }
+
+    var toolBar: some ToolbarContent {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            Button {
+                isEditing = true
+            } label: {
+                Image(systemName: "highlighter")
+                    .foregroundColor(Color(.label))
+            }
+
+            Menu {
+                Button {
+                    UIPasteboard.general.string = allTranscription
+                } label: {
+                    Label("全文をコピー", systemImage: "doc.on.doc")
+                }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .foregroundColor(Color(.label))
+                    .rotationEffect(.degrees(90))
+            }
+        }
     }
 
     var allTranscription: String {
