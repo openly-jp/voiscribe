@@ -19,7 +19,7 @@ enum WhisperModelRepository {
 
      - Returns: local path of the model
      */
-    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, callBack:@escaping (URL) throws -> Void) throws -> URL {
+    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, callBack: @escaping (URL) throws -> Void) throws -> URL {
         // if model is in bundled resource or in local storage, return it
         if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
             // return the bundled resource path of the model
@@ -44,17 +44,17 @@ enum WhisperModelRepository {
         if !FileManager.default.fileExists(atPath: destinationURL.path) {
             let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
             let url = URL(string: "https://\(modelURL)")!
-            let task = URLSession.shared.downloadTask(with: url) { location, response, error in
-                            guard let location else { return }
-                            do {
-                                try FileManager.default.moveItem(at: location, to: destinationURL)
-                                try! callBack(destinationURL) //URLSession.shared.downloadTask does not                             allow errors
-                            } catch {
-                                print(error)
-                            }
-                        }
-                        task.resume()
-                    }
+            let task = URLSession.shared.downloadTask(with: url) { location, _, error in
+                guard let location else { return }
+                do {
+                    try FileManager.default.moveItem(at: location, to: destinationURL)
+                    try! callBack(destinationURL) // URLSession.shared.downloadTask does not                             allow errors
+                } catch {
+                    print(error)
+                }
+            }
+            task.resume()
+        }
         return destinationURL
     }
 

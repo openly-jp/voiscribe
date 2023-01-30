@@ -27,7 +27,7 @@ struct ModelLoadSubMenuItemView: View {
     let needsSubscription: Bool
     let modelDisplayName: String
     @State private var showDialogue = false
-    
+
     var body: some View {
         HStack {
             if recognizer.whisperModel?.name == "\(modelSize.rawValue)-\(language.rawValue)" {
@@ -51,37 +51,37 @@ struct ModelLoadSubMenuItemView: View {
                   message: Text("一部のモデルはダウンロードが行われます"),
                   primaryButton: .cancel(Text("キャンセル")),
                   secondaryButton: .default(Text("変更"), action: {
-                let isSucceed: Bool
-                do {isSucceed = try changeModel()}
-                catch {isSucceed = false}
-                if isSucceed {
-                    defaultModelSize = modelSize
-                    defaultLanguage = language
-                    dafaultNeedsSubscription = needsSubscription
-                }
-            }))
+                      let isSucceed: Bool
+                      do { isSucceed = try changeModel() }
+                      catch { isSucceed = false }
+                      if isSucceed {
+                          defaultModelSize = modelSize
+                          defaultLanguage = language
+                          dafaultNeedsSubscription = needsSubscription
+                      }
+                  }))
         }
     }
-    
-    private func loadWhisperModelURL(whisperModelURL: URL) throws -> Void {
+
+    private func loadWhisperModelURL(whisperModelURL: URL) throws {
         do {
             try recognizer.load_model(whisperModelURL: whisperModelURL)
         } catch {
             throw NSError(domain: "model loading failed in loadWhisperModelURL", code: -1)
         }
     }
-    
+
     private func changeModel() throws -> Bool {
         if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
             do {
                 let whisperModel = try WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModelURL)
-                recognizer.whisperModel = whisperModel}
-            catch {
+                recognizer.whisperModel = whisperModel
+            } catch {
                 print("changeModel failed")
                 return false
             }
             return true
-        } else{
+        } else {
             return false
         }
     }

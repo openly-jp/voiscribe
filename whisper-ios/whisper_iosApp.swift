@@ -28,7 +28,8 @@ struct StartView: View {
                         let whisperModel = WhisperModel(
                             localPath: URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!),
                             size: defaultModelSize,
-                            language: defaultModelLanguage, needsSubscription: false)
+                            language: defaultModelLanguage, needsSubscription: false
+                        )
                         recognizer = WhisperRecognizer(whisperModel: whisperModel)
                         isLoading = false
                     }

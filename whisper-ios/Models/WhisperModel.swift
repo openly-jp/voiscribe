@@ -50,13 +50,13 @@ class WhisperModel: Identifiable {
         language: Lang,
         needsSubscription: Bool
     ) {
-        self.id = UUID()
+        id = UUID()
         self.localPath = localPath
         self.size = size
         self.language = language
         self.needsSubscription = needsSubscription
-        self.createdAt = Date()
-        self.updatedAt = Date()
+        createdAt = Date()
+        updatedAt = Date()
     }
 
     var name: String {

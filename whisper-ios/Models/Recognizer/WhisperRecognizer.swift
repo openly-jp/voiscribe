@@ -18,7 +18,6 @@ class WhisperRecognizer: Recognizer {
             self.whisperModel = try? WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false, callBack: { _ in })
             return
         }
-
     }
 
     deinit {
