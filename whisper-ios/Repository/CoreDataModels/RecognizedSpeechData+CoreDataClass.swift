@@ -65,4 +65,23 @@ public class RecognizedSpeechData: NSManagedObject {
         }
         return rsModel
     }
+
+    /// Update recognizedSpeech data model.
+    ///
+    /// - Note: this method is used for update data model but not transcription lines.
+    /// - Parameter rs: recognizedSpeech model
+    static func update(_ rs: RecognizedSpeech) {
+        guard let rsEntity: RecognizedSpeechData = CoreDataRepository.getById(uuid: rs.id) else {
+            fatalError("object with id: \(rs.id.uuidString) is not found.")
+        }
+
+        rsEntity.id = rs.id
+        rsEntity.title = rs.title
+        rsEntity.audioFileURL = rs.audioFileURL
+        rsEntity.language = rs.language.rawValue
+        rsEntity.createdAt = rs.createdAt
+        rsEntity.updatedAt = rs.updatedAt
+
+        CoreDataRepository.save()
+    }
 }

@@ -19,10 +19,7 @@ struct RecordDetails: View {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
-            Text(recognizedSpeech.title)
-                .font(.title)
-                .fontWeight(.bold)
-                .padding(.horizontal)
+            Title(recognizedSpeech: recognizedSpeech)
             Rectangle()
                 .frame(height: 2)
                 .foregroundColor(Color.gray)
@@ -58,6 +55,42 @@ struct RecognizingView: View {
             Spacer()
             Text("認識中")
             Spacer()
+        }
+    }
+}
+
+struct Title: View {
+    var recognizedSpeech: RecognizedSpeech
+    @State var editingTitle = ""
+    @State var isEditing = false
+    @FocusState var focus
+
+    var body: some View {
+        if isEditing {
+            TextField(editingTitle, text: $editingTitle)
+                .focused($focus)
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.horizontal)
+                .submitLabel(.done)
+                .onSubmit {
+                    isEditing = false
+                    recognizedSpeech.title = editingTitle
+                    focus = false
+
+                    RecognizedSpeechData.update(recognizedSpeech)
+                }
+        } else {
+            Text(recognizedSpeech.title)
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.horizontal)
+                .padding(1)
+                .onTapGesture {
+                    editingTitle = recognizedSpeech.title
+                    isEditing = true
+                    focus = true
+                }
         }
     }
 }
