@@ -19,35 +19,42 @@ enum WhisperModelRepository {
 
      - Returns: local path of the model
      */
-    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, callBack:@escaping (URL) -> Void) -> URL {
+    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, callBack:@escaping (URL) throws -> Void) throws -> URL {
         // if model is in bundled resource or in local storage, return it
         if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
             // return the bundled resource path of the model
             let modelUrl = URL(string: Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
-            callBack(modelUrl)
+            do {
+                try callBack(modelUrl)
+            } catch {
+                throw NSError(domain: "callBack failed in fetchWhisperModel when the model is in the bundle", code: -1)
+            }
             return modelUrl
         }
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if FileManager.default.fileExists(atPath: destinationURL.path) {
-            callBack(destinationURL)
+            do {
+                try callBack(destinationURL)
+            } catch {
+                throw NSError(domain: "callBack failed in fetchWhisperModel when the model is already downloaded", code: -1)
+            }
         }
         // if model is not in local storage, download it
         if !FileManager.default.fileExists(atPath: destinationURL.path) {
             let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
             let url = URL(string: "https://\(modelURL)")!
             let task = URLSession.shared.downloadTask(with: url) { location, response, error in
-                guard let location else { return }
-                do {
-                    try FileManager.default.moveItem(at: location, to: destinationURL)
-                    callBack(destinationURL)
-                } catch {
-                    print(error)
-                }
-            }
-            task.resume()
-        }
-        // check if model is downloaded
+                            guard let location else { return }
+                            do {
+                                try FileManager.default.moveItem(at: location, to: destinationURL)
+                                try! callBack(destinationURL) //URLSession.shared.downloadTask does not                             allow errors
+                            } catch {
+                                print(error)
+                            }
+                        }
+                        task.resume()
+                    }
         return destinationURL
     }
 

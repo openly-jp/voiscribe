@@ -15,7 +15,7 @@ class WhisperRecognizer: Recognizer {
             try load_model(whisperModelURL: whisperModel.localPath!)
             self.whisperModel = whisperModel
         } catch {
-            self.whisperModel = WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false, callBack: { _ in })
+            self.whisperModel = try? WhisperModel(size: Size(rawValue: "tiny")!, language: Lang(rawValue: "en")!, needsSubscription: false, callBack: { _ in })
             return
         }
 

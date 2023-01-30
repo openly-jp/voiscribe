@@ -29,12 +29,16 @@ class WhisperModel: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    init(size: Size, language: Lang, needsSubscription: Bool = false, callBack: @escaping (URL) -> Void) {
+    init(size: Size, language: Lang, needsSubscription: Bool = false, callBack: @escaping (URL) throws -> Void) throws {
         id = UUID()
         self.size = size
         self.language = language
         self.needsSubscription = needsSubscription
-        localPath = WhisperModelRepository.fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription, callBack: callBack)
+        do {
+            localPath = try WhisperModelRepository.fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription, callBack: callBack)
+        } catch {
+            throw NSError(domain: "local path failed to initialize in WhisperModel init", code: -1)
+        }
         // NOTE: This is a UNIX Time
         createdAt = Date()
         updatedAt = Date()

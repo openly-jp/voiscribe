@@ -27,7 +27,7 @@ struct ModelLoadSubMenuItemView: View {
     let needsSubscription: Bool
     let modelDisplayName: String
     @State private var showDialogue = false
-
+    
     var body: some View {
         HStack {
             if recognizer.whisperModel?.name == "\(modelSize.rawValue)-\(language.rawValue)" {
@@ -42,9 +42,6 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
         }
         .onTapGesture(perform: {
-            print("model_name", recognizer.whisperModel?.name)
-            print("\(modelSize.rawValue)-\(language.rawValue)")
-
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
                 self.showDialogue = true
             }
@@ -54,35 +51,39 @@ struct ModelLoadSubMenuItemView: View {
                   message: Text("一部のモデルはダウンロードが行われます"),
                   primaryButton: .cancel(Text("キャンセル")),
                   secondaryButton: .default(Text("変更"), action: {
-                      let isSucceed = changeModel()
-                      if isSucceed {
-                          defaultModelSize = modelSize
-                          defaultLanguage = language
-                          dafaultNeedsSubscription = needsSubscription
-                      }
-                  }))
+                let isSucceed: Bool
+                do {isSucceed = try changeModel()}
+                catch {isSucceed = false}
+                if isSucceed {
+                    defaultModelSize = modelSize
+                    defaultLanguage = language
+                    dafaultNeedsSubscription = needsSubscription
+                }
+            }))
         }
     }
-
-    private func loadWhisperModelURL(whisperModelURL: URL) -> Void {
+    
+    private func loadWhisperModelURL(whisperModelURL: URL) throws -> Void {
         do {
             try recognizer.load_model(whisperModelURL: whisperModelURL)
         } catch {
-            print("model loading failed in loadModel")
+            throw NSError(domain: "model loading failed in loadWhisperModelURL", code: -1)
         }
     }
-
-    private func changeModel() -> Bool {
-        do {
-            if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
-                let whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModelURL)
-                recognizer.whisperModel = whisperModel
+    
+    private func changeModel() throws -> Bool {
+        if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
+            do {
+                let whisperModel = try WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModelURL)
+                recognizer.whisperModel = whisperModel}
+            catch {
+                print("changeModel failed")
+                return false
             }
-        } catch {
-            print("model loading failed")
+            return true
+        } else{
             return false
         }
-        return true
     }
 }
 
