@@ -16,6 +16,7 @@ struct EditingAudioPlayer: View {
     @StateObject var isPlayingObject = IsPlayingObject()
 
     @FocusState var focus: UUID?
+    @State var prevFocusedId: UUID?
 
     var body: some View {
         HStack {
@@ -40,8 +41,15 @@ struct EditingAudioPlayer: View {
             }
             Spacer()
 
-            PlayerButton(name: "keyboard.chevron.compact.down", size: 20) {
-                focus = nil
+            if focus != nil {
+                PlayerButton(name: "keyboard.chevron.compact.down", size: 20) {
+                    prevFocusedId = focus
+                    focus = nil
+                }
+            } else {
+                PlayerButton(name: "keyboard", size: 20) {
+                    focus = prevFocusedId
+                }
             }
         }
         .padding(.horizontal, 30)
