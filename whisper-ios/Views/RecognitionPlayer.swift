@@ -22,7 +22,7 @@ struct RecognitionPlayer: View {
         recognizedSpeeches: Binding<[RecognizedSpeech]>
     ) {
         self.recognizedSpeech = recognizedSpeech
-        self._recognizedSpeeches = recognizedSpeeches
+        _recognizedSpeeches = recognizedSpeeches
 
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
@@ -76,7 +76,7 @@ struct RecognitionPlayer: View {
                     Label("全文をコピー", systemImage: "doc.on.doc")
                 }
                 Button(role: .destructive) {
-                    if let removeIdx = recognizedSpeeches.firstIndex {$0.id == recognizedSpeech.id} {
+                    if let removeIdx = recognizedSpeeches.firstIndex { $0.id == recognizedSpeech.id } {
                         recognizedSpeeches.remove(at: removeIdx)
                         CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeech)
                         presentationMode.wrappedValue.dismiss()
@@ -107,6 +107,7 @@ struct RecognitionPlayer: View {
         // TODO: fix this (issue #25)
         let fileName = recognizedSpeech.audioFileURL.lastPathComponent
         let url = getURLByName(fileName: fileName)
+//         let url = recognizedSpeech.audioFileURL
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player!.enableRate = true

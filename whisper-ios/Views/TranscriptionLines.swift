@@ -31,7 +31,7 @@ struct TranscriptionLines: View {
         _player = player
         _currentPlayingTime = currentPlayingTime
         _isEditing = isEditing
-        self._focus = focus
+        _focus = focus
 
         // By default, scroll inside `TextEditor` is enabled
         // and this causes difficulities in scrolling transcrition lines
@@ -165,9 +165,9 @@ struct TranscriptionLines: View {
             }
         }
     }
-    
+
     var isEdited: Bool {
-        return editedTranscriptionTexts != recognizedSpeech.transcriptionLines.map({$0.text})
+        editedTranscriptionTexts != recognizedSpeech.transcriptionLines.map(\.text)
     }
 
     func updateTranscriptionLines() {
