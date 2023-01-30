@@ -43,7 +43,10 @@ struct TranscriptionLines: View {
     var body: some View {
         ScrollViewReader { scrollReader in
             ScrollView {
-                LazyVStack(spacing: 0) {
+                // Though LazyVStack is hopefully used,
+                // FocusState changes to nil with it while scrolling,
+                // thus normal VStack is used to avoid this.
+                VStack(spacing: 0) {
                     ForEach(
                         Array(recognizedSpeech.transcriptionLines.enumerated()),
                         id: \.self.element.id
