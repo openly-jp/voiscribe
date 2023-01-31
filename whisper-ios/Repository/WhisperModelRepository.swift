@@ -12,14 +12,14 @@ let modelURLs: [String: String] = [
 enum WhisperModelRepository {
     /**
      Download a model, if it does exist locally, from R2 and save it to local storage.
-     
+
      - Parameter size: The size of the model (tiny, base, small).
      - Parameter language: The language of the model (ja, en, multi).
      - Parameter needsSubscription: Whether the model needs a subscription to use.
-     
+
      - Returns: local path of the model
      */
-    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, completion: @escaping (Result<URL, Error>) -> Void) -> Void {
+    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, completion: @escaping (Result<URL, Error>) -> Void) {
         // if model is in bundled resource or in local storage, return it
         if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
             // return the bundled resource path of the model
@@ -52,7 +52,6 @@ enum WhisperModelRepository {
             }
         }
     }
-    
 
     /**
      Delete a model from local storage.

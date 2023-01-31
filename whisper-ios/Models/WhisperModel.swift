@@ -34,15 +34,15 @@ class WhisperModel: Identifiable {
         self.size = size
         self.language = language
         self.needsSubscription = needsSubscription
-        self.localPath = URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!)!
+        localPath = URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!)!
         // NOTE: This is a UNIX Time
         createdAt = Date()
         updatedAt = Date()
         WhisperModelRepository.fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription) { result in
             switch result {
-            case .success(let modelURL):
+            case let .success(modelURL):
                 self.localPath = modelURL
-            case .failure(let error):
+            case let .failure(error):
                 print("Error: \(error.localizedDescription)")
             }
         }
