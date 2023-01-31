@@ -25,6 +25,7 @@ class WhisperRecognizer: Recognizer {
     }
 
     func load_model(whisperModel: WhisperModel) throws {
+        whisper_free(whisperContext)
         whisperContext = whisper_init(whisperModel.localPath?.path)
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
