@@ -16,7 +16,7 @@ struct TranscriptionLines: View {
 
     @Binding var isEditing: Bool
     @State var editedTranscriptionTexts = [String]()
-    @FocusState var focus: UUID?
+    @FocusState var focusedTranscriptionLineId: UUID?
 
     @State var isOpenCancelAlert: Bool = false
 
@@ -25,13 +25,13 @@ struct TranscriptionLines: View {
         player: Binding<AVAudioPlayer?>,
         currentPlayingTime: Binding<Double>,
         isEditing: Binding<Bool>,
-        focus: FocusState<UUID?>
+        focusedTranscriptionLineId: FocusState<UUID?>
     ) {
         self.recognizedSpeech = recognizedSpeech
         _player = player
         _currentPlayingTime = currentPlayingTime
         _isEditing = isEditing
-        _focus = focus
+        _focusedTranscriptionLineId = focusedTranscriptionLineId
 
         // By default, scroll inside `TextEditor` is enabled
         // and this causes difficulities in scrolling transcrition lines
@@ -51,65 +51,8 @@ struct TranscriptionLines: View {
                         Array(recognizedSpeech.transcriptionLines.enumerated()),
                         id: \.self.element.id
                     ) {
-                        (idx: Int, transcriptionLine: TranscriptionLine) in
-                        Group {
-                            let action = moveTranscriptionLine(
-                                idx: idx,
-                                transcriptionLine: transcriptionLine,
-                                scrollReader: scrollReader
-                            )
-                            Button(action: action) {
-                                HStack(alignment: .center) {
-                                    Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
-                                        .frame(width: 50, alignment: .center)
-                                        .foregroundColor(Color.blue)
-                                        .padding()
-
-                                    Spacer()
-
-                                    if isEditing {
-                                        // The size of default `TextEditor` is somehow smaller
-                                        // than text box (`Text`), resulting text is hidden partialy.
-                                        // To make `TextEditor` the same size as `Text`,
-                                        // create `Text` that is not shown by setting opacity 0
-                                        // under `TextEditor`. Refer #102 for the detail.
-                                        ZStack {
-                                            Text(transcriptionLine.text)
-                                                .multilineTextAlignment(.leading)
-                                                .opacity(0)
-                                                .padding(9)
-
-                                            TextEditor(text: $editedTranscriptionTexts[idx])
-                                                .multilineTextAlignment(.leading)
-                                                .focused($focus, equals: transcriptionLine.id)
-                                        }
-                                    } else {
-                                        Text(transcriptionLine.text)
-                                            .foregroundColor(Color(.label))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .multilineTextAlignment(.leading)
-                                    }
-                                }
-                            }
-                            .padding(10)
-                            .background(getTextColor(idx))
-                            .contextMenu {
-                                Button {
-                                    isEditing = true
-                                    focus = transcriptionLine.id
-                                } label: {
-                                    Label("編集", systemImage: "pencil")
-                                }
-
-                                Button {
-                                    UIPasteboard.general.string = transcriptionLine.text
-                                } label: {
-                                    Label("コピー", systemImage: "doc.on.doc")
-                                }
-                            }
-                            Divider()
-                        }
-                        .id(idx)
+                        idx, transcriptionLine in
+                        transcriptionLineRow(idx, transcriptionLine, scrollReader)
                     }
                 }
             }
@@ -131,12 +74,76 @@ struct TranscriptionLines: View {
         .toolbar { if isEditing { editingToolBar } }
     }
 
+    func transcriptionLineRow(
+        _ idx: Int,
+        _ transcriptionLine: TranscriptionLine,
+        _ scrollReader: ScrollViewProxy
+    ) -> some View {
+        Group {
+            let action = moveTranscriptionLine(
+                idx: idx,
+                transcriptionLine: transcriptionLine,
+                scrollReader: scrollReader
+            )
+            Button(action: action) {
+                HStack(alignment: .center) {
+                    Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
+                        .frame(width: 50, alignment: .center)
+                        .foregroundColor(Color.blue)
+                        .padding()
+
+                    Spacer()
+
+                    if isEditing {
+                        // The size of default `TextEditor` is somehow smaller
+                        // than text box (`Text`), resulting text is hidden partialy.
+                        // To make `TextEditor` the same size as `Text`,
+                        // create `Text` that is not shown by setting opacity 0
+                        // under `TextEditor`. Refer #102 for the detail.
+                        ZStack {
+                            Text(transcriptionLine.text)
+                                .multilineTextAlignment(.leading)
+                                .opacity(0)
+                                .padding(9)
+
+                            TextEditor(text: $editedTranscriptionTexts[idx])
+                                .multilineTextAlignment(.leading)
+                                .focused($focusedTranscriptionLineId, equals: transcriptionLine.id)
+                        }
+                    } else {
+                        Text(transcriptionLine.text)
+                            .foregroundColor(Color(.label))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+            }
+            .padding(10)
+            .background(getTextColor(idx))
+            .contextMenu {
+                Button {
+                    isEditing = true
+                    focusedTranscriptionLineId = transcriptionLine.id
+                } label: {
+                    Label("編集", systemImage: "pencil")
+                }
+
+                Button {
+                    UIPasteboard.general.string = transcriptionLine.text
+                } label: {
+                    Label("コピー", systemImage: "doc.on.doc")
+                }
+            }
+            Divider()
+        }.id(idx)
+    }
+
     var editingToolBar: some ToolbarContent {
         Group {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button("キャンセル") {
                     if isEdited { isOpenCancelAlert = true }
-                    else { isEditing = false; focus = nil }
+                    else { isEditing = false; focusedTranscriptionLineId = nil }
                 }.alert(isPresented: $isOpenCancelAlert) {
                     Alert(
                         title: Text("変更を破棄しますか？"),
@@ -145,7 +152,7 @@ struct TranscriptionLines: View {
                         secondaryButton: .destructive(Text("変更を破棄")) {
                             isOpenCancelAlert = false
                             isEditing = false
-                            focus = nil
+                            focusedTranscriptionLineId = nil
                         }
                     )
                 }
@@ -163,7 +170,7 @@ struct TranscriptionLines: View {
                     updateTranscriptionLines()
 
                     isEditing = false
-                    focus = nil
+                    focusedTranscriptionLineId = nil
                 }
             }
         }
@@ -256,7 +263,7 @@ struct TranscriptionLines_Previews: PreviewProvider {
             player: .constant(player),
             currentPlayingTime: .constant(20.0),
             isEditing: .constant(true),
-            focus: FocusState<UUID?>()
+            focusedTranscriptionLineId: FocusState<UUID?>()
         )
 
         TranscriptionLines(
@@ -264,7 +271,7 @@ struct TranscriptionLines_Previews: PreviewProvider {
             player: .constant(player),
             currentPlayingTime: .constant(20.0),
             isEditing: .constant(true),
-            focus: FocusState<UUID?>()
+            focusedTranscriptionLineId: FocusState<UUID?>()
         )
     }
 }

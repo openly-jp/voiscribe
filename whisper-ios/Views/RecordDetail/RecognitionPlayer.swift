@@ -2,6 +2,9 @@ import AVFoundation
 import SwiftUI
 
 struct RecognitionPlayer: View {
+    var recognizedSpeech: RecognizedSpeech
+    @Binding var recognizedSpeeches: [RecognizedSpeech]
+
     // MARK: - state about player
 
     @State var player: AVAudioPlayer? = nil
@@ -10,13 +13,7 @@ struct RecognitionPlayer: View {
     // MARK: - states for editing transcription
 
     @State var isEditing = false
-    @FocusState var focus: UUID?
-
-    var recognizedSpeech: RecognizedSpeech
-    @Binding var recognizedSpeeches: [RecognizedSpeech]
-
-    @Environment(\.presentationMode) var presentationMode
-    @State var isOpenDeleteAlert: Bool = false
+    @FocusState var focusedTranscriptionLineId: UUID?
 
     init(
         recognizedSpeech: RecognizedSpeech,
@@ -37,7 +34,7 @@ struct RecognitionPlayer: View {
                 player: $player,
                 currentPlayingTime: $currentPlayingTime,
                 isEditing: $isEditing,
-                focus: _focus
+                focusedTranscriptionLineId: _focusedTranscriptionLineId
             )
 
             if let player {
@@ -52,55 +49,19 @@ struct RecognitionPlayer: View {
                     EditingAudioPlayer(
                         player: player,
                         currentPlayingTime: $currentPlayingTime,
-                        focus: _focus
+                        focusedTranscriptionLineId: _focusedTranscriptionLineId
                     )
                 }
             }
         }
         .onAppear(perform: initAudioPlayer)
-        .toolbar { if !isEditing { toolBar } }
-    }
-
-    var toolBar: some ToolbarContent {
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            Button {
-                isEditing = true
-            } label: {
-                Image(systemName: "highlighter")
-                    .foregroundColor(Color(.label))
-            }
-
-            Menu {
-                Button {
-                    UIPasteboard.general.string = allTranscription
-                } label: {
-                    Label("全文をコピー", systemImage: "doc.on.doc")
-                }
-                Button(
-                    role: .destructive,
-                    action: { isOpenDeleteAlert = true },
-                    label: {
-                        Label("削除", systemImage: "trash")
-                            .foregroundColor(.red)
-                    }
-                )
-            } label: {
-                Image(systemName: "ellipsis")
-                    .foregroundColor(Color(.label))
-                    .rotationEffect(.degrees(90))
-            }.alert(isPresented: $isOpenDeleteAlert) {
-                Alert(
-                    title: Text("削除しますか？"),
-                    message: Text("データは完全に失われます。本当に削除しますか？"),
-                    primaryButton: .cancel(Text("キャンセル")) { isOpenDeleteAlert = false },
-                    secondaryButton: .destructive(Text("削除")) {
-                        if let removeIdx = recognizedSpeeches.firstIndex(where: { $0.id == recognizedSpeech.id }) {
-                            recognizedSpeeches.remove(at: removeIdx)
-                            CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeech)
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                        isOpenDeleteAlert = false
-                    }
+        .toolbar {
+            if !isEditing {
+                ToolBar(
+                    recognizedSpeech: recognizedSpeech,
+                    recognizedSpeeches: $recognizedSpeeches,
+                    allTranscription: allTranscription,
+                    isEditing: $isEditing
                 )
             }
         }
@@ -120,7 +81,6 @@ struct RecognitionPlayer: View {
         // TODO: fix this (issue #25)
         let fileName = recognizedSpeech.audioFileURL.lastPathComponent
         let url = getURLByName(fileName: fileName)
-//         let url = recognizedSpeech.audioFileURL
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player!.enableRate = true

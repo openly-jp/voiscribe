@@ -63,12 +63,12 @@ struct Title: View {
     var recognizedSpeech: RecognizedSpeech
     @State var editingTitle = ""
     @State var isEditing = false
-    @FocusState var focus
+    @FocusState var isFocused: Bool
 
     var body: some View {
         if isEditing {
             TextField(editingTitle, text: $editingTitle)
-                .focused($focus)
+                .focused($isFocused)
                 .font(.title)
                 .fontWeight(.bold)
                 .padding(.horizontal)
@@ -76,7 +76,7 @@ struct Title: View {
                 .onSubmit {
                     isEditing = false
                     recognizedSpeech.title = editingTitle
-                    focus = false
+                    isFocused = false
 
                     RecognizedSpeechData.update(recognizedSpeech)
                 }
@@ -89,7 +89,7 @@ struct Title: View {
                 .onTapGesture {
                     editingTitle = recognizedSpeech.title
                     isEditing = true
-                    focus = true
+                    isFocused = true
                 }
         }
     }
@@ -108,14 +108,20 @@ struct NoRecognitionView: View {
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        NavigationView {
+            RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: false)
+                .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+        }
 
-        RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: false)
-            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
-        RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: false)
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
-            .previewDisplayName("ipad")
+        NavigationView {
+            RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: false)
+                .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+                .previewDisplayName("ipad")
+        }
 
-        RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: true)
-            .previewDisplayName("Record Details (recognizing)")
+        NavigationView {
+            RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: true)
+                .previewDisplayName("Record Details (recognizing)")
+        }
     }
 }

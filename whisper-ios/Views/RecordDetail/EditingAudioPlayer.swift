@@ -1,6 +1,8 @@
 import AVFoundation
 import SwiftUI
 
+let ICON_SIZE = 20
+
 struct EditingAudioPlayer: View {
     var player: AVAudioPlayer
 
@@ -15,42 +17,36 @@ struct EditingAudioPlayer: View {
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
 
-    @FocusState var focus: UUID?
-    @State var prevFocusedId: UUID?
+    @FocusState var focusedTranscriptionLineId: UUID?
+    @State var prevFocusedTranscriptionLineId: UUID?
 
     var body: some View {
         HStack {
             Button(speedRate2String(availableSpeedRates[speedRateIdx])) { isChangingSpeedRate = true }
                 .foregroundColor(Color(.secondaryLabel))
                 .sheet(isPresented: $isChangingSpeedRate) { changeSpeedSheetView }
+
             Spacer()
-            PlayerButton(name: "gobackward.5", size: 20) {
+            PlayerButton(name: "gobackward.5", size: ICON_SIZE) {
                 player.currentTime -= 5
                 currentPlayingTime = player.currentTime
             }
+
             Spacer()
             PlayerButton(
                 name: isPlayingObject.isPlaying ? "pause.fill" : "play.fill",
-                size: 20,
+                size: ICON_SIZE,
                 action: playOrPause
             )
+
             Spacer()
-            PlayerButton(name: "goforward.5", size: 20) {
+            PlayerButton(name: "goforward.5", size: ICON_SIZE) {
                 player.currentTime += 5
                 currentPlayingTime = player.currentTime
             }
-            Spacer()
 
-            if focus != nil {
-                PlayerButton(name: "keyboard.chevron.compact.down", size: 20) {
-                    prevFocusedId = focus
-                    focus = nil
-                }
-            } else {
-                PlayerButton(name: "keyboard", size: 20) {
-                    focus = prevFocusedId
-                }
-            }
+            Spacer()
+            keyboardButton()
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 15)
@@ -59,6 +55,19 @@ struct EditingAudioPlayer: View {
             player.stop()
             if let updateRecordingTimeTimer {
                 updateRecordingTimeTimer.invalidate()
+            }
+        }
+    }
+
+    func keyboardButton() -> some View {
+        if focusedTranscriptionLineId != nil {
+            return PlayerButton(name: "keyboard.chevron.compact.down", size: ICON_SIZE) {
+                prevFocusedTranscriptionLineId = focusedTranscriptionLineId
+                focusedTranscriptionLineId = nil
+            }
+        } else {
+            return PlayerButton(name: "keyboard", size: ICON_SIZE) {
+                focusedTranscriptionLineId = prevFocusedTranscriptionLineId
             }
         }
     }

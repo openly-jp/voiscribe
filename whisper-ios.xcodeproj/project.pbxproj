@@ -32,6 +32,7 @@
 		574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 574609C52961A08300D9DE06 /* Model.xcdatamodeld */; };
 		5766628C296047B100C27512 /* RecognitionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5766628B296047B100C27512 /* RecognitionPane.swift */; };
 		578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F4298676D600081CF8 /* EditingAudioPlayer.swift */; };
+		578352F829890CF400081CF8 /* ToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F729890CF400081CF8 /* ToolBar.swift */; };
 		57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B26A21296317A3007A7B9B /* StopButtonPane.swift */; };
 		57B26A262963FFC7007A7B9B /* ConfirmPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B26A252963FFC7007A7B9B /* ConfirmPane.swift */; };
 		57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 57B26A2829649A7F007A7B9B /* DequeModule */; };
@@ -110,6 +111,7 @@
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
 		578352F4298676D600081CF8 /* EditingAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingAudioPlayer.swift; sourceTree = "<group>"; };
+		578352F729890CF400081CF8 /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
 		57B26A21296317A3007A7B9B /* StopButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButtonPane.swift; sourceTree = "<group>"; };
 		57B26A252963FFC7007A7B9B /* ConfirmPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPane.swift; sourceTree = "<group>"; };
 		57B26A2A2965743F007A7B9B /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -226,14 +228,26 @@
 			path = RecognizedSpeech;
 			sourceTree = "<group>";
 		};
+		578352F629890C8700081CF8 /* RecordDetail */ = {
+			isa = PBXGroup;
+			children = (
+				57D4CB182981BF2D00D0D598 /* RecognitionPlayer.swift */,
+				578352F729890CF400081CF8 /* ToolBar.swift */,
+				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
+				57D4CB1A2981C39900D0D598 /* TranscriptionLines.swift */,
+				578352F4298676D600081CF8 /* EditingAudioPlayer.swift */,
+				572D375F296AA30E0096DEEE /* ShareButton.swift */,
+				57B26A2A2965743F007A7B9B /* AudioPlayer.swift */,
+			);
+			path = RecordDetail;
+			sourceTree = "<group>";
+		};
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
-				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
-				57D4CB182981BF2D00D0D598 /* RecognitionPlayer.swift */,
-				57D4CB1A2981C39900D0D598 /* TranscriptionLines.swift */,
+				578352F629890C8700081CF8 /* RecordDetail */,
 				5A8F55272948CDB700E87D25 /* RecordList.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
@@ -242,9 +256,6 @@
 				5709E5042960BDFC00352CF3 /* Waveform.swift */,
 				57B26A21296317A3007A7B9B /* StopButtonPane.swift */,
 				57B26A252963FFC7007A7B9B /* ConfirmPane.swift */,
-				57B26A2A2965743F007A7B9B /* AudioPlayer.swift */,
-				578352F4298676D600081CF8 /* EditingAudioPlayer.swift */,
-				572D375F296AA30E0096DEEE /* ShareButton.swift */,
 				57CF69D32967019B00DF0E3F /* LazyView.swift */,
 				57CF69D52968897800DF0E3F /* Constant.swift */,
 			);
@@ -546,6 +557,7 @@
 				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
 				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
+				578352F829890CF400081CF8 /* ToolBar.swift in Sources */,
 				387B6FCE0F7C83F953692C3A /* README.md in Sources */,
 				13D1E4A0295CE4370070090B /* WhisperRecognizer.swift in Sources */,
 			);
