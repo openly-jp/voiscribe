@@ -38,6 +38,8 @@ struct RecognitionPane: View {
     @State var title = ""
 
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
+    @AppStorage(PromptingActiveKey) var isPromptingActive = true
+    @AppStorage(RemainingAudioConcatActiveKey) var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
@@ -132,6 +134,8 @@ struct RecognitionPane: View {
             audioFileURL: url,
             language: language,
             recognizingSpeech: recognizingSpeech,
+            isPromptingActive: isPromptingActive,
+            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
             callback: streamingRecognitionPostProcess,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
@@ -173,7 +177,15 @@ struct RecognitionPane: View {
             return
         }
         // recognize past 10 ~ 30 sec speech
-        recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech, callback: { _ in }, feasibilityCheck: streamingRecognitionFeasibilityCheck)
+        recognizer.streamingRecognize(
+            audioFileURL: url,
+            language: language,
+            recognizingSpeech: recognizingSpeech,
+            isPromptingActive: isPromptingActive,
+            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
+            callback: { _ in },
+            feasibilityCheck: streamingRecognitionFeasibilityCheck
+        )
     }
 
     /// check whether ASR has to be executed or not
