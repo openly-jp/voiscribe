@@ -10,15 +10,11 @@ let modelURLs: [String: String] = [
 ]
 
 enum WhisperModelRepository {
-    /**
-     Download a model, if it does exist locally, from R2 and save it to local storage.
-
-     - Parameter size: The size of the model (tiny, base, small).
-     - Parameter language: The language of the model (ja, en, multi).
-     - Parameter needsSubscription: Whether the model needs a subscription to use.
-
-     - Returns: local path of the model
-     */
+    /// Download a model, if it does exist locally, from R2 and save it to local storage.
+    /// - Parameter size: The size of the model (tiny, base, small).
+    /// - Parameter language: The language of the model (ja, en, multi).
+    /// - Parameter needsSubscription: Whether the model needs a subscription to use.
+    /// - Returns: local path of the model
     static func fetchWhisperModel(
         size: Size,
         language: Lang,
@@ -60,11 +56,8 @@ enum WhisperModelRepository {
         }
     }
 
-    /**
-     Delete a model from local storage.
-
-     - Parameter model: The model to delete.
-     */
+    /// Delete a model from local storage.
+    /// - Parameter model: The model to delete.
     static func deleteWhisperModel(model: WhisperModel) {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent(model.localPath!.path)
