@@ -6,6 +6,7 @@ class WhisperRecognizer: Recognizer {
     private var whisperContext: OpaquePointer?
     @Published var whisperModel: WhisperModel?
     let serialDispatchQueue = DispatchQueue(label: "recognize")
+    let samplingRate: Float = 16000
     var is_ready: Bool {
         whisperContext != nil
     }
@@ -122,15 +123,19 @@ class WhisperRecognizer: Recognizer {
         audioFileURL: URL,
         language: Language,
         recognizingSpeech: RecognizedSpeech,
+        isPromptingActive: Bool,
+        isRemainingAudioConcatActive: Bool,
         callback: @escaping (RecognizedSpeech) -> Void,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
+            Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
+            Logger.debug("Remaining Audio Concat: \(isRemainingAudioConcatActive ? "active" : "inactive")")
             guard let whisperContext = self.whisperContext else {
                 Logger.error("model load error")
                 return
             }
-            guard let audioData = try? self.load_audio(url: audioFileURL) else {
+            guard var audioData = try? self.load_audio(url: audioFileURL) else {
                 Logger.error("audio load error")
                 return
             }
@@ -155,8 +160,12 @@ class WhisperRecognizer: Recognizer {
                     params.offset_ms = 0
                     params.no_context = true
                     params.single_segment = false
+                    params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
+                    params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
                     whisper_reset_timings(whisperContext)
+                    // append remaining previous audioData to audioData
+                    audioData = recognizingSpeech.remainingAudioData + audioData
                     audioData.withUnsafeBufferPointer { data in
                         if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
                         } else {
@@ -168,11 +177,13 @@ class WhisperRecognizer: Recognizer {
                 let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
                 let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil ? recognizingSpeech
                     .transcriptionLines.last!.ordering + 1 : 0
-                let n_segments = whisper_full_n_segments(whisperContext)
-                for i in 0 ..< n_segments {
+                let nSegments = whisper_full_n_segments(whisperContext)
+                var lastEndMSec: Int64 = 0
+                for i in 0 ..< nSegments {
                     let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
                     let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10 + baseStartMSec
                     let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10 + baseStartMSec
+                    lastEndMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
                     let transcriptionLine = TranscriptionLine(
                         startMSec: startMSec,
                         endMSec: endMSec,
@@ -181,6 +192,30 @@ class WhisperRecognizer: Recognizer {
                     )
                     recognizingSpeech.transcriptionLines.append(transcriptionLine)
                 }
+                // update promptTokens
+                if isPromptingActive {
+                    recognizingSpeech.promptTokens.removeAll()
+                    for i in 0 ..< nSegments {
+                        let tokenCount = whisper_full_n_tokens(whisperContext, i)
+                        for j in 0 ..< tokenCount {
+                            let tokenId = whisper_full_get_token_id(whisperContext, i, j)
+                            recognizingSpeech.promptTokens.append(tokenId)
+                        }
+                    }
+                }
+                // update remaining audioData
+                if isRemainingAudioConcatActive {
+                    let originalAudioDataCount: Int = audioData.count
+                    let usedAudioDataCount = Int(Float(lastEndMSec) / Float(1000) * self.samplingRate)
+                    let remainingAudioDataCount: Int = originalAudioDataCount - usedAudioDataCount
+                    if remainingAudioDataCount > 0 {
+                        recognizingSpeech
+                            .remainingAudioData = Array(audioData[usedAudioDataCount ..< originalAudioDataCount])
+                    } else {
+                        recognizingSpeech.remainingAudioData = []
+                    }
+                }
+
                 recognizingSpeech.tmpAudioDataList.append(audioData)
                 callback(recognizingSpeech)
             }

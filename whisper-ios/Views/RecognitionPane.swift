@@ -38,6 +38,8 @@ struct RecognitionPane: View {
     @State var title = ""
 
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
+    @AppStorage(PromptingActiveKey) var isPromptingActive = true
+    @AppStorage(RemainingAudioConcatActiveKey) var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
@@ -138,6 +140,8 @@ struct RecognitionPane: View {
             audioFileURL: url,
             language: language,
             recognizingSpeech: recognizingSpeech,
+            isPromptingActive: isPromptingActive,
+            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
             callback: streamingRecognitionPostProcess,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
@@ -183,6 +187,8 @@ struct RecognitionPane: View {
             audioFileURL: url,
             language: language,
             recognizingSpeech: recognizingSpeech,
+            isPromptingActive: isPromptingActive,
+            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
             callback: { _ in },
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
