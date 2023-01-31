@@ -29,7 +29,7 @@ class WhisperModel: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    init(size: Size, language: Lang, needsSubscription: Bool = false) {
+    init(size: Size, language: Lang, needsSubscription: Bool = false, callback: @escaping (URL) throws -> Void) {
         id = UUID()
         self.size = size
         self.language = language
@@ -38,14 +38,16 @@ class WhisperModel: Identifiable {
         // NOTE: This is a UNIX Time
         createdAt = Date()
         updatedAt = Date()
-        WhisperModelRepository.fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription) { result in
-            switch result {
-            case let .success(modelURL):
-                self.localPath = modelURL
-            case let .failure(error):
-                print("Error: \(error.localizedDescription)")
+        WhisperModelRepository
+            .fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription) { result in
+                switch result {
+                case let .success(modelURL):
+                    self.localPath = modelURL
+                    DispatchQueue.main.async { try? callback(modelURL) }
+                case let .failure(error):
+                    print("Error: \(error.localizedDescription)")
+                }
             }
-        }
     }
 
     init(

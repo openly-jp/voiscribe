@@ -69,14 +69,20 @@ struct RecognitionPane: View {
 
         language = getUserLanguage()
         tmpAudioFileNumber = 0
-        recognizingSpeech = RecognizedSpeech(audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber), language: language)
+        recognizingSpeech = RecognizedSpeech(
+            audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber),
+            language: language
+        )
         recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
 
         elapsedTime = 0
         idAmps = []
         title = ""
 
-        audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: tmpAudioFileNumber), settings: recordSettings)
+        audioRecorder = try! AVAudioRecorder(
+            url: getTmpURLByNumber(number: tmpAudioFileNumber),
+            settings: recordSettings
+        )
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
 
@@ -173,7 +179,13 @@ struct RecognitionPane: View {
             return
         }
         // recognize past 10 ~ 30 sec speech
-        recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech, callback: { _ in }, feasibilityCheck: streamingRecognitionFeasibilityCheck)
+        recognizer.streamingRecognize(
+            audioFileURL: url,
+            language: language,
+            recognizingSpeech: recognizingSpeech,
+            callback: { _ in },
+            feasibilityCheck: streamingRecognitionFeasibilityCheck
+        )
     }
 
     /// check whether ASR has to be executed or not
@@ -190,11 +202,17 @@ struct RecognitionPane: View {
         for tmpAudioData in tmpAudioDataList {
             audioData = audioData + tmpAudioData
         }
-        guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) else {
+        guard let format = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: 16000,
+            channels: 1,
+            interleaved: false
+        ) else {
             Logger.error("format load error")
             return
         }
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count)) else {
+        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
+        else {
             Logger.error("audio load error")
             return
         }
@@ -307,7 +325,10 @@ struct RecognitionPane: View {
                         ScrollViewReader { scrollReader in
                             ScrollView {
                                 LazyVStack(spacing: 0) {
-                                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
+                                    ForEach(
+                                        Array(recognizingSpeech!.transcriptionLines.enumerated()),
+                                        id: \.self.offset
+                                    ) {
                                         idx, onGoingTranscriptionLine in
                                         HStack(alignment: .center) {
                                             Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
@@ -326,7 +347,13 @@ struct RecognitionPane: View {
                                     }
                                 }
                             }
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                            .frame(
+                                minWidth: 0,
+                                maxWidth: .infinity,
+                                minHeight: 0,
+                                maxHeight: .infinity,
+                                alignment: .topLeading
+                            )
                             .padding()
                             .onAppear {
                                 // TODO: 毎秒スクロールを試行するのは負荷が大きいため、認識ごとにスクロールするようにしたい
@@ -335,7 +362,10 @@ struct RecognitionPane: View {
                                     repeats: true
                                 ) { _ in
                                     withAnimation {
-                                        scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
+                                        scrollReader.scrollTo(
+                                            recognizingSpeech!.transcriptionLines.count - 1,
+                                            anchor: .bottom
+                                        )
                                     }
                                 }
                             }
@@ -426,7 +456,8 @@ struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
+            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja",
+                                                                   csvFileName: "sample_ja")!]),
             isActives: .constant([])
         )
     }

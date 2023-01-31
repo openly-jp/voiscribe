@@ -99,7 +99,10 @@ struct RecordList: View {
 
 class RecordList_Previews: PreviewProvider {
     static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
         Group {
             RecordList(

@@ -214,7 +214,10 @@ struct RecognizingView: View {
 
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
 
         RecordDetails(recognizedSpeech: recognizedSpeech, isRecognizing: false)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))

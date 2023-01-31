@@ -12,7 +12,7 @@ class WhisperRecognizer: Recognizer {
 
     init(whisperModel: WhisperModel) throws {
         do {
-            try load_model(whisperModel: whisperModel)
+            try load_model_path(whisperModelPath: whisperModel.localPath!)
         } catch {
             throw NSError(domain: "WhisperRecognizer failed to initiate", code: -1)
         }
@@ -24,20 +24,23 @@ class WhisperRecognizer: Recognizer {
         }
     }
 
-    func load_model(whisperModel: WhisperModel) throws {
+    func load_model_path(whisperModelPath: URL) throws {
         whisper_free(whisperContext)
-        whisperContext = whisper_init(whisperModel.localPath?.path)
+        whisperContext = whisper_init(whisperModelPath.path)
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        self.whisperModel = whisperModel
+        whisperModel = whisperModel
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
         guard let audio = try? AVAudioFile(forReading: url, commonFormat: .pcmFormatFloat32, interleaved: false) else {
             throw NSError(domain: "audio load error", code: -1)
         }
-        guard let buffer = AVAudioPCMBuffer(pcmFormat: audio.processingFormat, frameCapacity: AVAudioFrameCount(audio.length)) else {
+        guard let buffer = AVAudioPCMBuffer(
+            pcmFormat: audio.processingFormat,
+            frameCapacity: AVAudioFrameCount(audio.length)
+        ) else {
             throw NSError(domain: "audio load error", code: -1)
         }
         do {
@@ -100,7 +103,12 @@ class WhisperRecognizer: Recognizer {
                 let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
                 let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
                 let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
-                let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: i)
+                let transcriptionLine = TranscriptionLine(
+                    startMSec: startMSec,
+                    endMSec: endMSec,
+                    text: text,
+                    ordering: i
+                )
                 recognizedSpeech.transcriptionLines.append(transcriptionLine)
             }
 
@@ -158,13 +166,19 @@ class WhisperRecognizer: Recognizer {
                 }
 
                 let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
-                let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil ? recognizingSpeech.transcriptionLines.last!.ordering + 1 : 0
+                let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil ? recognizingSpeech
+                    .transcriptionLines.last!.ordering + 1 : 0
                 let n_segments = whisper_full_n_segments(whisperContext)
                 for i in 0 ..< n_segments {
                     let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
                     let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10 + baseStartMSec
                     let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10 + baseStartMSec
-                    let transcriptionLine = TranscriptionLine(startMSec: startMSec, endMSec: endMSec, text: text, ordering: baseOrdering + i)
+                    let transcriptionLine = TranscriptionLine(
+                        startMSec: startMSec,
+                        endMSec: endMSec,
+                        text: text,
+                        ordering: baseOrdering + i
+                    )
                     recognizingSpeech.transcriptionLines.append(transcriptionLine)
                 }
                 recognizingSpeech.tmpAudioDataList.append(audioData)

@@ -19,11 +19,17 @@ enum WhisperModelRepository {
 
      - Returns: local path of the model
      */
-    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, completion: @escaping (Result<URL, Error>) -> Void) {
+    static func fetchWhisperModel(
+        size: Size,
+        language: Lang,
+        needsSubscription _: Bool,
+        completion: @escaping (Result<URL, Error>) -> Void
+    ) {
         // if model is in bundled resource or in local storage, return it
         if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
             // return the bundled resource path of the model
-            let modelUrl = URL(string: Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
+            let modelUrl = URL(string: Bundle.main
+                .path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
             completion(.success(modelUrl))
             return
         }
@@ -44,7 +50,8 @@ enum WhisperModelRepository {
                 if success {
                     print("File download was successful")
                     try? FileManager.default.moveItem(at: location!, to: destinationURL)
-                    completion(.success(location!))
+
+                    completion(.success(destinationURL))
                 } else {
                     print("File download failed with error: \(error!.localizedDescription)")
                     completion(.failure(error!))
