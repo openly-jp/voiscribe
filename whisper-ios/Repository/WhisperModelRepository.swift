@@ -12,51 +12,47 @@ let modelURLs: [String: String] = [
 enum WhisperModelRepository {
     /**
      Download a model, if it does exist locally, from R2 and save it to local storage.
-
+     
      - Parameter size: The size of the model (tiny, base, small).
      - Parameter language: The language of the model (ja, en, multi).
      - Parameter needsSubscription: Whether the model needs a subscription to use.
-
+     
      - Returns: local path of the model
      */
-    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, callBack: @escaping (URL) throws -> Void) throws -> URL {
+    static func fetchWhisperModel(size: Size, language: Lang, needsSubscription _: Bool, completion: @escaping (Result<URL, Error>) -> Void) -> Void {
         // if model is in bundled resource or in local storage, return it
         if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
             // return the bundled resource path of the model
             let modelUrl = URL(string: Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
-            do {
-                try callBack(modelUrl)
-            } catch {
-                throw NSError(domain: "callBack failed in fetchWhisperModel when the model is in the bundle", code: -1)
-            }
-            return modelUrl
+            completion(.success(modelUrl))
+            return
         }
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if FileManager.default.fileExists(atPath: destinationURL.path) {
-            do {
-                try callBack(destinationURL)
-            } catch {
-                throw NSError(domain: "callBack failed in fetchWhisperModel when the model is already downloaded", code: -1)
-            }
+            completion(.success(destinationURL))
+            return
         }
         // if model is not in local storage, download it
         if !FileManager.default.fileExists(atPath: destinationURL.path) {
+            let fileDownloader = FileDownloader()
             let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
             let url = URL(string: "https://\(modelURL)")!
-            let task = URLSession.shared.downloadTask(with: url) { location, _, error in
-                guard let location else { return }
-                do {
-                    try FileManager.default.moveItem(at: location, to: destinationURL)
-                    try! callBack(destinationURL) // URLSession.shared.downloadTask does not                             allow errors
-                } catch {
-                    print(error)
+            fileDownloader.downloadFile(withURL: url, progress: { progress in
+                print("Download progress: \(Int(progress * 100))%")
+            }) { location, success, error in
+                if success {
+                    print("File download was successful")
+                    try? FileManager.default.moveItem(at: location!, to: destinationURL)
+                    completion(.success(location!))
+                } else {
+                    print("File download failed with error: \(error!.localizedDescription)")
+                    completion(.failure(error!))
                 }
             }
-            task.resume()
         }
-        return destinationURL
     }
+    
 
     /**
      Delete a model from local storage.

@@ -1,5 +1,6 @@
 import SwiftUI
 
+let userDefaultModelPathKey = "use-defalut-model-path-key"
 let userDefaultModelSizeKey = "user-default-model-size"
 let userDefaultModelLanguageKey = "user-default-model-language"
 let userDefaultModelNeedsSubscriptionKey = "user-default-model-needs-subscription"
@@ -19,6 +20,7 @@ struct ModelLoadMenuItemView: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
+    @AppStorage(userDefaultModelPathKey) var defaultModelPath = URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!)!
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize: Size = .init(rawValue: "tiny")!
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
     @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
@@ -55,6 +57,7 @@ struct ModelLoadSubMenuItemView: View {
                       do { isSucceed = try changeModel() }
                       catch { isSucceed = false }
                       if isSucceed {
+                          defaultModelPath = (recognizer.whisperModel?.localPath)!
                           defaultModelSize = modelSize
                           defaultLanguage = language
                           dafaultNeedsSubscription = needsSubscription
@@ -63,19 +66,11 @@ struct ModelLoadSubMenuItemView: View {
         }
     }
 
-    private func loadWhisperModelURL(whisperModelURL: URL) throws {
-        do {
-            try recognizer.load_model(whisperModelURL: whisperModelURL)
-        } catch {
-            throw NSError(domain: "model loading failed in loadWhisperModelURL", code: -1)
-        }
-    }
-
     private func changeModel() throws -> Bool {
         if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
             do {
-                let whisperModel = try WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription, callBack: loadWhisperModelURL)
-                recognizer.whisperModel = whisperModel
+                let whisperModel = WhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription)
+                try recognizer.load_model(whisperModel: whisperModel)
             } catch {
                 print("changeModel failed")
                 return false

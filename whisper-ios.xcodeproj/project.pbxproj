@@ -48,6 +48,7 @@
 		5A0DE9C8298695100071EE82 /* WhisperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C7298695100071EE82 /* WhisperModel.swift */; };
 		5A0DE9CA298695910071EE82 /* WhisperModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */; };
 		5A0DE9D02986F2CE0071EE82 /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */; };
+		5A2517972989800C001ED13F /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2517962989800C001ED13F /* FileDownloader.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -124,6 +125,7 @@
 		5A0DE9C7298695100071EE82 /* WhisperModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModel.swift; sourceTree = "<group>"; };
 		5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModelRepository.swift; sourceTree = "<group>"; };
 		5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.multi.bin"; sourceTree = "<group>"; };
+		5A2517962989800C001ED13F /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 		57EAB6E52962028C00BB59BE /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				5A2517962989800C001ED13F /* FileDownloader.swift */,
 				5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */,
 				57EAB6C32961E1E400BB59BE /* CoreDataModels */,
 				57EAB6E62962041000BB59BE /* CoreDataRepository.swift */,
@@ -519,6 +522,7 @@
 				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
 				574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */,
 				139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */,
+				5A2517972989800C001ED13F /* FileDownloader.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
