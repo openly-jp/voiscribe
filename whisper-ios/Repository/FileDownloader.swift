@@ -19,8 +19,10 @@ class FileDownloader {
                 completion(
                     nil,
                     false,
-                    NSError(domain: "FileDownloaderError", code: 1,
-                            userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
+                    NSError(
+                        domain: "FileDownloaderError", code: 1,
+                        userInfo: [NSLocalizedDescriptionKey: "Invalid response"]
+                    )
                 )
                 return
             }

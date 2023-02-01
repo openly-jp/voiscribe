@@ -217,8 +217,10 @@ struct RecognitionPane: View {
             Logger.error("format load error")
             return
         }
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
-        else {
+        guard let pcmBuffer = AVAudioPCMBuffer(
+            pcmFormat: format,
+            frameCapacity: AVAudioFrameCount(audioData.count)
+        ) else {
             Logger.error("audio load error")
             return
         }
@@ -460,10 +462,10 @@ func saveUserLanguage(_ language: Language) {
 
 struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
+        let mock = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja",
-                                                                   csvFileName: "sample_ja")!]),
+            recognizedSpeeches: .constant([mock]),
             isActives: .constant([])
         )
     }

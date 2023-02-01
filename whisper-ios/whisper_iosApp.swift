@@ -14,8 +14,10 @@ struct WhisperTestApp: App {
 struct StartView: View {
     @State var isLoading: Bool = true
     @State var recognizer: WhisperRecognizer?
-    @AppStorage(userDefaultModelPathKey) var defaultModelPath = URL(string: Bundle.main
-        .path(forResource: "ggml-tiny.en", ofType: "bin")!)!
+
+    @AppStorage(userDefaultModelPathKey) var defaultModelPath = URL(
+        string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!
+    )!
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
     @AppStorage(userDefaultModelLanguageKey) var defaultModelLanguage = Lang(rawValue: "en")!
     @AppStorage(userDefaultModelNeedsSubscriptionKey) var defaultModelNeedsSubscription = false

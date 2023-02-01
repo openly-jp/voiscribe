@@ -22,7 +22,11 @@ enum WhisperModelRepository {
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         // if model is in bundled resource or in local storage, return it
-        if Bundle.main.path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin") != nil {
+        let path = Bundle.main.path(
+            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
+            ofType: "bin"
+        )
+        if path != nil {
             // return the bundled resource path of the model
             let modelUrl = URL(string: Bundle.main
                 .path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
