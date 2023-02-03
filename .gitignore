@@ -33,6 +33,7 @@ Carthage/Build/
 xcuserdata/
 *.moved-aside
 !.gitkeep
+.vscode/*
 
 # ASR
 *.bin

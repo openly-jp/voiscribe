@@ -692,7 +692,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = Y9HQ3VG5LF;
+				DEVELOPMENT_TEAM = SD388AQ78A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
