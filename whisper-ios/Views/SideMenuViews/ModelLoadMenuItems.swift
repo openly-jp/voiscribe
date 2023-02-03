@@ -5,6 +5,15 @@ let userDefaultModelSizeKey = "user-default-model-size"
 let userDefaultModelLanguageKey = "user-default-model-language"
 let userDefaultModelNeedsSubscriptionKey = "user-default-model-needs-subscription"
 
+class RecordDownloadedModels: ObservableObject {
+    @AppStorage("is-downloaded-tiny-multi") var isDownloadedTinyMulti = true
+    @AppStorage("is-downloaded-tiny-en") var isDownloadedTinyEn = true
+    @AppStorage("is-downloaded-base-multi") var isDownloadedBaseMulti = false
+    @AppStorage("is-downloaded-base-en") var isDownloadedBaseEn = false
+    @AppStorage("is-downloaded-small-multi") var isDownloadedSmallMulti = false
+    @AppStorage("is-downloaded-small-en") var isDownloadedSmallEn = false
+}
+
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
@@ -25,6 +34,8 @@ struct ModelLoadSubMenuItemView: View {
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize: Size = .init(rawValue: "tiny")!
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
     @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
+    @ObservedObject var recordDownloadedModels = RecordDownloadedModels()
+
     let modelSize: Size
     let language: Lang
     let needsSubscription: Bool
@@ -43,6 +54,61 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
+            if modelSize.rawValue == "tiny" {
+                if language.rawValue == "en" {
+                    if recordDownloadedModels.isDownloadedTinyEn {
+                        Image(systemName: "icloud.and.arrow.down")
+                            .imageScale(.large)
+                    } else {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .imageScale(.large)
+                    }
+                } else {
+                    if recordDownloadedModels.isDownloadedTinyMulti {
+                        Image(systemName: "icloud.and.arrow.down")
+                            .imageScale(.large)
+                    } else {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .imageScale(.large)
+                    }
+                }
+            } else if modelSize.rawValue == "base" {
+                if language.rawValue == "en" {
+                    if recordDownloadedModels.isDownloadedBaseEn {
+                        Image(systemName: "icloud.and.arrow.down")
+                            .imageScale(.large)
+                    } else {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .imageScale(.large)
+                    }
+                } else {
+                    if recordDownloadedModels.isDownloadedBaseMulti {
+                        Image(systemName: "icloud.and.arrow.down")
+                            .imageScale(.large)
+                    } else {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .imageScale(.large)
+                    }
+                }
+            } else {
+                if language.rawValue == "en" {
+                    if recordDownloadedModels.isDownloadedSmallEn {
+                        Image(systemName: "icloud.and.arrow.down")
+                            .imageScale(.large)
+                    } else {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .imageScale(.large)
+                    }
+                } else {
+                    if recordDownloadedModels.isDownloadedSmallMulti {
+                        Image(systemName: "icloud.and.arrow.down")
+                            .imageScale(.large)
+                    } else {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .imageScale(.large)
+                    }
+                }
+            }
         }
         .onTapGesture(perform: {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
