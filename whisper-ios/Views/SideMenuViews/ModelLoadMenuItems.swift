@@ -12,6 +12,29 @@ class RecordDownloadedModels: ObservableObject {
     @AppStorage("is-downloaded-base-en") var isDownloadedBaseEn = false
     @AppStorage("is-downloaded-small-multi") var isDownloadedSmallMulti = false
     @AppStorage("is-downloaded-small-en") var isDownloadedSmallEn = false
+
+    func getRecordDownloadedModels(size: String, lang: String) -> Bool {
+        if size == "tiny" {
+            if lang == "multi" {
+                return isDownloadedTinyMulti
+            } else {
+                return isDownloadedTinyEn
+            }
+        } else if size == "base" {
+            if lang == "multi" {
+                return isDownloadedBaseMulti
+            } else {
+                return isDownloadedBaseEn
+            }
+        } else if size == "small" {
+            if lang == "multi" {
+                return isDownloadedSmallMulti
+            } else {
+                return isDownloadedSmallEn
+            }
+        }
+        return false
+    }
 }
 
 struct ModelLoadMenuItemView: View {
@@ -54,60 +77,12 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if modelSize.rawValue == "tiny" {
-                if language.rawValue == "en" {
-                    if recordDownloadedModels.isDownloadedTinyEn {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    }
-                } else {
-                    if recordDownloadedModels.isDownloadedTinyMulti {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    }
-                }
-            } else if modelSize.rawValue == "base" {
-                if language.rawValue == "en" {
-                    if recordDownloadedModels.isDownloadedBaseEn {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "icloud.and.arrow.down")
-                            .imageScale(.large)
-                    }
-                } else {
-                    if recordDownloadedModels.isDownloadedBaseMulti {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "icloud.and.arrow.down")
-                            .imageScale(.large)
-                    }
-                }
+            if recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue) {
+                Image(systemName: "checkmark.icloud.fill")
+                    .imageScale(.large)
             } else {
-                if language.rawValue == "en" {
-                    if recordDownloadedModels.isDownloadedSmallEn {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "icloud.and.arrow.down")
-                            .imageScale(.large)
-                    }
-                } else {
-                    if recordDownloadedModels.isDownloadedSmallMulti {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "icloud.and.arrow.down")
-                            .imageScale(.large)
-                    }
-                }
+                Image(systemName: "icloud.and.arrow.down")
+                    .imageScale(.large)
             }
         }
         .onTapGesture(perform: {
