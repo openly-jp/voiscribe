@@ -68,7 +68,7 @@ struct RecognitionPlayer: View {
     }
 
     var allTranscription: String {
-        recognizedSpeech.transcriptionLines.reduce("") { $0 + $1.text }
+        recognizedSpeech.transcriptionLines.reduce("") { "\($0)\n\($1.text)" }
     }
 
     /// initialize AVAudioPlayer
