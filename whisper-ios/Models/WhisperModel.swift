@@ -31,7 +31,7 @@ class WhisperModel: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    init(size: Size, language: Lang, needsSubscription: Bool = false, callback: @escaping (URL) throws -> Void) {
+    init(size: Size, language: Lang, needsSubscription: Bool = false) {
         id = UUID()
         self.size = size
         self.language = language
@@ -51,20 +51,11 @@ class WhisperModel: Identifiable {
                 case let .success(modelURL):
                     self.localPath = modelURL
                     self.isDownloaded = true
-                    if size.rawValue == "base" {
-                        if language.rawValue == "en" {
-                            self.recordDownloadedModels.isDownloadedBaseEn = true
-                        } else {
-                            self.recordDownloadedModels.isDownloadedBaseMulti = true
-                        }
-                    } else if size.rawValue == "small" {
-                        if language.rawValue == "en" {
-                            self.recordDownloadedModels.isDownloadedSmallEn = true
-                        } else {
-                            self.recordDownloadedModels.isDownloadedSmallMulti = true
-                        }
-                    }
-                    DispatchQueue.main.async { try? callback(modelURL) }
+                    self.recordDownloadedModels.setRecordDownloadedModels(
+                        size: size.rawValue,
+                        lang: language.rawValue,
+                        isDownloaded: true
+                    )
                 case let .failure(error):
                     self.isDownloaded = false
                     print("Error: \(error.localizedDescription)")

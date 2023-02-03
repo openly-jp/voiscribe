@@ -35,7 +35,6 @@ struct StartView: View {
                             language: defaultModelLanguage, needsSubscription: false
                         )
                         recognizer = try? WhisperRecognizer(whisperModel: whisperModel)
-                        recognizer?.whisperModel = whisperModel
                         isLoading = false
                     }
                 }

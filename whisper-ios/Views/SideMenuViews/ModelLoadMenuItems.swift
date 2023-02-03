@@ -35,6 +35,28 @@ class RecordDownloadedModels: ObservableObject {
         }
         return false
     }
+
+    func setRecordDownloadedModels(size: String, lang: String, isDownloaded: Bool) {
+        if size == "tiny" {
+            if lang == "multi" {
+                isDownloadedTinyMulti = isDownloaded
+            } else {
+                isDownloadedTinyEn = isDownloaded
+            }
+        } else if size == "base" {
+            if lang == "multi" {
+                isDownloadedBaseMulti = isDownloaded
+            } else {
+                isDownloadedBaseEn = isDownloaded
+            }
+        } else if size == "small" {
+            if lang == "multi" {
+                isDownloadedSmallMulti = isDownloaded
+            } else {
+                isDownloadedSmallEn = isDownloaded
+            }
+        }
+    }
 }
 
 struct ModelLoadMenuItemView: View {
@@ -107,7 +129,7 @@ struct ModelLoadSubMenuItemView: View {
                              primaryButton: .cancel(Text("キャンセル")),
                              secondaryButton: .default(Text("変更"), action: {
                                  let isSucceed: Bool
-                                 do { isSucceed = try changeModel() }
+                                 do { isSucceed = try loadModel() }
                                  catch { isSucceed = false }
                                  if isSucceed {
                                      defaultModelPath = (recognizer.whisperModel?.localPath)!
@@ -120,32 +142,35 @@ struct ModelLoadSubMenuItemView: View {
                 return Alert(title: Text("モデルをダウンロードしますか?"),
                              message: Text("通信容量にご注意ください。"),
                              primaryButton: .cancel(Text("キャンセル")),
-                             secondaryButton: .default(Text("ダウンロード")))
+                             secondaryButton: .default(Text("ダウンロード"), action: {
+                                 downloadModel()
+                             }))
             }
         }
     }
 
-    private func changeModel() throws -> Bool {
-        if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
-            do {
-                let whisperModel = try WhisperModel(
-                    size: modelSize,
-                    language: language,
-                    needsSubscription: needsSubscription,
-                    callback: recognizer.load_model_path
-                )
-                recognizer.whisperModel = whisperModel
-            } catch {
-                print("changeModel failed")
-                return false
-            }
-            return true
-        } else {
+    private func loadModel() throws -> Bool {
+        let whisperModel = WhisperModel(
+            size: modelSize,
+            language: language,
+            needsSubscription: needsSubscription
+        )
+        do {
+            try recognizer.load_model(whisperModel: whisperModel)
+        } catch {
+            print("load model failed in ModelLoadMenuItems")
             return false
         }
+        return true
     }
 
-    private func downloadModel() throws {}
+    private func downloadModel() {
+        let whisperModel = WhisperModel(
+            size: modelSize,
+            language: language,
+            needsSubscription: needsSubscription
+        )
+    }
 }
 
 let modeLoadSubMenuItems = [

@@ -13,7 +13,7 @@ class WhisperRecognizer: Recognizer {
 
     init(whisperModel: WhisperModel) throws {
         do {
-            try load_model_path(whisperModelPath: whisperModel.localPath!)
+            try load_model(whisperModel: whisperModel)
         } catch {
             throw NSError(domain: "WhisperRecognizer failed to initiate", code: -1)
         }
@@ -25,13 +25,13 @@ class WhisperRecognizer: Recognizer {
         }
     }
 
-    func load_model_path(whisperModelPath: URL) throws {
+    func load_model(whisperModel: WhisperModel) throws {
         whisper_free(whisperContext)
-        whisperContext = whisper_init(whisperModelPath.path)
+        whisperContext = whisper_init(whisperModel.localPath?.path)
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        whisperModel = whisperModel
+        self.whisperModel = whisperModel
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
