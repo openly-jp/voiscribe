@@ -63,7 +63,9 @@ struct ModelLoadSubMenuItemView: View {
     let language: Lang
     let needsSubscription: Bool
     let modelDisplayName: String
-    @State private var showDialogue = false
+    @State private var showPrompt = false
+    @State private var showDownloadModelPrompt = false
+    @State private var showChangeModelPrompt = false
 
     var body: some View {
         HStack {
@@ -87,24 +89,39 @@ struct ModelLoadSubMenuItemView: View {
         }
         .onTapGesture(perform: {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
-                self.showDialogue = true
+                self.showPrompt = true
+                if !recordDownloadedModels
+                    .getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue)
+                {
+                    self.showDownloadModelPrompt = true
+                } else {
+                    self.showChangeModelPrompt = true
+                }
+                print("showDownloadModelPrompt", showDownloadModelPrompt)
+                print("showChangeModelPrompt", showChangeModelPrompt)
             }
         })
-        .alert(isPresented: $showDialogue) {
-            Alert(title: Text("モデルを変更しますか？"),
-                  message: Text("一部のモデルはダウンロードが行われます"),
-                  primaryButton: .cancel(Text("キャンセル")),
-                  secondaryButton: .default(Text("変更"), action: {
-                      let isSucceed: Bool
-                      do { isSucceed = try changeModel() }
-                      catch { isSucceed = false }
-                      if isSucceed {
-                          defaultModelPath = (recognizer.whisperModel?.localPath)!
-                          defaultModelSize = modelSize
-                          defaultLanguage = language
-                          dafaultNeedsSubscription = needsSubscription
-                      }
-                  }))
+        .alert(isPresented: $showPrompt) {
+            if self.showChangeModelPrompt {
+                return Alert(title: Text("モデルを変更しますか？"),
+                             primaryButton: .cancel(Text("キャンセル")),
+                             secondaryButton: .default(Text("変更"), action: {
+                                 let isSucceed: Bool
+                                 do { isSucceed = try changeModel() }
+                                 catch { isSucceed = false }
+                                 if isSucceed {
+                                     defaultModelPath = (recognizer.whisperModel?.localPath)!
+                                     defaultModelSize = modelSize
+                                     defaultLanguage = language
+                                     dafaultNeedsSubscription = needsSubscription
+                                 }
+                             }))
+            } else {
+                return Alert(title: Text("モデルをダウンロードしますか?"),
+                             message: Text("通信容量にご注意ください。"),
+                             primaryButton: .cancel(Text("キャンセル")),
+                             secondaryButton: .default(Text("ダウンロード")))
+            }
         }
     }
 
@@ -127,6 +144,8 @@ struct ModelLoadSubMenuItemView: View {
             return false
         }
     }
+
+    private func downloadModel() throws {}
 }
 
 let modeLoadSubMenuItems = [
