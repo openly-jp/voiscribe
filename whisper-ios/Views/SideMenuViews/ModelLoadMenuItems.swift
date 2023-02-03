@@ -57,7 +57,7 @@ struct ModelLoadSubMenuItemView: View {
             if modelSize.rawValue == "tiny" {
                 if language.rawValue == "en" {
                     if recordDownloadedModels.isDownloadedTinyEn {
-                        Image(systemName: "icloud.and.arrow.down")
+                        Image(systemName: "checkmark.icloud.fill")
                             .imageScale(.large)
                     } else {
                         Image(systemName: "checkmark.icloud.fill")
@@ -65,7 +65,7 @@ struct ModelLoadSubMenuItemView: View {
                     }
                 } else {
                     if recordDownloadedModels.isDownloadedTinyMulti {
-                        Image(systemName: "icloud.and.arrow.down")
+                        Image(systemName: "checkmark.icloud.fill")
                             .imageScale(.large)
                     } else {
                         Image(systemName: "checkmark.icloud.fill")
@@ -75,36 +75,36 @@ struct ModelLoadSubMenuItemView: View {
             } else if modelSize.rawValue == "base" {
                 if language.rawValue == "en" {
                     if recordDownloadedModels.isDownloadedBaseEn {
-                        Image(systemName: "icloud.and.arrow.down")
+                        Image(systemName: "checkmark.icloud.fill")
                             .imageScale(.large)
                     } else {
-                        Image(systemName: "checkmark.icloud.fill")
+                        Image(systemName: "icloud.and.arrow.down")
                             .imageScale(.large)
                     }
                 } else {
                     if recordDownloadedModels.isDownloadedBaseMulti {
-                        Image(systemName: "icloud.and.arrow.down")
+                        Image(systemName: "checkmark.icloud.fill")
                             .imageScale(.large)
                     } else {
-                        Image(systemName: "checkmark.icloud.fill")
+                        Image(systemName: "icloud.and.arrow.down")
                             .imageScale(.large)
                     }
                 }
             } else {
                 if language.rawValue == "en" {
                     if recordDownloadedModels.isDownloadedSmallEn {
-                        Image(systemName: "icloud.and.arrow.down")
+                        Image(systemName: "checkmark.icloud.fill")
                             .imageScale(.large)
                     } else {
-                        Image(systemName: "checkmark.icloud.fill")
+                        Image(systemName: "icloud.and.arrow.down")
                             .imageScale(.large)
                     }
                 } else {
                     if recordDownloadedModels.isDownloadedSmallMulti {
-                        Image(systemName: "icloud.and.arrow.down")
+                        Image(systemName: "checkmark.icloud.fill")
                             .imageScale(.large)
                     } else {
-                        Image(systemName: "checkmark.icloud.fill")
+                        Image(systemName: "icloud.and.arrow.down")
                             .imageScale(.large)
                     }
                 }
