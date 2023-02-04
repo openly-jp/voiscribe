@@ -33,7 +33,7 @@ struct RecognitionPane: View {
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @State var recognizingSpeech: RecognizedSpeech?
-    @Binding var isRecordDetailActives: [Bool]
+    @Binding var isActives: [Bool]
     @State var language: Language = getUserLanguage()
     @State var title = ""
 
@@ -50,7 +50,7 @@ struct RecognitionPane: View {
     init(
         recognizingSpeechIds: Binding<[UUID]>,
         recognizedSpeeches: Binding<[RecognizedSpeech]>,
-        isRecordDetailActives: Binding<[Bool]>
+        isActives: Binding<[Bool]>
     ) {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
@@ -58,7 +58,7 @@ struct RecognitionPane: View {
 
         _recognizingSpeechIds = recognizingSpeechIds
         _recognizedSpeeches = recognizedSpeeches
-        _isRecordDetailActives = isRecordDetailActives
+        _isActives = isActives
     }
 
     // MARK: - functions about recording
@@ -140,7 +140,7 @@ struct RecognitionPane: View {
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
-        isRecordDetailActives.insert(true, at: 0)
+        isActives.insert(true, at: 0)
     }
 
     func abortRecording() {
@@ -439,7 +439,7 @@ struct RecognitionPane_Previews: PreviewProvider {
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
             recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
-            isRecordDetailActives: .constant([])
+            isActives: .constant([])
         )
     }
 }
