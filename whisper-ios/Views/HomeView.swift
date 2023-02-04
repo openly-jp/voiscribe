@@ -52,20 +52,20 @@ struct MainView: View {
     @State var isRecording: Bool = false
     @State var recognizingSpeechIds: [UUID]
     @State var recognizedSpeeches: [RecognizedSpeech]
-    @State var isActives: [Bool]
+    @State var isRecordDetailActives: [Bool]
 
     init() {
         let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
         recognizingSpeechIds = []
         recognizedSpeeches = initialRecognizedSpeeches
-        isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+        focusedTranscriptionLineId = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
     }
 
     var body: some View {
         RecordList(
             recognizingSpeechIds: $recognizingSpeechIds,
             recognizedSpeeches: $recognizedSpeeches,
-            isActives: $isActives
+            isRecordDetailActives: $isRecordDetailActives
         )
     }
 }
