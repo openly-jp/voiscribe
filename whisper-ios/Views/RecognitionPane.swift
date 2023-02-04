@@ -92,7 +92,7 @@ struct RecognitionPane: View {
         audioRecorder!.record()
         resetTimers()
     }
-    
+
     func resumeBackgoundRecording() {
         isRecording = true
         isPaused = false
@@ -165,17 +165,17 @@ struct RecognitionPane: View {
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
     }
-    
+
     func recordingInterruptionHandler(notification: Notification) {
         guard let info = notification.userInfo,
-            let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
-            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
-                return
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
         }
         if type == .began, isRecording {
             pauseRecording()
-        }
-        else if type == .ended, isRecording, isPaused {
+        } else if type == .ended, isRecording, isPaused {
             resumeBackgoundRecording()
         }
     }
