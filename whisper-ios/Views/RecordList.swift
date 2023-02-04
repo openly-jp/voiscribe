@@ -97,6 +97,15 @@ struct RecordList: View {
             } else {
                 CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
             }
+
+            do {
+                // TODO: fix this (issue #25)
+                let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
+                let url = getURLByName(fileName: fileName)
+                try FileManager.default.removeItem(at: url)
+            } catch {
+                Logger.error("Failed to remove audio file.")
+            }
             recognizedSpeeches.remove(at: i)
             isActives.remove(at: i)
         }
