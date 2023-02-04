@@ -71,7 +71,16 @@ struct TranscriptionLines: View {
             alignment: .topLeading
         )
         .padding(.top)
-        .toolbar { if isEditing { editingToolBar } }
+        .toolbar {
+            if isEditing {
+                EditingToolbar(
+                    isEditing: $isEditing,
+                    hasContentEdited: hasContentEdited,
+                    focusedTranscriptionLineId: _focusedTranscriptionLineId,
+                    updateTranscriptionLines: updateTranscriptionLines
+                )
+            }
+        }
     }
 
     func transcriptionLineRow(
@@ -138,45 +147,7 @@ struct TranscriptionLines: View {
         }.id(idx)
     }
 
-    var editingToolBar: some ToolbarContent {
-        Group {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("キャンセル") {
-                    if isEdited { isOpenCancelAlert = true }
-                    else { isEditing = false; focusedTranscriptionLineId = nil }
-                }.alert(isPresented: $isOpenCancelAlert) {
-                    Alert(
-                        title: Text("変更を破棄しますか？"),
-                        message: Text("変更は完全に失われます。変更を破棄しますか？"),
-                        primaryButton: .cancel(Text("キャンセル")) { isOpenCancelAlert = false },
-                        secondaryButton: .destructive(Text("変更を破棄")) {
-                            isOpenCancelAlert = false
-                            isEditing = false
-                            focusedTranscriptionLineId = nil
-                        }
-                    )
-                }
-            }
-
-            ToolbarItem(placement: .principal) {
-                Text("書き起こし編集")
-                    .foregroundColor(Color(.label))
-                    .font(.title3)
-                    .bold()
-                    .padding()
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("保存") {
-                    updateTranscriptionLines()
-
-                    isEditing = false
-                    focusedTranscriptionLineId = nil
-                }
-            }
-        }
-    }
-
-    var isEdited: Bool {
+    var hasContentEdited: Bool {
         editedTranscriptionTexts != recognizedSpeech.transcriptionLines.map(\.text)
     }
 
