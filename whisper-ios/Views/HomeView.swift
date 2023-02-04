@@ -58,7 +58,7 @@ struct MainView: View {
         let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
         recognizingSpeechIds = []
         recognizedSpeeches = initialRecognizedSpeeches
-        focusedTranscriptionLineId = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+        isRecordDetailActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
     }
 
     var body: some View {
