@@ -90,10 +90,16 @@ struct RecordList: View {
 
     private func deleteRecognizedSpeech(indexSet: IndexSet) {
         for i in indexSet {
-            CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
+            // RecognizedSpeech is inserted to recognizedSpeeches array right after
+            // finishing recording, but saved to coredata after ASR is completed.
+            if recognizingSpeechIds.contains(recognizedSpeeches[i].id) {
+                recognizingSpeechIds.removeAll { id in id == recognizedSpeeches[i].id }
+            } else {
+                CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
+            }
+            recognizedSpeeches.remove(at: i)
+            isActives.remove(at: i)
         }
-        recognizedSpeeches.remove(atOffsets: indexSet)
-        isActives.remove(atOffsets: indexSet)
     }
 }
 
