@@ -3,7 +3,7 @@ import SwiftUI
 struct RecordList: View {
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
-    @Binding var isActives: [Bool]
+    @Binding var isRecordDetailActives: [Bool]
 
     var body: some View {
         VStack {
@@ -17,7 +17,7 @@ struct RecordList: View {
             RecognitionPane(
                 recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
-                isActives: $isActives
+                isRecordDetailActives: $isRecordDetailActives
             )
         }
     }
@@ -46,7 +46,7 @@ struct RecordList: View {
                         recognizedSpeech: recognizedSpeech,
                         isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
                     )),
-                    isActive: $isActives[idx]
+                    isActive: $isRecordDetailActives[idx]
                 ) {
                     HStack {
                         Image(systemName: "mic.square.fill")
@@ -107,7 +107,7 @@ struct RecordList: View {
                 Logger.error("Failed to remove audio file.")
             }
             recognizedSpeeches.remove(at: i)
-            isActives.remove(at: i)
+            isRecordDetailActives.remove(at: i)
         }
     }
 }
@@ -120,7 +120,7 @@ class RecordList_Previews: PreviewProvider {
             RecordList(
                 recognizingSpeechIds: .constant([]),
                 recognizedSpeeches: .constant(recognizedSpeechs),
-                isActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
+                isRecordDetailActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
             )
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iphone")
@@ -128,7 +128,7 @@ class RecordList_Previews: PreviewProvider {
             RecordList(
                 recognizingSpeechIds: .constant([]),
                 recognizedSpeeches: .constant(recognizedSpeechs),
-                isActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
+                isRecordDetailActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
             )
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
             .previewDisplayName("ipad")
@@ -136,7 +136,7 @@ class RecordList_Previews: PreviewProvider {
             RecordList(
                 recognizingSpeechIds: .constant([]),
                 recognizedSpeeches: .constant([]),
-                isActives: .constant([])
+                isRecordDetailActives: .constant([])
             )
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iphone no record")
