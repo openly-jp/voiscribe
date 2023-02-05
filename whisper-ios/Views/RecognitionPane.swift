@@ -211,7 +211,7 @@ struct RecognitionPane: View {
         }
         recognizedSpeech.audioFileURL = newURL
 
-        CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizedSpeech)
+        CoreDataRepository.saveRecognizedSpeech(recognizedSpeech)
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
