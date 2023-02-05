@@ -101,6 +101,7 @@
 		574609C62961A08300D9DE06 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
+		57835301299047B500081CF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		57B26A21296317A3007A7B9B /* StopButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButtonPane.swift; sourceTree = "<group>"; };
 		57B26A252963FFC7007A7B9B /* ConfirmPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPane.swift; sourceTree = "<group>"; };
 		57B26A2A2965743F007A7B9B /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -290,6 +291,7 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				57835301299047B500081CF8 /* Info.plist */,
 				57EAB6E52962028C00BB59BE /* Repository */,
 				13516D9729603679005013C8 /* Mocks */,
 				5766628A29603BBF00C27512 /* Info.plist */,
@@ -695,6 +697,7 @@
 				DEVELOPMENT_TEAM = SD388AQ78A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "whisper-ios/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -726,6 +729,7 @@
 				DEVELOPMENT_TEAM = SD388AQ78A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "whisper-ios/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
