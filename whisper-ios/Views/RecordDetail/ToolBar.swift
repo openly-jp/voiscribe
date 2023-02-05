@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ToolBar: ToolbarContent {
     let recognizedSpeech: RecognizedSpeech
-    @Binding var recognizedSpeeches: [RecognizedSpeech]
+    let deleteRecognizedSpeech: (UUID) -> Void
 
     let allTranscription: String
     @Binding var isEditing: Bool
@@ -43,11 +43,8 @@ struct ToolBar: ToolbarContent {
                     message: Text("データは完全に失われます。本当に削除しますか？"),
                     primaryButton: .cancel(Text("キャンセル")) { isOpenDeleteAlert = false },
                     secondaryButton: .destructive(Text("削除")) {
-                        if let removeIdx = recognizedSpeeches.firstIndex(where: { $0.id == recognizedSpeech.id }) {
-                            recognizedSpeeches.remove(at: removeIdx)
-                            CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeech)
-                            presentationMode.wrappedValue.dismiss()
-                        }
+                        deleteRecognizedSpeech(recognizedSpeech.id)
+                        presentationMode.wrappedValue.dismiss()
                         isOpenDeleteAlert = false
                     }
                 )

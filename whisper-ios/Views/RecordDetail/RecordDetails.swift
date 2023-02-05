@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
-    @Binding var recognizedSpeeches: [RecognizedSpeech]
+    let deleteRecognizedSpeech: (UUID) -> Void
 
     let isRecognizing: Bool
     func getLocaleDateString(date: Date) -> String {
@@ -35,7 +35,7 @@ struct RecordDetails: View {
             } else {
                 RecognitionPlayer(
                     recognizedSpeech: recognizedSpeech,
-                    recognizedSpeeches: $recognizedSpeeches
+                    deleteRecognizedSpeech: deleteRecognizedSpeech
                 )
             }
         }
@@ -109,19 +109,31 @@ class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
         NavigationView {
-            RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: false)
-                .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+            RecordDetails(
+                recognizedSpeech: recognizedSpeech,
+                deleteRecognizedSpeech: { _ in },
+                isRecognizing: false
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
         }
 
         NavigationView {
-            RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: false)
-                .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
-                .previewDisplayName("ipad")
+            RecordDetails(
+                recognizedSpeech: recognizedSpeech,
+                deleteRecognizedSpeech: { _ in },
+                isRecognizing: false
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+            .previewDisplayName("ipad")
         }
 
         NavigationView {
-            RecordDetails(recognizedSpeech: recognizedSpeech, recognizedSpeeches: .constant([]), isRecognizing: true)
-                .previewDisplayName("Record Details (recognizing)")
+            RecordDetails(
+                recognizedSpeech: recognizedSpeech,
+                deleteRecognizedSpeech: { _ in },
+                isRecognizing: true
+            )
+            .previewDisplayName("Record Details (recognizing)")
         }
     }
 }

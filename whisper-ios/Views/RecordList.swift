@@ -44,7 +44,7 @@ struct RecordList: View {
                 NavigationLink(
                     destination: LazyView(RecordDetails(
                         recognizedSpeech: recognizedSpeech,
-                        recognizedSpeeches: $recognizedSpeeches,
+                        deleteRecognizedSpeech: deleteRecognizedSpeech,
                         isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
                     )),
                     isActive: $isRecordDetailActives[idx]
@@ -75,7 +75,7 @@ struct RecordList: View {
                     }
                 }
             }
-            .onDelete(perform: deleteRecognizedSpeech)
+            .onDelete(perform: deleteRecognizedSpeeches)
         }
         .listStyle(PlainListStyle())
     }
@@ -89,26 +89,37 @@ struct RecordList: View {
         return dateFormatter.string(from: date)
     }
 
-    private func deleteRecognizedSpeech(indexSet: IndexSet) {
+    private func deleteRecognizedSpeeches(indexSet: IndexSet) {
         for i in indexSet {
-            // RecognizedSpeech is inserted to recognizedSpeeches array right after
-            // finishing recording, but saved to coredata after ASR is completed.
-            if recognizingSpeechIds.contains(recognizedSpeeches[i].id) {
-                recognizingSpeechIds.removeAll { id in id == recognizedSpeeches[i].id }
-            } else {
-                CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
-            }
+            deleteRecognizedSpeech(at: i)
+        }
+    }
 
-            do {
-                // TODO: fix this (issue #25)
-                let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
-                let url = getURLByName(fileName: fileName)
-                try FileManager.default.removeItem(at: url)
-            } catch {
-                Logger.error("Failed to remove audio file.")
-            }
-            recognizedSpeeches.remove(at: i)
-            isRecordDetailActives.remove(at: i)
+    private func deleteRecognizedSpeech(at i: Int) {
+        // RecognizedSpeech is inserted to recognizedSpeeches array right after
+        // finishing recording, but saved to coredata after ASR is completed.
+        if recognizingSpeechIds.contains(recognizedSpeeches[i].id) {
+            recognizingSpeechIds.removeAll { id in id == recognizedSpeeches[i].id }
+        } else {
+            CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
+        }
+
+        do {
+            // TODO: fix this (issue #25)
+            let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
+            let url = getURLByName(fileName: fileName)
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            Logger.error("Failed to remove audio file.")
+        }
+        recognizedSpeeches.remove(at: i)
+        isRecordDetailActives.remove(at: i)
+    }
+
+    private func deleteRecognizedSpeech(id: UUID) {
+        let at = recognizedSpeeches.firstIndex { rs in rs.id == id }
+        if let at {
+            deleteRecognizedSpeech(at: at)
         }
     }
 }

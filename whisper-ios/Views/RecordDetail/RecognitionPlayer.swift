@@ -3,7 +3,7 @@ import SwiftUI
 
 struct RecognitionPlayer: View {
     var recognizedSpeech: RecognizedSpeech
-    @Binding var recognizedSpeeches: [RecognizedSpeech]
+    let deleteRecognizedSpeech: (UUID) -> Void
 
     // MARK: - state about player
 
@@ -17,10 +17,10 @@ struct RecognitionPlayer: View {
 
     init(
         recognizedSpeech: RecognizedSpeech,
-        recognizedSpeeches: Binding<[RecognizedSpeech]>
+        deleteRecognizedSpeech: @escaping (UUID) -> Void
     ) {
         self.recognizedSpeech = recognizedSpeech
-        _recognizedSpeeches = recognizedSpeeches
+        self.deleteRecognizedSpeech = deleteRecognizedSpeech
 
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
@@ -59,7 +59,7 @@ struct RecognitionPlayer: View {
             if !isEditing {
                 ToolBar(
                     recognizedSpeech: recognizedSpeech,
-                    recognizedSpeeches: $recognizedSpeeches,
+                    deleteRecognizedSpeech: deleteRecognizedSpeech,
                     allTranscription: allTranscription,
                     isEditing: $isEditing
                 )
@@ -96,7 +96,7 @@ struct RecognitionPlayer_Previews: PreviewProvider {
 
         RecognitionPlayer(
             recognizedSpeech: recognizedSpeech,
-            recognizedSpeeches: .constant([])
+            deleteRecognizedSpeech: { _ in }
         )
     }
 }
