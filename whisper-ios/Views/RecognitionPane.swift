@@ -300,7 +300,10 @@ struct RecognitionPane: View {
             stopAction: pauseRecording
         )
         .frame(height: 150)
-        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification), perform: recordingInterruptionHandler)
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: recordingInterruptionHandler
+        )
         .sheet(isPresented: $isPaneOpen) {
             NavigationView {
                 VStack {

@@ -90,7 +90,11 @@ struct AudioPlayer: View {
             _ in
             // order recorder to resume if it is active
             // cuz "Back" button implicitly stop audio player
-            NotificationCenter.default.post(name: AVAudioSession.interruptionNotification, object: nil, userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.ended.rawValue])
+            NotificationCenter.default.post(
+                name: AVAudioSession.interruptionNotification,
+                object: nil,
+                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.ended.rawValue]
+            )
         }
     }
 
@@ -138,13 +142,21 @@ struct AudioPlayer: View {
             }
             player.play()
             // order recorder to pause if it is active
-            NotificationCenter.default.post(name: AVAudioSession.interruptionNotification, object: nil, userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.began.rawValue])
+            NotificationCenter.default.post(
+                name: AVAudioSession.interruptionNotification,
+                object: nil,
+                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.began.rawValue]
+            )
 
         } else {
             updateRecordingTimeTimer?.invalidate()
             player.pause()
             // order recorder to resume if it is active
-            NotificationCenter.default.post(name: AVAudioSession.interruptionNotification, object: nil, userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.ended.rawValue])
+            NotificationCenter.default.post(
+                name: AVAudioSession.interruptionNotification,
+                object: nil,
+                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.ended.rawValue]
+            )
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
