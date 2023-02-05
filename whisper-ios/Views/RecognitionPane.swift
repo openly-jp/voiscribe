@@ -33,11 +33,13 @@ struct RecognitionPane: View {
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @State var recognizingSpeech: RecognizedSpeech?
-    @Binding var isActives: [Bool]
+    @Binding var isRecordDetailActives: [Bool]
     @State var language: Language = getUserLanguage()
     @State var title = ""
 
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
+    @AppStorage(PromptingActiveKey) var isPromptingActive = true
+    @AppStorage(RemainingAudioConcatActiveKey) var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
@@ -48,7 +50,7 @@ struct RecognitionPane: View {
     init(
         recognizingSpeechIds: Binding<[UUID]>,
         recognizedSpeeches: Binding<[RecognizedSpeech]>,
-        isActives: Binding<[Bool]>
+        isRecordDetailActives: Binding<[Bool]>
     ) {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
@@ -56,7 +58,7 @@ struct RecognitionPane: View {
 
         _recognizingSpeechIds = recognizingSpeechIds
         _recognizedSpeeches = recognizedSpeeches
-        _isActives = isActives
+        _isRecordDetailActives = isRecordDetailActives
     }
 
     // MARK: - functions about recording
@@ -132,11 +134,13 @@ struct RecognitionPane: View {
             audioFileURL: url,
             language: language,
             recognizingSpeech: recognizingSpeech,
+            isPromptingActive: isPromptingActive,
+            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
             callback: streamingRecognitionPostProcess,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
-        isActives.insert(true, at: 0)
+        isRecordDetailActives.insert(true, at: 0)
     }
 
     func abortRecording() {
@@ -173,7 +177,15 @@ struct RecognitionPane: View {
             return
         }
         // recognize past 10 ~ 30 sec speech
-        recognizer.streamingRecognize(audioFileURL: url, language: language, recognizingSpeech: recognizingSpeech, callback: { _ in }, feasibilityCheck: streamingRecognitionFeasibilityCheck)
+        recognizer.streamingRecognize(
+            audioFileURL: url,
+            language: language,
+            recognizingSpeech: recognizingSpeech,
+            isPromptingActive: isPromptingActive,
+            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
+            callback: { _ in },
+            feasibilityCheck: streamingRecognitionFeasibilityCheck
+        )
     }
 
     /// check whether ASR has to be executed or not
@@ -262,7 +274,7 @@ struct RecognitionPane: View {
         RecordButtonPane(
             isRecording: $isRecording,
             isPaused: $isPaused,
-            startAction: startRecording,
+            startAction: isPaused ? resumeRecording : startRecording,
             stopAction: pauseRecording
         )
         .frame(height: 150)
@@ -427,7 +439,7 @@ struct RecognitionPane_Previews: PreviewProvider {
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
             recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
-            isActives: .constant([])
+            isRecordDetailActives: .constant([])
         )
     }
 }
