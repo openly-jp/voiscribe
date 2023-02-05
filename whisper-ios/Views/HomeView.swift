@@ -1,3 +1,4 @@
+import AVFoundation
 import SwiftUI
 
 struct HomeView: View {
@@ -59,6 +60,14 @@ struct MainView: View {
         recognizingSpeechIds = []
         recognizedSpeeches = initialRecognizedSpeeches
         isRecordDetailActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+
+        let session = AVAudioSession.sharedInstance()
+        try! session.setCategory(
+            .playAndRecord,
+            mode: .default,
+            options: [.mixWithOthers, .defaultToSpeaker]
+        )
+        try! session.setActive(true)
     }
 
     var body: some View {

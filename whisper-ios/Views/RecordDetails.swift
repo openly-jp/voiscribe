@@ -23,18 +23,6 @@ struct RecordDetails: View {
     /// this is initialized in .onAppear method
     @State var updateScrollTimer: Timer?
 
-    init(
-        recognizedSpeech: RecognizedSpeech,
-        isRecognizing: Bool
-    ) {
-        self.recognizedSpeech = recognizedSpeech
-        self.isRecognizing = isRecognizing
-
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
-        try! session.setActive(true)
-    }
-
     var body: some View {
         VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
