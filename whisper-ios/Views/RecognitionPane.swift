@@ -290,6 +290,7 @@ struct RecognitionPane: View {
                         } else {
                             Circle()
                                 .fill(.red)
+                                .blinkEffect()
                                 .frame(width: 10)
                         }
                         Text(formatTime(Double(elapsedTime)))
