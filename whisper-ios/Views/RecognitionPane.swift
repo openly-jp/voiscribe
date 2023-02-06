@@ -93,7 +93,6 @@ struct RecognitionPane: View {
         resetTimers()
     }
 
-
     func pauseRecording() {
         isPaused = true
         audioRecorder!.pause()
