@@ -53,7 +53,7 @@
 		5A8F55202948CD1F00E87D25 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F551F2948CD1F00E87D25 /* Data.swift */; };
 		5A8F55222948CD3900E87D25 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55212948CD3900E87D25 /* Record.swift */; };
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
-		5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* RecordList.swift */; };
+		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
 		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
 /* End PBXBuildFile section */
 
@@ -127,7 +127,7 @@
 		5A8F551F2948CD1F00E87D25 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
-		5A8F55272948CDB700E87D25 /* RecordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordList.swift; sourceTree = "<group>"; };
+		5A8F55272948CDB700E87D25 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,7 +229,7 @@
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
 				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
-				5A8F55272948CDB700E87D25 /* RecordList.swift */,
+				5A8F55272948CDB700E87D25 /* MainView.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
 				13516D9C2961A900005013C8 /* SideMenu.swift */,
@@ -524,7 +524,7 @@
 				572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
-				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
+				5A8F55282948CDB700E87D25 /* MainView.swift in Sources */,
 				1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
 				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,

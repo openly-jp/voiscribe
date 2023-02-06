@@ -48,28 +48,6 @@ struct HomeView: View {
     }
 }
 
-struct MainView: View {
-    @State var isRecording: Bool = false
-    @State var recognizingSpeechIds: [UUID]
-    @State var recognizedSpeeches: [RecognizedSpeech]
-    @State var isActives: [Bool]
-
-    init() {
-        let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
-        recognizingSpeechIds = []
-        recognizedSpeeches = initialRecognizedSpeeches
-        isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
-    }
-
-    var body: some View {
-        RecordList(
-            recognizingSpeechIds: $recognizingSpeechIds,
-            recognizedSpeeches: $recognizedSpeeches,
-            isActives: $isActives
-        )
-    }
-}
-
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()

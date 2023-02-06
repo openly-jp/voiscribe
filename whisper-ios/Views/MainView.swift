@@ -1,9 +1,16 @@
 import SwiftUI
 
-struct RecordList: View {
-    @Binding var recognizingSpeechIds: [UUID]
-    @Binding var recognizedSpeeches: [RecognizedSpeech]
-    @Binding var isActives: [Bool]
+struct MainView: View {
+    @State var recognizingSpeechIds: [UUID]
+    @State var recognizedSpeeches: [RecognizedSpeech]
+    @State var isActives: [Bool]
+
+    init() {
+        let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
+        recognizingSpeechIds = []
+        recognizedSpeeches = initialRecognizedSpeeches
+        isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+    }
 
     var body: some View {
         VStack {
@@ -97,32 +104,20 @@ struct RecordList: View {
     }
 }
 
-class RecordList_Previews: PreviewProvider {
+class MainView_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
         Group {
-            RecordList(
-                recognizingSpeechIds: .constant([]),
-                recognizedSpeeches: .constant(recognizedSpeechs),
-                isActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
-            )
+            MainView()
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iphone")
 
-            RecordList(
-                recognizingSpeechIds: .constant([]),
-                recognizedSpeeches: .constant(recognizedSpeechs),
-                isActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
-            )
+            MainView()
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
             .previewDisplayName("ipad")
 
-            RecordList(
-                recognizingSpeechIds: .constant([]),
-                recognizedSpeeches: .constant([]),
-                isActives: .constant([])
-            )
+            MainView()
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iphone no record")
         }
