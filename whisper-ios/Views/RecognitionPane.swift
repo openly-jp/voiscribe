@@ -88,7 +88,7 @@ struct RecognitionPane: View {
     func resumeRecording() {
         isRecording = true
         isPaused = false
-        isPaneOpen = true
+
         audioRecorder!.record()
         resetTimers()
     }
@@ -271,68 +271,79 @@ struct RecognitionPane: View {
     }
 
     var body: some View {
-        RecordButtonPane(
+        AudioController(
             isRecording: $isRecording,
             isPaused: $isPaused,
-            startAction: isPaused ? resumeRecording : startRecording,
-            stopAction: pauseRecording
+            isPaneOpen: $isPaneOpen,
+            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
+            stopAction: pauseRecording,
+            elapsedTime: elapsedTime,
+            idAmps: $idAmps
         )
-        .frame(height: 150)
-        .sheet(isPresented: $isPaneOpen) {
-            NavigationView {
-                VStack {
-                    HStack { closeButton; Spacer() }
 
-                    HStack(spacing: 10) {
-                        if isPaused {
-                            Image(systemName: "pause.fill")
-                                .foregroundColor(.gray)
+        // The Views used inside AudioController changes when recording starts,
+        // so if a sheet is defined for AudioController,
+        // the animation of the sheet rising on top of the view is lost.
+        // To prevent this, provide an unchanged view with height 0 at the start of recording
+        // and define the sheet for it, so that the animation is performed correctly.
+        Rectangle()
+            .frame(height: 0)
+            .hidden()
+            .sheet(isPresented: $isPaneOpen) {
+                NavigationView {
+                    VStack {
+                        HStack { closeButton; Spacer() }
+
+                        HStack(spacing: 10) {
+                            if isPaused {
+                                Image(systemName: "pause.fill")
+                                    .foregroundColor(.gray)
+                            } else {
+                                Circle()
+                                    .fill(.red)
+                                    .blinkEffect()
+                                    .frame(width: 10)
+                            }
+                            Text(formatTime(Double(elapsedTime)))
+                        }
+
+                        Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: true)
+                            .frame(height: 250)
+
+                        if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
+                            Group {
+                                Divider()
+                                transcriptionLinesView
+                            }
                         } else {
-                            Circle()
-                                .fill(.red)
-                                .blinkEffect()
-                                .frame(width: 10)
+                            Spacer()
                         }
-                        Text(formatTime(Double(elapsedTime)))
-                    }
-
-                    Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: true)
-                        .frame(height: 250)
-
-                    if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
-                        Group {
-                            Divider()
-                            transcriptionLinesView
+                        NavigationLink(
+                            destination: ConfirmPane(
+                                finishRecording: finishRecording,
+                                abortRecording: abortRecording,
+                                language: $language,
+                                title: $title
+                            ),
+                            isActive: $isConfirmOpen
+                        ) {}.hidden()
+                        HStack(spacing: 50) {
+                            StopButtonPane {
+                                pauseRecording()
+                                language = getUserLanguage()
+                                isConfirmOpen = true
+                            }
+                            RecordButtonPane(
+                                isRecording: $isRecording,
+                                isPaused: $isPaused,
+                                startAction: resumeRecording,
+                                stopAction: pauseRecording
+                            )
                         }
-                    } else {
-                        Spacer()
+                        .padding(.bottom, 30)
                     }
-                    NavigationLink(
-                        destination: ConfirmPane(
-                            finishRecording: finishRecording,
-                            abortRecording: abortRecording,
-                            language: $language,
-                            title: $title
-                        ),
-                        isActive: $isConfirmOpen
-                    ) {}.hidden()
-                    HStack(spacing: 50) {
-                        StopButtonPane {
-                            pauseRecording()
-                            language = getUserLanguage()
-                            isConfirmOpen = true
-                        }
-                        RecordButtonPane(
-                            isRecording: $isRecording,
-                            isPaused: $isPaused,
-                            startAction: resumeRecording,
-                            stopAction: pauseRecording
-                        )
-                    }
-                    .padding(.bottom, 30)
                 }
             }
-        }
     }
 
     var closeButton: some View {
