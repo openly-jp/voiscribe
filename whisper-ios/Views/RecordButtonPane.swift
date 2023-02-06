@@ -66,7 +66,7 @@ struct RecordButton_Previews: PreviewProvider {
             startAction: {},
             stopAction: {}
         )
-        
+
         RecordButtonPane(
             isRecording: .constant(false),
             isPaused: .constant(false),

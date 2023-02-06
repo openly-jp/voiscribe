@@ -138,16 +138,16 @@ class MainView_Previews: PreviewProvider {
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
         Group {
             MainView()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
-            .previewDisplayName("iphone")
+                .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+                .previewDisplayName("iphone")
 
             MainView()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
-            .previewDisplayName("ipad")
+                .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+                .previewDisplayName("ipad")
 
             MainView()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
-            .previewDisplayName("iphone no record")
+                .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+                .previewDisplayName("iphone no record")
         }
     }
 }

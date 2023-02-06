@@ -7,22 +7,25 @@ struct BlinkEffect: ViewModifier {
     let interval: Double
 
     init(opacity: ClosedRange<Double>, interval: Double) {
-        self.opacityRange = opacity
+        opacityRange = opacity
         self.interval = interval
     }
 
     func body(content: Content) -> some View {
         content
-            .opacity(self.isOn ? self.opacityRange.lowerBound : self.opacityRange.upperBound)
-            .animation(Animation.linear(duration: self.interval).repeatForever(), value: isOn)
+            .opacity(isOn ? opacityRange.lowerBound : opacityRange.upperBound)
+            .animation(Animation.linear(duration: interval).repeatForever(), value: isOn)
             .onAppear(perform: {
-                self.isOn = true
+                isOn = true
             })
     }
 }
 
 extension View {
-    func blinkEffect(opacity: ClosedRange<Double> = 0.1...1, interval: Double = 0.6) -> some View {
-        self.modifier(BlinkEffect(opacity: opacity, interval: interval))
+    func blinkEffect(
+        opacity: ClosedRange<Double> = 0.1 ... 1,
+        interval: Double = 0.6
+    ) -> some View {
+        modifier(BlinkEffect(opacity: opacity, interval: interval))
     }
 }

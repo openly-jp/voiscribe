@@ -46,7 +46,7 @@ struct Waveform: View {
                         .foregroundColor(isPaused ? Color(.label) : .red)
                 }
             }
-            .onChange(of: idAmps) { newIdAmps in
+            .onChange(of: idAmps) { _ in
                 if removeIdAmps { removeUndisplayedAmp(geometry) }
             }
         }
