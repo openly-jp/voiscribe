@@ -281,24 +281,8 @@ struct RecognitionPane: View {
         .sheet(isPresented: $isPaneOpen) {
             NavigationView {
                 VStack {
-                    HStack {
-                        Button(action: { isCancelRecognitionAlertOpen = true }) {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(35)
-                        .alert(isPresented: $isCancelRecognitionAlertOpen) {
-                            Alert(
-                                title: Text("録音を終了しますか？"),
-                                message: Text("録音された音声は破棄されます。本当に終了しますか？"),
-                                primaryButton: .destructive(Text("終了"), action: abortRecording),
-                                secondaryButton: .cancel()
-                            )
-                        }
-                        Spacer()
-                    }
+                    HStack { closeButton; Spacer() }
+
                     HStack(spacing: 10) {
                         if isPaused {
                             Image(systemName: "pause.fill")
@@ -378,6 +362,24 @@ struct RecognitionPane: View {
                     .padding(.bottom, 30)
                 }
             }
+        }
+    }
+
+    var closeButton: some View {
+        Button(action: { isCancelRecognitionAlertOpen = true }) {
+            Image(systemName: "xmark")
+                .resizable()
+                .frame(width: 15, height: 15)
+                .foregroundColor(.gray)
+        }
+        .padding(35)
+        .alert(isPresented: $isCancelRecognitionAlertOpen) {
+            Alert(
+                title: Text("録音を終了しますか？"),
+                message: Text("録音された音声は破棄されます。本当に終了しますか？"),
+                primaryButton: .destructive(Text("終了"), action: abortRecording),
+                secondaryButton: .cancel()
+            )
         }
     }
 }
