@@ -299,43 +299,12 @@ struct RecognitionPane: View {
                         .padding(.top, 60)
                         .padding(.bottom, 20)
                     if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
-                        Divider()
-                        ScrollViewReader { scrollReader in
-                            ScrollView {
-                                LazyVStack(spacing: 0) {
-                                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
-                                        idx, onGoingTranscriptionLine in
-                                        HStack(alignment: .center) {
-                                            Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
-                                                .frame(width: 50, alignment: .center)
-                                                .foregroundColor(Color.blue)
-                                                .padding()
-                                            Spacer()
-                                            Text(onGoingTranscriptionLine.text)
-                                                .foregroundColor(Color(.label))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .multilineTextAlignment(.leading)
-                                        }
-                                        .padding(10)
-                                        .background(getTextColor(lines: &recognizingSpeech!.transcriptionLines, idx))
-                                        Divider()
-                                    }
-                                }
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-                            .padding()
-                            .onAppear {
-                                // TODO: 毎秒スクロールを試行するのは負荷が大きいため、認識ごとにスクロールするようにしたい
-                                recognizedResultsScrollTimer = Timer.scheduledTimer(
-                                    withTimeInterval: 1,
-                                    repeats: true
-                                ) { _ in
-                                    withAnimation {
-                                        scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
-                                    }
-                                }
-                            }
+                        Group {
+                            Divider()
+                            transcriptionLinesView
                         }
+                    } else {
+                        Spacer()
                     }
                     NavigationLink(
                         destination: ConfirmPane(
@@ -380,6 +349,45 @@ struct RecognitionPane: View {
                 primaryButton: .destructive(Text("終了"), action: abortRecording),
                 secondaryButton: .cancel()
             )
+        }
+    }
+
+    var transcriptionLinesView: some View {
+        ScrollViewReader { scrollReader in
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
+                        idx, onGoingTranscriptionLine in
+                        HStack(alignment: .center) {
+                            Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
+                                .frame(width: 50, alignment: .center)
+                                .foregroundColor(Color.blue)
+                                .padding()
+                            Spacer()
+                            Text(onGoingTranscriptionLine.text)
+                                .foregroundColor(Color(.label))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .multilineTextAlignment(.leading)
+                        }
+                        .padding(10)
+                        .background(getTextColor(lines: &recognizingSpeech!.transcriptionLines, idx))
+                        Divider()
+                    }
+                }
+            }
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .padding()
+            .onAppear {
+                // TODO: 毎秒スクロールを試行するのは負荷が大きいため、認識ごとにスクロールするようにしたい
+                recognizedResultsScrollTimer = Timer.scheduledTimer(
+                    withTimeInterval: 1,
+                    repeats: true
+                ) { _ in
+                    withAnimation {
+                        scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
+                    }
+                }
+            }
         }
     }
 }
