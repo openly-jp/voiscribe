@@ -222,6 +222,14 @@
 			path = RecognizedSpeech;
 			sourceTree = "<group>";
 		};
+		578353022990E3A200081CF8 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				57CF69D32967019B00DF0E3F /* LazyView.swift */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,7 +247,7 @@
 				57B26A252963FFC7007A7B9B /* ConfirmPane.swift */,
 				57B26A2A2965743F007A7B9B /* AudioPlayer.swift */,
 				572D375F296AA30E0096DEEE /* ShareButton.swift */,
-				57CF69D32967019B00DF0E3F /* LazyView.swift */,
+				578353022990E3A200081CF8 /* Others */,
 				57CF69D52968897800DF0E3F /* Constant.swift */,
 			);
 			path = Views;
