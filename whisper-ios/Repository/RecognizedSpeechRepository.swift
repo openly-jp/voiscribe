@@ -2,8 +2,8 @@ import CoreData
 import Foundation
 
 extension CoreDataRepository {
-    static func saveRecognizedSpeech(aRecognizedSpeech: RecognizedSpeech) {
-        let rsEntity = RecognizedSpeechData.new(aRecognizedSpeech: aRecognizedSpeech)
+    static func saveRecognizedSpeech(_ recognizedSpeech: RecognizedSpeech) {
+        let rsEntity = RecognizedSpeechData.new(recognizedSpeech: recognizedSpeech)
 
         for tl in rsEntity.transcriptionLines {
             CoreDataRepository.add(tl as! NSManagedObject)
@@ -17,7 +17,7 @@ extension CoreDataRepository {
         let request = RecognizedSpeechData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         let res = CoreDataRepository.fetch(request)
-        return res.map { rsd in RecognizedSpeechData.toModel(aRecognizedSpeechData: rsd) }
+        return res.map { rsd in RecognizedSpeechData.toModel(recognizedSpeechData: rsd) }
     }
 
     static func deleteRecognizedSpeech(recognizedSpeech: RecognizedSpeech) {
