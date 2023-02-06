@@ -296,7 +296,7 @@ struct RecognitionPane: View {
         RecordButtonPane(
             isRecording: $isRecording,
             isPaused: $isPaused,
-            startAction: isPaused ? resumeRecording : startRecording,
+            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording
         )
         .frame(height: 150)
