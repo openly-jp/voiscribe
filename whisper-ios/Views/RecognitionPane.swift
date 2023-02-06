@@ -78,6 +78,10 @@ struct RecognitionPane: View {
         // To prevent this, provide an unchanged view with height 0 at the start of recording
         // and define the sheet for it, so that the animation is performed correctly.
         Rectangle()
+            .onReceive(
+                NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+                perform: recordingInterruptionHandler
+            )
             .frame(height: 0)
             .hidden()
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
@@ -252,6 +256,7 @@ struct RecognitionPane: View {
         recognizedResultsScrollTimer?.invalidate()
 
         isRecording = false
+        isPaused = false
         isPaneOpen = false
         isConfirmOpen = false
 
@@ -291,6 +296,20 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
+    }
+
+    func recordingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isRecording {
+            pauseRecording()
+        } else if type == .ended, isRecording, isPaused {
+            resumeRecording()
+        }
     }
 
     // MARK: - function about ASR
