@@ -1,35 +1,26 @@
-//
-//  RecognizedSpeechData+CoreDataClass.swift
-//  whisper-ios
-//
-//  Created by creevo on 2023/01/02.
-//  Copyright © 2023 jp.openly. All rights reserved.
-//
-//
-
 import CoreData
 import Foundation
 
 @objc(RecognizedSpeechData)
 public class RecognizedSpeechData: NSManagedObject {
-    static func new(aRecognizedSpeech: RecognizedSpeech) -> RecognizedSpeechData {
+    static func new(recognizedSpeech: RecognizedSpeech) -> RecognizedSpeechData {
         let rsEntity: RecognizedSpeechData = CoreDataRepository.entity()
-        rsEntity.id = aRecognizedSpeech.id
-        rsEntity.title = aRecognizedSpeech.title
-        rsEntity.audioFileURL = aRecognizedSpeech.audioFileURL
-        rsEntity.language = aRecognizedSpeech.language.rawValue
-        rsEntity.createdAt = aRecognizedSpeech.createdAt
-        rsEntity.updatedAt = aRecognizedSpeech.updatedAt
+        rsEntity.id = recognizedSpeech.id
+        rsEntity.title = recognizedSpeech.title
+        rsEntity.audioFileURL = recognizedSpeech.audioFileURL
+        rsEntity.language = recognizedSpeech.language.rawValue
+        rsEntity.createdAt = recognizedSpeech.createdAt
+        rsEntity.updatedAt = recognizedSpeech.updatedAt
 
-        for aTranscriptionLine in aRecognizedSpeech.transcriptionLines {
+        for transcriptionLine in recognizedSpeech.transcriptionLines {
             let tlEntity: TranscriptionLineData = CoreDataRepository.entity()
-            tlEntity.id = aTranscriptionLine.id
-            tlEntity.startMSec = aTranscriptionLine.startMSec
-            tlEntity.endMSec = aTranscriptionLine.endMSec
-            tlEntity.text = aTranscriptionLine.text
-            tlEntity.ordering = aTranscriptionLine.ordering
-            tlEntity.createdAt = aTranscriptionLine.createdAt
-            tlEntity.updatedAt = aTranscriptionLine.updatedAt
+            tlEntity.id = transcriptionLine.id
+            tlEntity.startMSec = transcriptionLine.startMSec
+            tlEntity.endMSec = transcriptionLine.endMSec
+            tlEntity.text = transcriptionLine.text
+            tlEntity.ordering = transcriptionLine.ordering
+            tlEntity.createdAt = transcriptionLine.createdAt
+            tlEntity.updatedAt = transcriptionLine.updatedAt
 
             tlEntity.recognizedSpeech = rsEntity
             rsEntity.addToTranscriptionLines(tlEntity)
@@ -37,19 +28,19 @@ public class RecognizedSpeechData: NSManagedObject {
         return rsEntity
     }
 
-    static func toModel(aRecognizedSpeechData: RecognizedSpeechData) -> RecognizedSpeech {
+    static func toModel(recognizedSpeechData: RecognizedSpeechData) -> RecognizedSpeech {
         let rsModel = RecognizedSpeech(
-            id: aRecognizedSpeechData.id,
-            title: aRecognizedSpeechData.title,
-            audioFileURL: aRecognizedSpeechData.audioFileURL,
-            language: Language(rawValue: aRecognizedSpeechData.language)!,
+            id: recognizedSpeechData.id,
+            title: recognizedSpeechData.title,
+            audioFileURL: recognizedSpeechData.audioFileURL,
+            language: Language(rawValue: recognizedSpeechData.language)!,
             transcriptionLines: [],
-            createdAt: aRecognizedSpeechData.createdAt,
-            updatedAt: aRecognizedSpeechData.updatedAt
+            createdAt: recognizedSpeechData.createdAt,
+            updatedAt: recognizedSpeechData.updatedAt
         )
 
         let transcriptionLines: [TranscriptionLine] = []
-        for tld in aRecognizedSpeechData.transcriptionLines {
+        for tld in recognizedSpeechData.transcriptionLines {
             let tldEntity = tld as! TranscriptionLineData
             let tlModel = TranscriptionLine(
                 id: tldEntity.id,
@@ -64,5 +55,24 @@ public class RecognizedSpeechData: NSManagedObject {
             rsModel.transcriptionLines.append(tlModel)
         }
         return rsModel
+    }
+
+    /// Update recognizedSpeech data model.
+    ///
+    /// - Note: this method is used for update data model but not transcription lines.
+    /// - Parameter rs: recognizedSpeech model
+    static func update(_ rs: RecognizedSpeech) {
+        guard let rsEntity: RecognizedSpeechData = CoreDataRepository.getById(uuid: rs.id) else {
+            fatalError("object with id: \(rs.id.uuidString) is not found.")
+        }
+
+        rsEntity.id = rs.id
+        rsEntity.title = rs.title
+        rsEntity.audioFileURL = rs.audioFileURL
+        rsEntity.language = rs.language.rawValue
+        rsEntity.createdAt = rs.createdAt
+        rsEntity.updatedAt = rs.updatedAt
+
+        CoreDataRepository.save()
     }
 }

@@ -3,13 +3,13 @@ import SwiftUI
 struct MainView: View {
     @State var recognizingSpeechIds: [UUID]
     @State var recognizedSpeeches: [RecognizedSpeech]
-    @State var isActives: [Bool]
+    @State var isRecordDetailActives: [Bool]
 
     init() {
         let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
         recognizingSpeechIds = []
         recognizedSpeeches = initialRecognizedSpeeches
-        isActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
+        isRecordDetailActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
     }
 
     var body: some View {
@@ -25,7 +25,7 @@ struct MainView: View {
             RecognitionPane(
                 recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
-                isActives: $isActives
+                isRecordDetailActives: $isRecordDetailActives
             )
         }
     }
@@ -52,9 +52,10 @@ struct MainView: View {
                 NavigationLink(
                     destination: LazyView(RecordDetails(
                         recognizedSpeech: recognizedSpeech,
+                        deleteRecognizedSpeech: deleteRecognizedSpeech,
                         isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
                     )),
-                    isActive: $isActives[idx]
+                    isActive: $isRecordDetailActives[idx]
                 ) {
                     HStack {
                         Image(systemName: "mic.square.fill")
@@ -82,7 +83,7 @@ struct MainView: View {
                     }
                 }
             }
-            .onDelete(perform: deleteRecognizedSpeech)
+            .onDelete(perform: deleteRecognizedSpeeches)
         }
         .listStyle(PlainListStyle())
     }
@@ -96,12 +97,38 @@ struct MainView: View {
         return dateFormatter.string(from: date)
     }
 
-    private func deleteRecognizedSpeech(indexSet: IndexSet) {
+    private func deleteRecognizedSpeeches(indexSet: IndexSet) {
         for i in indexSet {
+            deleteRecognizedSpeech(at: i)
+        }
+    }
+
+    private func deleteRecognizedSpeech(at i: Int) {
+        // RecognizedSpeech is inserted to recognizedSpeeches array right after
+        // finishing recording, but saved to coredata after ASR is completed.
+        if recognizingSpeechIds.contains(recognizedSpeeches[i].id) {
+            recognizingSpeechIds.removeAll { id in id == recognizedSpeeches[i].id }
+        } else {
             CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
         }
-        recognizedSpeeches.remove(atOffsets: indexSet)
-        isActives.remove(atOffsets: indexSet)
+
+        do {
+            // TODO: fix this (issue #25)
+            let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
+            let url = getURLByName(fileName: fileName)
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            Logger.error("Failed to remove audio file.")
+        }
+        recognizedSpeeches.remove(at: i)
+        isRecordDetailActives.remove(at: i)
+    }
+
+    private func deleteRecognizedSpeech(id: UUID) {
+        let at = recognizedSpeeches.firstIndex { rs in rs.id == id }
+        if let at {
+            deleteRecognizedSpeech(at: at)
+        }
     }
 }
 
