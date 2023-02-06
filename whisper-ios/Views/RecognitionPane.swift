@@ -117,6 +117,7 @@ struct RecognitionPane: View {
         recognizedResultsScrollTimer?.invalidate()
 
         isRecording = false
+        isPaused = false
         isPaneOpen = false
         isConfirmOpen = false
 
@@ -156,6 +157,20 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
+    }
+
+    func recordingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isRecording {
+            pauseRecording()
+        } else if type == .ended, isRecording, isPaused {
+            resumeRecording()
+        }
     }
 
     // MARK: - function about ASR
@@ -274,10 +289,14 @@ struct RecognitionPane: View {
         RecordButtonPane(
             isRecording: $isRecording,
             isPaused: $isPaused,
-            startAction: isPaused ? resumeRecording : startRecording,
+            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording
         )
         .frame(height: 150)
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: recordingInterruptionHandler
+        )
         .sheet(isPresented: $isPaneOpen) {
             NavigationView {
                 VStack {
