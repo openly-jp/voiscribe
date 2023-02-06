@@ -293,11 +293,11 @@ struct RecognitionPane: View {
                                 .frame(width: 10)
                         }
                         Text(formatTime(Double(elapsedTime)))
-                    }.padding(40)
+                    }
 
-                    Waveform(idAmps: $idAmps, isPaused: $isPaused)
-                        .padding(.top, 60)
-                        .padding(.bottom, 20)
+                    Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: true)
+                        .frame(height: 250)
+
                     if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
                         Group {
                             Divider()
