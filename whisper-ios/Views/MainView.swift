@@ -13,7 +13,7 @@ struct MainView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if recognizedSpeeches.count == 0 {
                 Spacer()
                 initialPage
@@ -21,6 +21,7 @@ struct MainView: View {
             } else {
                 recordList
             }
+            Spacer()
             RecognitionPane(
                 recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
