@@ -2,7 +2,7 @@ import DequeModule
 import Foundation
 import SwiftUI
 
-struct AudioController: View {
+struct RecordingController: View {
     @Binding var isRecording: Bool
     @Binding var isPaused: Bool
     @Binding var isPaneOpen: Bool
@@ -17,13 +17,13 @@ struct AudioController: View {
 
     var body: some View {
         if isRecording {
-            miniAudioController
+            miniRecordingController
         } else {
             StartRecordingButton(startAction: startAction)
         }
     }
 
-    var miniAudioController: some View {
+    var miniRecordingController: some View {
         VStack(spacing: 0) {
             Divider()
             HStack(alignment: .center, spacing: 15) {
@@ -96,7 +96,7 @@ struct StartRecordingButton: View {
     }
 }
 
-struct AudioController_Previews: PreviewProvider {
+struct RecordingController_Previews: PreviewProvider {
     static var previews: some View {
         var idAmps: Deque<IdAmp> = []
         var idx = 0
@@ -107,7 +107,7 @@ struct AudioController_Previews: PreviewProvider {
             }
         }
 
-        return AudioController(
+        return RecordingController(
             isRecording: .constant(true),
             isPaused: .constant(true),
             isPaneOpen: .constant(true),

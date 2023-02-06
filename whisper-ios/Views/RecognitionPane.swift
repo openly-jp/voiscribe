@@ -62,7 +62,7 @@ struct RecognitionPane: View {
     }
 
     var body: some View {
-        AudioController(
+        RecordingController(
             isRecording: $isRecording,
             isPaused: $isPaused,
             isPaneOpen: $isPaneOpen,
@@ -72,69 +72,71 @@ struct RecognitionPane: View {
             idAmps: $idAmps
         )
 
-        // The Views used inside AudioController changes when recording starts,
-        // so if a sheet is defined for AudioController,
+        // The Views used inside RecordingController changes when recording starts,
+        // so if a sheet is defined for RecordingController,
         // the animation of the sheet rising on top of the view is lost.
         // To prevent this, provide an unchanged view with height 0 at the start of recording
         // and define the sheet for it, so that the animation is performed correctly.
         Rectangle()
             .frame(height: 0)
             .hidden()
-            .sheet(isPresented: $isPaneOpen) {
-                NavigationView {
-                    VStack {
-                        HStack { closeButton; Spacer() }
+            .sheet(isPresented: $isPaneOpen) { recordingSheet }
+    }
 
-                        HStack(spacing: 10) {
-                            if isPaused {
-                                Image(systemName: "pause.fill")
-                                    .foregroundColor(.gray)
-                            } else {
-                                Circle()
-                                    .fill(.red)
-                                    .blinkEffect()
-                                    .frame(width: 10)
-                            }
-                            Text(formatTime(Double(elapsedTime)))
-                        }
+    var recordingSheet: some View {
+        NavigationView {
+            VStack {
+                HStack { closeButton; Spacer() }
 
-                        Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: true)
-                            .frame(height: 250)
-
-                        if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
-                            Group {
-                                Divider()
-                                transcriptionLinesView
-                            }
-                        } else {
-                            Spacer()
-                        }
-                        NavigationLink(
-                            destination: ConfirmPane(
-                                finishRecording: finishRecording,
-                                abortRecording: abortRecording,
-                                language: $language,
-                                title: $title
-                            ),
-                            isActive: $isConfirmOpen
-                        ) {}.hidden()
-                        HStack(spacing: 50) {
-                            StopButtonPane {
-                                pauseRecording()
-                                language = getUserLanguage()
-                                isConfirmOpen = true
-                            }
-                            RecordButtonPane(
-                                isRecording: $isRecording,
-                                isPaused: $isPaused,
-                                startAction: resumeRecording,
-                                stopAction: pauseRecording
-                            )
-                        }
-                        .padding(.bottom, 30)
+                HStack(spacing: 10) {
+                    if isPaused {
+                        Image(systemName: "pause.fill")
+                            .foregroundColor(.gray)
+                    } else {
+                        Circle()
+                            .fill(.red)
+                            .blinkEffect()
+                            .frame(width: 10)
                     }
+                    Text(formatTime(Double(elapsedTime)))
                 }
+
+                Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: true)
+                    .frame(height: 250)
+
+                if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
+                    Group {
+                        Divider()
+                        transcriptionLinesView
+                    }
+                } else {
+                    Spacer()
+                }
+                NavigationLink(
+                    destination: ConfirmPane(
+                        finishRecording: finishRecording,
+                        abortRecording: abortRecording,
+                        language: $language,
+                        title: $title
+                    ),
+                    isActive: $isConfirmOpen
+                ) {}.hidden()
+                HStack(spacing: 50) {
+                    StopButtonPane {
+                        pauseRecording()
+                        language = getUserLanguage()
+                        isConfirmOpen = true
+                    }
+                    RecordButtonPane(
+                        isRecording: $isRecording,
+                        isPaused: $isPaused,
+                        startAction: resumeRecording,
+                        stopAction: pauseRecording
+                    )
+                }
+                .padding(.bottom, 30)
             }
+        }
     }
 
     var closeButton: some View {
