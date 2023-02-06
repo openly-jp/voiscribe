@@ -93,12 +93,6 @@ struct RecognitionPane: View {
         resetTimers()
     }
 
-    func resumeBackgoundRecording() {
-        isRecording = true
-        isPaused = false
-        audioRecorder!.record()
-        resetTimers()
-    }
 
     func pauseRecording() {
         isPaused = true
@@ -176,7 +170,7 @@ struct RecognitionPane: View {
         if type == .began, isRecording {
             pauseRecording()
         } else if type == .ended, isRecording, isPaused {
-            resumeBackgoundRecording()
+            resumeRecording()
         }
     }
 

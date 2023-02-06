@@ -33,8 +33,6 @@ struct AudioPlayer: View {
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
 
-    @Environment(\.isPresented) var isPresented
-
     var body: some View {
         VStack(spacing: 10) {
             Slider(value: $currentPlayingTime, in: 0 ... player.duration) { editing in
@@ -86,16 +84,6 @@ struct AudioPlayer: View {
                 updateRecordingTimeTimer.invalidate()
             }
         }
-        .onChange(of: isPresented) {
-            _ in
-            // order recorder to resume if it is active
-            // cuz "Back" button implicitly stop audio player
-            NotificationCenter.default.post(
-                name: AVAudioSession.interruptionNotification,
-                object: nil,
-                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.ended.rawValue]
-            )
-        }
     }
 
     var changeSpeedSheetView: some View {
@@ -141,22 +129,9 @@ struct AudioPlayer: View {
                 }
             }
             player.play()
-            // order recorder to pause if it is active
-            NotificationCenter.default.post(
-                name: AVAudioSession.interruptionNotification,
-                object: nil,
-                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.began.rawValue]
-            )
-
         } else {
             updateRecordingTimeTimer?.invalidate()
             player.pause()
-            // order recorder to resume if it is active
-            NotificationCenter.default.post(
-                name: AVAudioSession.interruptionNotification,
-                object: nil,
-                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.ended.rawValue]
-            )
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
