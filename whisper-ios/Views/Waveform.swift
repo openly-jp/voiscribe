@@ -1,40 +1,53 @@
 import DequeModule
 import SwiftUI
 
-struct IdAmp: Identifiable {
+struct IdAmp: Identifiable, Equatable {
     var id: UUID
     var amp: Float
 }
 
+/// A view that displays a waveform of the audio input.
+///
+/// The height of this view is the same as the height of the parent view.
 struct Waveform: View {
     @Binding var idAmps: Deque<IdAmp>
     @Binding var isPaused: Bool
 
+    // Since the number of idAmps increases monotonically,
+    // idAmps that are no longer displayed should be removed.
+    // However, if this View is used in multiple locations,
+    // deleting idAmps in each location will cause a bug,
+    // so it is necessary to set removeIdAmps to true in only one location.
+    let removeIdAmps: Bool
+
+    // parameter to control the sensitivity of the waveform
+    let sensitivity: Float = 10
     let e: Float = 2.718281828459
     let rectangleWidth: CGFloat = 2.0
     let spacingWidth: CGFloat = 2.0
 
     var body: some View {
         GeometryReader { geometry in
-            returnView(geometry)
-        }
-    }
-
-    func returnView(_ geometry: GeometryProxy) -> some View {
-        removeUndisplayedAmp(geometry)
-        return Group {
-            ForEach(Array(idAmps.enumerated()), id: \.self.offset) { idx, idAmp in
-                let amp = CGFloat(powf(e, idAmp.amp / 10) * 4)
+            ForEach(Array(idAmps.enumerated()), id: \.self.element.id) { idx, idAmp in
+                // idAmp.amp: -160 ~ 0
+                // expAmp: exp(-160 / sensitivity) ~ 1
+                let expAmp = CGFloat(powf(e, idAmp.amp / sensitivity))
+                let height = expAmp * geometry.size.height
                 let x = getX(
                     idAmpIdx: idx,
                     numIdAmps: idAmps.count,
                     geometry: geometry
                 )
 
-                Rectangle()
-                    .frame(width: rectangleWidth, height: amp * 50)
-                    .position(x: x)
-                    .foregroundColor(isPaused ? Color(.label) : .red)
+                if x > 0 {
+                    Rectangle()
+                        .frame(width: rectangleWidth, height: height)
+                        .position(x: x, y: geometry.size.height / 2)
+                        .foregroundColor(isPaused ? Color(.label) : .red)
+                }
+            }
+            .onChange(of: idAmps) { newIdAmps in
+                if removeIdAmps { removeUndisplayedAmp(geometry) }
             }
         }
     }
@@ -73,6 +86,10 @@ struct Waveform_Previews: PreviewProvider {
                 idx += 1
             }
         }
-        return Waveform(idAmps: .constant(idAmps), isPaused: .constant(false))
+        return Waveform(
+            idAmps: .constant(idAmps),
+            isPaused: .constant(false),
+            removeIdAmps: true
+        )
     }
 }
