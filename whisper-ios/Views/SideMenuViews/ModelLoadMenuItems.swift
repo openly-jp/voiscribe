@@ -103,10 +103,8 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
             if recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue) {
                 Image(systemName: "checkmark.icloud.fill")
-                    .imageScale(.large)
             } else {
                 Image(systemName: "icloud.and.arrow.down")
-                    .imageScale(.large)
             }
         }
         .onTapGesture(perform: {
