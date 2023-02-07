@@ -72,6 +72,32 @@ struct ModelLoadMenuItemView: View {
     }
 }
 
+struct CircularProgressBar: View {
+    @Binding var progress: CGFloat
+
+    var body: some View {
+        ZStack {
+            // 背景の円
+            Circle()
+                // ボーダーラインを描画するように指定
+                .stroke(lineWidth: 8.0)
+                .opacity(0.3)
+                .foregroundColor(.blue)
+
+            // 進捗を示す円
+            Circle()
+                // 始点/終点を指定して円を描画する
+                // 始点/終点には0.0-1.0の範囲に正規化した値を指定する
+                .trim(from: 0.0, to: min(progress, 1.0))
+                // 線の端の形状などを指定
+                .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round, lineJoin: .round))
+                .foregroundColor(.blue)
+                // デフォルトの原点は時計の12時の位置ではないので回転させる
+                .rotationEffect(Angle(degrees: 270.0))
+        }
+    }
+}
+
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @AppStorage(userDefaultModelPathKey) var defaultModelPath = URL(string: Bundle.main
@@ -80,6 +106,7 @@ struct ModelLoadSubMenuItemView: View {
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
     @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
     @ObservedObject var recordDownloadedModels = RecordDownloadedModels()
+    @State var progressValue: CGFloat = 0.3
 
     let modelSize: Size
     let language: Lang
@@ -88,6 +115,7 @@ struct ModelLoadSubMenuItemView: View {
     @State private var showPrompt = false
     @State private var showDownloadModelPrompt = false
     @State private var showChangeModelPrompt = false
+    @State private var showDownloadProgressBar = false
 
     var body: some View {
         HStack {
@@ -101,10 +129,15 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue) {
-                Image(systemName: "checkmark.icloud.fill")
+            if showDownloadModelPrompt {
+                CircularProgressBar(progress: $progressValue)
+                    .frame(width: 20, height: 20)
             } else {
-                Image(systemName: "icloud.and.arrow.down")
+                if recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue) {
+                    Image(systemName: "checkmark.icloud.fill")
+                } else {
+                    Image(systemName: "icloud.and.arrow.down")
+                }
             }
         }
         .onTapGesture(perform: {
@@ -117,8 +150,6 @@ struct ModelLoadSubMenuItemView: View {
                 } else {
                     self.showChangeModelPrompt = true
                 }
-                print("showDownloadModelPrompt", showDownloadModelPrompt)
-                print("showChangeModelPrompt", showChangeModelPrompt)
             }
         })
         .alert(isPresented: $showPrompt) {
@@ -141,6 +172,7 @@ struct ModelLoadSubMenuItemView: View {
                              message: Text("通信容量にご注意ください。"),
                              primaryButton: .cancel(Text("キャンセル")),
                              secondaryButton: .default(Text("ダウンロード"), action: {
+                                 showDownloadProgressBar = true
                                  downloadModel()
                              }))
             }
@@ -155,6 +187,7 @@ struct ModelLoadSubMenuItemView: View {
         )
         do {
             try recognizer.load_model(whisperModel: whisperModel)
+            showDownloadProgressBar = false
         } catch {
             print("load model failed in ModelLoadMenuItems")
             return false
