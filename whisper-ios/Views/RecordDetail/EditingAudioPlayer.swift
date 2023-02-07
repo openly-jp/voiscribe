@@ -112,6 +112,7 @@ struct EditingAudioPlayer: View {
             ) { _ in
                 currentPlayingTime = player.currentTime
             }
+            RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
             player.play()
         } else {
             updateRecordingTimeTimer?.invalidate()
