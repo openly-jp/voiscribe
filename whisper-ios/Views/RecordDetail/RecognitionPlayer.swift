@@ -56,14 +56,15 @@ struct RecognitionPlayer: View {
         }
         .onAppear(perform: initAudioPlayer)
         .toolbar {
-            if !isEditing {
-                ToolBar(
-                    recognizedSpeech: recognizedSpeech,
-                    deleteRecognizedSpeech: deleteRecognizedSpeech,
-                    allTranscription: allTranscription,
-                    isEditing: $isEditing
-                )
-            }
+            // The following `ToolBar` is only shown when `isEditing` is true,
+            // but conditional clause cannot be used in `.toolbar` modifier until iOS16.
+            // Thus whether `ToolBar` is shown or not is controlled inside it.
+            ToolBar(
+                recognizedSpeech: recognizedSpeech,
+                deleteRecognizedSpeech: deleteRecognizedSpeech,
+                allTranscription: allTranscription,
+                isEditing: $isEditing
+            )
         }
     }
 
