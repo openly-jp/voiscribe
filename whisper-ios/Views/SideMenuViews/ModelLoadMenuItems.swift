@@ -80,9 +80,9 @@ struct CircularProgressBar: View {
             // 背景の円
             Circle()
                 // ボーダーラインを描画するように指定
-                .stroke(lineWidth: 8.0)
+                .stroke(lineWidth: 4.0)
                 .opacity(0.3)
-                .foregroundColor(.blue)
+                .foregroundColor(.gray)
 
             // 進捗を示す円
             Circle()
@@ -90,7 +90,7 @@ struct CircularProgressBar: View {
                 // 始点/終点には0.0-1.0の範囲に正規化した値を指定する
                 .trim(from: 0.0, to: min(progress, 1.0))
                 // 線の端の形状などを指定
-                .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round, lineJoin: .round))
+                .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 .foregroundColor(.blue)
                 // デフォルトの原点は時計の12時の位置ではないので回転させる
                 .rotationEffect(Angle(degrees: 270.0))
@@ -131,7 +131,7 @@ struct ModelLoadSubMenuItemView: View {
             Spacer()
             if showDownloadModelPrompt {
                 CircularProgressBar(progress: $progressValue)
-                    .frame(width: 20, height: 20)
+                    .frame(width: 18, height: 18)
             } else {
                 if recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue) {
                     Image(systemName: "checkmark.icloud.fill")
