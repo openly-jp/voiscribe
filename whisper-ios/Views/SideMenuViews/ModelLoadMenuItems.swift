@@ -106,7 +106,7 @@ struct ModelLoadSubMenuItemView: View {
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
     @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
     @ObservedObject var recordDownloadedModels = RecordDownloadedModels()
-    @State var progressValue: CGFloat = 0.3
+    @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
     let language: Lang
@@ -116,6 +116,10 @@ struct ModelLoadSubMenuItemView: View {
     @State private var showDownloadModelPrompt = false
     @State private var showChangeModelPrompt = false
     @State private var showDownloadProgressBar = false
+
+    func updateProgress(a: Float) {
+        progressValue = CGFloat(a)
+    }
 
     var body: some View {
         HStack {
@@ -183,7 +187,9 @@ struct ModelLoadSubMenuItemView: View {
         let whisperModel = WhisperModel(
             size: modelSize,
             language: language,
-            needsSubscription: needsSubscription
+            needsSubscription: needsSubscription,
+            update: { _ in },
+            completion: {}
         )
         do {
             try recognizer.load_model(whisperModel: whisperModel)
@@ -199,8 +205,13 @@ struct ModelLoadSubMenuItemView: View {
         let whisperModel = WhisperModel(
             size: modelSize,
             language: language,
-            needsSubscription: needsSubscription
-        )
+            needsSubscription: needsSubscription,
+            update: updateProgress
+        ) {
+            showDownloadProgressBar = false
+            showDownloadModelPrompt = false
+            showChangeModelPrompt = true
+        }
     }
 }
 

@@ -31,7 +31,13 @@ class WhisperModel: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    init(size: Size, language: Lang, needsSubscription: Bool = false) {
+    init(
+        size: Size,
+        language: Lang,
+        needsSubscription: Bool = false,
+        update: @escaping (Float) -> Void,
+        completion: @escaping () -> Void
+    ) {
         id = UUID()
         self.size = size
         self.language = language
@@ -46,7 +52,8 @@ class WhisperModel: Identifiable {
         createdAt = Date()
         updatedAt = Date()
         WhisperModelRepository
-            .fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription) { result in
+            .fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription,
+                               update: update) { result in
                 switch result {
                 case let .success(modelURL):
                     self.localPath = modelURL
@@ -56,6 +63,7 @@ class WhisperModel: Identifiable {
                         lang: language.rawValue,
                         isDownloaded: true
                     )
+                    completion()
                 case let .failure(error):
                     self.isDownloaded = false
                     print("Error: \(error.localizedDescription)")

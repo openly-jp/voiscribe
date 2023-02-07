@@ -19,6 +19,7 @@ enum WhisperModelRepository {
         size: Size,
         language: Lang,
         needsSubscription _: Bool,
+        update: @escaping (Float) -> Void,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         // if model is in bundled resource or in local storage, return it
@@ -39,23 +40,22 @@ enum WhisperModelRepository {
             completion(.success(destinationURL))
             return
         }
-        // if model is not in local storage, download it
-        if !FileManager.default.fileExists(atPath: destinationURL.path) {
-            let fileDownloader = FileDownloader()
-            let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
-            let url = URL(string: "https://\(modelURL)")!
-            fileDownloader.downloadFile(withURL: url, progress: { progress in
-                print("Download progress: \(Int(progress * 100))%")
-            }) { location, success, error in
-                if success {
-                    print("File download was successful")
-                    try? FileManager.default.moveItem(at: location!, to: destinationURL)
 
-                    completion(.success(destinationURL))
-                } else {
-                    print("File download failed with error: \(error!.localizedDescription)")
-                    completion(.failure(error!))
-                }
+        let fileDownloader = FileDownloader()
+        let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
+        let url = URL(string: "https://\(modelURL)")!
+        fileDownloader.downloadFile(withURL: url, progress: { progress in
+            update(progress)
+            print("Download progress: \(Int(progress * 100))%")
+        }) { location, success, error in
+            if success {
+                print("File download was successful")
+                try? FileManager.default.moveItem(at: location!, to: destinationURL)
+
+                completion(.success(destinationURL))
+            } else {
+                print("File download failed with error: \(error!.localizedDescription)")
+                completion(.failure(error!))
             }
         }
     }
