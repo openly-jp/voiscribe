@@ -35,7 +35,6 @@ class WhisperModel: Identifiable {
         size: Size,
         language: Lang,
         needsSubscription: Bool = false,
-        update: @escaping (Float) -> Void,
         completion: @escaping () -> Void
     ) {
         id = UUID()
@@ -53,7 +52,7 @@ class WhisperModel: Identifiable {
         updatedAt = Date()
         WhisperModelRepository
             .fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription,
-                               update: update) { result in
+                               update: nil) { result in
                 switch result {
                 case let .success(modelURL):
                     self.localPath = modelURL

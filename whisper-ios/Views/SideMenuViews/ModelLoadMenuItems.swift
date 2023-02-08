@@ -188,7 +188,6 @@ struct ModelLoadSubMenuItemView: View {
             size: modelSize,
             language: language,
             needsSubscription: needsSubscription,
-            update: { _ in },
             completion: {}
         )
         do {
@@ -202,16 +201,23 @@ struct ModelLoadSubMenuItemView: View {
     }
 
     private func downloadModel() {
-        let whisperModel = WhisperModel(
-            size: modelSize,
-            language: language,
-            needsSubscription: needsSubscription,
-            update: updateProgress
-        ) {
-            showDownloadProgressBar = false
-            showDownloadModelPrompt = false
-            showChangeModelPrompt = true
-        }
+        WhisperModelRepository
+            .fetchWhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription,
+                               update: updateProgress) { result in
+                switch result {
+                case .success:
+                    showDownloadProgressBar = false
+                    showDownloadModelPrompt = false
+                    showChangeModelPrompt = true
+                    recordDownloadedModels.setRecordDownloadedModels(
+                        size: modelSize.rawValue,
+                        lang: language.rawValue,
+                        isDownloaded: true
+                    )
+                case let .failure(error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
     }
 }
 

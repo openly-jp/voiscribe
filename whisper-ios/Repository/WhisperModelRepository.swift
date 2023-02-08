@@ -19,7 +19,7 @@ enum WhisperModelRepository {
         size: Size,
         language: Lang,
         needsSubscription _: Bool,
-        update: @escaping (Float) -> Void,
+        update: ((Float) -> Void)?,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         // if model is in bundled resource or in local storage, return it
@@ -45,7 +45,9 @@ enum WhisperModelRepository {
         let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
         let url = URL(string: "https://\(modelURL)")!
         fileDownloader.downloadFile(withURL: url, progress: { progress in
-            update(progress)
+            if update != nil {
+                update!(progress)
+            }
             print("Download progress: \(Int(progress * 100))%")
         }) { location, success, error in
             if success {
