@@ -116,10 +116,30 @@ struct ModelLoadSubMenuItemView: View {
     @State private var showPrompt = false
     @State private var showDownloadModelPrompt = false
     @State private var showChangeModelPrompt = false
-    @State private var showDownloadProgressBar = false
+    @State private var isDownloading = false
 
-    func updateProgress(a: Float) {
-        progressValue = CGFloat(a)
+    func updateProgress(num: Float) {
+        progressValue = CGFloat(num)
+    }
+
+    func deleteModel() {
+        let flag = WhisperModelRepository.deleteWhisperModel(
+            size: modelSize,
+            language: language,
+            needsSubscription: needsSubscription
+        )
+        if flag {
+            showDownloadModelPrompt = true
+            showChangeModelPrompt = false
+            isDownloading = false
+            recordDownloadedModels.setRecordDownloadedModels(
+                size: modelSize.rawValue,
+                lang: language.rawValue,
+                isDownloaded: false
+            )
+        } else {
+            print("model deletion failed in deleteModel")
+        }
     }
 
     var body: some View {
@@ -134,7 +154,7 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if showDownloadModelPrompt {
+            if isDownloading {
                 CircularProgressBar(progress: $progressValue)
                     .frame(width: 18, height: 18)
             } else {
@@ -144,6 +164,13 @@ struct ModelLoadSubMenuItemView: View {
                     Image(systemName: "icloud.and.arrow.down")
                 }
             }
+        }
+        .swipeActions(edge: .trailing) {
+            Button(action: deleteModel) {
+                label: do {
+                    Image(systemName: "trash.fill")
+                }
+            }.tint(.red)
         }
         .onTapGesture(perform: {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
@@ -177,7 +204,7 @@ struct ModelLoadSubMenuItemView: View {
                              message: Text("通信容量にご注意ください。"),
                              primaryButton: .cancel(Text("キャンセル")),
                              secondaryButton: .default(Text("ダウンロード"), action: {
-                                 showDownloadProgressBar = true
+                                 isDownloading = true
                                  downloadModel()
                              }))
             }
@@ -193,7 +220,7 @@ struct ModelLoadSubMenuItemView: View {
         )
         do {
             try recognizer.load_model(whisperModel: whisperModel)
-            showDownloadProgressBar = false
+            isDownloading = false
         } catch {
             print("load model failed in ModelLoadMenuItems")
             return false
@@ -207,7 +234,7 @@ struct ModelLoadSubMenuItemView: View {
                                update: updateProgress) { result in
                 switch result {
                 case .success:
-                    showDownloadProgressBar = false
+                    isDownloading = false
                     showDownloadModelPrompt = false
                     showChangeModelPrompt = true
                     recordDownloadedModels.setRecordDownloadedModels(

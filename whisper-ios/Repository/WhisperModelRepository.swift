@@ -64,9 +64,19 @@ enum WhisperModelRepository {
 
     /// Delete a model from local storage.
     /// - Parameter model: The model to delete.
-    static func deleteWhisperModel(model: WhisperModel) {
+    static func deleteWhisperModel(size: Size, language: Lang, needsSubscription _: Bool) -> Bool {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let destinationURL = documentsURL.appendingPathComponent(model.localPath!.path)
-        try? FileManager.default.removeItem(at: destinationURL)
+        let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
+        if !FileManager.default.fileExists(atPath: destinationURL.path) {
+            print("Designated file does not exist.")
+            return false
+        }
+        do {
+            try FileManager.default.removeItem(at: destinationURL)
+            return true
+        } catch {
+            print("model deletion failed with error: \(error.localizedDescription)")
+            return false
+        }
     }
 }

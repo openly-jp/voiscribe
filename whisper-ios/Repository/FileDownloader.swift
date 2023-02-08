@@ -3,7 +3,6 @@ import Foundation
 class ProgressDelegatee: NSObject, URLSessionDownloadDelegate {
     func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         completionHandler(location, downloadTask.response, downloadTask.error)
-        print("urlSession was called")
     }
 
     let update: (Float) -> Void
