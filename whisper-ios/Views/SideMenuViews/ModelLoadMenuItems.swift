@@ -37,23 +37,24 @@ class RecordDownloadedModels: ObservableObject {
     }
 
     func setRecordDownloadedModels(size: String, lang: String, isDownloaded: Bool) {
-        if size == "tiny" {
-            if lang == "multi" {
-                isDownloadedTinyMulti = isDownloaded
-            } else {
-                isDownloadedTinyEn = isDownloaded
-            }
-        } else if size == "base" {
-            if lang == "multi" {
-                isDownloadedBaseMulti = isDownloaded
-            } else {
-                isDownloadedBaseEn = isDownloaded
-            }
-        } else if size == "small" {
-            if lang == "multi" {
-                isDownloadedSmallMulti = isDownloaded
-            } else {
-                isDownloadedSmallEn = isDownloaded
+        DispatchQueue.main.async {
+            if size == "tiny" {
+                if lang == "multi" {
+                } else {
+                    self.isDownloadedTinyEn = isDownloaded
+                }
+            } else if size == "base" {
+                if lang == "multi" {
+                    self.isDownloadedBaseMulti = isDownloaded
+                } else {
+                    self.isDownloadedBaseEn = isDownloaded
+                }
+            } else if size == "small" {
+                if lang == "multi" {
+                    self.isDownloadedSmallMulti = isDownloaded
+                } else {
+                    self.isDownloadedSmallEn = isDownloaded
+                }
             }
         }
     }
