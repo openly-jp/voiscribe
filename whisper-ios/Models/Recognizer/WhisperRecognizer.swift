@@ -28,10 +28,10 @@ class WhisperRecognizer: Recognizer {
     func load_model(whisperModel: WhisperModel) throws {
         whisper_free(whisperContext)
         whisperContext = whisper_init(whisperModel.localPath?.path)
+        self.whisperModel = whisperModel
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
-        self.whisperModel = whisperModel
     }
 
     private func load_audio(url: URL) throws -> [Float32] {

@@ -30,9 +30,10 @@ struct StartView: View {
                 .onAppear {
                     DispatchQueue.global(qos: .userInteractive).async {
                         let whisperModel = WhisperModel(
-                            localPath: URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!),
                             size: defaultModelSize,
-                            language: defaultModelLanguage, needsSubscription: false
+                            language: defaultModelLanguage,
+                            needsSubscription: defaultModelNeedsSubscription,
+                            completion: {}
                         )
                         recognizer = try? WhisperRecognizer(whisperModel: whisperModel)
                         isLoading = false
