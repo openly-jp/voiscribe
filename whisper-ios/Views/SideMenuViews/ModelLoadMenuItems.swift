@@ -166,11 +166,21 @@ struct ModelLoadSubMenuItemView: View {
             }
         }
         .swipeActions(edge: .trailing) {
-            Button(action: deleteModel) {
-                label: do {
-                    Image(systemName: "trash.fill")
-                }
-            }.tint(.red)
+            /// show delete label when the following 3 cases are met simultaneously
+            /// 1. model is not tiny
+            /// 2. the model is already downloaded
+            /// 3. the model is not selected
+            if modelSize != Size(rawValue: "tiny"),
+               recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue,
+                                                                lang: language.rawValue),
+               recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)"
+            {
+                Button(action: deleteModel) {
+                    label: do {
+                        Image(systemName: "trash.fill")
+                    }
+                }.tint(.red)
+            }
         }
         .onTapGesture(perform: {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
