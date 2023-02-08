@@ -154,14 +154,19 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if isDownloading {
-                CircularProgressBar(progress: $progressValue)
-                    .frame(width: 18, height: 18)
-            } else {
-                if recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue, lang: language.rawValue) {
-                    Image(systemName: "checkmark.icloud.fill")
+            if modelSize != Size(rawValue: "tiny") {
+                if isDownloading {
+                    CircularProgressBar(progress: $progressValue)
+                        .frame(width: 18, height: 18)
                 } else {
-                    Image(systemName: "icloud.and.arrow.down")
+                    if recordDownloadedModels.getRecordDownloadedModels(
+                        size: modelSize.rawValue,
+                        lang: language.rawValue
+                    ) {
+                        Image(systemName: "checkmark.icloud.fill")
+                    } else {
+                        Image(systemName: "icloud.and.arrow.down")
+                    }
                 }
             }
         }
