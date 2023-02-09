@@ -279,7 +279,7 @@ struct ModelLoadSubMenuItemView: View {
                                      defaultLanguage = language
                                      dafaultNeedsSubscription = needsSubscription
                                  }
-                                 }))
+                             }))
             } else {
                 return Alert(title: Text("モデルをダウンロードしますか?"),
                              message: Text("通信容量にご注意ください。"),
