@@ -274,6 +274,10 @@ struct RecognitionPane: View {
         ) { _ in
             streamingRecognitionTimerFunc()
         }
+
+        RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
+        RunLoop.main.add(updateWaveformTimer!, forMode: .common)
+        RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
     }
 
     func getTextColor(lines: inout [TranscriptionLine], _ idx: Int) -> Color {
@@ -369,6 +373,7 @@ struct RecognitionPane: View {
                                         scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
                                     }
                                 }
+                                RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
                             }
                         }
                     }
