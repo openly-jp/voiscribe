@@ -226,7 +226,10 @@ struct TranscriptionLines: View {
 
 struct TranscriptionLines_Previews: PreviewProvider {
     static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
         let player = try! AVAudioPlayer(contentsOf: recognizedSpeech.audioFileURL)
 
         TranscriptionLines(

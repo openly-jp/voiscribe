@@ -92,7 +92,10 @@ struct RecognitionPlayer: View {
 
 struct RecognitionPlayer_Previews: PreviewProvider {
     static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
 
         RecognitionPlayer(
             recognizedSpeech: recognizedSpeech,

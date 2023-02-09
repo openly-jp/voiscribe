@@ -484,7 +484,8 @@ struct RecognitionPane_Previews: PreviewProvider {
         let mock = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
+            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja",
+                                                                   csvFileName: "sample_ja")!]),
             isRecordDetailActives: .constant([])
         )
     }

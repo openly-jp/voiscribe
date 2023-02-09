@@ -107,7 +107,10 @@ struct NoRecognitionView: View {
 
 class RecordDetails_Previews: PreviewProvider {
     static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
         NavigationView {
             RecordDetails(
                 recognizedSpeech: recognizedSpeech,
