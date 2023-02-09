@@ -33,7 +33,7 @@ struct RecognitionPane: View {
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @State var recognizingSpeech: RecognizedSpeech?
-    @Binding var isActives: [Bool]
+    @Binding var isRecordDetailActives: [Bool]
     @State var language: Language = getUserLanguage()
     @State var title = ""
 
@@ -50,7 +50,7 @@ struct RecognitionPane: View {
     init(
         recognizingSpeechIds: Binding<[UUID]>,
         recognizedSpeeches: Binding<[RecognizedSpeech]>,
-        isActives: Binding<[Bool]>
+        isRecordDetailActives: Binding<[Bool]>
     ) {
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord)
@@ -58,7 +58,7 @@ struct RecognitionPane: View {
 
         _recognizingSpeechIds = recognizingSpeechIds
         _recognizedSpeeches = recognizedSpeeches
-        _isActives = isActives
+        _isRecordDetailActives = isRecordDetailActives
     }
 
     // MARK: - functions about recording
@@ -123,6 +123,7 @@ struct RecognitionPane: View {
         recognizedResultsScrollTimer?.invalidate()
 
         isRecording = false
+        isPaused = false
         isPaneOpen = false
         isConfirmOpen = false
 
@@ -146,7 +147,7 @@ struct RecognitionPane: View {
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
-        isActives.insert(true, at: 0)
+        isRecordDetailActives.insert(true, at: 0)
     }
 
     func abortRecording() {
@@ -162,6 +163,20 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
+    }
+
+    func recordingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isRecording {
+            pauseRecording()
+        } else if type == .ended, isRecording, isPaused {
+            resumeRecording()
+        }
     }
 
     // MARK: - function about ASR
@@ -239,7 +254,7 @@ struct RecognitionPane: View {
         }
         recognizedSpeech.audioFileURL = newURL
 
-        CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizedSpeech)
+        CoreDataRepository.saveRecognizedSpeech(recognizedSpeech)
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
@@ -288,10 +303,14 @@ struct RecognitionPane: View {
         RecordButtonPane(
             isRecording: $isRecording,
             isPaused: $isPaused,
-            startAction: startRecording,
+            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording
         )
         .frame(height: 150)
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: recordingInterruptionHandler
+        )
         .sheet(isPresented: $isPaneOpen) {
             NavigationView {
                 VStack {
@@ -465,8 +484,8 @@ struct RecognitionPane_Previews: PreviewProvider {
         let mock = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([mock]),
-            isActives: .constant([])
+            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
+            isRecordDetailActives: .constant([])
         )
     }
 }

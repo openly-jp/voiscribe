@@ -21,7 +21,7 @@ struct AudioPlayer: View {
     var player: AVAudioPlayer
 
     @Binding var currentPlayingTime: Double
-    @State var isEditing = false
+    @State var isEditingSlider = false
 
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
@@ -36,7 +36,7 @@ struct AudioPlayer: View {
     var body: some View {
         VStack(spacing: 10) {
             Slider(value: $currentPlayingTime, in: 0 ... player.duration) { editing in
-                isEditing = editing
+                isEditingSlider = editing
                 if !editing {
                     player.currentTime = currentPlayingTime
                     currentPlayingTime = player.currentTime
@@ -124,7 +124,7 @@ struct AudioPlayer: View {
                 withTimeInterval: 0.1,
                 repeats: true
             ) { _ in
-                if !isEditing {
+                if !isEditingSlider {
                     currentPlayingTime = player.currentTime
                 }
             }

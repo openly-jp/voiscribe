@@ -3,7 +3,7 @@ import SwiftUI
 struct RecordList: View {
     @Binding var recognizingSpeechIds: [UUID]
     @Binding var recognizedSpeeches: [RecognizedSpeech]
-    @Binding var isActives: [Bool]
+    @Binding var isRecordDetailActives: [Bool]
 
     var body: some View {
         VStack {
@@ -17,7 +17,7 @@ struct RecordList: View {
             RecognitionPane(
                 recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
-                isActives: $isActives
+                isRecordDetailActives: $isRecordDetailActives
             )
         }
     }
@@ -44,9 +44,10 @@ struct RecordList: View {
                 NavigationLink(
                     destination: LazyView(RecordDetails(
                         recognizedSpeech: recognizedSpeech,
+                        deleteRecognizedSpeech: deleteRecognizedSpeech,
                         isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
                     )),
-                    isActive: $isActives[idx]
+                    isActive: $isRecordDetailActives[idx]
                 ) {
                     HStack {
                         Image(systemName: "mic.square.fill")
@@ -74,7 +75,7 @@ struct RecordList: View {
                     }
                 }
             }
-            .onDelete(perform: deleteRecognizedSpeech)
+            .onDelete(perform: deleteRecognizedSpeeches)
         }
         .listStyle(PlainListStyle())
     }
@@ -88,12 +89,38 @@ struct RecordList: View {
         return dateFormatter.string(from: date)
     }
 
-    private func deleteRecognizedSpeech(indexSet: IndexSet) {
+    private func deleteRecognizedSpeeches(indexSet: IndexSet) {
         for i in indexSet {
+            deleteRecognizedSpeech(at: i)
+        }
+    }
+
+    private func deleteRecognizedSpeech(at i: Int) {
+        // RecognizedSpeech is inserted to recognizedSpeeches array right after
+        // finishing recording, but saved to coredata after ASR is completed.
+        if recognizingSpeechIds.contains(recognizedSpeeches[i].id) {
+            recognizingSpeechIds.removeAll { id in id == recognizedSpeeches[i].id }
+        } else {
             CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
         }
-        recognizedSpeeches.remove(atOffsets: indexSet)
-        isActives.remove(atOffsets: indexSet)
+
+        do {
+            // TODO: fix this (issue #25)
+            let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
+            let url = getURLByName(fileName: fileName)
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            Logger.error("Failed to remove audio file.")
+        }
+        recognizedSpeeches.remove(at: i)
+        isRecordDetailActives.remove(at: i)
+    }
+
+    private func deleteRecognizedSpeech(id: UUID) {
+        let at = recognizedSpeeches.firstIndex { rs in rs.id == id }
+        if let at {
+            deleteRecognizedSpeech(at: at)
+        }
     }
 }
 
@@ -108,7 +135,7 @@ class RecordList_Previews: PreviewProvider {
             RecordList(
                 recognizingSpeechIds: .constant([]),
                 recognizedSpeeches: .constant(recognizedSpeechs),
-                isActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
+                isRecordDetailActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
             )
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iphone")
@@ -116,7 +143,7 @@ class RecordList_Previews: PreviewProvider {
             RecordList(
                 recognizingSpeechIds: .constant([]),
                 recognizedSpeeches: .constant(recognizedSpeechs),
-                isActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
+                isRecordDetailActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
             )
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
             .previewDisplayName("ipad")
@@ -124,7 +151,7 @@ class RecordList_Previews: PreviewProvider {
             RecordList(
                 recognizingSpeechIds: .constant([]),
                 recognizedSpeeches: .constant([]),
-                isActives: .constant([])
+                isRecordDetailActives: .constant([])
             )
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iphone no record")
