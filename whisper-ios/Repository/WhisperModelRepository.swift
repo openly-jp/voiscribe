@@ -49,8 +49,8 @@ enum WhisperModelRepository {
                 update!(progress)
             }
             print("Download progress: \(Int(progress * 100))%")
-        }) { location, success, error in
-            if success {
+        }) { location, error in
+            if error == nil {
                 print("File download was successful")
                 try? FileManager.default.moveItem(at: location!, to: destinationURL)
 
