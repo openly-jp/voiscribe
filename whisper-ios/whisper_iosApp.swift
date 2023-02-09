@@ -28,17 +28,15 @@ struct StartView: View {
                 .resizable()
                 .frame(width: 60, height: 60)
                 .onAppear {
-                    DispatchQueue.global(qos: .userInteractive).sync {
+                    DispatchQueue.global(qos: .userInteractive).async {
                         let whisperModel = WhisperModel(
                             size: defaultModelSize,
                             language: defaultModelLanguage,
                             needsSubscription: defaultModelNeedsSubscription,
                             completion: {}
                         )
-                        DispatchQueue.main.async {
-                            recognizer = try? WhisperRecognizer(whisperModel: whisperModel)
-                            isLoading = false
-                        }
+                        recognizer = try? WhisperRecognizer(whisperModel: whisperModel)
+                        isLoading = false
                     }
                 }
             Text(APP_NAME)

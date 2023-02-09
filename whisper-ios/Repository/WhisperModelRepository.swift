@@ -44,7 +44,7 @@ enum WhisperModelRepository {
         let fileDownloader = FileDownloader()
         let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
         let url = URL(string: "https://\(modelURL)")!
-        fileDownloader.downloadFile(withURL: url, progress: { progress in
+        fileDownloader.downloadFile(withURL: url, progressHandler: { progress in
             if update != nil {
                 update!(progress)
             }
