@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
 		1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */; };
-		1331B48A29842D5F00FEBE24 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1331B48929842D5F00FEBE24 /* ggml-tiny.bin */; };
 		1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */; };
 		1331B49C298439FF00FEBE24 /* StreamingRecognitionTest in Resources */ = {isa = PBXBuildFile; fileRef = 1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
@@ -50,7 +49,6 @@
 		57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */; };
 		5A0DE9C8298695100071EE82 /* WhisperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C7298695100071EE82 /* WhisperModel.swift */; };
 		5A0DE9CA298695910071EE82 /* WhisperModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */; };
-		5A0DE9D02986F2CE0071EE82 /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */; };
 		5A2517972989800C001ED13F /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2517962989800C001ED13F /* FileDownloader.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
@@ -63,6 +61,7 @@
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* RecordList.swift */; };
 		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
+		5ABF47B62995243A00620518 /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,7 +84,6 @@
 /* Begin PBXFileReference section */
 		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
 		1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingRecognitionTest.swift; sourceTree = "<group>"; };
-		1331B48929842D5F00FEBE24 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
 		1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */ = {isa = PBXFileReference; lastKnownFileType = folder; path = StreamingRecognitionTest; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
@@ -144,6 +142,7 @@
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* RecordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordList.swift; sourceTree = "<group>"; };
+		5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "ggml-tiny.multi.bin"; path = "../../../../../Downloads/ggml-tiny.multi.bin"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,6 +303,7 @@
 				5A8F550E2948CCDD00E87D25 /* whisper-iosUITests */,
 				5A8F54F22948CCDB00E87D25 /* Products */,
 				387B6489C08FCF766F9D934F /* README.md */,
+				5ABF47B42995238A00620518 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -376,11 +376,19 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */,
 				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
-				1331B48929842D5F00FEBE24 /* ggml-tiny.multi.bin */,
 				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		5ABF47B42995238A00620518 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -500,7 +508,7 @@
 				1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
-				5A0DE9D02986F2CE0071EE82 /* ggml-tiny.multi.bin in Resources */,
+				5ABF47B62995243A00620518 /* ggml-tiny.multi.bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
