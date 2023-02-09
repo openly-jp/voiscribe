@@ -232,7 +232,7 @@ struct ModelLoadSubMenuItemView: View {
             /// 2. model is not tiny
             /// 3. the model is already downloaded
             /// 4. the model is not selected
-            if recordLoadModels.getRecordLoadModels(size: modelSize.rawValue, lang: language.rawValue),
+            if !recordLoadModels.getRecordLoadModels(size: modelSize.rawValue, lang: language.rawValue),
                modelSize != Size(rawValue: "tiny"),
                recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue,
                                                                 lang: language.rawValue),
