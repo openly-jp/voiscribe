@@ -107,9 +107,9 @@
 		574609C62961A08300D9DE06 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
-		57835301299047B500081CF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		578352F4298676D600081CF8 /* EditingAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingAudioPlayer.swift; sourceTree = "<group>"; };
 		578352F729890CF400081CF8 /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
+		57835301299047B500081CF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		578353042990E3C900081CF8 /* blinkEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blinkEffect.swift; sourceTree = "<group>"; };
 		57B26A21296317A3007A7B9B /* StopButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButtonPane.swift; sourceTree = "<group>"; };
 		57B26A252963FFC7007A7B9B /* ConfirmPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPane.swift; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 		57EAB6E8296207C600BB59BE /* RecognizedSpeechRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechRepository.swift; sourceTree = "<group>"; };
 		57EAB6EA296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranscriptionLineData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/TranscriptionLineData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecognizedSpeechData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/RecognizedSpeechData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
-		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A8F54F12948CCDB00E87D25 /* voiscribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = voiscribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -141,6 +141,7 @@
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		5ABF47BA2995577700620518 /* whisper-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whisper-ios.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -315,7 +316,7 @@
 		5A8F54F22948CCDB00E87D25 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A8F54F12948CCDB00E87D25 /* whisper-ios.app */,
+				5A8F54F12948CCDB00E87D25 /* voiscribe.app */,
 				5A8F55012948CCDD00E87D25 /* whisper-iosTests.xctest */,
 				5A8F550B2948CCDD00E87D25 /* whisper-iosUITests.xctest */,
 			);
@@ -325,6 +326,7 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				5ABF47BA2995577700620518 /* whisper-ios.entitlements */,
 				57835301299047B500081CF8 /* Info.plist */,
 				57EAB6E52962028C00BB59BE /* Repository */,
 				13516D9729603679005013C8 /* Mocks */,
@@ -391,9 +393,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5A8F54F02948CCDB00E87D25 /* whisper-ios */ = {
+		5A8F54F02948CCDB00E87D25 /* voiscribe */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5A8F55152948CCDD00E87D25 /* Build configuration list for PBXNativeTarget "whisper-ios" */;
+			buildConfigurationList = 5A8F55152948CCDD00E87D25 /* Build configuration list for PBXNativeTarget "voiscribe" */;
 			buildPhases = (
 				5A8F54ED2948CCDB00E87D25 /* Sources */,
 				5A8F54EE2948CCDB00E87D25 /* Frameworks */,
@@ -403,13 +405,13 @@
 			);
 			dependencies = (
 			);
-			name = "whisper-ios";
+			name = voiscribe;
 			packageProductDependencies = (
 				5A8F552A2948CEA800E87D25 /* Inject */,
 				57B26A2829649A7F007A7B9B /* DequeModule */,
 			);
 			productName = "whisper-ios";
-			productReference = 5A8F54F12948CCDB00E87D25 /* whisper-ios.app */;
+			productReference = 5A8F54F12948CCDB00E87D25 /* voiscribe.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5A8F55002948CCDD00E87D25 /* whisper-iosTests */ = {
@@ -489,7 +491,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5A8F54F02948CCDB00E87D25 /* whisper-ios */,
+				5A8F54F02948CCDB00E87D25 /* voiscribe */,
 				5A8F55002948CCDD00E87D25 /* whisper-iosTests */,
 				5A8F550A2948CCDD00E87D25 /* whisper-iosUITests */,
 			);
@@ -599,12 +601,12 @@
 /* Begin PBXTargetDependency section */
 		5A8F55032948CCDD00E87D25 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5A8F54F02948CCDB00E87D25 /* whisper-ios */;
+			target = 5A8F54F02948CCDB00E87D25 /* voiscribe */;
 			targetProxy = 5A8F55022948CCDD00E87D25 /* PBXContainerItemProxy */;
 		};
 		5A8F550D2948CCDD00E87D25 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5A8F54F02948CCDB00E87D25 /* whisper-ios */;
+			target = 5A8F54F02948CCDB00E87D25 /* voiscribe */;
 			targetProxy = 5A8F550C2948CCDD00E87D25 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -731,6 +733,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "whisper-ios/whisper-ios.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
@@ -738,6 +741,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "whisper-ios/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -751,6 +755,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -763,6 +770,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "whisper-ios/whisper-ios.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
@@ -770,6 +778,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "whisper-ios/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -781,8 +790,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.openly.whisper-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -874,7 +886,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A8F55152948CCDD00E87D25 /* Build configuration list for PBXNativeTarget "whisper-ios" */ = {
+		5A8F55152948CCDD00E87D25 /* Build configuration list for PBXNativeTarget "voiscribe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5A8F55162948CCDD00E87D25 /* Debug */,
