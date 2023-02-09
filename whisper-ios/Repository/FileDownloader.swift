@@ -33,11 +33,11 @@ class FileDownloader {
 
     func downloadFile(
         withURL url: URL,
-        progress: @escaping (_ progress: Float) -> Void,
+        progressHandler: @escaping (_ progress: Float) -> Void,
         completion: @escaping (_ location: URL?, _ error: Error?) -> Void
     ) {
         task = URLSession.shared.downloadTask(with: url)
-        task?.delegate = ProgressDelegatee(update: progress) {
+        task?.delegate = ProgressDelegatee(update: progressHandler) {
             location, response, error in
             if let error {
                 completion(nil, error)
