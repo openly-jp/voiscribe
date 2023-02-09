@@ -1,11 +1,3 @@
-//
-//  RecordButton.swift
-//  whisper-ios
-//
-//  Created by creevo on 2022/12/29.
-//  Copyright © 2022 jp.openly. All rights reserved.
-//
-
 import AVFoundation
 import SwiftUI
 
@@ -68,6 +60,13 @@ struct RecordButtonPane: View {
 
 struct RecordButton_Previews: PreviewProvider {
     static var previews: some View {
+        RecordButtonPane(
+            isRecording: .constant(false),
+            isPaused: .constant(false),
+            startAction: {},
+            stopAction: {}
+        )
+
         RecordButtonPane(
             isRecording: .constant(false),
             isPaused: .constant(false),
