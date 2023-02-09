@@ -60,6 +60,61 @@ class RecordDownloadedModels: ObservableObject {
     }
 }
 
+class RecordLoadModels: ObservableObject {
+    @AppStorage("is-loaded-tiny-multi") var isLoadingTinyMulti = true
+    @AppStorage("is-loaded-tiny-en") var isLoadingTinyEn = true
+    @AppStorage("is-loaded-base-multi") var isLoadingBaseMulti = false
+    @AppStorage("is-loaded-base-en") var isLoadingBaseEn = false
+    @AppStorage("is-loaded-small-multi") var isLoadingSmallMulti = false
+    @AppStorage("is-loaded-small-en") var isLoadingSmallEn = false
+
+    func getRecordLoadModels(size: String, lang: String) -> Bool {
+        if size == "tiny" {
+            if lang == "multi" {
+                return isLoadingTinyMulti
+            } else {
+                return isLoadingTinyEn
+            }
+        } else if size == "base" {
+            if lang == "multi" {
+                return isLoadingBaseMulti
+            } else {
+                return isLoadingBaseEn
+            }
+        } else if size == "small" {
+            if lang == "multi" {
+                return isLoadingSmallMulti
+            } else {
+                return isLoadingSmallEn
+            }
+        }
+        return false
+    }
+
+    func setRecordLoadModels(size: String, lang: String, isLoading: Bool) {
+        DispatchQueue.main.async {
+            if size == "tiny" {
+                if lang == "multi" {
+                } else {
+                    self.isLoadingTinyEn = isLoading
+                }
+            } else if size == "base" {
+                if lang == "multi" {
+                    self.isLoadingBaseMulti = isLoading
+                } else {
+                    self.isLoadingBaseEn = isLoading
+                }
+            } else if size == "small" {
+                if lang == "multi" {
+                    self.isLoadingSmallMulti = isLoading
+                } else {
+                    self.isLoadingSmallEn = isLoading
+                }
+            }
+        }
+    }
+}
+
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
@@ -107,6 +162,7 @@ struct ModelLoadSubMenuItemView: View {
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
     @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
     @ObservedObject var recordDownloadedModels = RecordDownloadedModels()
+    @ObservedObject var recordLoadModels = RecordLoadModels()
     @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
@@ -172,10 +228,12 @@ struct ModelLoadSubMenuItemView: View {
         }
         .swipeActions(edge: .trailing) {
             /// show delete label when the following 3 cases are met simultaneously
-            /// 1. model is not tiny
-            /// 2. the model is already downloaded
-            /// 3. the model is not selected
-            if modelSize != Size(rawValue: "tiny"),
+            /// 1. model is not loading
+            /// 2. model is not tiny
+            /// 3. the model is already downloaded
+            /// 4. the model is not selected
+            if recordLoadModels.getRecordLoadModels(size: modelSize.rawValue, lang: language.rawValue),
+               modelSize != Size(rawValue: "tiny"),
                recordDownloadedModels.getRecordDownloadedModels(size: modelSize.rawValue,
                                                                 lang: language.rawValue),
                recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)"
@@ -204,16 +262,24 @@ struct ModelLoadSubMenuItemView: View {
                 return Alert(title: Text("モデルを変更しますか？"),
                              primaryButton: .cancel(Text("キャンセル")),
                              secondaryButton: .default(Text("変更"), action: {
+                                 recordLoadModels.setRecordLoadModels(size: modelSize.rawValue,
+                                                                      lang: language.rawValue,
+                                                                      isLoading: true)
                                  let isSucceed: Bool
                                  do { isSucceed = try loadModel() }
                                  catch { isSucceed = false }
                                  if isSucceed {
+                                     recordLoadModels.setRecordLoadModels(
+                                         size: modelSize.rawValue,
+                                         lang: language.rawValue,
+                                         isLoading: false
+                                     )
                                      defaultModelPath = (recognizer.whisperModel?.localPath)!
                                      defaultModelSize = modelSize
                                      defaultLanguage = language
                                      dafaultNeedsSubscription = needsSubscription
                                  }
-                             }))
+                                 }))
             } else {
                 return Alert(title: Text("モデルをダウンロードしますか?"),
                              message: Text("通信容量にご注意ください。"),
