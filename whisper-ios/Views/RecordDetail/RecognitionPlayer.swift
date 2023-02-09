@@ -15,18 +15,6 @@ struct RecognitionPlayer: View {
     @State var isEditing = false
     @FocusState var focusedTranscriptionLineId: UUID?
 
-    init(
-        recognizedSpeech: RecognizedSpeech,
-        deleteRecognizedSpeech: @escaping (UUID) -> Void
-    ) {
-        self.recognizedSpeech = recognizedSpeech
-        self.deleteRecognizedSpeech = deleteRecognizedSpeech
-
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
-        try! session.setActive(true)
-    }
-
     var body: some View {
         VStack(spacing: 0) {
             TranscriptionLines(
