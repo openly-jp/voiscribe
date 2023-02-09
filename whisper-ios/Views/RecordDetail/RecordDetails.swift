@@ -69,8 +69,7 @@ struct Title: View {
         if isEditing {
             TextField(editingTitle, text: $editingTitle)
                 .focused($isFocused)
-                .font(.title)
-                .fontWeight(.bold)
+                .font(.title.weight(.bold))
                 .padding(.horizontal)
                 .submitLabel(.done)
                 .onSubmit {
