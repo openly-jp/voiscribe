@@ -1,19 +1,12 @@
 import SwiftUI
 
-struct MainView: View {
-    @State var recognizingSpeechIds: [UUID]
-    @State var recognizedSpeeches: [RecognizedSpeech]
-    @State var isRecordDetailActives: [Bool]
-
-    init() {
-        let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
-        recognizingSpeechIds = []
-        recognizedSpeeches = initialRecognizedSpeeches
-        isRecordDetailActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
-    }
+struct RecordList: View {
+    @Binding var recognizingSpeechIds: [UUID]
+    @Binding var recognizedSpeeches: [RecognizedSpeech]
+    @Binding var isRecordDetailActives: [Bool]
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
             if recognizedSpeeches.count == 0 {
                 Spacer()
                 initialPage
@@ -21,7 +14,6 @@ struct MainView: View {
             } else {
                 recordList
             }
-            Spacer()
             RecognitionPane(
                 recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
@@ -132,22 +124,34 @@ struct MainView: View {
     }
 }
 
-class MainView_Previews: PreviewProvider {
+class RecordList_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
         Group {
-            MainView()
-                .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
-                .previewDisplayName("iphone")
+            RecordList(
+                recognizingSpeechIds: .constant([]),
+                recognizedSpeeches: .constant(recognizedSpeechs),
+                isRecordDetailActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+            .previewDisplayName("iphone")
 
-            MainView()
-                .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
-                .previewDisplayName("ipad")
+            RecordList(
+                recognizingSpeechIds: .constant([]),
+                recognizedSpeeches: .constant(recognizedSpeechs),
+                isRecordDetailActives: .constant([Bool](repeating: false, count: recognizedSpeechs.count))
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+            .previewDisplayName("ipad")
 
-            MainView()
-                .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
-                .previewDisplayName("iphone no record")
+            RecordList(
+                recognizingSpeechIds: .constant([]),
+                recognizedSpeeches: .constant([]),
+                isRecordDetailActives: .constant([])
+            )
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+            .previewDisplayName("iphone no record")
         }
     }
 }
