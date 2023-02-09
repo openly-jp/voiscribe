@@ -128,6 +128,7 @@ struct AudioPlayer: View {
                     currentPlayingTime = player.currentTime
                 }
             }
+            RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
             player.play()
         } else {
             updateRecordingTimeTimer?.invalidate()

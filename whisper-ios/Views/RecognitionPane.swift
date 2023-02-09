@@ -47,20 +47,6 @@ struct RecognitionPane: View {
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
 
-    init(
-        recognizingSpeechIds: Binding<[UUID]>,
-        recognizedSpeeches: Binding<[RecognizedSpeech]>,
-        isRecordDetailActives: Binding<[Bool]>
-    ) {
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(AVAudioSession.Category.playAndRecord)
-        try! session.setActive(true)
-
-        _recognizingSpeechIds = recognizingSpeechIds
-        _recognizedSpeeches = recognizedSpeeches
-        _isRecordDetailActives = isRecordDetailActives
-    }
-
     // MARK: - functions about recording
 
     /// start recording
@@ -288,6 +274,10 @@ struct RecognitionPane: View {
         ) { _ in
             streamingRecognitionTimerFunc()
         }
+
+        RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
+        RunLoop.main.add(updateWaveformTimer!, forMode: .common)
+        RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
     }
 
     func getTextColor(lines: inout [TranscriptionLine], _ idx: Int) -> Color {
@@ -395,6 +385,7 @@ struct RecognitionPane: View {
                                         )
                                     }
                                 }
+                                RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
                             }
                         }
                     }

@@ -107,6 +107,7 @@
 		574609C62961A08300D9DE06 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
+		57835301299047B500081CF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		578352F4298676D600081CF8 /* EditingAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingAudioPlayer.swift; sourceTree = "<group>"; };
 		578352F729890CF400081CF8 /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
 		57B26A21296317A3007A7B9B /* StopButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButtonPane.swift; sourceTree = "<group>"; };
@@ -320,6 +321,7 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				57835301299047B500081CF8 /* Info.plist */,
 				57EAB6E52962028C00BB59BE /* Repository */,
 				13516D9729603679005013C8 /* Mocks */,
 				5766628A29603BBF00C27512 /* Info.plist */,
@@ -664,7 +666,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -719,7 +721,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "\"-Xlinker -interposable\"";
@@ -741,6 +743,7 @@
 				DEVELOPMENT_TEAM = SD388AQ78A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "whisper-ios/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -772,6 +775,7 @@
 				DEVELOPMENT_TEAM = SD388AQ78A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "whisper-ios/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "音声の録音にマイクを使用します。許可お願いします。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
