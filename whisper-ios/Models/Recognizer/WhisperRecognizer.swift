@@ -131,10 +131,13 @@ class WhisperRecognizer: Recognizer {
                 Logger.error("model load error")
                 return
             }
-            guard var audioData = try? self.load_audio(url: audioFileURL) else {
+            guard var originalAudioData = try? self.load_audio(url: audioFileURL) else {
                 Logger.error("audio load error")
                 return
             }
+            recognizingSpeech.tmpAudioDataList.append(originalAudioData)
+            // append remaining previous audioData to originalAudioData
+            var audioData = recognizingSpeech.remainingAudioData + originalAudioData
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
             } catch {
@@ -161,8 +164,6 @@ class WhisperRecognizer: Recognizer {
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
                     whisper_reset_timings(whisperContext)
-                    // append remaining previous audioData to audioData
-                    audioData = recognizingSpeech.remainingAudioData + audioData
                     audioData.withUnsafeBufferPointer { data in
                         if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
                         } else {
@@ -204,17 +205,15 @@ class WhisperRecognizer: Recognizer {
                 }
                 // update remaining audioData
                 if isRemainingAudioConcatActive {
-                    let originalAudioDataCount: Int = audioData.count
+                    let audioDataCount: Int = audioData.count
                     let usedAudioDataCount = Int(Float(lastEndMSec) / Float(1000) * self.samplingRate)
-                    let remainingAudioDataCount: Int = originalAudioDataCount - usedAudioDataCount
+                    let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
                     if remainingAudioDataCount > 0 {
-                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< originalAudioDataCount])
+                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
                     } else {
                         recognizingSpeech.remainingAudioData = []
                     }
                 }
-
-                recognizingSpeech.tmpAudioDataList.append(audioData)
                 callback(recognizingSpeech)
             }
         }
