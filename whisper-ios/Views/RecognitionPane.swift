@@ -182,6 +182,7 @@ struct RecognitionPane: View {
                         scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
                     }
                 }
+                RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
             }
         }
     }

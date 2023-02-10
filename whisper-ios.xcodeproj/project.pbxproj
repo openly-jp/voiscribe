@@ -60,6 +60,7 @@
 		5A8F55222948CD3900E87D25 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55212948CD3900E87D25 /* Record.swift */; };
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
+		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
