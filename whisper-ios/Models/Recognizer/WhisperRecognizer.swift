@@ -185,13 +185,21 @@ class WhisperRecognizer: Recognizer {
                 }
                 // update promptTokens
                 if isPromptingActive {
+                    let oldPromptTokens = recognizingSpeech.promptTokens
+                    var newPromptTokens: [Int32] = []
                     recognizingSpeech.promptTokens.removeAll()
                     for i in 0 ..< nSegments {
                         let tokenCount = whisper_full_n_tokens(whisperContext, i)
                         for j in 0 ..< tokenCount {
                             let tokenId = whisper_full_get_token_id(whisperContext, i, j)
-                            recognizingSpeech.promptTokens.append(tokenId)
+                            newPromptTokens.append(tokenId)
                         }
+                    }
+                    // reset promptTokens if new and old promptTokens are the same
+                    if newPromptTokens == oldPromptTokens {
+                        recognizingSpeech.promptTokens = []
+                    } else {
+                        recognizingSpeech.promptTokens = newPromptTokens
                     }
                 }
                 // update remaining audioData
