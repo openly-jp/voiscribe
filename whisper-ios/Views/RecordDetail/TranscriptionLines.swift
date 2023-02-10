@@ -72,15 +72,14 @@ struct TranscriptionLines: View {
         )
         .padding(.top)
         .toolbar {
-            // The following `ToolBar` is only shown when `isEditing` is true,
-            // but conditional clause cannot be used in `.toolbar` modifier until iOS16.
-            // Thus whether `ToolBar` is shown or not is controlled inside it.
-            EditingToolbar(
-                isEditing: $isEditing,
-                hasContentEdited: hasContentEdited,
-                focusedTranscriptionLineId: _focusedTranscriptionLineId,
-                updateTranscriptionLines: updateTranscriptionLines
-            )
+            if isEditing {
+                EditingToolbar(
+                    isEditing: $isEditing,
+                    hasContentEdited: hasContentEdited,
+                    focusedTranscriptionLineId: _focusedTranscriptionLineId,
+                    updateTranscriptionLines: updateTranscriptionLines
+                )
+            }
         }
     }
 

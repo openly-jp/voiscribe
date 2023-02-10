@@ -31,7 +31,7 @@ class WhisperRecognizer: Recognizer {
         guard let url: URL = Bundle.main.url(forResource: modelName, withExtension: "bin") else {
             throw NSError(domain: "model load error", code: -1)
         }
-        whisperContext = whisper_init(url.path)
+        whisperContext = whisper_init(url.path())
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
