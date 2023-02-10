@@ -61,9 +61,8 @@
 		5A8F55202948CD1F00E87D25 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F551F2948CD1F00E87D25 /* Data.swift */; };
 		5A8F55222948CD3900E87D25 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55212948CD3900E87D25 /* Record.swift */; };
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
-		5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* RecordList.swift */; };
-		5ABF47B62995243A00620518 /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */; };
-		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
+		5ABF47B62995243A00620518 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		5ABF47BF2996AF5D00620518 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF47BE2996AF5D00620518 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,7 +144,7 @@
 		5A8F551F2948CD1F00E87D25 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
-		5A8F55272948CDB700E87D25 /* RecordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordList.swift; sourceTree = "<group>"; };
+		5ABF47BE2996AF5D00620518 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,7 +268,7 @@
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
 				578352F629890C8700081CF8 /* RecordDetail */,
-				5A8F55272948CDB700E87D25 /* MainView.swift */,
+				5ABF47BE2996AF5D00620518 /* MainView.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
 				13516D9C2961A900005013C8 /* SideMenu.swift */,
@@ -388,7 +387,6 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */,
 				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
 				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 			);
@@ -518,7 +516,7 @@
 				1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
-				5ABF47B62995243A00620518 /* ggml-tiny.multi.bin in Resources */,
+				5ABF47B62995243A00620518 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,6 +566,7 @@
 				57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */,
 				57B26A2D2965E04D007A7B9B /* utils.swift in Sources */,
 				139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */,
+				5ABF47BF2996AF5D00620518 /* MainView.swift in Sources */,
 				57CF69D42967019C00DF0E3F /* LazyView.swift in Sources */,
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				13516D9D2961A900005013C8 /* SideMenu.swift in Sources */,
@@ -580,7 +579,6 @@
 				572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
-				5A8F55282948CDB700E87D25 /* MainView.swift in Sources */,
 				1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
 				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
