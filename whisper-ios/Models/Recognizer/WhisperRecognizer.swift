@@ -31,7 +31,7 @@ class WhisperRecognizer: Recognizer {
         guard let url: URL = Bundle.main.url(forResource: modelName, withExtension: "bin") else {
             throw NSError(domain: "model load error", code: -1)
         }
-        whisperContext = whisper_init(url.path)
+        whisperContext = whisper_init_from_file(url.path)
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
@@ -156,6 +156,7 @@ class WhisperRecognizer: Recognizer {
                     params.offset_ms = 0
                     params.no_context = true
                     params.single_segment = false
+                    params.suppress_non_speech_tokens = true
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
