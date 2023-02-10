@@ -30,6 +30,7 @@
 		5766628C296047B100C27512 /* RecognitionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5766628B296047B100C27512 /* RecognitionPane.swift */; };
 		578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F4298676D600081CF8 /* EditingAudioPlayer.swift */; };
 		578352F829890CF400081CF8 /* ToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F729890CF400081CF8 /* ToolBar.swift */; };
+		578353052990E3C900081CF8 /* blinkEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578353042990E3C900081CF8 /* blinkEffect.swift */; };
 		57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B26A21296317A3007A7B9B /* StopButtonPane.swift */; };
 		57B26A262963FFC7007A7B9B /* ConfirmPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B26A252963FFC7007A7B9B /* ConfirmPane.swift */; };
 		57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 57B26A2829649A7F007A7B9B /* DequeModule */; };
@@ -41,6 +42,7 @@
 		57CF69D62968897800DF0E3F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CF69D52968897800DF0E3F /* Constant.swift */; };
 		57D4CB192981BF2D00D0D598 /* RecognitionPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D4CB182981BF2D00D0D598 /* RecognitionPlayer.swift */; };
 		57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D4CB1A2981C39900D0D598 /* TranscriptionLines.swift */; };
+		57E460C52990FC93004FB6C2 /* RecordingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E460C42990FC93004FB6C2 /* RecordingController.swift */; };
 		57EAB6E02961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6DC2961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift */; };
 		57EAB6E22961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6DE2961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift */; };
 		57EAB6E72962041000BB59BE /* CoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6E62962041000BB59BE /* CoreDataRepository.swift */; };
@@ -61,6 +63,7 @@
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* RecordList.swift */; };
 		5ABF47B62995243A00620518 /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */; };
+		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +111,7 @@
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
 		578352F4298676D600081CF8 /* EditingAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingAudioPlayer.swift; sourceTree = "<group>"; };
 		578352F729890CF400081CF8 /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
+		578353042990E3C900081CF8 /* blinkEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blinkEffect.swift; sourceTree = "<group>"; };
 		57B26A21296317A3007A7B9B /* StopButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButtonPane.swift; sourceTree = "<group>"; };
 		57B26A252963FFC7007A7B9B /* ConfirmPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPane.swift; sourceTree = "<group>"; };
 		57B26A2A2965743F007A7B9B /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -118,6 +122,7 @@
 		57CF69D52968897800DF0E3F /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		57D4CB182981BF2D00D0D598 /* RecognitionPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPlayer.swift; sourceTree = "<group>"; };
 		57D4CB1A2981C39900D0D598 /* TranscriptionLines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionLines.swift; sourceTree = "<group>"; };
+		57E460C42990FC93004FB6C2 /* RecordingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingController.swift; sourceTree = "<group>"; };
 		57EAB6DC2961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecognizedSpeechData+CoreDataClass.swift"; path = "whisper-ios/Repository/CoreDataModels/RecognizedSpeechData+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6DE2961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranscriptionLineData+CoreDataClass.swift"; path = "whisper-ios/Repository/CoreDataModels/TranscriptionLineData+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6E62962041000BB59BE /* CoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataRepository.swift; sourceTree = "<group>"; };
@@ -141,7 +146,6 @@
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* RecordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordList.swift; sourceTree = "<group>"; };
-		5ABF47B52995243A00620518 /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "ggml-tiny.multi.bin"; path = "../../../../../Downloads/ggml-tiny.multi.bin"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +253,15 @@
 			path = RecordDetail;
 			sourceTree = "<group>";
 		};
+		578353022990E3A200081CF8 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				57CF69D32967019B00DF0E3F /* LazyView.swift */,
+				578353042990E3C900081CF8 /* blinkEffect.swift */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,15 +269,16 @@
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
 				578352F629890C8700081CF8 /* RecordDetail */,
-				5A8F55272948CDB700E87D25 /* RecordList.swift */,
+				5A8F55272948CDB700E87D25 /* MainView.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
 				13516D9C2961A900005013C8 /* SideMenu.swift */,
 				5766628B296047B100C27512 /* RecognitionPane.swift */,
+				57E460C42990FC93004FB6C2 /* RecordingController.swift */,
 				5709E5042960BDFC00352CF3 /* Waveform.swift */,
 				57B26A21296317A3007A7B9B /* StopButtonPane.swift */,
 				57B26A252963FFC7007A7B9B /* ConfirmPane.swift */,
-				57CF69D32967019B00DF0E3F /* LazyView.swift */,
+				578353022990E3A200081CF8 /* Others */,
 				57CF69D52968897800DF0E3F /* Constant.swift */,
 			);
 			path = Views;
@@ -534,6 +548,7 @@
 				5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */,
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				57EAB6E02961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift in Sources */,
+				578353052990E3C900081CF8 /* blinkEffect.swift in Sources */,
 				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
 				578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */,
 				57EAB6E72962041000BB59BE /* CoreDataRepository.swift in Sources */,
@@ -565,10 +580,11 @@
 				572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
-				5A8F55282948CDB700E87D25 /* RecordList.swift in Sources */,
+				5A8F55282948CDB700E87D25 /* MainView.swift in Sources */,
 				1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
 				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
+				57E460C52990FC93004FB6C2 /* RecordingController.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
 				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
 				578352F829890CF400081CF8 /* ToolBar.swift in Sources */,

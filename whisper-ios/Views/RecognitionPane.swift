@@ -219,7 +219,7 @@ struct RecognitionPane: View {
     func resumeRecording() {
         isRecording = true
         isPaused = false
-        isPaneOpen = true
+
         audioRecorder!.record()
         resetTimers()
     }
@@ -422,134 +422,6 @@ struct RecognitionPane: View {
         let isInside = startMSec <= currentMSec && currentMSec < endMSec
         let uiColor: UIColor = isInside ? .systemGray5 : .systemBackground
         return Color(uiColor)
-    }
-
-    var body: some View {
-        RecordButtonPane(
-            isRecording: $isRecording,
-            isPaused: $isPaused,
-            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
-            stopAction: pauseRecording
-        )
-        .frame(height: 150)
-        .onReceive(
-            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
-            perform: recordingInterruptionHandler
-        )
-        .sheet(isPresented: $isPaneOpen) {
-            NavigationView {
-                VStack {
-                    HStack {
-                        Button(action: { isCancelRecognitionAlertOpen = true }) {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(35)
-                        .alert(isPresented: $isCancelRecognitionAlertOpen) {
-                            Alert(
-                                title: Text("録音を終了しますか？"),
-                                message: Text("録音された音声は破棄されます。本当に終了しますか？"),
-                                primaryButton: .destructive(Text("終了"), action: abortRecording),
-                                secondaryButton: .cancel()
-                            )
-                        }
-                        Spacer()
-                    }
-                    HStack(spacing: 10) {
-                        if isPaused {
-                            Image(systemName: "pause.fill")
-                                .foregroundColor(.gray)
-                        } else {
-                            Circle()
-                                .fill(.red)
-                                .frame(width: 10)
-                        }
-                        Text(formatTime(Double(elapsedTime)))
-                    }.padding(40)
-
-                    Waveform(idAmps: $idAmps, isPaused: $isPaused)
-                        .padding(.top, 60)
-                        .padding(.bottom, 20)
-                    if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
-                        Divider()
-                        ScrollViewReader { scrollReader in
-                            ScrollView {
-                                LazyVStack(spacing: 0) {
-                                    ForEach(
-                                        Array(recognizingSpeech!.transcriptionLines.enumerated()),
-                                        id: \.self.offset
-                                    ) {
-                                        idx, onGoingTranscriptionLine in
-                                        HStack(alignment: .center) {
-                                            Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
-                                                .frame(width: 50, alignment: .center)
-                                                .foregroundColor(Color.blue)
-                                                .padding()
-                                            Spacer()
-                                            Text(onGoingTranscriptionLine.text)
-                                                .foregroundColor(Color(.label))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .multilineTextAlignment(.leading)
-                                        }
-                                        .padding(10)
-                                        .background(getTextColor(lines: &recognizingSpeech!.transcriptionLines, idx))
-                                        Divider()
-                                    }
-                                }
-                            }
-                            .frame(
-                                minWidth: 0,
-                                maxWidth: .infinity,
-                                minHeight: 0,
-                                maxHeight: .infinity,
-                                alignment: .topLeading
-                            )
-                            .padding()
-                            .onAppear {
-                                // TODO: 毎秒スクロールを試行するのは負荷が大きいため、認識ごとにスクロールするようにしたい
-                                recognizedResultsScrollTimer = Timer.scheduledTimer(
-                                    withTimeInterval: 1,
-                                    repeats: true
-                                ) { _ in
-                                    withAnimation {
-                                        scrollReader.scrollTo(
-                                            recognizingSpeech!.transcriptionLines.count - 1,
-                                            anchor: .bottom
-                                        )
-                                    }
-                                }
-                                RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
-                            }
-                        }
-                    }
-                    NavigationLink(
-                        destination: ConfirmPane(
-                            finishRecording: finishRecording,
-                            abortRecording: abortRecording,
-                            language: $language,
-                            title: $title
-                        ),
-                        isActive: $isConfirmOpen
-                    ) {}.hidden()
-                    HStack(spacing: 50) {
-                        StopButtonPane {
-                            pauseRecording()
-                            language = getUserLanguage()
-                            isConfirmOpen = true
-                        }
-                        RecordButtonPane(
-                            isRecording: $isRecording,
-                            isPaused: $isPaused,
-                            startAction: resumeRecording,
-                            stopAction: pauseRecording
-                        )
-                    }
-                    .padding(.bottom, 30)
-                }
-            }
-        }
     }
 }
 
