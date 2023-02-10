@@ -34,7 +34,6 @@ struct StreamingRecognitionTestView: View {
     @State var audioFileURLList: [URL] = []
 
     let metaInfoList = getAllMetaInfoList()
-    @State var selectedMetaInfoIdx: Int = -1
     @State var selectedMetaInfo: MetaInfo?
     @State var answerTranscripts: [String] = []
 
@@ -59,22 +58,18 @@ struct StreamingRecognitionTestView: View {
 
                 HStack {
                     Text("サンプル: ")
-                    Picker("サンプル", selection: $selectedMetaInfoIdx) {
-                        Text("未選択").tag(-1)
-                        ForEach(0 ..< metaInfoList.count, id: \.self) { idx in
-                            Text(metaInfoList[idx].label).tag(idx)
+                    Menu(selectedMetaInfo?.label ?? "選択 ↕") {
+                        ForEach(metaInfoList, id: \.self) {
+                            metaInfo in
+                            Button(metaInfo.label, action: {
+                                selectedMetaInfo = metaInfo
+                                answerTranscripts = metaInfo.transcripts
+                                preprocess(audioFileURL: metaInfo.audioFileURL, language: metaInfo.language)
+                            })
                         }
-                    }.onChange(of: selectedMetaInfoIdx) { idx in
-                        if idx >= 0 {
-                            let metaInfo = metaInfoList[idx]
-                            selectedMetaInfo = metaInfo
-                            answerTranscripts = metaInfo.transcripts
-                            preprocess(audioFileURL: metaInfo.audioFileURL, language: metaInfo.language)
-                        } else {
-                            selectedMetaInfo = nil
-                            answerTranscripts = []
-                        }
-                    }.disabled(!isSelectSampleReady)
+                    }
+                    .menuStyle(ButtonMenuStyle())
+                    .disabled(!isSelectSampleReady)
                 }
                 HStack {
                     switch selectedMetaInfo?.language {
