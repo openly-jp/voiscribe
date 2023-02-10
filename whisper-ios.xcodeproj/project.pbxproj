@@ -60,7 +60,6 @@
 		5A8F55222948CD3900E87D25 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55212948CD3900E87D25 /* Record.swift */; };
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
-		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,7 +146,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A8F552B2948CEA800E87D25 /* Inject in Frameworks */,
 				57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,7 +401,6 @@
 			);
 			name = "whisper-ios";
 			packageProductDependencies = (
-				5A8F552A2948CEA800E87D25 /* Inject */,
 				57B26A2829649A7F007A7B9B /* DequeModule */,
 			);
 			productName = "whisper-ios";
@@ -480,7 +477,6 @@
 			);
 			mainGroup = 5A8F54E82948CCDB00E87D25;
 			packageReferences = (
-				5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */,
 				57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 5A8F54F22948CCDB00E87D25 /* Products */;
@@ -908,14 +904,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -923,11 +911,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = DequeModule;
-		};
-		5A8F552A2948CEA800E87D25 /* Inject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */;
-			productName = Inject;
 		};
 /* End XCSwiftPackageProductDependency section */
 

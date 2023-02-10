@@ -47,20 +47,6 @@ struct RecognitionPane: View {
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
 
-    init(
-        recognizingSpeechIds: Binding<[UUID]>,
-        recognizedSpeeches: Binding<[RecognizedSpeech]>,
-        isRecordDetailActives: Binding<[Bool]>
-    ) {
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(AVAudioSession.Category.playAndRecord)
-        try! session.setActive(true)
-
-        _recognizingSpeechIds = recognizingSpeechIds
-        _recognizedSpeeches = recognizedSpeeches
-        _isRecordDetailActives = isRecordDetailActives
-    }
-
     var body: some View {
         RecordingController(
             isRecording: $isRecording,
