@@ -47,20 +47,6 @@ struct RecognitionPane: View {
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
 
-    init(
-        recognizingSpeechIds: Binding<[UUID]>,
-        recognizedSpeeches: Binding<[RecognizedSpeech]>,
-        isRecordDetailActives: Binding<[Bool]>
-    ) {
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(AVAudioSession.Category.playAndRecord)
-        try! session.setActive(true)
-
-        _recognizingSpeechIds = recognizingSpeechIds
-        _recognizedSpeeches = recognizedSpeeches
-        _isRecordDetailActives = isRecordDetailActives
-    }
-
     // MARK: - functions about recording
 
     /// start recording
@@ -117,6 +103,7 @@ struct RecognitionPane: View {
         recognizedResultsScrollTimer?.invalidate()
 
         isRecording = false
+        isPaused = false
         isPaneOpen = false
         isConfirmOpen = false
 
@@ -156,6 +143,20 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
+    }
+
+    func recordingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isRecording {
+            pauseRecording()
+        } else if type == .ended, isRecording, isPaused {
+            resumeRecording()
+        }
     }
 
     // MARK: - function about ASR
@@ -225,7 +226,7 @@ struct RecognitionPane: View {
         }
         recognizedSpeech.audioFileURL = newURL
 
-        CoreDataRepository.saveRecognizedSpeech(aRecognizedSpeech: recognizedSpeech)
+        CoreDataRepository.saveRecognizedSpeech(recognizedSpeech)
 
         recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
@@ -259,6 +260,10 @@ struct RecognitionPane: View {
         ) { _ in
             streamingRecognitionTimerFunc()
         }
+
+        RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
+        RunLoop.main.add(updateWaveformTimer!, forMode: .common)
+        RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
     }
 
     func getTextColor(lines: inout [TranscriptionLine], _ idx: Int) -> Color {
@@ -274,10 +279,14 @@ struct RecognitionPane: View {
         RecordButtonPane(
             isRecording: $isRecording,
             isPaused: $isPaused,
-            startAction: isPaused ? resumeRecording : startRecording,
+            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording
         )
         .frame(height: 150)
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: recordingInterruptionHandler
+        )
         .sheet(isPresented: $isPaneOpen) {
             NavigationView {
                 VStack {
@@ -350,6 +359,7 @@ struct RecognitionPane: View {
                                         scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
                                     }
                                 }
+                                RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
                             }
                         }
                     }
