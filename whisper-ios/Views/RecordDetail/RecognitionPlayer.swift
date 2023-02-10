@@ -4,6 +4,7 @@ import SwiftUI
 struct RecognitionPlayer: View {
     var recognizedSpeech: RecognizedSpeech
     let deleteRecognizedSpeech: (UUID) -> Void
+    let isRecognizing: Bool
 
     // MARK: - state about player
 
@@ -16,43 +17,51 @@ struct RecognitionPlayer: View {
     @FocusState var focusedTranscriptionLineId: UUID?
 
     var body: some View {
-        VStack(spacing: 0) {
-            TranscriptionLines(
-                recognizedSpeech: recognizedSpeech,
-                player: $player,
-                currentPlayingTime: $currentPlayingTime,
-                isEditing: $isEditing,
-                focusedTranscriptionLineId: _focusedTranscriptionLineId
-            )
-
-            if let player {
-                if !isEditing {
-                    AudioPlayer(
-                        player: player,
-                        currentPlayingTime: $currentPlayingTime,
-                        transcription: allTranscription
-                    )
+        if isRecognizing {
+            VStack(spacing: 0) {
+                RecognizingTranscriptionLines(recognizedSpeech: recognizedSpeech)
+                RecognizingAudioPlayer()
                     .padding(20)
-                } else {
-                    EditingAudioPlayer(
-                        player: player,
-                        currentPlayingTime: $currentPlayingTime,
-                        focusedTranscriptionLineId: _focusedTranscriptionLineId
-                    )
+            }
+        } else {
+            VStack(spacing: 0) {
+                TranscriptionLines(
+                    recognizedSpeech: recognizedSpeech,
+                    player: $player,
+                    currentPlayingTime: $currentPlayingTime,
+                    isEditing: $isEditing,
+                    focusedTranscriptionLineId: _focusedTranscriptionLineId
+                )
+
+                if let player {
+                    if !isEditing {
+                        AudioPlayer(
+                            player: player,
+                            currentPlayingTime: $currentPlayingTime,
+                            transcription: allTranscription
+                        )
+                        .padding(20)
+                    } else {
+                        EditingAudioPlayer(
+                            player: player,
+                            currentPlayingTime: $currentPlayingTime,
+                            focusedTranscriptionLineId: _focusedTranscriptionLineId
+                        )
+                    }
                 }
             }
-        }
-        .onAppear(perform: initAudioPlayer)
-        .toolbar {
-            // The following `ToolBar` is only shown when `isEditing` is true,
-            // but conditional clause cannot be used in `.toolbar` modifier until iOS16.
-            // Thus whether `ToolBar` is shown or not is controlled inside it.
-            ToolBar(
-                recognizedSpeech: recognizedSpeech,
-                deleteRecognizedSpeech: deleteRecognizedSpeech,
-                allTranscription: allTranscription,
-                isEditing: $isEditing
-            )
+            .onAppear(perform: initAudioPlayer)
+            .toolbar {
+                // The following `ToolBar` is only shown when `isEditing` is true,
+                // but conditional clause cannot be used in `.toolbar` modifier until iOS16.
+                // Thus whether `ToolBar` is shown or not is controlled inside it.
+                ToolBar(
+                    recognizedSpeech: recognizedSpeech,
+                    deleteRecognizedSpeech: deleteRecognizedSpeech,
+                    allTranscription: allTranscription,
+                    isEditing: $isEditing
+                )
+            }
         }
     }
 
@@ -82,10 +91,12 @@ struct RecognitionPlayer: View {
 struct RecognitionPlayer_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let isRecognizing = false
 
         RecognitionPlayer(
             recognizedSpeech: recognizedSpeech,
-            deleteRecognizedSpeech: { _ in }
+            deleteRecognizedSpeech: { _ in },
+            isRecognizing: isRecognizing
         )
     }
 }

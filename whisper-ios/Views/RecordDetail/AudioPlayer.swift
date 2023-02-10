@@ -156,6 +156,55 @@ struct PlayerButton: View {
     }
 }
 
+// This view is used when recognition is on going
+// this is just for indicating that the audio is being recognized
+struct RecognizingAudioPlayer: View {
+    @State var isRotating = 0.0
+    @State var currentPlayingTime = 0.0
+    func speedRate2String(_ speedRate: Double) -> String {
+        "\(String(format: "%g", speedRate))x"
+    }
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Slider(value: $currentPlayingTime, in: 0 ... 0) {}
+            HStack {
+                Text(formatTime(0))
+                Spacer()
+                Text("認識中")
+            }
+            .font(.caption)
+
+            HStack {
+                Button(speedRate2String(availableSpeedRates[2])) {}
+                    .foregroundColor(Color(.secondaryLabel))
+                    .disabled(true)
+                Spacer()
+                PlayerButton(name: "gobackward.5", size: 35) {}
+                    .disabled(true)
+                Spacer()
+                ProgressView()
+                    .scaleEffect(2)
+                Spacer()
+                PlayerButton(name: "goforward.5", size: 35) {}
+                    .disabled(true)
+                Spacer()
+                ShareButton(transcription: "")
+                    .disabled(true)
+                    .overlay(alignment: .center) {
+                        Image(systemName: "nosign")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color(.secondaryLabel))
+                    }
+            }
+            .padding(.horizontal, 30)
+            .padding(.bottom, 10)
+        }
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let url = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")?.audioFileURL

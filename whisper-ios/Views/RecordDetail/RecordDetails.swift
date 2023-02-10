@@ -19,42 +19,22 @@ struct RecordDetails: View {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
-            Title(recognizedSpeech: recognizedSpeech)
+            Title(recognizedSpeech: recognizedSpeech, isEditable: !isRecognizing)
             Rectangle()
                 .frame(height: 2)
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
-            if isRecognizing {
-                Spacer()
-                RecognizingView()
-                Spacer()
-            } else if recognizedSpeech.transcriptionLines.count == 0 {
+            if !isRecognizing, recognizedSpeech.transcriptionLines.count == 0 {
                 Spacer()
                 NoRecognitionView()
                 Spacer()
             } else {
                 RecognitionPlayer(
                     recognizedSpeech: recognizedSpeech,
-                    deleteRecognizedSpeech: deleteRecognizedSpeech
+                    deleteRecognizedSpeech: deleteRecognizedSpeech,
+                    isRecognizing: isRecognizing
                 )
             }
-        }
-    }
-}
-
-struct RecognizingView: View {
-    var body: some View {
-        HStack {
-            Spacer()
-            ProgressView()
-                .scaleEffect(2)
-                .padding(30)
-            Spacer()
-        }
-        HStack {
-            Spacer()
-            Text("認識中")
-            Spacer()
         }
     }
 }
@@ -63,10 +43,11 @@ struct Title: View {
     var recognizedSpeech: RecognizedSpeech
     @State var editingTitle = ""
     @State var isEditing = false
+    let isEditable: Bool
     @FocusState var isFocused: Bool
 
     var body: some View {
-        if isEditing {
+        if isEditable, isEditing {
             TextField(editingTitle, text: $editingTitle)
                 .focused($isFocused)
                 .font(.title.weight(.bold))
@@ -79,7 +60,7 @@ struct Title: View {
 
                     RecognizedSpeechData.update(recognizedSpeech)
                 }
-        } else {
+        } else if isEditable {
             Text(recognizedSpeech.title)
                 .font(.title)
                 .fontWeight(.bold)
@@ -90,6 +71,14 @@ struct Title: View {
                     isEditing = true
                     isFocused = true
                 }
+        } else {
+            // when recognition is on going, RecognizedSpeech hasn't saved to coredata yet
+            // to avoid crash, prohibit to edit title
+            Text(recognizedSpeech.title)
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.horizontal)
+                .padding(1)
         }
     }
 }

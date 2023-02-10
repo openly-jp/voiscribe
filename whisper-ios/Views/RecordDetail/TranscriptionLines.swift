@@ -225,6 +225,41 @@ struct TranscriptionLines: View {
     }
 }
 
+struct RecognizingTranscriptionLines: View {
+    let recognizedSpeech: RecognizedSpeech
+    var body: some View {
+        ScrollViewReader { _ in
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.self.offset) {
+                        idx, transcriptionLine in
+                        Group {
+                            HStack(alignment: .center) {
+                                Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
+                                    .frame(width: 50, alignment: .center)
+                                    .foregroundColor(Color.blue)
+                                    .padding()
+                                Spacer()
+                                Text(transcriptionLine.text)
+                                    .foregroundColor(Color(.label))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            .padding(10)
+                            .background(Color(.systemBackground))
+                            Divider()
+                        }
+                        .id(idx)
+                    }
+                }
+            }
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+        .padding()
+        .navigationBarTitle("", displayMode: .inline)
+    }
+}
+
 struct TranscriptionLines_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
