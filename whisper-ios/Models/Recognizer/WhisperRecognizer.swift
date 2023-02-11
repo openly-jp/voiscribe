@@ -31,7 +31,7 @@ class WhisperRecognizer: Recognizer {
         guard let url: URL = Bundle.main.url(forResource: modelName, withExtension: "bin") else {
             throw NSError(domain: "model load error", code: -1)
         }
-        whisperContext = whisper_init(url.path)
+        whisperContext = whisper_init_from_file(url.path)
         if whisperContext == nil {
             throw NSError(domain: "model load error", code: -1)
         }
@@ -131,10 +131,13 @@ class WhisperRecognizer: Recognizer {
                 Logger.error("model load error")
                 return
             }
-            guard var audioData = try? self.load_audio(url: audioFileURL) else {
+            guard var originalAudioData = try? self.load_audio(url: audioFileURL) else {
                 Logger.error("audio load error")
                 return
             }
+            recognizingSpeech.tmpAudioDataList.append(originalAudioData)
+            // append remaining previous audioData to originalAudioData
+            var audioData = recognizingSpeech.remainingAudioData + originalAudioData
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
             } catch {
@@ -156,12 +159,11 @@ class WhisperRecognizer: Recognizer {
                     params.offset_ms = 0
                     params.no_context = true
                     params.single_segment = false
+                    params.suppress_non_speech_tokens = true
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
                     whisper_reset_timings(whisperContext)
-                    // append remaining previous audioData to audioData
-                    audioData = recognizingSpeech.remainingAudioData + audioData
                     audioData.withUnsafeBufferPointer { data in
                         if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
                         } else {
@@ -184,28 +186,34 @@ class WhisperRecognizer: Recognizer {
                 }
                 // update promptTokens
                 if isPromptingActive {
+                    let oldPromptTokens = recognizingSpeech.promptTokens
+                    var newPromptTokens: [Int32] = []
                     recognizingSpeech.promptTokens.removeAll()
                     for i in 0 ..< nSegments {
                         let tokenCount = whisper_full_n_tokens(whisperContext, i)
                         for j in 0 ..< tokenCount {
                             let tokenId = whisper_full_get_token_id(whisperContext, i, j)
-                            recognizingSpeech.promptTokens.append(tokenId)
+                            newPromptTokens.append(tokenId)
                         }
+                    }
+                    // reset promptTokens if new and old promptTokens are the same
+                    if newPromptTokens == oldPromptTokens {
+                        recognizingSpeech.promptTokens = []
+                    } else {
+                        recognizingSpeech.promptTokens = newPromptTokens
                     }
                 }
                 // update remaining audioData
                 if isRemainingAudioConcatActive {
-                    let originalAudioDataCount: Int = audioData.count
+                    let audioDataCount: Int = audioData.count
                     let usedAudioDataCount = Int(Float(lastEndMSec) / Float(1000) * self.samplingRate)
-                    let remainingAudioDataCount: Int = originalAudioDataCount - usedAudioDataCount
+                    let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
                     if remainingAudioDataCount > 0 {
-                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< originalAudioDataCount])
+                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
                     } else {
                         recognizingSpeech.remainingAudioData = []
                     }
                 }
-
-                recognizingSpeech.tmpAudioDataList.append(audioData)
                 callback(recognizingSpeech)
             }
         }
