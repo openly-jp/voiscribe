@@ -62,6 +62,7 @@
 		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
 		5A91ACDE29992BC7004BE94A /* AppInfoMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A91ACDD29992BC7004BE94A /* AppInfoMenuBar.swift */; };
 		5A91ACE72999514D004BE94A /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
+		5A91ACEA299957FB004BE94A /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A91ACE9299957FB004BE94A /* LicenseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,7 +144,7 @@
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5A91ACDD29992BC7004BE94A /* AppInfoMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoMenuBar.swift; sourceTree = "<group>"; };
-		5A91ACE3299949ED004BE94A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		5A91ACE9299957FB004BE94A /* LicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +193,7 @@
 		136E051D2965F53500DEC112 /* SideMenuViews */ = {
 			isa = PBXGroup;
 			children = (
+				5A91ACE8299957B0004BE94A /* AppInfoMenuBarViews */,
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
 				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
 				139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */,
@@ -392,6 +394,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		5A91ACE8299957B0004BE94A /* AppInfoMenuBarViews */ = {
+			isa = PBXGroup;
+			children = (
+				5A91ACE9299957FB004BE94A /* LicenseView.swift */,
+			);
+			path = AppInfoMenuBarViews;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -555,6 +565,7 @@
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5A91ACDE29992BC7004BE94A /* AppInfoMenuBar.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
+				5A91ACEA299957FB004BE94A /* LicenseView.swift in Sources */,
 				13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */,
 				57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */,
 				57B26A2D2965E04D007A7B9B /* utils.swift in Sources */,

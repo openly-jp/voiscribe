@@ -36,7 +36,11 @@ let AppInfoMenuSubItems = [
         Link("プライバシーポリシー", destination: URL(string: "https://openly.jp/company/privacy-policy")!)
             .openURLInSafariView()
     ), subMenuItems: nil),
-    MenuItem(view: AnyView(AppInfoMenuItemViewSubMenuItemView(title: "ライセンス")), subMenuItems: nil),
+    MenuItem(view: AnyView(
+        NavigationLink(destination: LicenseView()) {
+            AppInfoMenuItemViewSubMenuItemView(title: "ライセンス")
+        }
+    ), subMenuItems: nil),
 ]
 
 let appInfoMenuItem = MenuItem(view: AnyView(AppInfoMenuItemView()), subMenuItems: AppInfoMenuSubItems)
