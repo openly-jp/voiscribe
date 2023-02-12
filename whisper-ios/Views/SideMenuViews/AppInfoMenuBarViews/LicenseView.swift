@@ -4,15 +4,15 @@ struct LicenseView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("License")
-                    .font(.headline)
-                    .padding(.bottom)
-
                 VStack(alignment: .leading) {
                     Text("Whisper.cpp")
-                        .font(.subheadline)
+                        .font(.headline)
+                        .padding(.top)
+                        .padding(.horizontal)
                     Text("MIT License")
+                        .padding(.horizontal)
                     Text("Copyright (c) 2022 Georgi Gerganov")
+                        .padding(.horizontal)
                     Text("""
                     Permission is hereby granted, free of charge, to any person obtaining a copy \
                     of this software and associated documentation files (the "Software"), to deal \
@@ -21,10 +21,12 @@ struct LicenseView: View {
                     copies of the Software, and to permit persons to whom the Software is \
                     furnished to do so, subject to the following conditions:
                     """)
+                    .padding(.horizontal)
                     Text("""
                     The above copyright notice and this permission notice shall be included in \
                     all copies or substantial portions of the Software.
                     """)
+                    .padding(.horizontal)
                     Text("""
                     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR \
                     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, \
@@ -34,14 +36,19 @@ struct LicenseView: View {
                     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE \
                     SOFTWARE.
                     """)
+                    .padding(.horizontal)
                     Divider()
                 }
 
                 VStack(alignment: .leading) {
                     Text("SafariServicesUI")
-                        .font(.subheadline)
+                        .font(.headline)
+                        .padding(.top)
+                        .padding(.horizontal)
                     Text("MIT License")
+                        .padding(.horizontal)
                     Text("Copyright (c) 2022 Hiroki Kato")
+                        .padding(.horizontal)
                     Text("""
                     Permission is hereby granted, free of charge, to any person obtaining a copy \
                     of this software and associated documentation files (the "Software"), to deal \
@@ -50,10 +57,12 @@ struct LicenseView: View {
                     copies of the Software, and to permit persons to whom the Software is \
                     furnished to do so, subject to the following conditions:
                     """)
+                    .padding(.horizontal)
                     Text("""
                     The above copyright notice and this permission notice shall be included in \
                     all copies or substantial portions of the Software.
                     """)
+                    .padding(.horizontal)
                     Text("""
                     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR \
                     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, \
@@ -63,13 +72,17 @@ struct LicenseView: View {
                     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE \
                     SOFTWARE.
                     """)
+                    .padding(.horizontal)
                     Divider()
                 }
 
                 VStack(alignment: .leading) {
                     Text("Image: Freepik.com")
-                        .font(.subheadline)
+                        .font(.headline)
+                        .padding(.top)
+                        .padding(.horizontal)
                     Text("The frontpage image has been designed using assets from Freepik.com.")
+                        .padding(.horizontal)
                 }
             }
         }
