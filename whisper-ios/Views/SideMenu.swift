@@ -3,7 +3,9 @@ import SwiftUI
 struct SideMenu: View {
     @Binding var isOpen: Bool
     let width: CGFloat = 270
-    let menuItems: [MenuItem] = [modelLoadMenuItem, recognitionFrequencySecMenuItem, languageSelectMenuItem, developerMenuItem]
+    let menuItems: [MenuItem] = [modelLoadMenuItem, recognitionFrequencySecMenuItem, languageSelectMenuItem,
+                                 developerMenuItem,
+                                 appInfoMenuItem]
 
     var body: some View {
         ZStack {

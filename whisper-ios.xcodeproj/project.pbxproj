@@ -61,6 +61,7 @@
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
 		5A8F552B2948CEA800E87D25 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8F552A2948CEA800E87D25 /* Inject */; };
+		5A91ACDE29992BC7004BE94A /* AppInfoMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A91ACDD29992BC7004BE94A /* AppInfoMenuBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		5A8F55212948CD3900E87D25 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		5A91ACDD29992BC7004BE94A /* AppInfoMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoMenuBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
 				139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */,
 				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
+				5A91ACDD29992BC7004BE94A /* AppInfoMenuBar.swift */,
 			);
 			path = SideMenuViews;
 			sourceTree = "<group>";
@@ -548,6 +551,7 @@
 				139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
+				5A91ACDE29992BC7004BE94A /* AppInfoMenuBar.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
 				13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */,
 				57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */,
