@@ -1,3 +1,4 @@
+import AVFoundation
 import SwiftUI
 
 struct HomeView: View {
@@ -45,28 +46,6 @@ struct HomeView: View {
                 }
             }
         }.navigationViewStyle(StackNavigationViewStyle())
-    }
-}
-
-struct MainView: View {
-    @State var isRecording: Bool = false
-    @State var recognizingSpeechIds: [UUID]
-    @State var recognizedSpeeches: [RecognizedSpeech]
-    @State var isRecordDetailActives: [Bool]
-
-    init() {
-        let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
-        recognizingSpeechIds = []
-        recognizedSpeeches = initialRecognizedSpeeches
-        isRecordDetailActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
-    }
-
-    var body: some View {
-        RecordList(
-            recognizingSpeechIds: $recognizingSpeechIds,
-            recognizedSpeeches: $recognizedSpeeches,
-            isRecordDetailActives: $isRecordDetailActives
-        )
     }
 }
 
