@@ -301,6 +301,13 @@ struct ggml_cgraph {
     int64_t perf_time_us;
 };
 
+// scratch buffer
+struct ggml_scratch {
+    size_t offs;
+    size_t size;
+    void * data;
+};
+
 struct ggml_init_params {
     // memory pool
     size_t mem_size;   // bytes
@@ -326,6 +333,8 @@ struct ggml_context * ggml_init(struct ggml_init_params params);
 void ggml_free(struct ggml_context * ctx);
 
 size_t ggml_used_mem(const struct ggml_context * ctx);
+
+size_t ggml_set_scratch(struct ggml_context * ctx, struct ggml_scratch scratch);
 
 struct ggml_tensor * ggml_new_tensor(
         struct ggml_context * ctx,
@@ -731,6 +740,8 @@ int ggml_cpu_has_f16c(void);
 int ggml_cpu_has_fp16_va(void);
 int ggml_cpu_has_wasm_simd(void);
 int ggml_cpu_has_blas(void);
+int ggml_cpu_has_sse3(void);
+int ggml_cpu_has_vsx(void);
 
 #ifdef  __cplusplus
 }
