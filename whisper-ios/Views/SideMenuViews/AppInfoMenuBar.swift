@@ -1,3 +1,4 @@
+import SafariServicesUI
 import SwiftUI
 
 struct AppInfoMenuItemView: View {
@@ -27,10 +28,15 @@ struct AppInfoMenuItemViewSubMenuItemView: View {
 }
 
 let AppInfoMenuSubItems = [
-    MenuItem(view: AnyView(AppInfoMenuItemViewSubMenuItemView(title: "利用規約")), subMenuItems: nil),
-    MenuItem(view: AnyView(AppInfoMenuItemViewSubMenuItemView(title: "プライバシーポリシー")), subMenuItems: nil),
+    MenuItem(view: AnyView(
+        Link("利用規約", destination: URL(string: "https://developer.apple.com")!)
+            .openURLInSafariView()
+    ), subMenuItems: nil),
+    MenuItem(view: AnyView(
+        Link("プライバシーポリシー", destination: URL(string: "https://openly.jp/company/privacy-policy")!)
+            .openURLInSafariView()
+    ), subMenuItems: nil),
     MenuItem(view: AnyView(AppInfoMenuItemViewSubMenuItemView(title: "ライセンス")), subMenuItems: nil),
-    MenuItem(view: AnyView(AppInfoMenuItemViewSubMenuItemView(title: "バージョン")), subMenuItems: nil),
 ]
 
 let appInfoMenuItem = MenuItem(view: AnyView(AppInfoMenuItemView()), subMenuItems: AppInfoMenuSubItems)
