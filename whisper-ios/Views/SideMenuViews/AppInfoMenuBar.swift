@@ -29,7 +29,7 @@ struct AppInfoMenuItemViewSubMenuItemView: View {
 
 let AppInfoMenuSubItems = [
     MenuItem(view: AnyView(
-        Link("利用規約", destination: URL(string: "https://developer.apple.com")!)
+        Link("利用規約", destination: URL(string: "https://openly.jp/company/voiscribe")!)
             .openURLInSafariView()
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
