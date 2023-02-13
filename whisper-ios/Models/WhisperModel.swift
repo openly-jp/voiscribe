@@ -4,6 +4,7 @@ enum Size: String {
     case tiny
     case base
     case small
+    case medium
 
     init() {
         self = .tiny

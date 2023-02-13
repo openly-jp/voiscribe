@@ -7,6 +7,8 @@ let modelURLs: [String: String] = [
     "base-en": "models.openly.jp/ggml-base.en.bin",
     "small-multi": "models.openly.jp/ggml-small.multi.bin",
     "small-en": "models.openly.jp/ggml-small.en.bin",
+    "medium-multi": "models.openly.jp/ggml-medium.multi.bin",
+    "medium-en": "models.openly.jp/ggml-medium.en.bin",
 ]
 
 enum WhisperModelRepository {

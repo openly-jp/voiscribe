@@ -12,6 +12,8 @@ class RecordDownloadedModels: ObservableObject {
     @AppStorage("is-downloaded-base-en") var isDownloadedBaseEn = false
     @AppStorage("is-downloaded-small-multi") var isDownloadedSmallMulti = false
     @AppStorage("is-downloaded-small-en") var isDownloadedSmallEn = false
+    @AppStorage("is-downloaded-medium-multi") var isDownloadedMediumMulti = false
+    @AppStorage("is-downloaded-medium-en") var isDownloadedMediumEn = false
 
     func getRecordDownloadedModels(size: String, lang: String) -> Bool {
         if size == "tiny" {
@@ -31,6 +33,12 @@ class RecordDownloadedModels: ObservableObject {
                 return isDownloadedSmallMulti
             } else {
                 return isDownloadedSmallEn
+            }
+        } else if size == "medium" {
+            if lang == "multi" {
+                return isDownloadedMediumMulti
+            } else {
+                return isDownloadedMediumEn
             }
         }
         return false
@@ -55,6 +63,12 @@ class RecordDownloadedModels: ObservableObject {
                 } else {
                     self.isDownloadedSmallEn = isDownloaded
                 }
+            } else if size == "medium" {
+                if lang == "multi" {
+                    self.isDownloadedMediumMulti = isDownloaded
+                } else {
+                    self.isDownloadedMediumEn = isDownloaded
+                }
             }
         }
     }
@@ -67,6 +81,8 @@ class RecordLoadModels: ObservableObject {
     @AppStorage("is-loaded-base-en") var isLoadingBaseEn = false
     @AppStorage("is-loaded-small-multi") var isLoadingSmallMulti = false
     @AppStorage("is-loaded-small-en") var isLoadingSmallEn = false
+    @AppStorage("is-loaded-medium-multi") var isLoadingMediumMulti = false
+    @AppStorage("is-loaded-medium-en") var isLoadingMediumEn = false
 
     func getRecordLoadModels(size: String, lang: String) -> Bool {
         if size == "tiny" {
@@ -86,6 +102,12 @@ class RecordLoadModels: ObservableObject {
                 return isLoadingSmallMulti
             } else {
                 return isLoadingSmallEn
+            }
+        } else if size == "medium" {
+            if lang == "multi" {
+                return isLoadingMediumMulti
+            } else {
+                return isLoadingMediumEn
             }
         }
         return false
@@ -109,6 +131,12 @@ class RecordLoadModels: ObservableObject {
                     self.isLoadingSmallMulti = isLoading
                 } else {
                     self.isLoadingSmallEn = isLoading
+                }
+            } else if size == "medium" {
+                if lang == "multi" {
+                    self.isLoadingMediumMulti = isLoading
+                } else {
+                    self.isLoadingMediumEn = isLoading
                 }
             }
         }
@@ -382,6 +410,24 @@ let modeLoadSubMenuItems = [
             language: Lang(rawValue: "en")!,
             needsSubscription: false,
             modelDisplayName: "Small(EN)"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "medium")!,
+            language: Lang(rawValue: "multi")!,
+            needsSubscription: false,
+            modelDisplayName: "Medium"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "medium")!,
+            language: Lang(rawValue: "en")!,
+            needsSubscription: false,
+            modelDisplayName: "Medium(EN)"
         )),
         subMenuItems: nil
     ),
