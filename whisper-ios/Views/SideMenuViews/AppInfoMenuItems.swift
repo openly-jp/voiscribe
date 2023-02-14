@@ -23,7 +23,6 @@ struct AppInfoMenuItemViewSubMenuItemView: View {
                 .font(.headline)
             Spacer()
         }
-        .onTapGesture(perform: {})
     }
 }
 
