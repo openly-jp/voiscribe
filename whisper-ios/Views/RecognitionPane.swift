@@ -49,6 +49,7 @@ struct RecognitionPane: View {
     
     // MARK: - background related state
     @Environment(\.scenePhase) var scenePhase
+    @State var isBackground = false
 
     var body: some View {
         RecordingController(
@@ -78,7 +79,9 @@ struct RecognitionPane: View {
                 newPhase in
                 if newPhase == .background, isRecording, !isPaused {
                     streamingRecognitionTimer?.invalidate()
-                } else if newPhase == .active, isRecording, !isPaused {
+                    // to distinguish background or inactive (e.g. Control Panel)
+                    isBackground = true
+                } else if newPhase == .active, isRecording, !isPaused, isBackground {
                     streamingRecognitionTimer = Timer.scheduledTimer(
                         withTimeInterval: Double(recognitionFrequencySec),
                         repeats: true
@@ -86,6 +89,7 @@ struct RecognitionPane: View {
                         streamingRecognitionTimerFunc()
                     }
                     RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
+                    isBackground = false
                 }
             }
     }
