@@ -14,7 +14,7 @@ struct AppInfoMenuItemView: View {
     }
 }
 
-struct AppInfoMenuItemViewSubMenuItemView: View {
+struct AppInfoSubMenuItemView: View {
     let title: String
 
     var body: some View {
@@ -26,20 +26,22 @@ struct AppInfoMenuItemViewSubMenuItemView: View {
     }
 }
 
-let AppInfoMenuSubItems = [
+let AppInfoSubMenuItems = [
     MenuItem(view: AnyView(
         Link("利用規約", destination: URL(string: "https://openly.jp/company/voiscribe")!)
             .openURLInSafariView()
+            .tint(Color(.label))
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
         Link("プライバシーポリシー", destination: URL(string: "https://openly.jp/company/privacy-policy")!)
             .openURLInSafariView()
+            .tint(Color(.label))
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
         NavigationLink(destination: LicenseView()) {
-            AppInfoMenuItemViewSubMenuItemView(title: "ライセンス")
+            AppInfoSubMenuItemView(title: "ライセンス")
         }
     ), subMenuItems: nil),
 ]
 
-let appInfoMenuItem = MenuItem(view: AnyView(AppInfoMenuItemView()), subMenuItems: AppInfoMenuSubItems)
+let appInfoMenuItem = MenuItem(view: AnyView(AppInfoMenuItemView()), subMenuItems: AppInfoSubMenuItems)
