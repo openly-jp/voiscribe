@@ -46,8 +46,9 @@ struct RecognitionPane: View {
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
-    
+
     // MARK: - background related state
+
     @Environment(\.scenePhase) var scenePhase
     @State var isBackground = false
 
@@ -75,7 +76,7 @@ struct RecognitionPane: View {
             .frame(height: 0)
             .hidden()
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
-            .onChange(of: scenePhase){
+            .onChange(of: scenePhase) {
                 newPhase in
                 if newPhase == .background, isRecording, !isPaused {
                     streamingRecognitionTimer?.invalidate()
