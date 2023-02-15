@@ -197,14 +197,20 @@ struct RecognitionPane: View {
 
         language = getUserLanguage()
         tmpAudioFileNumber = 0
-        recognizingSpeech = RecognizedSpeech(audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber), language: language)
+        recognizingSpeech = RecognizedSpeech(
+            audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber),
+            language: language
+        )
         recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
 
         elapsedTime = 0
         idAmps = []
         title = ""
 
-        audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: tmpAudioFileNumber), settings: recordSettings)
+        audioRecorder = try! AVAudioRecorder(
+            url: getTmpURLByNumber(number: tmpAudioFileNumber),
+            settings: recordSettings
+        )
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
 
@@ -343,11 +349,17 @@ struct RecognitionPane: View {
         for tmpAudioData in tmpAudioDataList {
             audioData = audioData + tmpAudioData
         }
-        guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) else {
+        guard let format = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: 16000,
+            channels: 1,
+            interleaved: false
+        ) else {
             Logger.error("format load error")
             return
         }
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count)) else {
+        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
+        else {
             Logger.error("audio load error")
             return
         }
@@ -472,7 +484,8 @@ struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
+            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja",
+                                                                   csvFileName: "sample_ja")!]),
             isRecordDetailActives: .constant([])
         )
     }

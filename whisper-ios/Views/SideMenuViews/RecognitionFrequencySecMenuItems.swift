@@ -46,4 +46,7 @@ let recognitionFrequencySecSubMenuItems = [
     MenuItem(view: AnyView(RecognitionFrequencySecSubMenuItemView(frequencySec: 30)), subMenuItems: nil),
 ]
 
-let recognitionFrequencySecMenuItem = MenuItem(view: AnyView(RecognitionFrequencySecMenuItemView()), subMenuItems: recognitionFrequencySecSubMenuItems)
+let recognitionFrequencySecMenuItem = MenuItem(
+    view: AnyView(RecognitionFrequencySecMenuItemView()),
+    subMenuItems: recognitionFrequencySecSubMenuItems
+)
