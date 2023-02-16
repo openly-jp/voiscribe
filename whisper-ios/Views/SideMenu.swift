@@ -8,6 +8,7 @@ struct SideMenu: View {
         recognitionFrequencySecMenuItem,
         languageSelectMenuItem,
         developerMenuItem,
+        appInfoMenuItem,
     ]
 
     var body: some View {
