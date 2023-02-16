@@ -252,8 +252,12 @@ func loadAudio(url: URL) throws -> [Float32] {
 }
 
 func writeAudio(audioData: [Float32], url: URL) throws {
-    guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1,
-                                     interleaved: false)
+    guard let format = AVAudioFormat(
+        commonFormat: .pcmFormatFloat32,
+        sampleRate: 16000,
+        channels: 1,
+        interleaved: false
+    )
     else {
         throw NSError(domain: "audio write error", code: -1)
     }
