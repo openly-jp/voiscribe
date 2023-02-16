@@ -18,7 +18,12 @@ func loadTranscriptionLinesFromCSV(fileName: String) -> [TranscriptionLine] {
             continue
         }
         let text = parts[2]
-        let transcriptionLine = TranscriptionLine(startMSec: startSec * 1000, endMSec: endSec * 1000, text: text, ordering: Int32(index))
+        let transcriptionLine = TranscriptionLine(
+            startMSec: startSec * 1000,
+            endMSec: endSec * 1000,
+            text: text,
+            ordering: Int32(index)
+        )
         transcriptionLines.append(transcriptionLine)
     }
     return transcriptionLines

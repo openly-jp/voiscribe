@@ -67,8 +67,14 @@ struct ModelLoadSubMenuItemView: View {
 }
 
 let modeLoadSubMenuItems = [
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny", modelDisplayName: "Tiny")), subMenuItems: nil),
-    MenuItem(view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")), subMenuItems: nil),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny", modelDisplayName: "Tiny")),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")),
+        subMenuItems: nil
+    ),
 ]
 
 let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: modeLoadSubMenuItems)
