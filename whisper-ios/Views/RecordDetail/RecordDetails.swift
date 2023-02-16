@@ -46,6 +46,8 @@ struct Title: View {
     let isEditable: Bool
     @FocusState var isFocused: Bool
 
+    @State var isNotEditableAlertOpen = false
+
     var body: some View {
         if isEditable, isEditing {
             TextField(editingTitle, text: $editingTitle)
@@ -79,6 +81,14 @@ struct Title: View {
                 .fontWeight(.bold)
                 .padding(.horizontal)
                 .padding(1)
+                .onTapGesture {
+                    isNotEditableAlertOpen = true
+                }
+                .alert(isPresented: $isNotEditableAlertOpen) {
+                    Alert(title: Text("認識中は編集できません"),
+                          message: Text("認識終了後に再度お試しください"),
+                          dismissButton: .default(Text("了解")))
+                }
         }
     }
 }
