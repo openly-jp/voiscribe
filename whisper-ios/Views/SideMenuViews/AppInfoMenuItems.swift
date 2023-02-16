@@ -31,11 +31,13 @@ let AppInfoSubMenuItems = [
         Link("利用規約", destination: URL(string: "https://openly.jp/company/voiscribe")!)
             .openURLInSafariView()
             .tint(Color(.label))
+            .font(.headline)
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
         Link("プライバシーポリシー", destination: URL(string: "https://openly.jp/company/privacy-policy")!)
             .openURLInSafariView()
             .tint(Color(.label))
+            .font(.headline)
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
         NavigationLink(destination: LicenseView()) {
