@@ -475,17 +475,15 @@ func getUserLanguage() -> Language {
     return .en
 }
 
-/// DEPRECATED: This operation will be done only on SideMenu
-func saveUserLanguage(_ language: Language) {
-    UserDefaults.standard.set(language.rawValue, forKey: UserDefaultASRLanguageKey)
-}
-
 struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
+        let mock = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja",
-                                                                   csvFileName: "sample_ja")!]),
+            recognizedSpeeches: .constant([mock!]),
             isRecordDetailActives: .constant([])
         )
     }

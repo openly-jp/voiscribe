@@ -181,8 +181,9 @@ class WhisperRecognizer: Recognizer {
                 }
 
                 let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
-                let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil ? recognizingSpeech
-                    .transcriptionLines.last!.ordering + 1 : 0
+                let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil
+                    ? recognizingSpeech.transcriptionLines.last!.ordering + 1
+                    : 0
                 let nSegments = whisper_full_n_segments(whisperContext)
                 var lastEndMSec: Int64 = 0
                 for i in 0 ..< nSegments {
