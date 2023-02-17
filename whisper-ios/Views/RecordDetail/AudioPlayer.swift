@@ -71,8 +71,13 @@ struct AudioPlayer: View {
                     currentPlayingTime = player.currentTime
                 }
                 Spacer()
-
-                ShareButton(transcription: transcription)
+                Button {
+                    UIPasteboard.general.string = transcription
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                }
+                
+                .foregroundColor(Color(.secondaryLabel))
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)

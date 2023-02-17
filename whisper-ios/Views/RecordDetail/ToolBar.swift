@@ -1,4 +1,6 @@
 import SwiftUI
+import AVFoundation
+import UIKit
 
 struct ToolBar: ToolbarContent {
     let recognizedSpeech: RecognizedSpeech
@@ -8,6 +10,8 @@ struct ToolBar: ToolbarContent {
     @Binding var isEditing: Bool
 
     @State var isOpenDeleteAlert: Bool = false
+    @State var isOpenShareSheetm4a: Bool = false
+    @State var isOpenShareSheettxt: Bool = false
     @Environment(\.presentationMode) var presentationMode
 
     var body: some ToolbarContent {
@@ -19,13 +23,20 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "highlighter")
                         .foregroundColor(Color(.label))
                 }
-
+                
                 Menu {
-                    Button {
-                        UIPasteboard.general.string = allTranscription
-                    } label: {
-                        Label("全文をコピー", systemImage: "doc.on.doc")
-                    }
+                    Button(
+                        action: { isOpenShareSheettxt = true },
+                        label: {
+                            Label("テキストを共有", systemImage: "square.and.arrow.up")
+                        }
+                    )
+                    Button(
+                        action: { isOpenShareSheetm4a = true },
+                        label: {
+                            Label("音声を共有", systemImage: "square.and.arrow.up")
+                        }
+                    )
                     Button(
                         role: .destructive,
                         action: { isOpenDeleteAlert = true },
@@ -38,7 +49,8 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "ellipsis")
                         .foregroundColor(Color(.label))
                         .rotationEffect(.degrees(90))
-                }.alert(isPresented: $isOpenDeleteAlert) {
+                }
+                .alert(isPresented: $isOpenDeleteAlert) {
                     Alert(
                         title: Text("削除しますか？"),
                         message: Text("データは完全に失われます。本当に削除しますか？"),
@@ -50,9 +62,38 @@ struct ToolBar: ToolbarContent {
                         }
                     )
                 }
+                .sheet(isPresented: $isOpenShareSheettxt) {
+                    ActivityViewTXT(text: allTranscription)
+                }
+                .sheet(isPresented: $isOpenShareSheetm4a) {
+                    ActivityViewM4A(recognizedSpeech: recognizedSpeech)
+                }
             }
         }
     }
+    
+}
+
+struct ActivityViewTXT: UIViewControllerRepresentable {
+    let text: String
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: [text], applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+struct ActivityViewM4A: UIViewControllerRepresentable {
+    let recognizedSpeech: RecognizedSpeech
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let fileURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
+
+        return UIActivityViewController(activityItems: ["audio file", fileURL], applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 struct EditingToolbar: ToolbarContent {
@@ -106,3 +147,4 @@ struct EditingToolbar: ToolbarContent {
         }
     }
 }
+

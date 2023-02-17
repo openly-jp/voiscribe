@@ -6,15 +6,13 @@ struct ShareButton: View {
     @State var isShareSheetOpen = false
 
     var body: some View {
-        VStack {
-            Button(action: openShareSheet) {
-                Image(systemName: "square.and.arrow.up")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-            }
-            .foregroundColor(Color(.secondaryLabel))
+        Button(action: openShareSheet) {
+            Image(systemName: "square.and.arrow.up")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
         }
+        .foregroundColor(Color(.secondaryLabel))
         .sheet(isPresented: $isShareSheetOpen) {
             ActivityView(text: transcription)
         }
@@ -48,3 +46,4 @@ struct ShareButton_Previews: PreviewProvider {
         ShareButton(transcription: "認識結果です。共有します。")
     }
 }
+

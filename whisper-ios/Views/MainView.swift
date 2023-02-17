@@ -144,7 +144,6 @@ struct MainView: View {
 class MainView_Previews: PreviewProvider {
     static var previews: some View {
         let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
-        let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
         Group {
             MainView()
                 .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
