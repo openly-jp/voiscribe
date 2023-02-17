@@ -40,8 +40,17 @@ struct RecognitionFrequencySecSubMenuItemView: View {
 }
 
 let languageSelectSubMenuItems = [
-    MenuItem(view: AnyView(LanguageSelectSubMenuItemView(language: Language.en, languageDisplayName: "英語")), subMenuItems: nil),
-    MenuItem(view: AnyView(LanguageSelectSubMenuItemView(language: Language.ja, languageDisplayName: "日本語")), subMenuItems: nil),
+    MenuItem(
+        view: AnyView(LanguageSelectSubMenuItemView(language: Language.en, languageDisplayName: "英語")),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(LanguageSelectSubMenuItemView(language: Language.ja, languageDisplayName: "日本語")),
+        subMenuItems: nil
+    ),
 ]
 
-let languageSelectMenuItem = MenuItem(view: AnyView(LanguageSelectMenuItemView()), subMenuItems: languageSelectSubMenuItems)
+let languageSelectMenuItem = MenuItem(
+    view: AnyView(LanguageSelectMenuItemView()),
+    subMenuItems: languageSelectSubMenuItems
+)

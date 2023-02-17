@@ -47,6 +47,11 @@ struct RecognitionPane: View {
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
 
+    // MARK: - background related state
+
+    @Environment(\.scenePhase) var scenePhase
+    @State var isBackground = false
+
     var body: some View {
         RecordingController(
             isRecording: $isRecording,
@@ -71,6 +76,23 @@ struct RecognitionPane: View {
             .frame(height: 0)
             .hidden()
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
+            .onChange(of: scenePhase) {
+                newPhase in
+                if newPhase == .background, isRecording, !isPaused {
+                    streamingRecognitionTimer?.invalidate()
+                    // to distinguish background or inactive (e.g. Control Panel)
+                    isBackground = true
+                } else if newPhase == .active, isRecording, !isPaused, isBackground {
+                    streamingRecognitionTimer = Timer.scheduledTimer(
+                        withTimeInterval: Double(recognitionFrequencySec),
+                        repeats: true
+                    ) { _ in
+                        streamingRecognitionTimerFunc()
+                    }
+                    RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
+                    isBackground = false
+                }
+            }
     }
 
     var recordingSheet: some View {
@@ -197,14 +219,20 @@ struct RecognitionPane: View {
 
         language = getUserLanguage()
         tmpAudioFileNumber = 0
-        recognizingSpeech = RecognizedSpeech(audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber), language: language)
+        recognizingSpeech = RecognizedSpeech(
+            audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber),
+            language: language
+        )
         recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
 
         elapsedTime = 0
         idAmps = []
         title = ""
 
-        audioRecorder = try! AVAudioRecorder(url: getTmpURLByNumber(number: tmpAudioFileNumber), settings: recordSettings)
+        audioRecorder = try! AVAudioRecorder(
+            url: getTmpURLByNumber(number: tmpAudioFileNumber),
+            settings: recordSettings
+        )
         audioRecorder!.isMeteringEnabled = true
         audioRecorder!.record()
 
@@ -343,11 +371,17 @@ struct RecognitionPane: View {
         for tmpAudioData in tmpAudioDataList {
             audioData = audioData + tmpAudioData
         }
-        guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) else {
+        guard let format = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: 16000,
+            channels: 1,
+            interleaved: false
+        ) else {
             Logger.error("format load error")
             return
         }
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count)) else {
+        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
+        else {
             Logger.error("audio load error")
             return
         }
@@ -463,16 +497,15 @@ func getUserLanguage() -> Language {
     return .en
 }
 
-/// DEPRECATED: This operation will be done only on SideMenu
-func saveUserLanguage(_ language: Language) {
-    UserDefaults.standard.set(language.rawValue, forKey: UserDefaultASRLanguageKey)
-}
-
 struct RecognitionPane_Previews: PreviewProvider {
     static var previews: some View {
+        let mock = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
         RecognitionPane(
             recognizingSpeechIds: .constant([]),
-            recognizedSpeeches: .constant([getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")!]),
+            recognizedSpeeches: .constant([mock!]),
             isRecordDetailActives: .constant([])
         )
     }

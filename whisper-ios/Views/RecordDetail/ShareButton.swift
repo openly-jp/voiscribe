@@ -26,7 +26,9 @@ struct ShareButton: View {
 struct ActivityView: UIViewControllerRepresentable {
     let text: String
 
-    func makeUIViewController(context _: UIViewControllerRepresentableContext<ActivityView>) -> UIActivityViewController {
+    func makeUIViewController(context _: UIViewControllerRepresentableContext<ActivityView>)
+        -> UIActivityViewController
+    {
         UIActivityViewController(activityItems: [text], applicationActivities: nil)
     }
 
