@@ -53,8 +53,7 @@ struct SideMenu: View {
                     } else {
                         offset = sideMenuOpenOffset
                     }
-                } : nil
-            )
+                } : nil)
         }
     }
 }
