@@ -140,7 +140,13 @@ struct StreamingRecognitionTestView: View {
                         }
                     }
                 }
-                .frame(minWidth: 0, maxWidth: .infinity, minHeight: geometry.size.height / 4, maxHeight: geometry.size.height / 4, alignment: .topLeading)
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    minHeight: geometry.size.height / 4,
+                    maxHeight: geometry.size.height / 4,
+                    alignment: .topLeading
+                )
                 Text("認識結果")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -160,7 +166,13 @@ struct StreamingRecognitionTestView: View {
                         }
                     }
                 }
-                .frame(minWidth: 0, maxWidth: .infinity, minHeight: geometry.size.height / 3, maxHeight: geometry.size.height / 3, alignment: .topLeading)
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    minHeight: geometry.size.height / 3,
+                    maxHeight: geometry.size.height / 3,
+                    alignment: .topLeading
+                )
                 HStack {
                     Text("CER: \(charErrorRate == nil ? "認識完了前" : String(format: "%.2f", charErrorRate!))")
                         .font(.title3)
@@ -221,7 +233,10 @@ func loadAudio(url: URL) throws -> [Float32] {
     guard let audio = try? AVAudioFile(forReading: url, commonFormat: .pcmFormatFloat32, interleaved: false) else {
         throw NSError(domain: "audio load error", code: -1)
     }
-    guard let buffer = AVAudioPCMBuffer(pcmFormat: audio.processingFormat, frameCapacity: AVAudioFrameCount(audio.length)) else {
+    guard let buffer = AVAudioPCMBuffer(
+        pcmFormat: audio.processingFormat,
+        frameCapacity: AVAudioFrameCount(audio.length)
+    ) else {
         throw NSError(domain: "audio load error", code: -1)
     }
     do {
@@ -237,7 +252,13 @@ func loadAudio(url: URL) throws -> [Float32] {
 }
 
 func writeAudio(audioData: [Float32], url: URL) throws {
-    guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000, channels: 1, interleaved: false) else {
+    guard let format = AVAudioFormat(
+        commonFormat: .pcmFormatFloat32,
+        sampleRate: 16000,
+        channels: 1,
+        interleaved: false
+    )
+    else {
         throw NSError(domain: "audio write error", code: -1)
     }
     guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count)) else {
@@ -270,7 +291,10 @@ func calculateCER(ref: String, out: String) -> Float {
             if ref[refPos] == out[outPos] {
                 dpTable[rowIdx][colIdx] = dpTable[rowIdx - 1][colIdx - 1]
             } else {
-                dpTable[rowIdx][colIdx] = min(dpTable[rowIdx - 1][colIdx] + 1, min(dpTable[rowIdx][colIdx - 1] + 1, dpTable[rowIdx - 1][colIdx - 1] + 1))
+                dpTable[rowIdx][colIdx] = min(
+                    dpTable[rowIdx - 1][colIdx] + 1,
+                    min(dpTable[rowIdx][colIdx - 1] + 1, dpTable[rowIdx - 1][colIdx - 1] + 1)
+                )
             }
         }
     }
@@ -280,7 +304,8 @@ func calculateCER(ref: String, out: String) -> Float {
 // MARK: meta info related func
 
 func getAllMetaInfoList() -> [MetaInfo] {
-    guard let urls = Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: "StreamingRecognitionTest") else {
+    guard let urls = Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: "StreamingRecognitionTest")
+    else {
         Logger.error("Failed to get urls for meta info.")
         return []
     }
@@ -294,7 +319,11 @@ func getAllMetaInfoList() -> [MetaInfo] {
             Logger.error("Failed to decode json data. \(url.absoluteString)")
             continue
         }
-        guard let audioFileURL = Bundle.main.url(forResource: metaInfoJson.audioFileName, withExtension: "wav", subdirectory: "StreamingRecognitionTest") else {
+        guard let audioFileURL = Bundle.main.url(
+            forResource: metaInfoJson.audioFileName,
+            withExtension: "wav",
+            subdirectory: "StreamingRecognitionTest"
+        ) else {
             Logger.error("Failed to get audio file url. \(url.absoluteString)")
             continue
         }
@@ -302,7 +331,12 @@ func getAllMetaInfoList() -> [MetaInfo] {
             Logger.error("Language is not valid. \(metaInfoJson.language)")
             continue
         }
-        let metaInfo = MetaInfo(audioFileURL: audioFileURL, language: language, label: metaInfoJson.label, transcripts: metaInfoJson.transcripts)
+        let metaInfo = MetaInfo(
+            audioFileURL: audioFileURL,
+            language: language,
+            label: metaInfoJson.label,
+            transcripts: metaInfoJson.transcripts
+        )
         metaInfoList.append(metaInfo)
     }
     return metaInfoList
