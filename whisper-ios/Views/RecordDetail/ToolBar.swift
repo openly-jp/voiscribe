@@ -1,5 +1,5 @@
-import SwiftUI
 import AVFoundation
+import SwiftUI
 import UIKit
 
 struct ToolBar: ToolbarContent {
@@ -23,7 +23,7 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "highlighter")
                         .foregroundColor(Color(.label))
                 }
-                
+
                 Menu {
                     Button(
                         action: { isOpenShareSheettxt = true },
@@ -71,29 +71,28 @@ struct ToolBar: ToolbarContent {
             }
         }
     }
-    
 }
 
 struct ActivityViewTXT: UIViewControllerRepresentable {
     let text: String
-    
-    func makeUIViewController(context: Context) -> UIActivityViewController {
+
+    func makeUIViewController(context _: Context) -> UIActivityViewController {
         UIActivityViewController(activityItems: [text], applicationActivities: nil)
     }
-    
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+
+    func updateUIViewController(_: UIActivityViewController, context _: Context) {}
 }
 
 struct ActivityViewM4A: UIViewControllerRepresentable {
     let recognizedSpeech: RecognizedSpeech
-    
-    func makeUIViewController(context: Context) -> UIActivityViewController {
+
+    func makeUIViewController(context _: Context) -> UIActivityViewController {
         let fileURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
 
         return UIActivityViewController(activityItems: ["audio file", fileURL], applicationActivities: nil)
     }
 
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+    func updateUIViewController(_: UIActivityViewController, context _: Context) {}
 }
 
 struct EditingToolbar: ToolbarContent {
@@ -147,4 +146,3 @@ struct EditingToolbar: ToolbarContent {
         }
     }
 }
-

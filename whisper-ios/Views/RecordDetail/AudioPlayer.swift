@@ -76,7 +76,7 @@ struct AudioPlayer: View {
                 } label: {
                     Image(systemName: "doc.on.doc")
                 }
-                
+
                 .foregroundColor(Color(.secondaryLabel))
             }
             .padding(.horizontal, 30)

@@ -48,4 +48,3 @@ struct ShareButton_Previews: PreviewProvider {
         ShareButton(transcription: "認識結果です。共有します。")
     }
 }
-
