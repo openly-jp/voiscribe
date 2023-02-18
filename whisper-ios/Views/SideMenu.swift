@@ -33,8 +33,6 @@ struct SideMenu: View {
                     Spacer()
                 }
             }
-            // .contentShape is just for activating gesture on transparent background
-            .contentShape(Rectangle())
             .gesture(isOpen ? DragGesture()
                 .onChanged {
                     value in
