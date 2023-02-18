@@ -133,6 +133,9 @@
 		5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModelRepository.swift; sourceTree = "<group>"; };
 		5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.multi.bin"; sourceTree = "<group>"; };
 		5A2517962989800C001ED13F /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
+		5A3AE6AA29A140F00036BD0F /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.multi.bin"; sourceTree = "<group>"; };
+		5A3AE6AC29A1417E0036BD0F /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
+		5A3AE6AE29A141A20036BD0F /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -266,6 +269,7 @@
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5A3AE6AC29A1417E0036BD0F /* ggml-tiny.en.bin */,
 				1331B465297D902400FEBE24 /* DeveloperViews */,
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
@@ -390,7 +394,9 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A3AE6AE29A141A20036BD0F /* ggml-tiny.en.bin */,
 				5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */,
+				5A3AE6AA29A140F00036BD0F /* ggml-tiny.multi.bin */,
 				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
 				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 			);
@@ -770,9 +776,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -805,9 +808,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
