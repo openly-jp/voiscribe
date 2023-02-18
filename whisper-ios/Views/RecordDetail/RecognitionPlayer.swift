@@ -78,7 +78,9 @@ struct RecognitionPlayer: View {
     func initAudioPlayer() {
         // TODO: fix this (issue #25)
         let fileName = recognizedSpeech.audioFileURL.lastPathComponent
-        let url = getURLByName(fileName: fileName)
+        let url = FileManager.default.url(forUbiquityContainerIdentifier: nil)!
+            .appendingPathComponent("Documents")
+            .appendingPathComponent(fileName)
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player!.enableRate = true

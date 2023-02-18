@@ -389,7 +389,11 @@ struct RecognitionPane: View {
             pcmBuffer.floatChannelData!.pointee[i] = Float(audioData[i])
         }
         pcmBuffer.frameLength = AVAudioFrameCount(audioData.count)
-        let newURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
+
+        let newURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)!
+            .appendingPathComponent("Documents")
+            .appendingPathComponent("\(recognizedSpeech.id.uuidString).m4a")
+
         guard let audioFile = try? AVAudioFile(forWriting: newURL, settings: recordSettings) else {
             Logger.error("audio load error")
             return
