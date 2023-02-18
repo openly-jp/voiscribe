@@ -159,24 +159,24 @@ struct ModelLoadMenuItemView: View {
 struct CircularProgressBar: View {
     @Binding var progress: CGFloat
 
-    var body: some View {
+        var body: some View {
         ZStack {
-            // 背景の円
+            // Background circle
             Circle()
-                // ボーダーラインを描画するように指定
+                // Specify to draw the border line
                 .stroke(lineWidth: 4.0)
                 .opacity(0.3)
                 .foregroundColor(.gray)
 
-            // 進捗を示す円
+            // Circle to indicate progress
             Circle()
-                // 始点/終点を指定して円を描画する
-                // 始点/終点には0.0-1.0の範囲に正規化した値を指定する
+                // Draw a circle by specifying the start and end points
+                // Specify normalized values in the range of 0.0-1.0 for the start and end points
                 .trim(from: 0.0, to: min(progress, 1.0))
-                // 線の端の形状などを指定
+                // Specify the shape of the line's end and other parameters
                 .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 .foregroundColor(.blue)
-                // デフォルトの原点は時計の12時の位置ではないので回転させる
+                // The default origin is not at the 12 o'clock position of the clock, so rotate it
                 .rotationEffect(Angle(degrees: 270.0))
         }
     }

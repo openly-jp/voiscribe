@@ -2,8 +2,6 @@ import SwiftUI
 
 @main
 struct WhisperTestApp: App {
-    init() {}
-
     var body: some Scene {
         WindowGroup {
             StartView()
