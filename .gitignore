@@ -21,7 +21,7 @@ DerivedData/
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
-!whisper-ios.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 ## library
 Pods/*
 Carthage/Build/
