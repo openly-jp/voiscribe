@@ -33,8 +33,14 @@ struct StartView: View {
                             needsSubscription: defaultModelNeedsSubscription,
                             completion: {}
                         )
-                        recognizer = try? WhisperRecognizer(whisperModel: whisperModel)
-                        isLoading = false
+                        whisperModel.load_model(callback:{
+                            recognizer = WhisperRecognizer(whisperModel: whisperModel)
+                            if recognizer == nil{
+                                // Logger cannot be initialized on app start
+                                print("recognizer initialization failed on app start")
+                            }
+                            isLoading = false
+                        })
                     }
                 }
             Text(APP_NAME)
