@@ -27,7 +27,6 @@ class WhisperModel: Identifiable {
     var size: Size
     var language: Lang
     @Published var isDownloaded: Bool
-    var recordDownloadedModels: RecordDownloadedModels = .init()
     var needsSubscription: Bool
     var whisperContext: OpaquePointer?
     var createdAt: Date
@@ -59,11 +58,6 @@ class WhisperModel: Identifiable {
                 case let .success(modelURL):
                     self.localPath = modelURL
                     self.isDownloaded = true
-                    self.recordDownloadedModels.setRecordDownloadedModels(
-                        size: size.rawValue,
-                        lang: language.rawValue,
-                        isDownloaded: true
-                    )
                     completion()
                 case let .failure(error):
                     self.isDownloaded = false
@@ -98,19 +92,22 @@ class WhisperModel: Identifiable {
         "\(size.rawValue)-\(language.rawValue)"
     }
 
-    func load_model() {
+    func load_model(callback: @escaping () -> Void) {
         Logger.debug("Loading Model: model size \(size ), model language \(language.rawValue ), model name \(name )")
         guard let modelUrl = localPath else {
             Logger.error("Failed to parse model url")
             return
     }
-    DispatchQueue.global(qos: .userInitiated).async {
-        self.whisperContext = whisper_init_from_file(modelUrl.path)
-        if self.whisperContext == nil {
-            Logger.error("Failed to load model")
-        } else {
-            Logger.debug("Model loaded")
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.whisperContext = whisper_init_from_file(modelUrl.path)
+            if self.whisperContext == nil {
+                Logger.error("Failed to load model")
+            } else {
+                Logger.debug("Model loaded")
+                DispatchQueue.main.async{
+                    callback()
+                }
+            }
         }
-    }
     }
 }
