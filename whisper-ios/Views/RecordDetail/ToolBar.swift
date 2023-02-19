@@ -23,7 +23,7 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "highlighter")
                         .foregroundColor(Color(.label))
                 }
-                
+
                 Menu {
                     Button(
                         action: { isOpenShareSheettxt = true },
