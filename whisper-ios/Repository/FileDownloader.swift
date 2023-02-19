@@ -1,10 +1,6 @@
 import Foundation
 
 class ProgressDelegatee: NSObject, URLSessionDownloadDelegate {
-    func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        completionHandler(location, downloadTask.response, downloadTask.error)
-    }
-
     let update: (Float) -> Void
     let completionHandler: @Sendable (URL?, URLResponse?, Error?) -> Void
 
@@ -16,6 +12,12 @@ class ProgressDelegatee: NSObject, URLSessionDownloadDelegate {
         self.completionHandler = completionHandler
     }
 
+    /// method for handling the completion of the download task
+    func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        completionHandler(location, downloadTask.response, downloadTask.error)
+    }
+
+    /// method for handling the progress of the download task
     func urlSession(
         _: URLSession,
         downloadTask _: URLSessionDownloadTask,
@@ -60,9 +62,5 @@ class FileDownloader {
             completion(location, nil)
         }
         task?.resume()
-    }
-
-    func cancelDownload() {
-        task?.cancel()
     }
 }

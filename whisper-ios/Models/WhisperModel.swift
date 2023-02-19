@@ -48,19 +48,21 @@ class WhisperModel: Identifiable {
         // NOTE: This is a UNIX Time
         createdAt = Date()
         updatedAt = Date()
-        WhisperModelRepository
-            .fetchWhisperModel(size: size, language: language,
-                               update: nil) { result in
-                switch result {
-                case let .success(modelURL):
-                    self.localPath = modelURL
-                    self.isDownloaded = true
-                    completion()
-                case let .failure(error):
-                    self.isDownloaded = false
-                    print("Error: \(error.localizedDescription)")
-                }
+        WhisperModelRepository.fetchWhisperModel(
+            size: size,
+            language: language,
+            update: nil
+        ) { result in
+            switch result {
+            case let .success(modelURL):
+                self.localPath = modelURL
+                self.isDownloaded = true
+                completion()
+            case let .failure(error):
+                self.isDownloaded = false
+                Logger.error("Error: \(error.localizedDescription)")
             }
+        }
     }
 
     init(

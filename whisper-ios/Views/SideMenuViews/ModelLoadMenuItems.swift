@@ -16,27 +16,21 @@ struct ModelLoadMenuItemView: View {
     }
 }
 
+// https://dev.classmethod.jp/articles/ios-circular-progress-bar-with-swiftui/
 struct CircularProgressBar: View {
     @Binding var progress: CGFloat
 
     var body: some View {
         ZStack {
-            // Background circle
             Circle()
-                // Specify to draw the border line
                 .stroke(lineWidth: 4.0)
                 .opacity(0.3)
                 .foregroundColor(.gray)
 
-            // Circle to indicate progress
             Circle()
-                // Draw a circle by specifying the start and end points
-                // Specify normalized values in the range of 0.0-1.0 for the start and end points
                 .trim(from: 0.0, to: min(progress, 1.0))
-                // Specify the shape of the line's end and other parameters
                 .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 .foregroundColor(.blue)
-                // The default origin is not at the 12 o'clock position of the clock, so rotate it
                 .rotationEffect(Angle(degrees: 270.0))
         }
     }
@@ -44,40 +38,22 @@ struct CircularProgressBar: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize: Size = .init(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang(rawValue: "en")!
     @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
     let language: Lang
     let modelDisplayName: String
+
     @State private var showPrompt = false
-    @State private var showDownloadModelPrompt = false
-    @State private var showChangeModelPrompt = false
+    @State private var isDownloadModelPrompt = false
     @State private var isDownloading = false
     @State private var isLoading = false
 
-    func updateProgress(num: Float) {
-        progressValue = CGFloat(num)
-    }
-
-    func deleteModel() {
-        let flag = WhisperModelRepository.deleteWhisperModel(
-            size: modelSize,
-            language: language
-        )
-        if flag {
-            showDownloadModelPrompt = true
-            showChangeModelPrompt = false
-            isDownloading = false
-        } else {
-            print("model deletion failed in deleteModel")
-        }
-    }
-
     var body: some View {
         HStack {
-            if recognizer.whisperModel?.name == "\(modelSize.rawValue)-\(language.rawValue)" {
+            if recognizer.whisperModel.name == "\(modelSize.rawValue)-\(language.rawValue)" {
                 Image(systemName: "checkmark.circle.fill")
                     .imageScale(.large)
             } else {
@@ -109,7 +85,7 @@ struct ModelLoadSubMenuItemView: View {
             if !isLoading,
                modelSize != Size(rawValue: "tiny"),
                modelExists(),
-               recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)"
+               recognizer.whisperModel.name != "\(modelSize.rawValue)-\(language.rawValue)"
             {
                 Button(action: deleteModel) {
                     label: do {
@@ -118,36 +94,31 @@ struct ModelLoadSubMenuItemView: View {
                 }.tint(.red)
             }
         }
-        .onTapGesture(perform: {
-            if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
-                self.showPrompt = true
-                if !modelExists() {
-                    self.showDownloadModelPrompt = true
-                } else {
-                    self.showChangeModelPrompt = true
-                }
+        .onTapGesture {
+            guard recognizer.whisperModel.name != "\(modelSize.rawValue)-\(language.rawValue)" else {
+                return
             }
-        })
+
+            guard !isDownloading else {
+                return
+            }
+
+            isDownloadModelPrompt = !modelExists()
+            showPrompt = true
+        }
         .alert(isPresented: $showPrompt) {
-            if self.showChangeModelPrompt {
-                return Alert(title: Text("モデルを変更しますか？"),
-                             primaryButton: .cancel(Text("キャンセル")),
-                             secondaryButton: .default(Text("変更"), action: {
-                                 loadModel(callback: {
-                                     isLoading = false
-                                     defaultModelSize = modelSize
-                                     defaultLanguage = language
-                                 })
-                             }))
-            } else {
-                return Alert(title: Text("モデルをダウンロードしますか?"),
-                             message: Text("通信容量にご注意ください。"),
-                             primaryButton: .cancel(Text("キャンセル")),
-                             secondaryButton: .default(Text("ダウンロード"), action: {
-                                 isDownloading = true
-                                 downloadModel()
-                             }))
-            }
+            isDownloadModelPrompt
+                ? Alert(
+                    title: Text("モデルをダウンロードしますか?"),
+                    message: Text("通信容量にご注意ください。"),
+                    primaryButton: .cancel(Text("キャンセル")),
+                    secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
+                )
+                : Alert(
+                    title: Text("モデルを変更しますか？"),
+                    primaryButton: .cancel(Text("キャンセル")),
+                    secondaryButton: .default(Text("変更"), action: loadModel)
+                )
         }
     }
 
@@ -155,40 +126,51 @@ struct ModelLoadSubMenuItemView: View {
         WhisperModelRepository.modelExists(size: modelSize, language: language)
     }
 
-    private func loadModel(callback: @escaping () -> Void) {
-        recognizer.whisperModel?.free_model(callback: {})
+    private func loadModel() {
+        isLoading = true
+        recognizer.whisperModel.free_model(callback: {})
         let whisperModel = WhisperModel(
             size: modelSize,
             language: language,
             completion: {}
         )
         whisperModel.load_model {
-            if isLoading {
-                isLoading = false
-            }
+            isLoading = false
             if whisperModel.whisperContext == nil {
                 Logger.error("model loading failed in loadModel")
             }
-            Logger.info("model successfully loaded")
             recognizer.whisperModel = whisperModel
-            Logger.info("whisperModel is loaded on recognizer")
-            callback()
+
+            defaultModelSize = modelSize
+            defaultLanguage = language
         }
     }
 
     private func downloadModel() {
-        WhisperModelRepository
-            .fetchWhisperModel(size: modelSize, language: language,
-                               update: updateProgress) { result in
-                switch result {
-                case .success:
-                    isDownloading = false
-                    showDownloadModelPrompt = false
-                    showChangeModelPrompt = true
-                case let .failure(error):
-                    print("Error: \(error.localizedDescription)")
-                }
+        isDownloading = true
+        WhisperModelRepository.fetchWhisperModel(
+            size: modelSize,
+            language: language,
+            update: { num in progressValue = CGFloat(num) }
+        ) { result in
+            switch result {
+            case .success:
+                isDownloading = false
+            case let .failure(error):
+                print("Error: \(error.localizedDescription)")
             }
+        }
+    }
+
+    func deleteModel() {
+        let flag = WhisperModelRepository.deleteWhisperModel(
+            size: modelSize,
+            language: language
+        )
+        if !flag {
+            Logger.error("model deletion failed in deleteModel")
+        }
+        isDownloadModelPrompt = true
     }
 }
 

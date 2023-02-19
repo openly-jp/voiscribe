@@ -7,9 +7,9 @@ class WhisperRecognizer: Recognizer {
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
 
-    init(whisperModel: WhisperModel) {
+    init(whisperModel: WhisperModel) throws {
         if whisperModel.localPath == nil {
-            Logger.error("whisperModel.localPath is nil")
+            throw NSError(domain: "whisperModel.localPath is nil", code: -1)
         } else {
             self.whisperModel = whisperModel
         }

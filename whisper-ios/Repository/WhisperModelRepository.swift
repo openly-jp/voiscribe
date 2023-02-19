@@ -63,12 +63,17 @@ enum WhisperModelRepository {
     }
 
     static func modelExists(size: Size, language: Lang) -> Bool {
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
-        if FileManager.default.fileExists(atPath: destinationURL.path) {
-            return true
+        let url: String
+        if size == .tiny {
+            url = Bundle.main.path(
+                forResource: "ggml-\(size.rawValue).\(language.rawValue)",
+                ofType: "bin"
+            )!
+        } else {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            url = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin").path
         }
-        return false
+        return FileManager.default.fileExists(atPath: url)
     }
 
     /// Delete a model from local storage.
