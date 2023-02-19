@@ -14,10 +14,14 @@ struct BlinkEffect: ViewModifier {
     func body(content: Content) -> some View {
         content
             .opacity(isOn ? opacityRange.lowerBound : opacityRange.upperBound)
-            .animation(Animation.linear(duration: interval).repeatForever(), value: isOn)
-            .onAppear(perform: {
-                isOn = true
-            })
+            .animation(isOn ? Animation.linear(duration: interval).repeatForever() : nil, value: isOn)
+            .onAppear {
+                // Without the following DispathcQueue, the issue #157 occurs.
+                // https://developer.apple.com/forums/thread/651065?answerId=665270022#665270022
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isOn = true
+                }
+            }
     }
 }
 
