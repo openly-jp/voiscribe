@@ -9,7 +9,6 @@ struct StopButtonPane: View {
     let borderStrokeColor: Color = .red
     let borderStrokeWidth: CGFloat = 2
     let borderSpacing: CGFloat = 10
-    let animation: Animation = .easeInOut
     let stoppedStateCornerRadius: CGFloat = 0.10
     let stoppedStateSize: CGFloat = 0.5
 
@@ -20,7 +19,6 @@ struct StopButtonPane: View {
                 .frame(width: circleDiameter, height: circleDiameter)
 
             recordButton(size: circleDiameter - borderSpacing)
-                .animation(animation)
                 .foregroundColor(buttonColor)
         }
     }
