@@ -45,7 +45,14 @@ struct HomeView: View {
                     SideMenu(isOpen: self.$showSideMenu)
                 }
             }
-        }.navigationViewStyle(StackNavigationViewStyle())
+            // This is really strange bug of swiftUI.
+            // Without the following code, weird space is inserted
+            // above the content of NavigationView.
+            // https://stackoverflow.com/a/57518324/17445616
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

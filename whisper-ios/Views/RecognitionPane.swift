@@ -147,7 +147,7 @@ struct RecognitionPane: View {
                     )
                 }
                 .padding(.bottom, 30)
-            }
+            }.navigationBarHidden(true)
         }
     }
 

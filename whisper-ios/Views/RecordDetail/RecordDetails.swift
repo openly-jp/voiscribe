@@ -35,7 +35,7 @@ struct RecordDetails: View {
                     isRecognizing: isRecognizing
                 )
             }
-        }
+        }.navigationBarTitleDisplayMode(.inline)
     }
 }
 
