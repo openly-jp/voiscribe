@@ -107,14 +107,26 @@ struct RecordingController_Previews: PreviewProvider {
             }
         }
 
-        return RecordingController(
-            isRecording: .constant(true),
-            isPaused: .constant(true),
-            isPaneOpen: .constant(true),
-            startAction: {},
-            stopAction: {},
-            elapsedTime: 23,
-            idAmps: .constant(idAmps)
-        )
+        return Group {
+            RecordingController(
+                isRecording: .constant(true),
+                isPaused: .constant(true),
+                isPaneOpen: .constant(true),
+                startAction: {},
+                stopAction: {},
+                elapsedTime: 23,
+                idAmps: .constant(idAmps)
+            )
+
+            RecordingController(
+                isRecording: .constant(false),
+                isPaused: .constant(false),
+                isPaneOpen: .constant(false),
+                startAction: {},
+                stopAction: {},
+                elapsedTime: 23,
+                idAmps: .constant(idAmps)
+            )
+        }
     }
 }

@@ -115,8 +115,9 @@ class RecordDetails_Previews: PreviewProvider {
                 deleteRecognizedSpeech: { _ in },
                 isRecognizing: false
             )
-            .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
         }
+        .previewDevice(PreviewDevice(rawValue: "iPhone 12 mini"))
+        .previewDisplayName("iPhone 12")
 
         NavigationView {
             RecordDetails(
@@ -124,9 +125,19 @@ class RecordDetails_Previews: PreviewProvider {
                 deleteRecognizedSpeech: { _ in },
                 isRecognizing: false
             )
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
-            .previewDisplayName("ipad")
         }
+        .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
+        .previewDisplayName("iPhone 14")
+
+        NavigationView {
+            RecordDetails(
+                recognizedSpeech: recognizedSpeech,
+                deleteRecognizedSpeech: { _ in },
+                isRecognizing: false
+            )
+        }
+        .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
+        .previewDisplayName("ipad")
 
         NavigationView {
             RecordDetails(
@@ -134,7 +145,7 @@ class RecordDetails_Previews: PreviewProvider {
                 deleteRecognizedSpeech: { _ in },
                 isRecognizing: true
             )
-            .previewDisplayName("Record Details (recognizing)")
         }
+        .previewDisplayName("Record Details (recognizing)")
     }
 }
