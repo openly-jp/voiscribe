@@ -107,8 +107,8 @@ struct RecognitionPane: View {
                     } else {
                         Circle()
                             .fill(.red)
+                            .frame(width: 10, height: 10)
                             .blinkEffect()
-                            .frame(width: 10)
                     }
                     Text(formatTime(Double(elapsedTime)))
                 }

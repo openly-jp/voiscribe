@@ -37,7 +37,7 @@ struct RecordingController: View {
                                 Circle()
                                     .fill(.red)
                                     .blinkEffect()
-                                    .frame(width: 12)
+                                    .frame(width: 12, height: 12)
                             }
                         }.frame(width: 15)
                         Text(formatTime(Double(elapsedTime)))
