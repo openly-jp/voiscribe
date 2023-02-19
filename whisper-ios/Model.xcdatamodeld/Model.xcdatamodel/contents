@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21279" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="RecognizedSpeechData" representedClassName="RecognizedSpeechData" syncable="YES">
-        <attribute name="audioFileURL" attributeType="URI"/>
-        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="language" attributeType="String"/>
-        <attribute name="title" attributeType="String"/>
-        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="transcriptionLines" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TranscriptionLineData" inverseName="recognizedSpeech" inverseEntity="TranscriptionLineData"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="RecognizedSpeechData" representedClassName="RecognizedSpeechData" isAbstract="YES" syncable="YES">
+        <attribute name="audioFileURL" attributeType="URI" defaultValueString="/"/>
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="-31654800" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="language" attributeType="String" defaultValueString=""/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <attribute name="updatedAt" attributeType="Date" defaultDateTimeInterval="-31654800" usesScalarValueType="NO"/>
+        <relationship name="transcriptionLines" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TranscriptionLineData" inverseName="recognizedSpeech" inverseEntity="TranscriptionLineData"/>
     </entity>
-    <entity name="TranscriptionLineData" representedClassName="TranscriptionLineData" syncable="YES">
-        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+    <entity name="TranscriptionLineData" representedClassName="TranscriptionLineData" isAbstract="YES" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="-31654800" usesScalarValueType="NO"/>
         <attribute name="endMSec" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
         <attribute name="ordering" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="startMSec" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="text" attributeType="String"/>
-        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="text" attributeType="String" defaultValueString=""/>
+        <attribute name="updatedAt" attributeType="Date" defaultDateTimeInterval="-31654800" usesScalarValueType="NO"/>
         <relationship name="recognizedSpeech" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecognizedSpeechData" inverseName="transcriptionLines" inverseEntity="RecognizedSpeechData"/>
     </entity>
+    <configuration name="iCloud" usedWithCloudKit="YES">
+        <memberEntity name="TranscriptionLineData"/>
+        <memberEntity name="RecognizedSpeechData"/>
+    </configuration>
 </model>

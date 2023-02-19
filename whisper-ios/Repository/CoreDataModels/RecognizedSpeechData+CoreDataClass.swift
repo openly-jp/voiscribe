@@ -39,10 +39,9 @@ public class RecognizedSpeechData: NSManagedObject {
             updatedAt: recognizedSpeechData.updatedAt
         )
 
-        let transcriptionLines: [TranscriptionLine] = []
-        for tld in recognizedSpeechData.transcriptionLines {
+        let transcriptionLines: [TranscriptionLine] = recognizedSpeechData.transcriptionLines.map { tld in
             let tldEntity = tld as! TranscriptionLineData
-            let tlModel = TranscriptionLine(
+            return TranscriptionLine(
                 id: tldEntity.id,
                 startMSec: tldEntity.startMSec,
                 endMSec: tldEntity.endMSec,
@@ -51,9 +50,9 @@ public class RecognizedSpeechData: NSManagedObject {
                 createdAt: tldEntity.createdAt,
                 updatedAt: tldEntity.updatedAt
             )
-
-            rsModel.transcriptionLines.append(tlModel)
         }
+        // RecognizedSpeechData -> TranscriptionLine relationship is not ordered, so sorting the array just in case
+        rsModel.transcriptionLines = transcriptionLines.sorted(by: { $0.ordering < $1.ordering })
         return rsModel
     }
 

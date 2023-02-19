@@ -21,7 +21,7 @@ public extension RecognizedSpeechData {
     @NSManaged var language: String
     @NSManaged var createdAt: Date
     @NSManaged var updatedAt: Date
-    @NSManaged var transcriptionLines: NSOrderedSet
+    @NSManaged var transcriptionLines: NSSet
 }
 
 // MARK: Generated accessors for transcriptionLines
@@ -52,10 +52,10 @@ public extension RecognizedSpeechData {
     @NSManaged func removeFromTranscriptionLines(_ value: TranscriptionLineData)
 
     @objc(addTranscriptionLines:)
-    @NSManaged func addToTranscriptionLines(_ values: NSOrderedSet)
+    @NSManaged func addToTranscriptionLines(_ values: NSSet)
 
     @objc(removeTranscriptionLines:)
-    @NSManaged func removeFromTranscriptionLines(_ values: NSOrderedSet)
+    @NSManaged func removeFromTranscriptionLines(_ values: NSSet)
 }
 
 extension RecognizedSpeechData: Identifiable {}
