@@ -3,38 +3,15 @@ import Dispatch
 import Foundation
 
 class WhisperRecognizer: Recognizer {
-    private var whisperContext: OpaquePointer?
     @Published var whisperModel: WhisperModel?
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
-    var is_ready: Bool {
-        whisperContext != nil
-    }
 
-    init(whisperModel: WhisperModel) throws {
-        do {
-            try load_model(whisperModel: whisperModel)
-        } catch {
-            throw NSError(domain: "WhisperRecognizer failed to initiate", code: -1)
-        }
-    }
-
-    deinit {
-        if whisperContext != nil {
-            whisper_free(whisperContext)
-        }
-    }
-
-    func load_model(whisperModel: WhisperModel) throws {
-        DispatchQueue.global(qos: .userInitiated).async {
-            whisper_free(self.whisperContext)
-            self.whisperContext = whisper_init_from_file(whisperModel.localPath?.path)
-            DispatchQueue.main.async {
-                self.whisperModel = whisperModel
-                if self.whisperContext == nil {
-                    Logger.error("Model load failed")
-                }
-            }
+    init(whisperModel: WhisperModel) {
+        if whisperModel.localPath == nil {
+            Logger.error("whisperModel.localPath is nil")
+        } else {
+            self.whisperModel = whisperModel
         }
     }
 
@@ -65,7 +42,7 @@ class WhisperRecognizer: Recognizer {
         language: Language,
         callback: @escaping (RecognizedSpeech) -> Void
     ) throws -> RecognizedSpeech {
-        guard let whisperContext: OpaquePointer else {
+        guard let context : OpaquePointer  = whisperModel?.whisperContext else {
             throw NSError(domain: "model load error", code: -1)
         }
 
@@ -94,20 +71,20 @@ class WhisperRecognizer: Recognizer {
                 params.no_context = true
                 params.single_segment = false
 
-                whisper_reset_timings(whisperContext)
+                whisper_reset_timings(context)
                 audioData.withUnsafeBufferPointer { data in
-                    if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
+                    if whisper_full(context, params, data.baseAddress, Int32(data.count)) != 0 {
                     } else {
-                        whisper_print_timings(whisperContext)
+                        whisper_print_timings(context)
                     }
                 }
             }
 
-            let n_segments = whisper_full_n_segments(whisperContext)
+            let n_segments = whisper_full_n_segments(context)
             for i in 0 ..< n_segments {
-                let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
-                let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10
-                let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
+                let text = String(cString: whisper_full_get_segment_text(context, i))
+                let startMSec = whisper_full_get_segment_t0(context, i) * 10
+                let endMSec = whisper_full_get_segment_t1(context, i) * 10
                 let transcriptionLine = TranscriptionLine(
                     startMSec: startMSec,
                     endMSec: endMSec,
@@ -135,7 +112,7 @@ class WhisperRecognizer: Recognizer {
         serialDispatchQueue.async {
             Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
             Logger.debug("Remaining Audio Concat: \(isRemainingAudioConcatActive ? "active" : "inactive")")
-            guard let whisperContext = self.whisperContext else {
+            guard let context = self.whisperModel?.whisperContext else {
                 Logger.error("model load error")
                 return
             }
@@ -171,11 +148,11 @@ class WhisperRecognizer: Recognizer {
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
-                    whisper_reset_timings(whisperContext)
+                    whisper_reset_timings(context)
                     audioData.withUnsafeBufferPointer { data in
-                        if whisper_full(whisperContext, params, data.baseAddress, Int32(data.count)) != 0 {
+                        if whisper_full(context, params, data.baseAddress, Int32(data.count)) != 0 {
                         } else {
-                            whisper_print_timings(whisperContext)
+                            whisper_print_timings(context)
                         }
                     }
                 }
@@ -184,13 +161,13 @@ class WhisperRecognizer: Recognizer {
                 let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil
                     ? recognizingSpeech.transcriptionLines.last!.ordering + 1
                     : 0
-                let nSegments = whisper_full_n_segments(whisperContext)
+                let nSegments = whisper_full_n_segments(context)
                 var lastEndMSec: Int64 = 0
                 for i in 0 ..< nSegments {
-                    let text = String(cString: whisper_full_get_segment_text(whisperContext, i))
-                    let startMSec = whisper_full_get_segment_t0(whisperContext, i) * 10 + baseStartMSec
-                    let endMSec = whisper_full_get_segment_t1(whisperContext, i) * 10 + baseStartMSec
-                    lastEndMSec = whisper_full_get_segment_t1(whisperContext, i) * 10
+                    let text = String(cString: whisper_full_get_segment_text(context, i))
+                    let startMSec = whisper_full_get_segment_t0(context, i) * 10 + baseStartMSec
+                    let endMSec = whisper_full_get_segment_t1(context, i) * 10 + baseStartMSec
+                    lastEndMSec = whisper_full_get_segment_t1(context, i) * 10
                     let transcriptionLine = TranscriptionLine(
                         startMSec: startMSec,
                         endMSec: endMSec,
@@ -205,9 +182,9 @@ class WhisperRecognizer: Recognizer {
                     var newPromptTokens: [Int32] = []
                     recognizingSpeech.promptTokens.removeAll()
                     for i in 0 ..< nSegments {
-                        let tokenCount = whisper_full_n_tokens(whisperContext, i)
+                        let tokenCount = whisper_full_n_tokens(context, i)
                         for j in 0 ..< tokenCount {
-                            let tokenId = whisper_full_get_token_id(whisperContext, i, j)
+                            let tokenId = whisper_full_get_token_id(context, i, j)
                             newPromptTokens.append(tokenId)
                         }
                     }

@@ -29,6 +29,7 @@ class WhisperModel: Identifiable {
     @Published var isDownloaded: Bool
     var recordDownloadedModels: RecordDownloadedModels = .init()
     var needsSubscription: Bool
+    var whisperContext: OpaquePointer?
     var createdAt: Date
     var updatedAt: Date
 
@@ -87,7 +88,29 @@ class WhisperModel: Identifiable {
         updatedAt = Date()
     }
 
+    deinit {
+        if self.whisperContext != nil {
+            whisper_free(self.whisperContext)
+        }
+    }
+
     var name: String {
         "\(size.rawValue)-\(language.rawValue)"
+    }
+
+    func load_model() {
+        Logger.debug("Loading Model: model size \(size ), model language \(language.rawValue ), model name \(name )")
+        guard let modelUrl = localPath else {
+            Logger.error("Failed to parse model url")
+            return
+    }
+    DispatchQueue.global(qos: .userInitiated).async {
+        self.whisperContext = whisper_init_from_file(modelUrl.path)
+        if self.whisperContext == nil {
+            Logger.error("Failed to load model")
+        } else {
+            Logger.debug("Model loaded")
+        }
+    }
     }
 }

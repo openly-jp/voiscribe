@@ -320,20 +320,19 @@ struct ModelLoadSubMenuItemView: View {
         }
     }
 
-    private func loadModel() throws -> Bool {
+    private func loadModel() -> Bool{
         let whisperModel = WhisperModel(
             size: modelSize,
             language: language,
             needsSubscription: needsSubscription,
             completion: {}
         )
-        do {
-            try recognizer.load_model(whisperModel: whisperModel)
-            isDownloading = false
-        } catch {
-            print("load model failed in ModelLoadMenuItems")
+        whisperModel.load_model()
+        if whisperModel.whisperContext == nil{
+            Logger.error("model loading failed in loadModel")
             return false
         }
+        recognizer.whisperModel = whisperModel
         return true
     }
 
