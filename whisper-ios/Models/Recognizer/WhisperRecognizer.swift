@@ -3,7 +3,7 @@ import Dispatch
 import Foundation
 
 class WhisperRecognizer: Recognizer {
-    @Published var whisperModel: WhisperModel?
+    @Published var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
 
@@ -42,7 +42,7 @@ class WhisperRecognizer: Recognizer {
         language: Language,
         callback: @escaping (RecognizedSpeech) -> Void
     ) throws -> RecognizedSpeech {
-        guard let context: OpaquePointer = whisperModel?.whisperContext else {
+        guard let context: OpaquePointer = whisperModel.whisperContext else {
             throw NSError(domain: "model load error", code: -1)
         }
 
@@ -112,7 +112,7 @@ class WhisperRecognizer: Recognizer {
         serialDispatchQueue.async {
             Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
             Logger.debug("Remaining Audio Concat: \(isRemainingAudioConcatActive ? "active" : "inactive")")
-            guard let context = self.whisperModel?.whisperContext else {
+            guard let context = self.whisperModel.whisperContext else {
                 Logger.error("model load error")
                 return
             }
