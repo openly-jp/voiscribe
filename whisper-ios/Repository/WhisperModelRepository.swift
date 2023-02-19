@@ -15,12 +15,10 @@ enum WhisperModelRepository {
     /// Download a model, if it does exist locally, from R2 and save it to local storage.
     /// - Parameter size: The size of the model (tiny, base, small).
     /// - Parameter language: The language of the model (ja, en, multi).
-    /// - Parameter needsSubscription: Whether the model needs a subscription to use.
     /// - Returns: local path of the model
     static func fetchWhisperModel(
         size: Size,
         language: Lang,
-        needsSubscription _: Bool,
         update: ((Float) -> Void)?,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
@@ -64,7 +62,7 @@ enum WhisperModelRepository {
         }
     }
 
-    static func modelExists(size: Size, language: Lang, needsSubscription _: Bool) -> Bool {
+    static func modelExists(size: Size, language: Lang) -> Bool {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if FileManager.default.fileExists(atPath: destinationURL.path) {
@@ -75,7 +73,7 @@ enum WhisperModelRepository {
 
     /// Delete a model from local storage.
     /// - Parameter model: The model to delete.
-    static func deleteWhisperModel(size: Size, language: Lang, needsSubscription _: Bool) -> Bool {
+    static func deleteWhisperModel(size: Size, language: Lang) -> Bool {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if !FileManager.default.fileExists(atPath: destinationURL.path) {

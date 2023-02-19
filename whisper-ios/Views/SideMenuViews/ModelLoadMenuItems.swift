@@ -1,9 +1,7 @@
 import SwiftUI
 
-let userDefaultModelPathKey = "use-defalut-model-path-key"
 let userDefaultModelSizeKey = "user-default-model-size"
 let userDefaultModelLanguageKey = "user-default-model-language"
-let userDefaultModelNeedsSubscriptionKey = "user-default-model-needs-subscription"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
@@ -46,16 +44,12 @@ struct CircularProgressBar: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelPathKey) var defaultModelPath = URL(string: Bundle.main
-        .path(forResource: "ggml-tiny.en", ofType: "bin")!)!
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize: Size = .init(rawValue: "tiny")!
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage: Lang = .init(rawValue: "en")!
-    @AppStorage(userDefaultModelNeedsSubscriptionKey) var dafaultNeedsSubscription: Bool = false
     @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
     let language: Lang
-    let needsSubscription: Bool
     let modelDisplayName: String
     @State private var showPrompt = false
     @State private var showDownloadModelPrompt = false
@@ -70,8 +64,7 @@ struct ModelLoadSubMenuItemView: View {
     func deleteModel() {
         let flag = WhisperModelRepository.deleteWhisperModel(
             size: modelSize,
-            language: language,
-            needsSubscription: needsSubscription
+            language: language
         )
         if flag {
             showDownloadModelPrompt = true
@@ -143,10 +136,8 @@ struct ModelLoadSubMenuItemView: View {
                              secondaryButton: .default(Text("変更"), action: {
                     loadModel(callback:{
                         isLoading = false
-                        defaultModelPath = (recognizer.whisperModel?.localPath)!
                         defaultModelSize = modelSize
                         defaultLanguage = language
-                        dafaultNeedsSubscription = needsSubscription
                     })}))}
             else {
             return Alert(title: Text("モデルをダウンロードしますか?"),
@@ -161,14 +152,13 @@ struct ModelLoadSubMenuItemView: View {
     }
     
     private func modelExists() -> Bool {
-        return WhisperModelRepository.modelExists(size: modelSize, language: language, needsSubscription: needsSubscription)
+        return WhisperModelRepository.modelExists(size: modelSize, language: language)
     }
 
     private func loadModel(callback: @escaping () -> Void) -> Void{
         let whisperModel = WhisperModel(
             size: modelSize,
             language: language,
-            needsSubscription: needsSubscription,
             completion: {}
         )
         whisperModel.load_model {
@@ -179,7 +169,7 @@ struct ModelLoadSubMenuItemView: View {
                 Logger.error("model loading failed in loadModel")
             }
             Logger.info("model successfully loaded")
-            self.recognizer.whisperModel = whisperModel
+            recognizer.whisperModel = whisperModel
             Logger.info("whisperModel is loaded on recognizer")
             callback()
         }
@@ -187,7 +177,7 @@ struct ModelLoadSubMenuItemView: View {
 
     private func downloadModel() {
         WhisperModelRepository
-            .fetchWhisperModel(size: modelSize, language: language, needsSubscription: needsSubscription,
+            .fetchWhisperModel(size: modelSize, language: language,
                                update: updateProgress) { result in
                 switch result {
                 case .success:
@@ -206,7 +196,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "tiny")!,
             language: Lang(rawValue: "multi")!,
-            needsSubscription: false,
             modelDisplayName: "Tiny"
         )),
         subMenuItems: nil
@@ -215,7 +204,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "tiny")!,
             language: Lang(rawValue: "en")!,
-            needsSubscription: false,
             modelDisplayName: "Tiny(EN)"
         )),
         subMenuItems: nil
@@ -224,7 +212,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "base")!,
             language: Lang(rawValue: "multi")!,
-            needsSubscription: false,
             modelDisplayName: "Base"
         )),
         subMenuItems: nil
@@ -233,7 +220,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "base")!,
             language: Lang(rawValue: "en")!,
-            needsSubscription: false,
             modelDisplayName: "Base(EN)"
         )),
         subMenuItems: nil
@@ -242,7 +228,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "small")!,
             language: Lang(rawValue: "multi")!,
-            needsSubscription: false,
             modelDisplayName: "Small"
         )),
         subMenuItems: nil
@@ -251,7 +236,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "small")!,
             language: Lang(rawValue: "en")!,
-            needsSubscription: false,
             modelDisplayName: "Small(EN)"
         )),
         subMenuItems: nil
@@ -260,7 +244,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "medium")!,
             language: Lang(rawValue: "multi")!,
-            needsSubscription: false,
             modelDisplayName: "Medium"
         )),
         subMenuItems: nil
@@ -269,7 +252,6 @@ let modeLoadSubMenuItems = [
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "medium")!,
             language: Lang(rawValue: "en")!,
-            needsSubscription: false,
             modelDisplayName: "Medium(EN)"
         )),
         subMenuItems: nil

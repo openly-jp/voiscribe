@@ -13,12 +13,8 @@ struct StartView: View {
     @State var isLoading: Bool = true
     @State var recognizer: WhisperRecognizer?
 
-    @AppStorage(userDefaultModelPathKey) var defaultModelPath = URL(
-        string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!
-    )!
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
     @AppStorage(userDefaultModelLanguageKey) var defaultModelLanguage = Lang(rawValue: "en")!
-    @AppStorage(userDefaultModelNeedsSubscriptionKey) var defaultModelNeedsSubscription = false
 
     var body: some View {
         if isLoading {
@@ -30,7 +26,6 @@ struct StartView: View {
                         let whisperModel = WhisperModel(
                             size: defaultModelSize,
                             language: defaultModelLanguage,
-                            needsSubscription: defaultModelNeedsSubscription,
                             completion: {}
                         )
                         whisperModel.load_model(callback:{

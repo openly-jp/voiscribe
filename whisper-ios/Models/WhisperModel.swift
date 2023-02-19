@@ -26,22 +26,19 @@ class WhisperModel: Identifiable {
     var localPath: URL?
     var size: Size
     var language: Lang
-    @Published var isDownloaded: Bool
-    var needsSubscription: Bool
     var whisperContext: OpaquePointer?
+    @Published var isDownloaded: Bool
     var createdAt: Date
     var updatedAt: Date
 
     init(
         size: Size,
         language: Lang,
-        needsSubscription: Bool = false,
         completion: @escaping () -> Void
     ) {
         id = UUID()
         self.size = size
         self.language = language
-        self.needsSubscription = needsSubscription
         localPath = URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!)!
         if size.rawValue == "tiny" {
             isDownloaded = true
@@ -52,7 +49,7 @@ class WhisperModel: Identifiable {
         createdAt = Date()
         updatedAt = Date()
         WhisperModelRepository
-            .fetchWhisperModel(size: size, language: language, needsSubscription: needsSubscription,
+            .fetchWhisperModel(size: size, language: language,
                                update: nil) { result in
                 switch result {
                 case let .success(modelURL):
@@ -69,15 +66,13 @@ class WhisperModel: Identifiable {
     init(
         localPath: URL?,
         size: Size,
-        language: Lang,
-        needsSubscription: Bool
+        language: Lang
     ) {
         id = UUID()
         self.localPath = localPath
         self.size = size
         self.language = language
         isDownloaded = true
-        self.needsSubscription = needsSubscription
         createdAt = Date()
         updatedAt = Date()
     }
