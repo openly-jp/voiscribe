@@ -42,7 +42,7 @@ class WhisperRecognizer: Recognizer {
         language: Language,
         callback: @escaping (RecognizedSpeech) -> Void
     ) throws -> RecognizedSpeech {
-        guard let context : OpaquePointer  = whisperModel?.whisperContext else {
+        guard let context: OpaquePointer = whisperModel?.whisperContext else {
             throw NSError(domain: "model load error", code: -1)
         }
 

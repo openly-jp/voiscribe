@@ -28,9 +28,9 @@ struct StartView: View {
                             language: defaultModelLanguage,
                             completion: {}
                         )
-                        whisperModel.load_model(callback:{
+                        whisperModel.load_model(callback: {
                             recognizer = WhisperRecognizer(whisperModel: whisperModel)
-                            if recognizer == nil{
+                            if recognizer == nil {
                                 // Logger cannot be initialized on app start
                                 print("recognizer initialization failed on app start")
                             }

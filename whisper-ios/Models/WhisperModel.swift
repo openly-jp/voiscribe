@@ -77,32 +77,33 @@ class WhisperModel: Identifiable {
         updatedAt = Date()
     }
 
-    deinit {
-        if self.whisperContext != nil {
-            whisper_free(self.whisperContext)
-        }
-    }
-
     var name: String {
         "\(size.rawValue)-\(language.rawValue)"
     }
 
     func load_model(callback: @escaping () -> Void) {
-        Logger.debug("Loading Model: model size \(size ), model language \(language.rawValue ), model name \(name )")
+        Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
         guard let modelUrl = localPath else {
             Logger.error("Failed to parse model url")
             return
-    }
+        }
         DispatchQueue.global(qos: .userInitiated).async {
             self.whisperContext = whisper_init_from_file(modelUrl.path)
             if self.whisperContext == nil {
                 Logger.error("Failed to load model")
             } else {
                 Logger.debug("Model loaded")
-                DispatchQueue.main.async{
+                DispatchQueue.main.async {
                     callback()
                 }
             }
         }
+    }
+
+    // prefer this fucntion to deinit cause
+    // we can avoid two models are loaded simultaneouly
+    // (for a short amout of time)
+    func free_model(callback _: @escaping () -> Void) {
+        whisper_free(whisperContext)
     }
 }

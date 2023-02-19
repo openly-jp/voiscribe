@@ -19,7 +19,7 @@ struct ModelLoadMenuItemView: View {
 struct CircularProgressBar: View {
     @Binding var progress: CGFloat
 
-        var body: some View {
+    var body: some View {
         ZStack {
             // Background circle
             Circle()
@@ -121,8 +121,7 @@ struct ModelLoadSubMenuItemView: View {
         .onTapGesture(perform: {
             if recognizer.whisperModel?.name != "\(modelSize.rawValue)-\(language.rawValue)" {
                 self.showPrompt = true
-                if !modelExists()
-                {
+                if !modelExists() {
                     self.showDownloadModelPrompt = true
                 } else {
                     self.showChangeModelPrompt = true
@@ -134,28 +133,30 @@ struct ModelLoadSubMenuItemView: View {
                 return Alert(title: Text("モデルを変更しますか？"),
                              primaryButton: .cancel(Text("キャンセル")),
                              secondaryButton: .default(Text("変更"), action: {
-                    loadModel(callback:{
-                        isLoading = false
-                        defaultModelSize = modelSize
-                        defaultLanguage = language
-                    })}))}
-            else {
-            return Alert(title: Text("モデルをダウンロードしますか?"),
-                         message: Text("通信容量にご注意ください。"),
-                         primaryButton: .cancel(Text("キャンセル")),
-                         secondaryButton: .default(Text("ダウンロード"), action: {
-                             isDownloading = true
-                             downloadModel()
-                         }))
+                                 loadModel(callback: {
+                                     isLoading = false
+                                     defaultModelSize = modelSize
+                                     defaultLanguage = language
+                                 })
+                             }))
+            } else {
+                return Alert(title: Text("モデルをダウンロードしますか?"),
+                             message: Text("通信容量にご注意ください。"),
+                             primaryButton: .cancel(Text("キャンセル")),
+                             secondaryButton: .default(Text("ダウンロード"), action: {
+                                 isDownloading = true
+                                 downloadModel()
+                             }))
             }
         }
     }
-    
+
     private func modelExists() -> Bool {
-        return WhisperModelRepository.modelExists(size: modelSize, language: language)
+        WhisperModelRepository.modelExists(size: modelSize, language: language)
     }
 
-    private func loadModel(callback: @escaping () -> Void) -> Void{
+    private func loadModel(callback: @escaping () -> Void) {
+        recognizer.whisperModel?.free_model(callback: {})
         let whisperModel = WhisperModel(
             size: modelSize,
             language: language,
@@ -165,7 +166,7 @@ struct ModelLoadSubMenuItemView: View {
             if isLoading {
                 isLoading = false
             }
-            if whisperModel.whisperContext == nil{
+            if whisperModel.whisperContext == nil {
                 Logger.error("model loading failed in loadModel")
             }
             Logger.info("model successfully loaded")
