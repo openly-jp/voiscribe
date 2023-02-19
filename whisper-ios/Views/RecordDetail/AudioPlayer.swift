@@ -81,6 +81,7 @@ struct AudioPlayer: View {
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
+            .frame(width: 325)
         }
         .onAppear { player.delegate = isPlayingObject }
         .onDisappear {

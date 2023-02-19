@@ -23,18 +23,36 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "highlighter")
                         .foregroundColor(Color(.label))
                 }
-
+                
                 Menu {
                     Button(
                         action: { isOpenShareSheettxt = true },
                         label: {
-                            Label("テキストを共有", systemImage: "square.and.arrow.up")
+                            Label("テキストを共有", systemImage: "textformat.alt")
                         }
                     )
                     Button(
                         action: { isOpenShareSheetm4a = true },
                         label: {
-                            Label("音声を共有", systemImage: "square.and.arrow.up")
+                            Label("音声を共有", systemImage: "waveform")
+                        }
+                    )
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundColor(Color(.label))
+                }
+                .sheet(isPresented: $isOpenShareSheettxt) {
+                    ActivityViewTXT(text: allTranscription)
+                }
+                .sheet(isPresented: $isOpenShareSheetm4a) {
+                    ActivityViewM4A(recognizedSpeech: recognizedSpeech)
+                }
+
+                Menu {
+                    Button(
+                        action: { UIPasteboard.general.string = allTranscription },
+                        label: {
+                            Label("テキストをコピー", systemImage: "doc.on.doc")
                         }
                     )
                     Button(
@@ -61,12 +79,6 @@ struct ToolBar: ToolbarContent {
                             isOpenDeleteAlert = false
                         }
                     )
-                }
-                .sheet(isPresented: $isOpenShareSheettxt) {
-                    ActivityViewTXT(text: allTranscription)
-                }
-                .sheet(isPresented: $isOpenShareSheetm4a) {
-                    ActivityViewM4A(recognizedSpeech: recognizedSpeech)
                 }
             }
         }
