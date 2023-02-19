@@ -49,11 +49,6 @@
 		57EAB6E9296207C600BB59BE /* RecognizedSpeechRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6E8296207C600BB59BE /* RecognizedSpeechRepository.swift */; };
 		57EAB6EC296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EA296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift */; };
 		57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */; };
-		5A8358B2299BA55A00985983 /* AppInfoMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8358B1299BA55A00985983 /* AppInfoMenuItems.swift */; };
-		5A8358B6299BA5B700985983 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8358B5299BA5B700985983 /* LicenseView.swift */; };
-		5A0DE9C8298695100071EE82 /* WhisperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C7298695100071EE82 /* WhisperModel.swift */; };
-		5A0DE9CA298695910071EE82 /* WhisperModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */; };
-		5A2517972989800C001ED13F /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2517962989800C001ED13F /* FileDownloader.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -64,8 +59,14 @@
 		5A8F55222948CD3900E87D25 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55212948CD3900E87D25 /* Record.swift */; };
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
-		5A91ACE72999514D004BE94A /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
-		5A91ACDA2998E84B004BE94A /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */; };/* End PBXBuildFile section */
+		5A91ACDA2998E84B004BE94A /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */; };
+		5AADC50429A24477003AD311 /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
+		5AADC50629A244CB003AD311 /* WhisperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50529A244CB003AD311 /* WhisperModel.swift */; };
+		5AADC50829A24563003AD311 /* WhisperModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50729A24563003AD311 /* WhisperModelRepository.swift */; };
+		5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50929A245EE003AD311 /* FileDownloader.swift */; };
+		5AADC50C29A24623003AD311 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50B29A24623003AD311 /* LicenseView.swift */; };
+		5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		5A8F55022948CCDD00E87D25 /* PBXContainerItemProxy */ = {
@@ -145,6 +146,11 @@
 		5A8F55232948CD5000E87D25 /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
 		5A8F55272948CDB700E87D25 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.multi.bin"; sourceTree = "<group>"; };
+		5AADC50529A244CB003AD311 /* WhisperModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModel.swift; sourceTree = "<group>"; };
+		5AADC50729A24563003AD311 /* WhisperModelRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhisperModelRepository.swift; sourceTree = "<group>"; };
+		5AADC50929A245EE003AD311 /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
+		5AADC50B29A24623003AD311 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
+		5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoMenuItems.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,7 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A8F552B2948CEA800E87D25 /* Inject in Frameworks */,
+				5AADC50429A24477003AD311 /* SafariServicesUI in Frameworks */,
 				57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -193,12 +199,12 @@
 		136E051D2965F53500DEC112 /* SideMenuViews */ = {
 			isa = PBXGroup;
 			children = (
+				5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */,
 				5A8358B7299BA5CC00985983 /* AppInfoViews */,
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
 				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
 				139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */,
 				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
-				5A8358B1299BA55A00985983 /* AppInfoMenuItems.swift */,
 			);
 			path = SideMenuViews;
 			sourceTree = "<group>";
@@ -267,7 +273,6 @@
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5A3AE6AC29A1417E0036BD0F /* ggml-tiny.en.bin */,
 				1331B465297D902400FEBE24 /* DeveloperViews */,
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
@@ -301,8 +306,8 @@
 		57EAB6E52962028C00BB59BE /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				5A2517962989800C001ED13F /* FileDownloader.swift */,
-				5A0DE9C9298695910071EE82 /* WhisperModelRepository.swift */,
+				5AADC50929A245EE003AD311 /* FileDownloader.swift */,
+				5AADC50729A24563003AD311 /* WhisperModelRepository.swift */,
 				57EAB6C32961E1E400BB59BE /* CoreDataModels */,
 				57EAB6E62962041000BB59BE /* CoreDataRepository.swift */,
 				57EAB6E8296207C600BB59BE /* RecognizedSpeechRepository.swift */,
@@ -313,7 +318,7 @@
 		5A8358B7299BA5CC00985983 /* AppInfoViews */ = {
 			isa = PBXGroup;
 			children = (
-				5A8358B5299BA5B700985983 /* LicenseView.swift */,
+				5AADC50B29A24623003AD311 /* LicenseView.swift */,
 			);
 			path = AppInfoViews;
 			sourceTree = "<group>";
@@ -388,7 +393,7 @@
 		5A8F551E2948CD0500E87D25 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5A0DE9C7298695100071EE82 /* WhisperModel.swift */,
+				5AADC50529A244CB003AD311 /* WhisperModel.swift */,
 				13D1E4A4295CE4430070090B /* RecognizedSpeech */,
 				13D1E4A3295CE4390070090B /* Recognizer */,
 				5A8F551F2948CD1F00E87D25 /* Data.swift */,
@@ -400,9 +405,7 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5A3AE6AE29A141A20036BD0F /* ggml-tiny.en.bin */,
 				5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */,
-				5A3AE6AA29A140F00036BD0F /* ggml-tiny.multi.bin */,
 				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
 				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 			);
@@ -412,7 +415,6 @@
 		5ABF47B42995238A00620518 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				5A0DE9CF2986F2CE0071EE82 /* ggml-tiny.multi.bin */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -559,7 +561,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A8358B2299BA55A00985983 /* AppInfoMenuItems.swift in Sources */,
 				13D1E499295CE4130070090B /* ggml.c in Sources */,
 				136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */,
 				5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */,
@@ -570,30 +571,31 @@
 				578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */,
 				57EAB6E72962041000BB59BE /* CoreDataRepository.swift in Sources */,
 				57B26A262963FFC7007A7B9B /* ConfirmPane.swift in Sources */,
+				5AADC50C29A24623003AD311 /* LicenseView.swift in Sources */,
 				13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */,
+				5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */,
 				57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */,
 				57D4CB192981BF2D00D0D598 /* RecognitionPlayer.swift in Sources */,
-				5A0DE9CA298695910071EE82 /* WhisperModelRepository.swift in Sources */,
 				13D1E49F295CE4370070090B /* Recognizer.swift in Sources */,
 				574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */,
 				139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */,
-				5A2517972989800C001ED13F /* FileDownloader.swift in Sources */,
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
-				5A8358B6299BA5B700985983 /* LicenseView.swift in Sources */,
 				13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */,
+				5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */,
 				57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */,
 				57B26A2D2965E04D007A7B9B /* utils.swift in Sources */,
 				139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */,
 				57CF69D42967019C00DF0E3F /* LazyView.swift in Sources */,
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				13516D9D2961A900005013C8 /* SideMenu.swift in Sources */,
+				5AADC50829A24563003AD311 /* WhisperModelRepository.swift in Sources */,
 				57EAB6E9296207C600BB59BE /* RecognizedSpeechRepository.swift in Sources */,
 				57EAB6EC296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift in Sources */,
+				5AADC50629A244CB003AD311 /* WhisperModel.swift in Sources */,
 				57EAB6E22961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift in Sources */,
 				57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */,
-				5A0DE9C8298695100071EE82 /* WhisperModel.swift in Sources */,
 				5A8F55222948CD3900E87D25 /* Record.swift in Sources */,
 				572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
@@ -939,14 +941,6 @@
 		57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
