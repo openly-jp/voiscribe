@@ -34,7 +34,15 @@ class WhisperModel: Identifiable, ObservableObject {
 
         isDownloaded = WhisperModelRepository.modelExists(size: size, language: language)
         if isDownloaded {
-            localPath = getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
+            if size == .tiny {
+                let urlStr = Bundle.main.path(
+                    forResource: "ggml-\(size.rawValue).\(language.rawValue)",
+                    ofType: "bin"
+                )
+                localPath = URL(string: urlStr!)!
+            } else {
+                localPath = getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
+            }
         }
     }
 
