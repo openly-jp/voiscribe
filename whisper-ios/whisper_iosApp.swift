@@ -25,10 +25,11 @@ struct StartView: View {
                     DispatchQueue.global(qos: .userInteractive).async {
                         let whisperModel = WhisperModel(
                             size: defaultModelSize,
-                            language: defaultModelLanguage,
-                            completion: {}
+                            language: defaultModelLanguage
                         )
-                        whisperModel.load_model {
+                        whisperModel.loadModel { err in
+                            if let err { Logger.error(err); return }
+
                             recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
                             isLoading = false
                         }

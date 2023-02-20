@@ -45,15 +45,23 @@ struct ModelLoadSubMenuItemView: View {
     let modelSize: Size
     let language: Lang
     let modelDisplayName: String
+    @ObservedObject var whisperModel: WhisperModel
 
     @State private var showPrompt = false
-    @State private var isDownloadModelPrompt = false
     @State private var isDownloading = false
     @State private var isLoading = false
 
+    init(modelSize: Size, language: Lang, modelDisplayName: String) {
+        self.modelSize = modelSize
+        self.language = language
+        self.modelDisplayName = modelDisplayName
+
+        whisperModel = WhisperModel(size: modelSize, language: language)
+    }
+
     var body: some View {
         HStack {
-            if recognizer.whisperModel.name == "\(modelSize.rawValue)-\(language.rawValue)" {
+            if isModelSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .imageScale(.large)
             } else {
@@ -63,12 +71,12 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if modelSize != Size(rawValue: "tiny") {
+            if modelSize != .tiny {
                 if isDownloading {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
                 } else {
-                    if modelExists() {
+                    if whisperModel.isDownloaded {
                         Image(systemName: "checkmark.icloud.fill")
                     } else {
                         Image(systemName: "icloud.and.arrow.down")
@@ -77,25 +85,17 @@ struct ModelLoadSubMenuItemView: View {
             }
         }
         .swipeActions(edge: .trailing) {
-            /// show delete label when the following 3 cases are met simultaneously
-            /// 1. model is not loading
-            /// 2. model is not tiny
-            /// 3. the model is already downloaded
-            /// 4. the model is not selected
             if !isLoading,
-               modelSize != Size(rawValue: "tiny"),
-               modelExists(),
-               recognizer.whisperModel.name != "\(modelSize.rawValue)-\(language.rawValue)"
+               modelSize != .tiny,
+               whisperModel.isDownloaded,
+               !isModelSelected
             {
-                Button(action: deleteModel) {
-                    label: do {
-                        Image(systemName: "trash.fill")
-                    }
-                }.tint(.red)
+                Button(action: deleteModel) { Image(systemName: "trash.fill") }
+                    .tint(.red)
             }
         }
         .onTapGesture {
-            guard recognizer.whisperModel.name != "\(modelSize.rawValue)-\(language.rawValue)" else {
+            guard !isModelSelected else {
                 return
             }
 
@@ -103,43 +103,42 @@ struct ModelLoadSubMenuItemView: View {
                 return
             }
 
-            isDownloadModelPrompt = !modelExists()
             showPrompt = true
         }
         .alert(isPresented: $showPrompt) {
-            isDownloadModelPrompt
+            whisperModel.isDownloaded
                 ? Alert(
+                    title: Text("モデルを変更しますか？"),
+                    primaryButton: .cancel(Text("キャンセル")),
+                    secondaryButton: .default(Text("変更"), action: loadModel)
+                )
+                : Alert(
                     title: Text("モデルをダウンロードしますか?"),
                     message: Text("通信容量にご注意ください。"),
                     primaryButton: .cancel(Text("キャンセル")),
                     secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
                 )
-                : Alert(
-                    title: Text("モデルを変更しますか？"),
-                    primaryButton: .cancel(Text("キャンセル")),
-                    secondaryButton: .default(Text("変更"), action: loadModel)
-                )
         }
     }
 
-    private func modelExists() -> Bool {
-        WhisperModelRepository.modelExists(size: modelSize, language: language)
+    var isModelSelected: Bool {
+        recognizer.whisperModel.size == modelSize && recognizer.whisperModel.language == language
     }
 
     private func loadModel() {
+        recognizer.whisperModel.freeModel()
+
+        assert(whisperModel.isDownloaded)
+        recognizer.whisperModel = whisperModel
+
         isLoading = true
-        recognizer.whisperModel.free_model(callback: {})
-        let whisperModel = WhisperModel(
-            size: modelSize,
-            language: language,
-            completion: {}
-        )
-        whisperModel.load_model {
+        whisperModel.loadModel { err in
             isLoading = false
-            if whisperModel.whisperContext == nil {
-                Logger.error("model loading failed in loadModel")
+
+            if let err {
+                Logger.error(err)
+                return
             }
-            recognizer.whisperModel = whisperModel
 
             defaultModelSize = modelSize
             defaultLanguage = language
@@ -148,29 +147,22 @@ struct ModelLoadSubMenuItemView: View {
 
     private func downloadModel() {
         isDownloading = true
-        WhisperModelRepository.fetchWhisperModel(
-            size: modelSize,
-            language: language,
-            update: { num in progressValue = CGFloat(num) }
-        ) { result in
-            switch result {
-            case .success:
-                isDownloading = false
-            case let .failure(error):
-                print("Error: \(error.localizedDescription)")
+        whisperModel.downloadModel { err in
+            isDownloading = false
+            if let err {
+                Logger.error(err)
             }
+        } updateCallback: { num in
+            progressValue = CGFloat(num)
         }
     }
 
     func deleteModel() {
-        let flag = WhisperModelRepository.deleteWhisperModel(
-            size: modelSize,
-            language: language
-        )
-        if !flag {
-            Logger.error("model deletion failed in deleteModel")
+        do {
+            try whisperModel.deleteModel()
+        } catch {
+            Logger.error(error)
         }
-        isDownloadModelPrompt = true
     }
 }
 

@@ -21,48 +21,18 @@ enum Lang: String {
     }
 }
 
-class WhisperModel: Identifiable {
-    let id: UUID
+class WhisperModel: Identifiable, ObservableObject {
     var localPath: URL?
     var size: Size
     var language: Lang
     var whisperContext: OpaquePointer?
     @Published var isDownloaded: Bool
-    var createdAt: Date
-    var updatedAt: Date
 
-    init(
-        size: Size,
-        language: Lang,
-        completion: @escaping () -> Void
-    ) {
-        id = UUID()
+    init(size: Size, language: Lang) {
         self.size = size
         self.language = language
         localPath = URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!)!
-        if size.rawValue == "tiny" {
-            isDownloaded = true
-        } else {
-            isDownloaded = false
-        }
-        // NOTE: This is a UNIX Time
-        createdAt = Date()
-        updatedAt = Date()
-        WhisperModelRepository.fetchWhisperModel(
-            size: size,
-            language: language,
-            update: nil
-        ) { result in
-            switch result {
-            case let .success(modelURL):
-                self.localPath = modelURL
-                self.isDownloaded = true
-                completion()
-            case let .failure(error):
-                self.isDownloaded = false
-                Logger.error("Error: \(error.localizedDescription)")
-            }
-        }
+        isDownloaded = WhisperModelRepository.modelExists(size: size, language: language)
     }
 
     init(
@@ -70,20 +40,46 @@ class WhisperModel: Identifiable {
         size: Size,
         language: Lang
     ) {
-        id = UUID()
         self.localPath = localPath
         self.size = size
         self.language = language
         isDownloaded = true
-        createdAt = Date()
-        updatedAt = Date()
     }
 
     var name: String {
         "\(size.rawValue)-\(language.rawValue)"
     }
 
-    func load_model(callback: @escaping () -> Void) {
+    func downloadModel(
+        completeCallback: @escaping (Error?) -> Void,
+        updateCallback: @escaping (Float) -> Void
+    ) {
+        assert(!isDownloaded)
+        WhisperModelRepository.fetchWhisperModel(
+            size: size,
+            language: language,
+            update: updateCallback
+        ) { result in
+            var err: Error?
+
+            switch result {
+            case let .success(modelURL):
+                self.localPath = modelURL
+                self.isDownloaded = true
+
+            case let .failure(error):
+                self.isDownloaded = false
+                err = NSError(
+                    domain: "Failed to download model: \(error.localizedDescription)",
+                    code: -1
+                )
+            }
+
+            completeCallback(err)
+        }
+    }
+
+    func loadModel(callback: @escaping (Error?) -> Void) {
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
         guard let modelUrl = localPath else {
             Logger.error("Failed to parse model url")
@@ -91,21 +87,31 @@ class WhisperModel: Identifiable {
         }
         DispatchQueue.global(qos: .userInitiated).async {
             self.whisperContext = whisper_init_from_file(modelUrl.path)
+
+            var err: Error?
             if self.whisperContext == nil {
-                Logger.error("Failed to load model")
-            } else {
-                Logger.debug("Model loaded")
-                DispatchQueue.main.async {
-                    callback()
-                }
+                err = NSError(domain: "Failed to load model", code: -1)
             }
+
+            callback(err)
+        }
+    }
+
+    func deleteModel() throws {
+        let flag = WhisperModelRepository.deleteWhisperModel(
+            size: size,
+            language: language
+        )
+        isDownloaded = false
+        if !flag {
+            throw NSError(domain: "failed to delete model", code: -1)
         }
     }
 
     // prefer this fucntion to deinit cause
     // we can avoid two models are loaded simultaneouly
     // (for a short amout of time)
-    func free_model(callback _: @escaping () -> Void) {
+    func freeModel() {
         whisper_free(whisperContext)
     }
 }
