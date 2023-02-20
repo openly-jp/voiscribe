@@ -101,7 +101,6 @@ struct ActivityViewM4A: UIViewControllerRepresentable {
     func makeUIViewController(context _: Context) -> UIActivityViewController {
         let fileName = recognizedSpeech.audioFileURL.lastPathComponent
         let url = getURLByName(fileName: fileName)
-//        let fileURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
 
         return UIActivityViewController(activityItems: [url], applicationActivities: nil)
     }
