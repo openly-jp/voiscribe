@@ -126,9 +126,9 @@ struct ModelLoadSubMenuItemView: View {
     }
 
     private func loadModel() {
-        recognizer.whisperModel.freeModel()
-
         assert(whisperModel.isDownloaded)
+
+        recognizer.whisperModel.freeModel()
         recognizer.whisperModel = whisperModel
 
         isLoading = true

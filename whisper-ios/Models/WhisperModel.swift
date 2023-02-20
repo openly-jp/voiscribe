@@ -31,8 +31,11 @@ class WhisperModel: Identifiable, ObservableObject {
     init(size: Size, language: Lang) {
         self.size = size
         self.language = language
-        localPath = URL(string: Bundle.main.path(forResource: "ggml-tiny.en", ofType: "bin")!)!
+
         isDownloaded = WhisperModelRepository.modelExists(size: size, language: language)
+        if isDownloaded {
+            localPath = getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
+        }
     }
 
     init(
@@ -65,8 +68,7 @@ class WhisperModel: Identifiable, ObservableObject {
             switch result {
             case let .success(modelURL):
                 self.localPath = modelURL
-                self.isDownloaded = true
-
+                DispatchQueue.main.async { self.isDownloaded = true }
             case let .failure(error):
                 self.isDownloaded = false
                 err = NSError(
