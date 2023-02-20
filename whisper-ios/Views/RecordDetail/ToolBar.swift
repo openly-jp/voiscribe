@@ -10,8 +10,8 @@ struct ToolBar: ToolbarContent {
     @Binding var isEditing: Bool
 
     @State var isOpenDeleteAlert: Bool = false
-    @State var isOpenShareSheetm4a: Bool = false
-    @State var isOpenShareSheettxt: Bool = false
+    @State var isOpenShareSheetM4a: Bool = false
+    @State var isOpenShareSheetTxt: Bool = false
     @Environment(\.presentationMode) var presentationMode
 
     var body: some ToolbarContent {
@@ -26,13 +26,13 @@ struct ToolBar: ToolbarContent {
 
                 Menu {
                     Button(
-                        action: { isOpenShareSheettxt = true },
+                        action: { isOpenShareSheetTxt = true },
                         label: {
                             Label("テキストを共有", systemImage: "textformat.alt")
                         }
                     )
                     Button(
-                        action: { isOpenShareSheetm4a = true },
+                        action: { isOpenShareSheetM4a = true },
                         label: {
                             Label("音声を共有", systemImage: "waveform")
                         }
@@ -41,10 +41,10 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "square.and.arrow.up")
                         .foregroundColor(Color(.label))
                 }
-                .sheet(isPresented: $isOpenShareSheettxt) {
+                .sheet(isPresented: $isOpenShareSheetTxt) {
                     ActivityViewTXT(text: allTranscription)
                 }
-                .sheet(isPresented: $isOpenShareSheetm4a) {
+                .sheet(isPresented: $isOpenShareSheetM4a) {
                     ActivityViewM4A(recognizedSpeech: recognizedSpeech)
                 }
 
@@ -99,9 +99,11 @@ struct ActivityViewM4A: UIViewControllerRepresentable {
     let recognizedSpeech: RecognizedSpeech
 
     func makeUIViewController(context _: Context) -> UIActivityViewController {
-        let fileURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
+        let fileName = recognizedSpeech.audioFileURL.lastPathComponent
+        let url = getURLByName(fileName: fileName)
+//        let fileURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
 
-        return UIActivityViewController(activityItems: ["audio file", fileURL], applicationActivities: nil)
+        return UIActivityViewController(activityItems: [url], applicationActivities: nil)
     }
 
     func updateUIViewController(_: UIActivityViewController, context _: Context) {}
