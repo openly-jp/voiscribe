@@ -14,6 +14,7 @@ struct RecognitionPane: View {
 
     @State var elapsedTime: Int = 0
     @State var idAmps: Deque<IdAmp> = []
+    @State var maxAmp: Float = 0
 
     @State var updateRecordingTimeTimer: Timer?
     @State var updateWaveformTimer: Timer?
@@ -60,7 +61,8 @@ struct RecognitionPane: View {
             startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording,
             elapsedTime: elapsedTime,
-            idAmps: $idAmps
+            idAmps: $idAmps,
+            maxAmp: $maxAmp
         )
 
         // The Views used inside RecordingController changes when recording starts,
@@ -113,8 +115,13 @@ struct RecognitionPane: View {
                     Text(formatTime(Double(elapsedTime)))
                 }
 
-                Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: true)
-                    .frame(height: 250)
+                Waveform(
+                    idAmps: $idAmps,
+                    isPaused: $isPaused,
+                    maxAmp: $maxAmp,
+                    removeIdAmps: true
+                )
+                .frame(height: 250)
 
                 if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
                     Group {
@@ -425,6 +432,7 @@ struct RecognitionPane: View {
                 id: UUID(),
                 amp: audioRecorder!.averagePower(forChannel: 0)
             )
+            if idAmp.amp > maxAmp { maxAmp = idAmp.amp }
             idAmps.append(idAmp)
         }
 

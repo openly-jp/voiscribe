@@ -12,6 +12,7 @@ struct RecordingController: View {
 
     let elapsedTime: Int
     @Binding var idAmps: Deque<IdAmp>
+    @Binding var maxAmp: Float
 
     let miniRecorderHeight: CGFloat = 70
 
@@ -42,8 +43,13 @@ struct RecordingController: View {
                         }.frame(width: 15)
                         Text(formatTime(Double(elapsedTime)))
                             .foregroundColor(Color(.label))
-                        Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: false)
-                            .frame(height: miniRecorderHeight)
+                        Waveform(
+                            idAmps: $idAmps,
+                            isPaused: $isPaused,
+                            maxAmp: $maxAmp,
+                            removeIdAmps: false
+                        )
+                        .frame(height: miniRecorderHeight)
                     }
                 }
 
@@ -115,7 +121,8 @@ struct RecordingController_Previews: PreviewProvider {
                 startAction: {},
                 stopAction: {},
                 elapsedTime: 23,
-                idAmps: .constant(idAmps)
+                idAmps: .constant(idAmps),
+                maxAmp: .constant(0)
             )
 
             RecordingController(
@@ -125,7 +132,8 @@ struct RecordingController_Previews: PreviewProvider {
                 startAction: {},
                 stopAction: {},
                 elapsedTime: 23,
-                idAmps: .constant(idAmps)
+                idAmps: .constant(idAmps),
+                maxAmp: .constant(0)
             )
         }
     }
