@@ -17,6 +17,7 @@
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
 		139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */; };
 		139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */; };
+		13BB395929A1176A00082D1F /* FlagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 13BB395829A1176A00082D1F /* FlagKit */; };
 		13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* DeveloperMainView.swift */; };
 		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
@@ -153,6 +154,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13DF2F2F29A0848C0030E39A /* PartialSheet in Frameworks */,
+				13BB395929A1176A00082D1F /* FlagKit in Frameworks */,
 				5A91ACE72999514D004BE94A /* SafariServicesUI in Frameworks */,
 				57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */,
 			);
@@ -422,6 +425,8 @@
 			packageProductDependencies = (
 				57B26A2829649A7F007A7B9B /* DequeModule */,
 				5A91ACE62999514D004BE94A /* SafariServicesUI */,
+				13DF2F2E29A0848C0030E39A /* PartialSheet */,
+				13BB395829A1176A00082D1F /* FlagKit */,
 			);
 			productName = "whisper-ios";
 			productReference = 5A8F54F12948CCDB00E87D25 /* whisper-ios.app */;
@@ -499,6 +504,8 @@
 			packageReferences = (
 				57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */,
 				5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */,
+				13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */,
+				13BB395729A1176900082D1F /* XCRemoteSwiftPackageReference "FlagKit" */,
 			);
 			productRefGroup = 5A8F54F22948CCDB00E87D25 /* Products */;
 			projectDirPath = "";
@@ -921,6 +928,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		13BB395729A1176900082D1F /* XCRemoteSwiftPackageReference "FlagKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/madebybowtie/FlagKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AndreaMiotto/PartialSheet.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
@@ -948,6 +971,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		13BB395829A1176A00082D1F /* FlagKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 13BB395729A1176900082D1F /* XCRemoteSwiftPackageReference "FlagKit" */;
+			productName = FlagKit;
+		};
+		13DF2F2E29A0848C0030E39A /* PartialSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */;
+			productName = PartialSheet;
+		};
 		57B26A2829649A7F007A7B9B /* DequeModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */;
