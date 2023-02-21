@@ -26,18 +26,18 @@ struct StartView: View {
                         .frame(width: 2048)
                         .onAppear {
                             DispatchQueue.global(qos: .userInteractive).async {
-                            let whisperModel = WhisperModel(
-                                size: defaultModelSize,
-                                language: defaultModelLanguage
-                            )
-                            whisperModel.loadModel { err in
-                                if let err { Logger.error(err); return }
+                                let whisperModel = WhisperModel(
+                                    size: defaultModelSize,
+                                    language: defaultModelLanguage
+                                )
+                                whisperModel.loadModel { err in
+                                    if let err { Logger.error(err); return }
 
-                                recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
-                                isLoading = false
+                                    recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
+                                    isLoading = false
+                                }
                             }
                         }
-                    }
                 }
                 VStack {
                     Text(APP_NAME)
