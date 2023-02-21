@@ -348,6 +348,7 @@
 		5A8F54F32948CCDB00E87D25 /* whisper-ios */ = {
 			isa = PBXGroup;
 			children = (
+				CD895CAB29A3638C008EAF0E /* whisper-iosDebug.entitlements */,
 				57835301299047B500081CF8 /* Info.plist */,
 				57EAB6E52962028C00BB59BE /* Repository */,
 				13516D9729603679005013C8 /* Mocks */,
@@ -767,6 +768,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "whisper-ios/whisper-iosDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"whisper-ios/Preview Content\"";
