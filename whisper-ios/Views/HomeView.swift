@@ -23,11 +23,6 @@ struct HomeView: View {
                         .padding(.horizontal)
                         Spacer()
                     }
-                    HStack(alignment: .center) {
-                        Text(APP_NAME)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
                 }
 
                 GeometryReader {
