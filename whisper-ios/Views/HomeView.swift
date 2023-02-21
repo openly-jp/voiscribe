@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var showSideMenu = false
+    @State var sideMenuOffset = sideMenuCloseOffset
     @AppStorage(UserModeNumKey) var userModeNum = 0
     var body: some View {
         NavigationView {

@@ -114,7 +114,6 @@
 		578352F4298676D600081CF8 /* EditingAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingAudioPlayer.swift; sourceTree = "<group>"; };
 		578352F729890CF400081CF8 /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
 		57835301299047B500081CF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		57835301299047B500081CF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		578353042990E3C900081CF8 /* blinkEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blinkEffect.swift; sourceTree = "<group>"; };
 		57B26A21296317A3007A7B9B /* StopButtonPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButtonPane.swift; sourceTree = "<group>"; };
 		57B26A252963FFC7007A7B9B /* ConfirmPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPane.swift; sourceTree = "<group>"; };
@@ -942,14 +941,6 @@
 		57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		5A8F55292948CEA800E87D25 /* XCRemoteSwiftPackageReference "Inject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
