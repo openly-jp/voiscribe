@@ -1,6 +1,7 @@
 import SwiftUI
 
-let UserDefaultASRModelNameKey = "user-default-asr-model-name"
+let userDefaultModelSizeKey = "user-default-model-size"
+let userDefaultModelLanguageKey = "user-default-model-language"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
@@ -15,16 +16,52 @@ struct ModelLoadMenuItemView: View {
     }
 }
 
+// https://dev.classmethod.jp/articles/ios-circular-progress-bar-with-swiftui/
+struct CircularProgressBar: View {
+    @Binding var progress: CGFloat
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(lineWidth: 4.0)
+                .opacity(0.3)
+                .foregroundColor(.gray)
+
+            Circle()
+                .trim(from: 0.0, to: min(progress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                .foregroundColor(.blue)
+                .rotationEffect(Angle(degrees: 270.0))
+        }
+    }
+}
+
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(UserDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
-    let modelName: String
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang(rawValue: "en")!
+    @State var progressValue: CGFloat = 0.0
+
+    let modelSize: Size
+    let language: Lang
     let modelDisplayName: String
-    @State private var showDialogue = false
+    @ObservedObject var whisperModel: WhisperModel
+
+    @State private var showPrompt = false
+    @State private var isDownloading = false
+    @State private var isLoading = false
+
+    init(modelSize: Size, language: Lang, modelDisplayName: String) {
+        self.modelSize = modelSize
+        self.language = language
+        self.modelDisplayName = modelDisplayName
+
+        whisperModel = WhisperModel(size: modelSize, language: language)
+    }
 
     var body: some View {
         HStack {
-            if recognizer.usedModelName == modelName {
+            if isModelSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .imageScale(.large)
             } else {
@@ -34,47 +71,165 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-        }
-        .onTapGesture(perform: {
-            if recognizer.usedModelName != modelName {
-                self.showDialogue = true
+            if modelSize != .tiny {
+                if isDownloading {
+                    CircularProgressBar(progress: $progressValue)
+                        .frame(width: 18, height: 18)
+                } else {
+                    if whisperModel.isDownloaded {
+                        Image(systemName: "checkmark.icloud.fill")
+                    } else {
+                        Image(systemName: "icloud.and.arrow.down")
+                    }
+                }
             }
-        })
-        .alert(isPresented: $showDialogue) {
-            Alert(title: Text("モデルを変更しますか？"),
-                  message: Text("一部のモデルはダウンロードが行われます"),
-                  primaryButton: .cancel(Text("キャンセル")),
-                  secondaryButton: .default(Text("変更"), action: {
-                      let isSucceed = changeModel()
-                      if isSucceed {
-                          // change default model name for next model loading time
-                          defaultModelName = modelName
-                      }
-                  }))
+        }
+        .swipeActions(edge: .trailing) {
+            if !isLoading,
+               modelSize != .tiny,
+               whisperModel.isDownloaded,
+               !isModelSelected
+            {
+                Button(action: deleteModel) { Image(systemName: "trash.fill") }
+                    .tint(.red)
+            }
+        }
+        .onTapGesture {
+            guard !isModelSelected else {
+                return
+            }
+
+            guard !isDownloading else {
+                return
+            }
+
+            showPrompt = true
+        }
+        .alert(isPresented: $showPrompt) {
+            whisperModel.isDownloaded
+                ? Alert(
+                    title: Text("モデルを変更しますか？"),
+                    primaryButton: .cancel(Text("キャンセル")),
+                    secondaryButton: .default(Text("変更"), action: loadModel)
+                )
+                : Alert(
+                    title: Text("モデルをダウンロードしますか?"),
+                    message: Text("通信容量にご注意ください。"),
+                    primaryButton: .cancel(Text("キャンセル")),
+                    secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
+                )
         }
     }
 
-    private func changeModel() -> Bool {
-        do {
-            if recognizer.usedModelName != modelName {
-                try recognizer.load_model(modelName: modelName)
+    var isModelSelected: Bool {
+        recognizer.whisperModel.size == modelSize && recognizer.whisperModel.language == language
+    }
+
+    private func loadModel() {
+        assert(whisperModel.isDownloaded)
+
+        recognizer.whisperModel.freeModel()
+        recognizer.whisperModel = whisperModel
+
+        isLoading = true
+        whisperModel.loadModel { err in
+            isLoading = false
+
+            if let err {
+                Logger.error(err)
+                return
             }
-        } catch {
-            return false
+
+            defaultModelSize = modelSize
+            defaultLanguage = language
         }
-        return true
+    }
+
+    private func downloadModel() {
+        isDownloading = true
+        whisperModel.downloadModel { err in
+            isDownloading = false
+            if let err {
+                Logger.error(err)
+            }
+        } updateCallback: { num in
+            progressValue = CGFloat(num)
+        }
+    }
+
+    func deleteModel() {
+        do {
+            try whisperModel.deleteModel()
+        } catch {
+            Logger.error(error)
+        }
     }
 }
 
 let modeLoadSubMenuItems = [
     MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny", modelDisplayName: "Tiny")),
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "tiny")!,
+            language: Lang(rawValue: "multi")!,
+            modelDisplayName: "Tiny"
+        )),
         subMenuItems: nil
     ),
     MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(modelName: "ggml-tiny.en", modelDisplayName: "Tiny(En)")),
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "tiny")!,
+            language: Lang(rawValue: "en")!,
+            modelDisplayName: "Tiny(EN)"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "base")!,
+            language: Lang(rawValue: "multi")!,
+            modelDisplayName: "Base"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "base")!,
+            language: Lang(rawValue: "en")!,
+            modelDisplayName: "Base(EN)"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "small")!,
+            language: Lang(rawValue: "multi")!,
+            modelDisplayName: "Small"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "small")!,
+            language: Lang(rawValue: "en")!,
+            modelDisplayName: "Small(EN)"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "medium")!,
+            language: Lang(rawValue: "multi")!,
+            modelDisplayName: "Medium"
+        )),
+        subMenuItems: nil
+    ),
+    MenuItem(
+        view: AnyView(ModelLoadSubMenuItemView(
+            modelSize: Size(rawValue: "medium")!,
+            language: Lang(rawValue: "en")!,
+            modelDisplayName: "Medium(EN)"
+        )),
         subMenuItems: nil
     ),
 ]
-
 let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: modeLoadSubMenuItems)
