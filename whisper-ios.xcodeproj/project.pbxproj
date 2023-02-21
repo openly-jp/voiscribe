@@ -25,7 +25,6 @@
 		13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49E295CE4370070090B /* TranscriptionLine.swift */; };
 		387B6FCE0F7C83F953692C3A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 387B6489C08FCF766F9D934F /* README.md */; };
 		5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709E5042960BDFC00352CF3 /* Waveform.swift */; };
-		572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D375F296AA30E0096DEEE /* ShareButton.swift */; };
 		574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 574609C52961A08300D9DE06 /* Model.xcdatamodeld */; };
 		5766628C296047B100C27512 /* RecognitionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5766628B296047B100C27512 /* RecognitionPane.swift */; };
 		578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F4298676D600081CF8 /* EditingAudioPlayer.swift */; };
@@ -107,7 +106,6 @@
 		13D1E49E295CE4370070090B /* TranscriptionLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptionLine.swift; sourceTree = "<group>"; };
 		387B6489C08FCF766F9D934F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5709E5042960BDFC00352CF3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
-		572D375F296AA30E0096DEEE /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButton.swift; sourceTree = "<group>"; };
 		574609C62961A08300D9DE06 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
@@ -255,7 +253,6 @@
 				5A8F55232948CD5000E87D25 /* RecordDetails.swift */,
 				57D4CB1A2981C39900D0D598 /* TranscriptionLines.swift */,
 				578352F4298676D600081CF8 /* EditingAudioPlayer.swift */,
-				572D375F296AA30E0096DEEE /* ShareButton.swift */,
 				57B26A2A2965743F007A7B9B /* AudioPlayer.swift */,
 			);
 			path = RecordDetail;
@@ -597,7 +594,6 @@
 				57EAB6E22961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift in Sources */,
 				57C722A2295C97F5009C8A20 /* RecordButtonPane.swift in Sources */,
 				5A8F55222948CD3900E87D25 /* Record.swift in Sources */,
-				572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */,
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* MainView.swift in Sources */,

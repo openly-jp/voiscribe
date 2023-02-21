@@ -148,6 +148,7 @@ class MainView_Previews: PreviewProvider {
             csvFileName: "sample_ja"
         )
         let recognizedSpeechs: [RecognizedSpeech] = [recognizedSpeech]
+
         Group {
             MainView()
                 .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
