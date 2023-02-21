@@ -25,7 +25,7 @@ struct HomeView: View {
                     }
                     HStack(alignment: .center) {
                         Text(APP_NAME)
-                            .font(.title)
+                            .font(.custom("Times-Roman", size: 20))
                             .fontWeight(.bold)
                     }
                 }
