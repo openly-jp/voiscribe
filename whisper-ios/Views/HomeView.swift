@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var showSideMenu = false
+    @State var sideMenuOffset = sideMenuCloseOffset
     @AppStorage(UserModeNumKey) var userModeNum = 0
     var body: some View {
         NavigationView {
@@ -10,7 +11,8 @@ struct HomeView: View {
                 ZStack {
                     HStack(alignment: .center) {
                         Button(action: {
-                            self.showSideMenu = !self.showSideMenu
+                            sideMenuOffset = showSideMenu ? sideMenuCloseOffset : sideMenuOpenOffset
+                            showSideMenu.toggle()
                         }, label: {
                             Image(systemName: "line.horizontal.3")
                                 .resizable()
@@ -33,16 +35,16 @@ struct HomeView: View {
                     if userModeNum == 0 {
                         MainView()
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .disabled(self.showSideMenu)
-                            .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
+                            .disabled(showSideMenu)
+                            .overlay(showSideMenu ? Color.black.opacity(0.6) : nil)
                     } else if userModeNum == 1 {
                         DeveloperMainView()
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .disabled(self.showSideMenu)
-                            .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
+                            .disabled(showSideMenu)
+                            .overlay(showSideMenu ? Color.black.opacity(0.6) : nil)
                     }
 
-                    SideMenu(isOpen: self.$showSideMenu)
+                    SideMenu(isOpen: $showSideMenu, offset: $sideMenuOffset)
                 }
             }
             // This is really strange bug of swiftUI.

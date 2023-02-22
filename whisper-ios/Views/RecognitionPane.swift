@@ -387,8 +387,10 @@ struct RecognitionPane: View {
             Logger.error("format load error")
             return
         }
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(audioData.count))
-        else {
+        guard let pcmBuffer = AVAudioPCMBuffer(
+            pcmFormat: format,
+            frameCapacity: AVAudioFrameCount(audioData.count)
+        ) else {
             Logger.error("audio load error")
             return
         }
