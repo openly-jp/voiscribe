@@ -27,7 +27,6 @@
 		5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709E5042960BDFC00352CF3 /* Waveform.swift */; };
 		572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 572D0CA229A17BCA00D62256 /* sample_ja.csv */; };
 		572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 572D0CA529A17F4800D62256 /* sample_ja.wav */; };
-		572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D375F296AA30E0096DEEE /* ShareButton.swift */; };
 		574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 574609C52961A08300D9DE06 /* Model.xcdatamodeld */; };
 		5766628C296047B100C27512 /* RecognitionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5766628B296047B100C27512 /* RecognitionPane.swift */; };
 		578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F4298676D600081CF8 /* EditingAudioPlayer.swift */; };
@@ -111,7 +110,6 @@
 		5709E5042960BDFC00352CF3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
 		572D0CA229A17BCA00D62256 /* sample_ja.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
 		572D0CA529A17F4800D62256 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
-		572D375F296AA30E0096DEEE /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButton.swift; sourceTree = "<group>"; };
 		574609C62961A08300D9DE06 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
@@ -136,6 +134,12 @@
 		57EAB6E8296207C600BB59BE /* RecognizedSpeechRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechRepository.swift; sourceTree = "<group>"; };
 		57EAB6EA296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranscriptionLineData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/TranscriptionLineData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecognizedSpeechData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/RecognizedSpeechData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		5A8E666C29A66EDC000C3FFA /* whisper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = whisper.h; path = ../../../../CTranslate2/include/ctranslate2/models/whisper.h; sourceTree = "<group>"; };
+		5A8E666D29A66F05000C3FFA /* generation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = generation.h; path = ../../../../CTranslate2/include/ctranslate2/generation.h; sourceTree = "<group>"; };
+		5A8E667B29A67086000C3FFA /* whisper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whisper.h; sourceTree = "<group>"; };
+		5A8E667D29A670BB000C3FFA /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
+		5A8E667E29A670E5000C3FFA /* replica_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = replica_pool.h; sourceTree = "<group>"; };
+		5A8E667F29A67106000C3FFA /* vocabulary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vocabulary.h; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -216,6 +220,7 @@
 		13D1E492295CE4120070090B /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				5A8E644E29A667F6000C3FFA /* ctranslate2 */,
 				13D1E493295CE4120070090B /* whisper-cpp */,
 			);
 			path = Libraries;
@@ -324,6 +329,35 @@
 				5AADC50B29A24623003AD311 /* LicenseView.swift */,
 			);
 			path = AppInfoViews;
+			sourceTree = "<group>";
+		};
+		5A8E644E29A667F6000C3FFA /* ctranslate2 */ = {
+			isa = PBXGroup;
+			children = (
+				5A8E667C29A6708E000C3FFA /* models */,
+				5A8E667A29A67078000C3FFA /* layers */,
+				5A8E666C29A66EDC000C3FFA /* whisper.h */,
+				5A8E667E29A670E5000C3FFA /* replica_pool.h */,
+				5A8E667F29A67106000C3FFA /* vocabulary.h */,
+				5A8E666D29A66F05000C3FFA /* generation.h */,
+			);
+			path = ctranslate2;
+			sourceTree = "<group>";
+		};
+		5A8E667A29A67078000C3FFA /* layers */ = {
+			isa = PBXGroup;
+			children = (
+				5A8E667B29A67086000C3FFA /* whisper.h */,
+			);
+			path = layers;
+			sourceTree = "<group>";
+		};
+		5A8E667C29A6708E000C3FFA /* models */ = {
+			isa = PBXGroup;
+			children = (
+				5A8E667D29A670BB000C3FFA /* model.h */,
+			);
+			path = models;
 			sourceTree = "<group>";
 		};
 		5A8F54E82948CCDB00E87D25 = {
