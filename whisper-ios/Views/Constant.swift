@@ -1,1 +1,1 @@
-let APP_NAME = "Whisper iOS"
+let APP_NAME = "VoiScribe"
