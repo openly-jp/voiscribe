@@ -226,6 +226,7 @@ struct RecognitionPane: View {
 
         language = getUserLanguage()
         tmpAudioFileNumber = 0
+        maxAmp = 0
         recognizingSpeech = RecognizedSpeech(
             audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber),
             language: language
