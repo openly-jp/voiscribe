@@ -1,5 +1,6 @@
 import AVFoundation
 import DequeModule
+import PartialSheet
 import SwiftUI
 
 let UserDefaultASRLanguageKey = "asr-language"
@@ -44,6 +45,7 @@ struct RecognitionPane: View {
 
     // MARK: - pane management state
 
+    @State var isRecognitionSettingPaneOpen: Bool = false
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
@@ -58,6 +60,7 @@ struct RecognitionPane: View {
             isRecording: $isRecording,
             isPaused: $isPaused,
             isPaneOpen: $isPaneOpen,
+            isRecognitionSettingOpen: $isRecognitionSettingPaneOpen,
             startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording,
             elapsedTime: elapsedTime,
@@ -77,6 +80,10 @@ struct RecognitionPane: View {
             )
             .frame(height: 0)
             .hidden()
+            .partialSheet(isPresented: $isRecognitionSettingPaneOpen) {
+                RecognitionSettingPane(startAction: startRecording)
+                    .environmentObject(recognizer)
+            }
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
             .onChange(of: scenePhase) {
                 newPhase in
@@ -223,6 +230,7 @@ struct RecognitionPane: View {
         isRecording = true
         isPaused = false
         isPaneOpen = true
+        isRecognitionSettingPaneOpen = false
 
         language = getUserLanguage()
         tmpAudioFileNumber = 0

@@ -1,6 +1,6 @@
 import Foundation
 
-enum Size: String {
+enum Size: String, CaseIterable, Identifiable {
     case tiny
     case base
     case small
@@ -8,6 +8,48 @@ enum Size: String {
 
     init() {
         self = .tiny
+    }
+
+    // just for ForEach operation
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .tiny:
+            return "Tiny"
+        case .base:
+            return "Base"
+        case .small:
+            return "Small"
+        case .medium:
+            return "Medium"
+        }
+    }
+
+    var speed: Int {
+        switch self {
+        case .tiny:
+            return 5
+        case .base:
+            return 4
+        case .small:
+            return 3
+        case .medium:
+            return 1
+        }
+    }
+
+    var accuracy: Int {
+        switch self {
+        case .tiny:
+            return 1
+        case .base:
+            return 3
+        case .small:
+            return 4
+        case .medium:
+            return 5
+        }
     }
 }
 

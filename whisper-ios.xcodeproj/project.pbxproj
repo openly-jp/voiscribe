@@ -16,7 +16,11 @@
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
 		139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */; };
 		139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */; };
-		13BB395929A1176A00082D1F /* FlagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 13BB395829A1176A00082D1F /* FlagKit */; };
+		13BB395A29A3548500082D1F /* PartialSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 13DF2F2E29A0848C0030E39A /* PartialSheet */; };
+		13BB395D29A3694200082D1F /* RecognitionSettingPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB395C29A3694200082D1F /* RecognitionSettingPane.swift */; };
+		13BB395F29A36A9500082D1F /* ModelSelectionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB395E29A36A9500082D1F /* ModelSelectionPane.swift */; };
+		13BB396129A36AA700082D1F /* RecognitionLanguageSelectionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB396029A36AA700082D1F /* RecognitionLanguageSelectionPane.swift */; };
+		13BB396629A7AED600082D1F /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
 		13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* DeveloperMainView.swift */; };
 		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
@@ -28,7 +32,6 @@
 		5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709E5042960BDFC00352CF3 /* Waveform.swift */; };
 		572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */ = {isa = PBXBuildFile; fileRef = 572D0CA229A17BCA00D62256 /* sample_ja.csv */; };
 		572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */ = {isa = PBXBuildFile; fileRef = 572D0CA529A17F4800D62256 /* sample_ja.wav */; };
-		572D3760296AA30E0096DEEE /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D375F296AA30E0096DEEE /* ShareButton.swift */; };
 		574609C72961A08300D9DE06 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 574609C52961A08300D9DE06 /* Model.xcdatamodeld */; };
 		5766628C296047B100C27512 /* RecognitionPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5766628B296047B100C27512 /* RecognitionPane.swift */; };
 		578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578352F4298676D600081CF8 /* EditingAudioPlayer.swift */; };
@@ -63,7 +66,6 @@
 		5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55232948CD5000E87D25 /* RecordDetails.swift */; };
 		5A8F55282948CDB700E87D25 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F55272948CDB700E87D25 /* MainView.swift */; };
 		5A91ACDA2998E84B004BE94A /* ggml-tiny.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */; };
-		5AADC50429A24477003AD311 /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
 		5AADC50629A244CB003AD311 /* WhisperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50529A244CB003AD311 /* WhisperModel.swift */; };
 		5AADC50829A24563003AD311 /* WhisperModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50729A24563003AD311 /* WhisperModelRepository.swift */; };
 		5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50929A245EE003AD311 /* FileDownloader.swift */; };
@@ -98,6 +100,9 @@
 		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
 		139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectMenuItems.swift; sourceTree = "<group>"; };
 		139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenuItems.swift; sourceTree = "<group>"; };
+		13BB395C29A3694200082D1F /* RecognitionSettingPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionSettingPane.swift; sourceTree = "<group>"; };
+		13BB395E29A36A9500082D1F /* ModelSelectionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSelectionPane.swift; sourceTree = "<group>"; };
+		13BB396029A36AA700082D1F /* RecognitionLanguageSelectionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionLanguageSelectionPane.swift; sourceTree = "<group>"; };
 		13D1E490295CE40C0070090B /* DeveloperMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperMainView.swift; sourceTree = "<group>"; };
 		13D1E494295CE4120070090B /* whisper-ios-test-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "whisper-ios-test-Bridging-Header.h"; sourceTree = "<group>"; };
 		13D1E495295CE4120070090B /* whisper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whisper.h; sourceTree = "<group>"; };
@@ -112,7 +117,6 @@
 		5709E5042960BDFC00352CF3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
 		572D0CA229A17BCA00D62256 /* sample_ja.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = sample_ja.csv; sourceTree = "<group>"; };
 		572D0CA529A17F4800D62256 /* sample_ja.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample_ja.wav; sourceTree = "<group>"; };
-		572D375F296AA30E0096DEEE /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButton.swift; sourceTree = "<group>"; };
 		574609C62961A08300D9DE06 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5766628A29603BBF00C27512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5766628B296047B100C27512 /* RecognitionPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionPane.swift; sourceTree = "<group>"; };
@@ -163,7 +167,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5AADC50429A24477003AD311 /* SafariServicesUI in Frameworks */,
+				13BB396629A7AED600082D1F /* SafariServicesUI in Frameworks */,
+				13BB395A29A3548500082D1F /* PartialSheet in Frameworks */,
 				57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,6 +217,16 @@
 				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
 			);
 			path = SideMenuViews;
+			sourceTree = "<group>";
+		};
+		13BB395B29A368F800082D1F /* ReconitionPane */ = {
+			isa = PBXGroup;
+			children = (
+				13BB395C29A3694200082D1F /* RecognitionSettingPane.swift */,
+				13BB395E29A36A9500082D1F /* ModelSelectionPane.swift */,
+				13BB396029A36AA700082D1F /* RecognitionLanguageSelectionPane.swift */,
+			);
+			path = ReconitionPane;
 			sourceTree = "<group>";
 		};
 		13D1E492295CE4120070090B /* Libraries */ = {
@@ -277,6 +292,9 @@
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				57E460C42990FC93004FB6C2 /* RecordingController.swift */,
+				5766628B296047B100C27512 /* RecognitionPane.swift */,
+				13BB395B29A368F800082D1F /* ReconitionPane */,
 				1331B465297D902400FEBE24 /* DeveloperViews */,
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
@@ -285,8 +303,6 @@
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
 				57C722A1295C97F5009C8A20 /* RecordButtonPane.swift */,
 				13516D9C2961A900005013C8 /* SideMenu.swift */,
-				5766628B296047B100C27512 /* RecognitionPane.swift */,
-				57E460C42990FC93004FB6C2 /* RecordingController.swift */,
 				5709E5042960BDFC00352CF3 /* Waveform.swift */,
 				57B26A21296317A3007A7B9B /* StopButtonPane.swift */,
 				57B26A252963FFC7007A7B9B /* ConfirmPane.swift */,
@@ -445,7 +461,6 @@
 				57B26A2829649A7F007A7B9B /* DequeModule */,
 				5A91ACE62999514D004BE94A /* SafariServicesUI */,
 				13DF2F2E29A0848C0030E39A /* PartialSheet */,
-				13BB395829A1176A00082D1F /* FlagKit */,
 			);
 			productName = "whisper-ios";
 			productReference = 5A8F54F12948CCDB00E87D25 /* whisper-ios.app */;
@@ -524,7 +539,6 @@
 				57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */,
 				5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */,
 				13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */,
-				13BB395729A1176900082D1F /* XCRemoteSwiftPackageReference "FlagKit" */,
 			);
 			productRefGroup = 5A8F54F22948CCDB00E87D25 /* Products */;
 			projectDirPath = "";
@@ -594,6 +608,7 @@
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
+				13BB395D29A3694200082D1F /* RecognitionSettingPane.swift in Sources */,
 				13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */,
 				5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */,
 				57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */,
@@ -603,7 +618,9 @@
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				13516D9D2961A900005013C8 /* SideMenu.swift in Sources */,
 				5AADC50829A24563003AD311 /* WhisperModelRepository.swift in Sources */,
+				13BB396129A36AA700082D1F /* RecognitionLanguageSelectionPane.swift in Sources */,
 				57EAB6E9296207C600BB59BE /* RecognizedSpeechRepository.swift in Sources */,
+				13BB395F29A36A9500082D1F /* ModelSelectionPane.swift in Sources */,
 				57EAB6EC296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift in Sources */,
 				5AADC50629A244CB003AD311 /* WhisperModel.swift in Sources */,
 				57EAB6E22961F58700BB59BE /* TranscriptionLineData+CoreDataClass.swift in Sources */,
@@ -949,14 +966,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		13BB395729A1176900082D1F /* XCRemoteSwiftPackageReference "FlagKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/madebybowtie/FlagKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/AndreaMiotto/PartialSheet.git";
@@ -984,11 +993,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		13BB395829A1176A00082D1F /* FlagKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 13BB395729A1176900082D1F /* XCRemoteSwiftPackageReference "FlagKit" */;
-			productName = FlagKit;
-		};
 		13DF2F2E29A0848C0030E39A /* PartialSheet */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */;

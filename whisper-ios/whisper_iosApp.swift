@@ -1,3 +1,4 @@
+import PartialSheet
 import SwiftUI
 
 @main
@@ -47,6 +48,7 @@ struct StartView: View {
         } else {
             HomeView()
                 .environmentObject(recognizer!)
+                .attachPartialSheetToRoot()
         }
     }
 }

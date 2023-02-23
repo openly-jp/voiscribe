@@ -1,8 +1,20 @@
 import Foundation
 
-enum Language: String, CaseIterable {
+enum Language: String, CaseIterable, Identifiable {
     case ja
     case en
+
+    // just for ForEach operation
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .ja:
+            return "日本語"
+        case .en:
+            return "English"
+        }
+    }
 }
 
 class RecognizedSpeech: Identifiable {
