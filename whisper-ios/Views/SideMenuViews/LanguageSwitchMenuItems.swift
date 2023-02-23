@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct LanguageSwitchItemView: View {
+    @State private var showingiOSAlert = false
     @State private var showingAlert = false
-
     var body: some View {
         VStack {
             Button(action: {
-                self.showingAlert = true
+                showingAlert = true
+                if !isRunningOnMacOS() {
+                    self.showingiOSAlert = true
+                }
             }) {
                 HStack {
                     Image(systemName: "globe")
@@ -19,19 +22,33 @@ struct LanguageSwitchItemView: View {
                     Spacer()
                 }
             }
-            .alert(isPresented: $showingAlert) {
-                Alert(
+        }
+        .alert(isPresented: $showingAlert) {
+            showingiOSAlert
+                ? Alert(
                     title: Text(NSLocalizedString("警告", comment: "")),
                     message: Text(NSLocalizedString("言語選択の警告", comment: "")),
-                    primaryButton: .destructive(Text(NSLocalizedString("閉じる", comment: ""))),
+                    primaryButton: .default(Text(NSLocalizedString("閉じる", comment: ""))),
                     secondaryButton: .default(Text(NSLocalizedString("開く", comment: "")), action: {
                         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                             UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
                         }
                     })
                 )
-            }
+                : Alert(
+                    title: Text(NSLocalizedString("警告", comment: "")),
+                    message: Text(NSLocalizedString("macでの言語選択の警告", comment: "")),
+                    dismissButton: .default(Text(NSLocalizedString("閉じる", comment: "")))
+                )
         }
+    }
+
+    private func isRunningOnMacOS() -> Bool {
+        #if os(macOS) || targetEnvironment(macCatalyst)
+            return true
+        #else
+            return false
+        #endif
     }
 }
 
