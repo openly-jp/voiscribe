@@ -13,6 +13,7 @@ struct SideMenu: View {
         languageSelectMenuItem,
         developerMenuItem,
         appInfoMenuItem,
+        switchLanguageMenuItem,
     ]
 
     var body: some View {

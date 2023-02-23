@@ -3,3 +3,6 @@
 
 /* No comment provided by engineer. */
 "日付フォーマット" = "yyyy年MM月dd日 HH:mm";
+
+/* No comment provided by engineer. */
+"はじめの指示" = "下のボタンから音声の録音を開始しましょう。\n 認識結果は一覧から閲覧可能です。";

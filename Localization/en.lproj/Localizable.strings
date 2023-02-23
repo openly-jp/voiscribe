@@ -168,3 +168,12 @@
 
 /* No comment provided by engineer. */
 "日付フォーマット" = "MM/dd/yyyy HH:mm";
+
+/* No comment provided by engineer. */
+"表示言語" = "Display Language";
+
+/* No comment provided by engineer. */
+"言語切り替え_日本語" = "日本語";
+
+/* No comment provided by engineer. */
+"はじめの指示" = "Start recording by pressing the button below. \n Recognition results can be viewed from the list.";

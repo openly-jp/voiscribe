@@ -49,7 +49,7 @@ struct MainView: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 220, height: 220)
-            Text("下のボタンから音声の録音を開始しましょう。\n認識結果は一覧から閲覧可能です。")
+            Text(NSLocalizedString("はじめの指示", comment: ""))
                 .multilineTextAlignment(.center)
                 .padding(10)
         }
