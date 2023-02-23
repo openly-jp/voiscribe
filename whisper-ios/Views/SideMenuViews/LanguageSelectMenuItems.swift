@@ -41,11 +41,13 @@ struct LanguageSelectSubMenuItemView: View {
 
 let languageSelectSubMenuItems = [
     MenuItem(
-        view: AnyView(LanguageSelectSubMenuItemView(language: Language.en, languageDisplayName: "英語")),
+        view: AnyView(LanguageSelectSubMenuItemView(language: Language.en,
+                                                    languageDisplayName: NSLocalizedString("英語", comment: ""))),
         subMenuItems: nil
     ),
     MenuItem(
-        view: AnyView(LanguageSelectSubMenuItemView(language: Language.ja, languageDisplayName: "日本語")),
+        view: AnyView(LanguageSelectSubMenuItemView(language: Language.ja,
+                                                    languageDisplayName: NSLocalizedString("日本語", comment: ""))),
         subMenuItems: nil
     ),
 ]

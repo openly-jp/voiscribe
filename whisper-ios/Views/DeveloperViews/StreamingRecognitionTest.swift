@@ -79,11 +79,11 @@ struct StreamingRecognitionTestView: View {
                 HStack {
                     switch selectedMetaInfo?.language {
                     case .ja:
-                        Text("日本語")
+                        Text(NSLocalizedString("s本語", comment: ""))
                     case .en:
-                        Text("英語")
+                        Text(NSLocalizedString("英語", comment: ""))
                     case .none:
-                        Text("未選択")
+                        Text(NSLocalizedString("未選択", comment: ""))
                     }
                 }
                 Button("認識開始", action: {

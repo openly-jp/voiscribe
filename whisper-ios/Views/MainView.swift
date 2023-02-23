@@ -101,7 +101,7 @@ struct MainView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateStyle = .medium
-        dateFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+        dateFormatter.dateFormat = NSLocalizedString("日付フォーマット", comment: "")
 
         return dateFormatter.string(from: date)
     }
