@@ -6,3 +6,6 @@
 
 /* No comment provided by engineer. */
 "はじめの指示" = "下のボタンから音声の録音を開始しましょう。\n 認識結果は一覧から閲覧可能です。";
+
+/* No comment provided by engineer. */
+"言語選択の警告" = "認識中の結果は全て失われます。";

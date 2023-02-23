@@ -177,3 +177,15 @@
 
 /* No comment provided by engineer. */
 "はじめの指示" = "Start recording by pressing the button below. \n Recognition results can be viewed from the list.";
+
+/* No comment provided by engineer. */
+"言語選択の警告" = "If you are running recognition, \n all the results will be lost.";
+
+/* No comment provided by engineer. */
+"警告" = "Warning";
+
+/* No comment provided by engineer. */
+"開く" = "Open";
+
+/* No comment provided by engineer. */
+"閉じる" = "Close";
