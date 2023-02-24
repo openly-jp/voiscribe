@@ -192,3 +192,6 @@
 
 /* No comment provided by engineer. */
 "macでの言語選択の警告" = "If you are running recognition, \n all the results will be lost. \n Go to System Preferences > Language & Region to add a per-language setting.";
+
+/* No comment provided by engineer. */
+"タイトル" = "Title";

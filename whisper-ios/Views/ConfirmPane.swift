@@ -15,7 +15,7 @@ struct ConfirmPane: View {
                 .padding(.bottom, 40)
 
             VStack(alignment: .leading, spacing: 40) {
-                TextField("タイトル", text: $title)
+                TextField(NSLocalizedString("タイトル", comment: ""), text: $title)
                     .font(.title3)
                 /*
                  VStack(alignment: .leading) {
@@ -56,7 +56,7 @@ struct ConfirmPane_Previews: PreviewProvider {
             finishRecording: {},
             abortRecording: {},
             language: .constant(.ja),
-            title: .constant("タイトル")
+            title: .constant(NSLocalizedString("タイトル", comment: ""))
         )
     }
 }
