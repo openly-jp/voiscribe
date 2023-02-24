@@ -53,10 +53,13 @@ enum Size: String, CaseIterable, Identifiable {
     }
 }
 
-enum Lang: String {
+enum Lang: String, Identifiable {
     case ja
     case en
     case multi
+    
+    // just for ForEach operation
+    var id: String { rawValue }
 
     init() {
         self = .en

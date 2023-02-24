@@ -12,7 +12,7 @@ enum Language: String, CaseIterable, Identifiable {
         case .ja:
             return "日本語"
         case .en:
-            return "English"
+            return "英語"
         }
     }
 }

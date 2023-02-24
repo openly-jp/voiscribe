@@ -4,28 +4,31 @@ struct RecognitionSettingPane: View {
     
     let startAction: () -> Void
     
-    @State var isModelSelectionPaneOpen = false
-    @State var isRecognitionLanguageSelectionPaneOpen = false
+    @State var isRecognitionPresetSelectionPaneOpen = false
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
     @AppStorage(UserDefaultASRLanguageKey) var defaultLanguageRawValue = Language.en.rawValue
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                Group {
                     VStack(alignment: .leading) {
-                        Text("モデル")
+                        Text("音声認識設定")
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(Color.secondary)
-                        Text(defaultModelSize.displayName)
+                        Text("言語　: \(Language(rawValue: defaultLanguageRawValue)!.displayName)")
                             .font(.title)
                             .fontWeight(.medium)
                             .foregroundColor(Color.primary)
+                        Text("モデル: \(defaultModelSize.displayName)")
+                            .font(.title)
+                            .fontWeight(.medium)
+                            .foregroundColor(Color.primary)
+                        
                     }
+                    .padding()
                     Spacer()
                     Image(systemName: "chevron.right")
-                }
-                .padding()
+                    .padding()
             }
             .frame(
                 maxWidth: .infinity,
@@ -37,36 +40,7 @@ struct RecognitionSettingPane: View {
             .background(Color(uiColor: .systemGray5).opacity(0.8).clipShape(RoundedRectangle(cornerRadius: 20)))
             .padding(.horizontal)
             .onTapGesture {
-                isModelSelectionPaneOpen = true
-            }
-            HStack {
-                Group {
-                    VStack(alignment: .leading) {
-                        Text("認識言語")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.secondary)
-                        Text(Language(rawValue: defaultLanguageRawValue)!.displayName)
-                            .font(.title)
-                            .fontWeight(.medium)
-                            .foregroundColor(Color.primary)
-                    }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-                .padding()
-            }
-            .frame(
-                maxWidth: .infinity,
-                minHeight: 50,
-                alignment: .leading
-            )
-            // this enable user to tap on Spacer
-            .contentShape(Rectangle())
-            .background(Color(uiColor: .systemGray5).opacity(0.8).clipShape(RoundedRectangle(cornerRadius: 20)))
-            .padding(.horizontal)
-            .onTapGesture {
-                isRecognitionLanguageSelectionPaneOpen = true
+                isRecognitionPresetSelectionPaneOpen = true
             }
             Button(action: {
                 startAction()
@@ -79,11 +53,8 @@ struct RecognitionSettingPane: View {
             }
             .buttonStyle(.borderedProminent)
             .padding()
-            .sheet(isPresented: $isModelSelectionPaneOpen) {
-                ModelSelectionPane()
-            }
-            .sheet(isPresented: $isRecognitionLanguageSelectionPaneOpen) {
-                RecognitionLanguageSelectionPane()
+            .sheet(isPresented: $isRecognitionPresetSelectionPaneOpen) {
+                RecognitionPresetPane()
             }
         }
     }

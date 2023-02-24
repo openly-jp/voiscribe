@@ -12,8 +12,11 @@ struct ModelSelectionPane: View {
                     .frame(maxWidth: .infinity)
             }
             ForEach(Size.allCases) { size in
-                ModelSelectionRow(modelSize: size)
-                Divider()
+                ForEach([Lang.en, Lang.multi]) {
+                    lang in
+                    ModelSelectionRow(modelSize: size, modelLanguage: lang)
+                    Divider()
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -23,6 +26,7 @@ struct ModelSelectionPane: View {
 struct ModelSelectionRow: View {
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
     let modelSize: Size
+    let modelLanguage: Lang
     var body: some View {
         HStack {
             ZStack(alignment: .bottomTrailing) {
@@ -66,6 +70,17 @@ struct ModelSelectionRow: View {
                         Image(systemName: "car.side")
                             .frame(width: 25)
                     }
+                }
+                HStack {
+                    Text("対応言語")
+                        .frame(minWidth: 30)
+                    if modelLanguage == Lang.multi {
+                        Text("全言語")
+                    }
+                    if modelLanguage == Lang.en {
+                        Text("英語")
+                    }
+                    
                 }
             }
             Spacer()
