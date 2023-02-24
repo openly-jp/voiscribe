@@ -11,7 +11,6 @@ struct SideMenu: View {
         modelLoadMenuItem,
         recognitionFrequencySecMenuItem,
         languageSelectMenuItem,
-        developerMenuItem,
         appInfoMenuItem,
     ]
 

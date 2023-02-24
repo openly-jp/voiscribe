@@ -8,15 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
-		1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */; };
 		1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */; };
-		1331B49C298439FF00FEBE24 /* StreamingRecognitionTest in Resources */ = {isa = PBXBuildFile; fileRef = 1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
 		139ED46729672F840084DCEC /* LanguageSelectMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */; };
-		139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */; };
-		13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E490295CE40C0070090B /* DeveloperMainView.swift */; };
 		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
 		13D1E49F295CE4370070090B /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E49B295CE4370070090B /* Recognizer.swift */; };
@@ -89,15 +85,11 @@
 
 /* Begin PBXFileReference section */
 		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
-		1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingRecognitionTest.swift; sourceTree = "<group>"; };
 		1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
-		1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */ = {isa = PBXFileReference; lastKnownFileType = folder; path = StreamingRecognitionTest; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
 		139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectMenuItems.swift; sourceTree = "<group>"; };
-		139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenuItems.swift; sourceTree = "<group>"; };
-		13D1E490295CE40C0070090B /* DeveloperMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperMainView.swift; sourceTree = "<group>"; };
 		13D1E494295CE4120070090B /* whisper-ios-test-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "whisper-ios-test-Bridging-Header.h"; sourceTree = "<group>"; };
 		13D1E495295CE4120070090B /* whisper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whisper.h; sourceTree = "<group>"; };
 		13D1E496295CE4120070090B /* ggml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ggml.c; sourceTree = "<group>"; };
@@ -184,14 +176,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1331B465297D902400FEBE24 /* DeveloperViews */ = {
-			isa = PBXGroup;
-			children = (
-				1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */,
-			);
-			path = DeveloperViews;
-			sourceTree = "<group>";
-		};
 		13516D9729603679005013C8 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,7 +191,6 @@
 				5A8358B7299BA5CC00985983 /* AppInfoViews */,
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
 				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
-				139ED46829674CC10084DCEC /* DeveloperMenuItems.swift */,
 				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
 			);
 			path = SideMenuViews;
@@ -276,9 +259,7 @@
 		57C7229E295C959A009C8A20 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1331B465297D902400FEBE24 /* DeveloperViews */,
 				136E051D2965F53500DEC112 /* SideMenuViews */,
-				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
 				578352F629890C8700081CF8 /* RecordDetail */,
 				5A8F55272948CDB700E87D25 /* MainView.swift */,
 				57C7229F295C979B009C8A20 /* HomeView.swift */,
@@ -410,7 +391,6 @@
 			children = (
 				572D0CA529A17F4800D62256 /* sample_ja.wav */,
 				5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */,
-				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
 				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 				572D0CA229A17BCA00D62256 /* sample_ja.csv */,
 			);
@@ -538,7 +518,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */,
-				1331B49C298439FF00FEBE24 /* StreamingRecognitionTest in Resources */,
 				1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */,
 				572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
@@ -589,11 +568,10 @@
 				13D1E4A2295CE4370070090B /* TranscriptionLine.swift in Sources */,
 				57B26A22296317A3007A7B9B /* StopButtonPane.swift in Sources */,
 				5766628C296047B100C27512 /* RecognitionPane.swift in Sources */,
-				13D1E491295CE40C0070090B /* DeveloperMainView.swift in Sources */,
+				5A8358B6299BA5B700985983 /* LicenseView.swift in Sources */,
 				5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */,
 				57D4CB1B2981C39900D0D598 /* TranscriptionLines.swift in Sources */,
 				57B26A2D2965E04D007A7B9B /* utils.swift in Sources */,
-				139ED46929674CC10084DCEC /* DeveloperMenuItems.swift in Sources */,
 				57CF69D42967019C00DF0E3F /* LazyView.swift in Sources */,
 				13D1E49A295CE4130070090B /* whisper.cpp in Sources */,
 				13516D9D2961A900005013C8 /* SideMenu.swift in Sources */,
@@ -607,7 +585,6 @@
 				5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */,
 				57B26A2B2965743F007A7B9B /* AudioPlayer.swift in Sources */,
 				5A8F55282948CDB700E87D25 /* MainView.swift in Sources */,
-				1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
 				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
 				57E460C52990FC93004FB6C2 /* RecordingController.swift in Sources */,
