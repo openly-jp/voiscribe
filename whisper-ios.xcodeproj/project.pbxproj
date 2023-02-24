@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
-		1331B467297D904C00FEBE24 /* StreamingRecognitionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */; };
 		1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
@@ -86,7 +85,6 @@
 
 /* Begin PBXFileReference section */
 		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
-		1331B466297D904C00FEBE24 /* StreamingRecognitionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingRecognitionTest.swift; sourceTree = "<group>"; };
 		1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.en.bin"; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
@@ -393,7 +391,6 @@
 			children = (
 				572D0CA529A17F4800D62256 /* sample_ja.wav */,
 				5A91ACD92998E84B004BE94A /* ggml-tiny.multi.bin */,
-				1331B49B298439FF00FEBE24 /* StreamingRecognitionTest */,
 				1331B48F29842E3F00FEBE24 /* ggml-tiny.en.bin */,
 				572D0CA229A17BCA00D62256 /* sample_ja.csv */,
 			);
@@ -521,7 +518,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */,
-				1331B49C298439FF00FEBE24 /* StreamingRecognitionTest in Resources */,
 				1331B49029842E3F00FEBE24 /* ggml-tiny.en.bin in Resources */,
 				572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
