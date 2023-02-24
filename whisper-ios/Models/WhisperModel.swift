@@ -51,7 +51,7 @@ enum Size: String, CaseIterable, Identifiable {
             return 4
         }
     }
-    
+
     var gigabytes: Double {
         switch self {
         case .tiny:
@@ -70,7 +70,7 @@ enum Lang: String, Identifiable {
     case ja
     case en
     case multi
-    
+
     // just for ForEach operation
     var id: String { rawValue }
 

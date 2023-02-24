@@ -80,7 +80,6 @@ struct ModelSelectionRow: View {
                     if modelLanguage == Lang.en {
                         Text("英語")
                     }
-                    
                 }
             }
             Spacer()

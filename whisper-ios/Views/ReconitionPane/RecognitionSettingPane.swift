@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct RecognitionSettingPane: View {
-    
-    let startAction: () -> Void
-    
-    @State var isRecognitionPresetSelectionPaneOpen = false
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
     @AppStorage(UserDefaultASRLanguageKey) var defaultLanguageRawValue = Language.en.rawValue
+
+    let startAction: () -> Void
+    let itemMinHeight: CGFloat = 50
+    let itemCornerRadius: CGFloat = 20
+    let itemColor = Color(uiColor: .systemGray5).opacity(0.8)
+
+    @State var isRecognitionPresetSelectionPaneOpen = false
+
     var body: some View {
         VStack(alignment: .center) {
             HStack {
@@ -28,12 +32,12 @@ struct RecognitionSettingPane: View {
             }
             .frame(
                 maxWidth: .infinity,
-                minHeight: 50,
+                minHeight: itemMinHeight,
                 alignment: .leading
             )
             // this enable user to tap on Spacer
             .contentShape(Rectangle())
-            .background(Color(uiColor: .systemGray5).opacity(0.8).clipShape(RoundedRectangle(cornerRadius: 20)))
+            .background(itemColor.clipShape(RoundedRectangle(cornerRadius: itemCornerRadius)))
             .padding(.horizontal)
             .onTapGesture {
                 isRecognitionPresetSelectionPaneOpen = true
@@ -57,12 +61,12 @@ struct RecognitionSettingPane: View {
             }
             .frame(
                 maxWidth: .infinity,
-                minHeight: 50,
+                minHeight: itemMinHeight,
                 alignment: .leading
             )
             // this enable user to tap on Spacer
             .contentShape(Rectangle())
-            .background(Color(uiColor: .systemGray5).opacity(0.8).clipShape(RoundedRectangle(cornerRadius: 20)))
+            .background(itemColor.clipShape(RoundedRectangle(cornerRadius: itemCornerRadius)))
             .padding(.horizontal)
             .onTapGesture {
                 isRecognitionPresetSelectionPaneOpen = true
