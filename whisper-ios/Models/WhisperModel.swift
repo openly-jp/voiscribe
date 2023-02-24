@@ -51,6 +51,19 @@ enum Size: String, CaseIterable, Identifiable {
             return 4
         }
     }
+    
+    var gigabytes: Double {
+        switch self {
+        case .tiny:
+            return 0.077
+        case .base:
+            return 0.148
+        case .small:
+            return 0.488
+        case .medium:
+            return 1.530
+        }
+    }
 }
 
 enum Lang: String, Identifiable {

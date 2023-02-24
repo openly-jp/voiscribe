@@ -58,97 +58,92 @@ struct RecognitionPresetRow: View {
             language: self.modelLanguage
         )
     }
-
+    
     var body: some View {
-            HStack {
-                ZStack(alignment: .topTrailing) {
-                    ZStack(alignment: .bottomTrailing) {
-                        VStack {
-                            Text(recognitionLanguage.displayName)
-                                .font(.title2)
-                            Text(modelSize.displayName)
-                                .font(.title2)
-                        }
-                        .frame(maxWidth: geometryWidth / 5, minHeight: 50)
-                        .padding()
-                        .background(Color(uiColor: .systemGray5).opacity(0.8))
-                        .cornerRadius(20)
-                        if modelSize == recognizer.whisperModel.size,
-                           modelLanguage == recognizer.whisperModel.language,
-                           recognitionLanguage.rawValue == defaultLanguageRawValue{
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 20))
-                                .offset(x: 5)
-                                .symbolRenderingMode(.palette)
-                                .foregroundStyle(.white, .green)
-                        }
-                    }
-                    if isDownloading {
-                        CircularProgressBar(progress: $progressValue)
-                            .frame(width: 20, height: 20)
+        HStack {
+            Image(systemName: modelSize == recognizer.whisperModel.size &&
+                  modelLanguage == recognizer.whisperModel.language &&
+                  recognitionLanguage.rawValue == defaultLanguageRawValue ? "checkmark.circle.fill" : "circle")
+            .font(.system(size: 20))
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(.white, .green)
+            ZStack(alignment: .bottomTrailing) {
+                VStack {
+                    Text(recognitionLanguage.displayName)
+                        .font(.title2)
+                    Text(modelSize.displayName)
+                        .font(.title2)
+                }
+                .frame(maxWidth: geometryWidth / 5, minHeight: 50)
+                .padding()
+                .background(Color(uiColor: .systemGray5).opacity(0.8))
+                .cornerRadius(20)
+                if isDownloading {
+                    CircularProgressBar(progress: $progressValue)
+                        .frame(width: 20, height: 20)
+                } else {
+                    if whisperModel.isDownloaded {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .font(.system(size: 20))
+                            .offset(x: 5)
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, .cyan)
                     } else {
-                        if whisperModel.isDownloaded {
-                            Image(systemName: "checkmark.icloud.fill")
-                                .font(.system(size: 20))
-                                .offset(x: 5)
-                                .foregroundStyle(.cyan)
-                        } else {
-                            Image(systemName: "icloud.and.arrow.down")
-                                .font(.system(size: 20))
-                                .offset(x: 5)
-                                .foregroundColor(.cyan)
-                        }
+                        Image(systemName: "icloud.and.arrow.down")
+                            .font(.system(size: 20))
+                            .offset(x: 5)
+                            .foregroundColor(.cyan)
                     }
                 }
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("精度")
-                            .frame(width: geometryWidth / 8)
-                        Group {
-                            ForEach(0 ..< modelSize.accuracy) { _ in
-                                Image(systemName: "star.fill")
-                                    .frame(width: geometryWidth / 15)
-                            }
-                            ForEach(0 ..< 4 - modelSize.accuracy) { _ in
-                                Image(systemName: "star")
-                                    .frame(width: geometryWidth / 15)
-                            }
-                        }
-                    }
-                    HStack {
-                        Text("速度")
-                            .frame(width: geometryWidth / 8)
-                        ForEach(0 ..< modelSize.speed) { _ in
-                            Image(systemName: "car.side.fill")
+            }
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("精度")
+                        .frame(width: geometryWidth / 8)
+                    Group {
+                        ForEach(0 ..< modelSize.accuracy) { _ in
+                            Image(systemName: "star.fill")
                                 .frame(width: geometryWidth / 15)
                         }
-                        ForEach(0 ..< 4 - modelSize.speed) { _ in
-                            Image(systemName: "car.side")
+                        ForEach(0 ..< 4 - modelSize.accuracy) { _ in
+                            Image(systemName: "star")
                                 .frame(width: geometryWidth / 15)
                         }
                     }
                 }
+                HStack {
+                    Text("速度")
+                        .frame(width: geometryWidth / 8)
+                    ForEach(0 ..< modelSize.speed) { _ in
+                        Image(systemName: "car.side.fill")
+                            .frame(width: geometryWidth / 15)
+                    }
+                    ForEach(0 ..< 4 - modelSize.speed) { _ in
+                        Image(systemName: "car.side")
+                            .frame(width: geometryWidth / 15)
+                    }
+                }
             }
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .padding(.horizontal)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                isShowAlert = true
-            }
-            .alert(isPresented: $isShowAlert){
-                whisperModel.isDownloaded ?
-                    Alert(
-                        title: Text("モデルを変更しますか？"),
-                        primaryButton: .cancel(Text("キャンセル")),
-                        secondaryButton: .default(Text("変更"), action: loadModel)
-                    )
-                : Alert(
-                    title: Text("モデルをダウンロードしますか?"),
-                    message: Text("通信容量にご注意ください。"),
-                    primaryButton: .cancel(Text("キャンセル")),
-                    secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
-                )
-            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 50)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isShowAlert = true
+        }
+        .alert(isPresented: $isShowAlert){
+            whisperModel.isDownloaded ?
+            Alert(
+                title: Text("モデルを変更しますか？"),
+                primaryButton: .cancel(Text("キャンセル")),
+                secondaryButton: .default(Text("変更"), action: loadModel)
+            )
+            : Alert(
+                title: Text("モデルをダウンロードしますか?"),
+                message: Text("\(modelSize.gigabytes, specifier: "%.3f") GBの通信容量が必要です。"),
+                primaryButton: .cancel(Text("キャンセル")),
+                secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
+            )
+        }
     }
     
     private func loadModel() {
@@ -161,9 +156,9 @@ struct RecognitionPresetRow: View {
             if let err {
                 return
             }
-                defaultModelSize = modelSize
-                defaultLanguage = modelLanguage
-                defaultLanguageRawValue = recognitionLanguage.rawValue
+            defaultModelSize = modelSize
+            defaultLanguage = modelLanguage
+            defaultLanguageRawValue = recognitionLanguage.rawValue
         }
     }
     

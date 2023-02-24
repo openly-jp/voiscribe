@@ -10,25 +10,50 @@ struct RecognitionSettingPane: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack {
+                Group {
                     VStack(alignment: .leading) {
-                        Text("音声認識設定")
+                        Text("モデル")
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(Color.secondary)
-                        Text("言語　: \(Language(rawValue: defaultLanguageRawValue)!.displayName)")
+                        Text(defaultModelSize.displayName)
                             .font(.title)
                             .fontWeight(.medium)
                             .foregroundColor(Color.primary)
-                        Text("モデル: \(defaultModelSize.displayName)")
-                            .font(.title)
-                            .fontWeight(.medium)
-                            .foregroundColor(Color.primary)
-                        
                     }
-                    .padding()
                     Spacer()
                     Image(systemName: "chevron.right")
-                    .padding()
+                }
+                .padding()
+            }
+            .frame(
+                maxWidth: .infinity,
+                minHeight: 50,
+                alignment: .leading
+            )
+            // this enable user to tap on Spacer
+            .contentShape(Rectangle())
+            .background(Color(uiColor: .systemGray5).opacity(0.8).clipShape(RoundedRectangle(cornerRadius: 20)))
+            .padding(.horizontal)
+            .onTapGesture {
+                isRecognitionPresetSelectionPaneOpen = true
+            }
+            HStack {
+                Group {
+                    VStack(alignment: .leading) {
+                        Text("認識言語")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.secondary)
+                        Text(Language(rawValue: defaultLanguageRawValue)!.displayName)
+                            .font(.title)
+                            .fontWeight(.medium)
+                            .foregroundColor(Color.primary)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                .padding()
             }
             .frame(
                 maxWidth: .infinity,
