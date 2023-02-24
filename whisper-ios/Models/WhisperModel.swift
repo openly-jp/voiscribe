@@ -29,11 +29,11 @@ enum Size: String, CaseIterable, Identifiable {
     var speed: Int {
         switch self {
         case .tiny:
-            return 5
-        case .base:
             return 4
-        case .small:
+        case .base:
             return 3
+        case .small:
+            return 2
         case .medium:
             return 1
         }
@@ -44,11 +44,11 @@ enum Size: String, CaseIterable, Identifiable {
         case .tiny:
             return 1
         case .base:
-            return 3
+            return 2
         case .small:
-            return 4
+            return 3
         case .medium:
-            return 5
+            return 4
         }
     }
 }

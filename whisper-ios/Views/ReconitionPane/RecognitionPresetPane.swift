@@ -30,30 +30,74 @@ struct RecognitionPresetPane: View {
 
 struct RecognitionPresetRow: View {
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
+    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang(rawValue: "en")!
     @AppStorage(UserDefaultASRLanguageKey) var defaultLanguageRawValue = Language.en.rawValue
-    let modelSize: Size
-    let modelLanguage: Lang
-    let recognitionLanguage: Language
-    let geometryWidth: Double
+    @EnvironmentObject var recognizer: WhisperRecognizer
+    var modelSize: Size
+    var modelLanguage: Lang
+    var recognitionLanguage: Language
+    var geometryWidth: Double
+    var whisperModel: WhisperModel
+    
+    @State private var isDownloading = false
+    @State var progressValue: CGFloat = 0.0
+    @State var isShowAlert = false
+    
+    init (
+        modelSize: Size,
+        modelLanguage: Lang,
+        recognitionLanguage: Language,
+        geometryWidth: Double
+    ) {
+        self.modelSize = modelSize
+        self.modelLanguage = modelLanguage
+        self.recognitionLanguage = recognitionLanguage
+        self.geometryWidth = geometryWidth
+        self.whisperModel = WhisperModel(
+            size: self.modelSize,
+            language: self.modelLanguage
+        )
+    }
+
     var body: some View {
             HStack {
-                ZStack(alignment: .bottomTrailing) {
-                    VStack {
-                        Text(recognitionLanguage.displayName)
-                            .font(.title2)
-                        Text(modelSize.displayName)
-                            .font(.title2)
+                ZStack(alignment: .topTrailing) {
+                    ZStack(alignment: .bottomTrailing) {
+                        VStack {
+                            Text(recognitionLanguage.displayName)
+                                .font(.title2)
+                            Text(modelSize.displayName)
+                                .font(.title2)
+                        }
+                        .frame(maxWidth: geometryWidth / 5, minHeight: 50)
+                        .padding()
+                        .background(Color(uiColor: .systemGray5).opacity(0.8))
+                        .cornerRadius(20)
+                        if modelSize == recognizer.whisperModel.size,
+                           modelLanguage == recognizer.whisperModel.language,
+                           recognitionLanguage.rawValue == defaultLanguageRawValue{
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 20))
+                                .offset(x: 5)
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.white, .green)
+                        }
                     }
-                    .frame(maxWidth: geometryWidth / 5, minHeight: 50)
-                    .padding()
-                    .background(Color(uiColor: .systemGray5).opacity(0.8))
-                    .cornerRadius(20)
-                    if modelSize == defaultModelSize, recognitionLanguage.rawValue == defaultLanguageRawValue{
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 20))
-                            .offset(x: 5)
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, .green)
+                    if isDownloading {
+                        CircularProgressBar(progress: $progressValue)
+                            .frame(width: 20, height: 20)
+                    } else {
+                        if whisperModel.isDownloaded {
+                            Image(systemName: "checkmark.icloud.fill")
+                                .font(.system(size: 20))
+                                .offset(x: 5)
+                                .foregroundStyle(.cyan)
+                        } else {
+                            Image(systemName: "icloud.and.arrow.down")
+                                .font(.system(size: 20))
+                                .offset(x: 5)
+                                .foregroundColor(.cyan)
+                        }
                     }
                 }
                 VStack(alignment: .leading) {
@@ -65,7 +109,7 @@ struct RecognitionPresetRow: View {
                                 Image(systemName: "star.fill")
                                     .frame(width: geometryWidth / 15)
                             }
-                            ForEach(0 ..< 5 - modelSize.accuracy) { _ in
+                            ForEach(0 ..< 4 - modelSize.accuracy) { _ in
                                 Image(systemName: "star")
                                     .frame(width: geometryWidth / 15)
                             }
@@ -78,7 +122,7 @@ struct RecognitionPresetRow: View {
                             Image(systemName: "car.side.fill")
                                 .frame(width: geometryWidth / 15)
                         }
-                        ForEach(0 ..< 5 - modelSize.speed) { _ in
+                        ForEach(0 ..< 4 - modelSize.speed) { _ in
                             Image(systemName: "car.side")
                                 .frame(width: geometryWidth / 15)
                         }
@@ -89,9 +133,50 @@ struct RecognitionPresetRow: View {
             .padding(.horizontal)
             .contentShape(Rectangle())
             .onTapGesture {
-                defaultModelSize = modelSize
-                defaultLanguageRawValue = recognitionLanguage.rawValue
+                isShowAlert = true
             }
+            .alert(isPresented: $isShowAlert){
+                whisperModel.isDownloaded ?
+                    Alert(
+                        title: Text("モデルを変更しますか？"),
+                        primaryButton: .cancel(Text("キャンセル")),
+                        secondaryButton: .default(Text("変更"), action: loadModel)
+                    )
+                : Alert(
+                    title: Text("モデルをダウンロードしますか?"),
+                    message: Text("通信容量にご注意ください。"),
+                    primaryButton: .cancel(Text("キャンセル")),
+                    secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
+                )
+            }
+    }
+    
+    private func loadModel() {
+        
+        recognizer.whisperModel.freeModel()
+        recognizer.whisperModel = whisperModel
+        
+        whisperModel.loadModel {
+            err in
+            if let err {
+                return
+            }
+                defaultModelSize = modelSize
+                defaultLanguage = modelLanguage
+                defaultLanguageRawValue = recognitionLanguage.rawValue
+        }
+    }
+    
+    private func downloadModel() {
+        isDownloading = true
+        whisperModel.downloadModel { err in
+            isDownloading = false
+            if let err {
+                Logger.error(err)
+            }
+        } updateCallback: { num in
+            progressValue = CGFloat(num)
+        }
     }
 }
 
