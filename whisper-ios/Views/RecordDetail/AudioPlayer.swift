@@ -71,8 +71,9 @@ struct AudioPlayer: View {
                     currentPlayingTime = player.currentTime
                 }
                 Spacer()
-
-                ShareButton(transcription: transcription)
+                PlayerButton(name: "doc.on.doc", size: 20) {
+                    UIPasteboard.general.string = transcription
+                }
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
@@ -189,15 +190,8 @@ struct RecognizingAudioPlayer: View {
                 PlayerButton(name: "goforward.5", size: 35) {}
                     .disabled(true)
                 Spacer()
-                ShareButton(transcription: "")
+                PlayerButton(name: "nosign", size: 20) {}
                     .disabled(true)
-                    .overlay(alignment: .center) {
-                        Image(systemName: "nosign")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(Color(.secondaryLabel))
-                    }
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)

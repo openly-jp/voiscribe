@@ -13,11 +13,17 @@ struct Waveform: View {
     @Binding var idAmps: Deque<IdAmp>
     @Binding var isPaused: Bool
 
+    // The maximum amplitude of the audio input.
+    // Though the maximum amplitude(dBFS) is 0 according to Apple doc,
+    // (https://developer.apple.com/documentation/avfaudio/avaudiorecorder/1387176-averagepower)
+    // actual amps sometimes exceed 0 and this value is used to normalize the amplitude.
+    @Binding var maxAmp: Float
+
     // Since the number of idAmps increases monotonically,
     // idAmps that are no longer displayed should be removed.
     // However, if this View is used in multiple locations,
     // deleting idAmps in each location will cause a bug,
-    // so it is necessary to set removeIdAmps to true in only one location.
+    // so setting removeIdAmps to true must be done in only one location.
     let removeIdAmps: Bool
 
     // parameter to control the sensitivity of the waveform
@@ -29,9 +35,9 @@ struct Waveform: View {
     var body: some View {
         GeometryReader { geometry in
             ForEach(Array(idAmps.enumerated()), id: \.self.element.id) { idx, idAmp in
-                // idAmp.amp: -160 ~ 0
-                // expAmp: exp(-160 / sensitivity) ~ 1
-                let expAmp = CGFloat(powf(e, idAmp.amp / sensitivity))
+                // idAmp.amp: -160 ~ maxAmp
+                // expAmp: exp(-(160 + maxAmp) / sensitivity) ~ 1
+                let expAmp = CGFloat(powf(e, (idAmp.amp - maxAmp) / sensitivity))
                 let height = expAmp * geometry.size.height
                 let x = getX(
                     idAmpIdx: idx,
@@ -89,6 +95,7 @@ struct Waveform_Previews: PreviewProvider {
         return Waveform(
             idAmps: .constant(idAmps),
             isPaused: .constant(false),
+            maxAmp: .constant(0),
             removeIdAmps: true
         )
     }

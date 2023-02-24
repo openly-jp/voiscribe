@@ -12,6 +12,7 @@ struct RecordingController: View {
 
     let elapsedTime: Int
     @Binding var idAmps: Deque<IdAmp>
+    @Binding var maxAmp: Float
 
     let miniRecorderHeight: CGFloat = 70
 
@@ -37,13 +38,18 @@ struct RecordingController: View {
                                 Circle()
                                     .fill(.red)
                                     .blinkEffect()
-                                    .frame(width: 12)
+                                    .frame(width: 12, height: 12)
                             }
                         }.frame(width: 15)
                         Text(formatTime(Double(elapsedTime)))
                             .foregroundColor(Color(.label))
-                        Waveform(idAmps: $idAmps, isPaused: $isPaused, removeIdAmps: false)
-                            .frame(height: miniRecorderHeight)
+                        Waveform(
+                            idAmps: $idAmps,
+                            isPaused: $isPaused,
+                            maxAmp: $maxAmp,
+                            removeIdAmps: false
+                        )
+                        .frame(height: miniRecorderHeight)
                     }
                 }
 
@@ -107,14 +113,28 @@ struct RecordingController_Previews: PreviewProvider {
             }
         }
 
-        return RecordingController(
-            isRecording: .constant(true),
-            isPaused: .constant(true),
-            isPaneOpen: .constant(true),
-            startAction: {},
-            stopAction: {},
-            elapsedTime: 23,
-            idAmps: .constant(idAmps)
-        )
+        return Group {
+            RecordingController(
+                isRecording: .constant(true),
+                isPaused: .constant(true),
+                isPaneOpen: .constant(true),
+                startAction: {},
+                stopAction: {},
+                elapsedTime: 23,
+                idAmps: .constant(idAmps),
+                maxAmp: .constant(0)
+            )
+
+            RecordingController(
+                isRecording: .constant(false),
+                isPaused: .constant(false),
+                isPaneOpen: .constant(false),
+                startAction: {},
+                stopAction: {},
+                elapsedTime: 23,
+                idAmps: .constant(idAmps),
+                maxAmp: .constant(0)
+            )
+        }
     }
 }
