@@ -50,11 +50,14 @@ struct ModelLoadSubMenuItemView: View {
     @State private var showPrompt = false
     @State private var isDownloading = false
     @State private var isLoading = false
+    @AppStorage var isDownloaded: Bool
 
     init(modelSize: Size, language: Lang, modelDisplayName: String) {
         self.modelSize = modelSize
         self.language = language
         self.modelDisplayName = modelDisplayName
+        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize.rawValue)-\(language.rawValue)"
+        self._isDownloaded = AppStorage(wrappedValue: false, key)
 
         whisperModel = WhisperModel(size: modelSize, language: language)
     }
@@ -76,7 +79,7 @@ struct ModelLoadSubMenuItemView: View {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
                 } else {
-                    if whisperModel.isDownloaded {
+                    if isDownloaded {
                         Image(systemName: "checkmark.icloud.fill")
                     } else {
                         Image(systemName: "icloud.and.arrow.down")
@@ -106,7 +109,7 @@ struct ModelLoadSubMenuItemView: View {
             showPrompt = true
         }
         .alert(isPresented: $showPrompt) {
-            whisperModel.isDownloaded
+            isDownloaded
                 ? Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -126,7 +129,7 @@ struct ModelLoadSubMenuItemView: View {
     }
 
     private func loadModel() {
-        assert(whisperModel.isDownloaded)
+        assert(isDownloaded)
 
         recognizer.whisperModel.freeModel()
         recognizer.whisperModel = whisperModel

@@ -45,6 +45,7 @@ struct RecognitionPresetRow: View {
     var geometryWidth: Double
     var whisperModel: WhisperModel
 
+    @AppStorage var isDownloaded: Bool
     @State private var isDownloading = false
     @State var progressValue: CGFloat = 0.0
     @State var isShowAlert = false
@@ -67,6 +68,8 @@ struct RecognitionPresetRow: View {
         self.modelLanguage = modelLanguage
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
+        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize)-\(modelLanguage)"
+        self._isDownloaded = AppStorage(wrappedValue: false, key)
         whisperModel = WhisperModel(
             size: self.modelSize,
             language: self.modelLanguage
@@ -96,7 +99,7 @@ struct RecognitionPresetRow: View {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: iconSize, height: iconSize)
                 } else {
-                    if whisperModel.isDownloaded {
+                    if isDownloaded {
                         Image(systemName: "checkmark.icloud.fill")
                             .font(.system(size: iconSize))
                             .offset(x: downloadIconOffset)
@@ -145,7 +148,7 @@ struct RecognitionPresetRow: View {
             isShowAlert = true
         }
         .alert(isPresented: $isShowAlert) {
-            whisperModel.isDownloaded ?
+            isDownloaded ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -179,6 +182,7 @@ struct RecognitionPresetRow: View {
         isDownloading = true
         whisperModel.downloadModel { err in
             isDownloading = false
+            isDownloaded = true
             if let err {
                 Logger.error(err)
             }
