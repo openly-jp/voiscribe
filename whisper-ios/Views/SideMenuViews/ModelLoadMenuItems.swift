@@ -48,17 +48,18 @@ struct ModelLoadSubMenuItemView: View {
     @ObservedObject var whisperModel: WhisperModel
 
     @State private var showPrompt = false
-    @State private var isDownloading = false
     @State private var isLoading = false
     @AppStorage var isDownloaded: Bool
+    @AppStorage private var isDownloading: Bool
 
     init(modelSize: Size, language: Lang, modelDisplayName: String) {
         self.modelSize = modelSize
         self.language = language
         self.modelDisplayName = modelDisplayName
-        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize.rawValue)-\(language.rawValue)"
-        self._isDownloaded = AppStorage(wrappedValue: false, key)
-
+        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize.rawValue)-\(language.rawValue)"
+        self._isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
+        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
+        self._isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         whisperModel = WhisperModel(size: modelSize, language: language)
     }
 

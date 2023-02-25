@@ -46,9 +46,15 @@ struct RecognitionPresetRow: View {
     var whisperModel: WhisperModel
 
     @AppStorage var isDownloaded: Bool
-    @State private var isDownloading = false
-    @State var progressValue: CGFloat = 0.0
+    @AppStorage private var isDownloading: Bool
+    @State var progressValue: CGFloat
     @State var isShowAlert = false
+
+    var isSelected: Bool {
+        modelSize == recognizer.whisperModel.size &&
+            modelLanguage == recognizer.whisperModel.language &&
+            recognitionLanguage.rawValue == defaultLanguageRawValue
+    }
 
     // MARK: - design related constants
 
@@ -68,8 +74,12 @@ struct RecognitionPresetRow: View {
         self.modelLanguage = modelLanguage
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
-        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize)-\(modelLanguage)"
-        self._isDownloaded = AppStorage(wrappedValue: false, key)
+        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize)-\(modelLanguage)"
+        self._isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
+        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
+        self._isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
+        self.progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
+
         whisperModel = WhisperModel(
             size: self.modelSize,
             language: self.modelLanguage
@@ -78,9 +88,7 @@ struct RecognitionPresetRow: View {
 
     var body: some View {
         HStack {
-            Image(systemName: modelSize == recognizer.whisperModel.size &&
-                modelLanguage == recognizer.whisperModel.language &&
-                recognitionLanguage.rawValue == defaultLanguageRawValue ? "checkmark.circle.fill" : "circle")
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.system(size: iconSize))
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, .green)
@@ -145,7 +153,7 @@ struct RecognitionPresetRow: View {
         .frame(maxWidth: .infinity, minHeight: itemMinHeight)
         .contentShape(Rectangle())
         .onTapGesture {
-            isShowAlert = true
+            isShowAlert = isDownloading || isSelected ? false : true
         }
         .alert(isPresented: $isShowAlert) {
             isDownloaded ?
@@ -185,6 +193,9 @@ struct RecognitionPresetRow: View {
             isDownloaded = true
             if let err {
                 Logger.error(err)
+            }
+            DispatchQueue.main.async {
+                loadModel()
             }
         } updateCallback: { num in
             progressValue = CGFloat(num)

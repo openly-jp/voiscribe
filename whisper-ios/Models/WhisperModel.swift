@@ -80,6 +80,7 @@ enum Lang: String, Identifiable, CaseIterable {
 }
 
 let userDefaultWhisperModelDownloadPrefix = "user-default-whisper-model-download" // "-" + size + "-" + lang
+let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
 
 class WhisperModel: Identifiable, ObservableObject {
     var localPath: URL?
@@ -93,15 +94,15 @@ class WhisperModel: Identifiable, ObservableObject {
         self.size = size
         self.language = language
 
-        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
-        if UserDefaults.standard.object(forKey: key) == nil {
+        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
+        if UserDefaults.standard.object(forKey: isDownloadedKey) == nil {
             let isModelExists = WhisperModelRepository.modelExists(
                 size: size,
                 language: language
             )
-            UserDefaults.standard.set(isModelExists, forKey: key)
+            UserDefaults.standard.set(isModelExists, forKey: isDownloadedKey)
         }
-        self.isDownloaded = UserDefaults.standard.object(forKey: key) as! Bool
+        self.isDownloaded = UserDefaults.standard.object(forKey: isDownloadedKey) as! Bool
 
         if isDownloaded {
             if size == .tiny {
