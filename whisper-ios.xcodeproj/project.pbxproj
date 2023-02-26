@@ -52,6 +52,7 @@
 		5A2284FA29AC0E5A008E848F /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 5A2284F929AC0E5A008E848F /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		5A2284FC29AC0E5A008E848F /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5A2284FB29AC0E5A008E848F /* FirebaseCrashlytics */; };
 		5A2284FF29AC0F33008E848F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284FE29AC0F33008E848F /* GoogleService-Info.plist */; };
+		5A22850329AC154E008E848F /* SettingMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A22850229AC154E008E848F /* SettingMenuItems.swift */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -138,6 +139,7 @@
 		5A2284D329A79F61008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5A2284DF29ABB437008E848F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5A2284FE29AC0F33008E848F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5A22850229AC154E008E848F /* SettingMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingMenuItems.swift; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* VoiScribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiScribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				5A8358B7299BA5CC00985983 /* AppInfoViews */,
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
 				139ED46629672F840084DCEC /* LanguageSelectMenuItems.swift */,
+				5A22850229AC154E008E848F /* SettingMenuItems.swift */,
 				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
 			);
 			path = SideMenuViews;
@@ -608,6 +611,7 @@
 				5709E5052960BDFC00352CF3 /* Waveform.swift in Sources */,
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				57EAB6E02961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift in Sources */,
+				5A22850329AC154E008E848F /* SettingMenuItems.swift in Sources */,
 				578353052990E3C900081CF8 /* blinkEffect.swift in Sources */,
 				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
 				578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */,
