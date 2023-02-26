@@ -214,13 +214,13 @@
 			path = SideMenuViews;
 			sourceTree = "<group>";
 		};
-		13BB395B29A368F800082D1F /* ReconitionPane */ = {
+		13BB395B29A368F800082D1F /* RecognitionPane */ = {
 			isa = PBXGroup;
 			children = (
 				13BB395C29A3694200082D1F /* RecognitionSettingPane.swift */,
 				13BB396729A894D900082D1F /* RecognitionPresetPane.swift */,
 			);
-			path = ReconitionPane;
+			path = RecognitionPane;
 			sourceTree = "<group>";
 		};
 		13D1E492295CE4120070090B /* Libraries */ = {
@@ -288,7 +288,7 @@
 			children = (
 				57E460C42990FC93004FB6C2 /* RecordingController.swift */,
 				5766628B296047B100C27512 /* RecognitionPane.swift */,
-				13BB395B29A368F800082D1F /* ReconitionPane */,
+				13BB395B29A368F800082D1F /* RecognitionPane */,
 				1331B465297D902400FEBE24 /* DeveloperViews */,
 				136E051D2965F53500DEC112 /* SideMenuViews */,
 				13D1E490295CE40C0070090B /* DeveloperMainView.swift */,
