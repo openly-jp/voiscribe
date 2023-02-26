@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5A8F54F02948CCDB00E87D25"
-               BuildableName = "whisper-ios.app"
+               BuildableName = "VoiScribe.app"
                BlueprintName = "whisper-ios"
                ReferencedContainer = "container:whisper-ios.xcodeproj">
             </BuildableReference>
@@ -67,7 +67,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5A8F54F02948CCDB00E87D25"
-            BuildableName = "whisper-ios.app"
+            BuildableName = "VoiScribe.app"
             BlueprintName = "whisper-ios"
             ReferencedContainer = "container:whisper-ios.xcodeproj">
          </BuildableReference>
@@ -84,7 +84,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5A8F54F02948CCDB00E87D25"
-            BuildableName = "whisper-ios.app"
+            BuildableName = "VoiScribe.app"
             BlueprintName = "whisper-ios"
             ReferencedContainer = "container:whisper-ios.xcodeproj">
          </BuildableReference>
