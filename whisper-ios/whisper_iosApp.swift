@@ -14,8 +14,8 @@ struct StartView: View {
     @State var isLoading: Bool = true
     @State var recognizer: WhisperRecognizer?
 
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguageKey) var defaultModelLanguage = Lang(rawValue: "en")!
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
+    @AppStorage(userDefaultModelLanguageKey) var defaultModelLanguage = Lang()
 
     var body: some View {
         if isLoading {

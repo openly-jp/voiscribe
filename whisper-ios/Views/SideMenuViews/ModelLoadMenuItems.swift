@@ -38,8 +38,8 @@ struct CircularProgressBar: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang(rawValue: "en")!
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
+    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang()
     @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
@@ -75,7 +75,7 @@ struct ModelLoadSubMenuItemView: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if modelSize != .tiny {
+            if !WhisperModelRepository.isModelBundled(size: modelSize, language: language) {
                 if isDownloading {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
@@ -90,7 +90,7 @@ struct ModelLoadSubMenuItemView: View {
         }
         .swipeActions(edge: .trailing) {
             if !isLoading,
-               modelSize != .tiny,
+               !WhisperModelRepository.isModelBundled(size: modelSize, language: language),
                whisperModel.isDownloaded,
                !isModelSelected
             {
@@ -171,22 +171,6 @@ struct ModelLoadSubMenuItemView: View {
 }
 
 let modeLoadSubMenuItems = [
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "tiny")!,
-            language: Lang(rawValue: "multi")!,
-            modelDisplayName: "Tiny"
-        )),
-        subMenuItems: nil
-    ),
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "tiny")!,
-            language: Lang(rawValue: "en")!,
-            modelDisplayName: "Tiny(EN)"
-        )),
-        subMenuItems: nil
-    ),
     MenuItem(
         view: AnyView(ModelLoadSubMenuItemView(
             modelSize: Size(rawValue: "base")!,

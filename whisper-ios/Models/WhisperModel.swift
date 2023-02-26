@@ -1,13 +1,12 @@
 import Foundation
 
 enum Size: String, CaseIterable, Identifiable {
-    case tiny
     case base
     case small
     case medium
 
     init() {
-        self = .tiny
+        self = .small
     }
 
     // just for ForEach operation
@@ -15,8 +14,6 @@ enum Size: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .tiny:
-            return "Tiny"
         case .base:
             return "Base"
         case .small:
@@ -28,8 +25,6 @@ enum Size: String, CaseIterable, Identifiable {
 
     var speed: Int {
         switch self {
-        case .tiny:
-            return 4
         case .base:
             return 3
         case .small:
@@ -41,27 +36,23 @@ enum Size: String, CaseIterable, Identifiable {
 
     var accuracy: Int {
         switch self {
-        case .tiny:
-            return 1
         case .base:
-            return 2
+            return 1
         case .small:
-            return 3
+            return 2
         case .medium:
-            return 4
+            return 3
         }
     }
 
-    var gigabytes: Double {
+    var megabytes: Double {
         switch self {
-        case .tiny:
-            return 0.077
         case .base:
-            return 0.148
+            return 148
         case .small:
-            return 0.488
+            return 488
         case .medium:
-            return 1.530
+            return 1530
         }
     }
 }
@@ -75,7 +66,7 @@ enum Lang: String, Identifiable, CaseIterable {
     var id: String { rawValue }
 
     init() {
-        self = .en
+        self = .multi
     }
 }
 
@@ -105,7 +96,7 @@ class WhisperModel: Identifiable, ObservableObject {
         self.isDownloaded = UserDefaults.standard.object(forKey: isDownloadedKey) as! Bool
 
         if isDownloaded {
-            if size == .tiny {
+            if WhisperModelRepository.isModelBundled(size: size, language: language) {
                 let urlStr = Bundle.main.path(
                     forResource: "ggml-\(size.rawValue).\(language.rawValue)",
                     ofType: "bin"

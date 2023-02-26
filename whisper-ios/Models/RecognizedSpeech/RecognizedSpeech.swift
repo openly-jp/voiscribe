@@ -1,9 +1,15 @@
 import Foundation
 
+let userDefaultRecognitionLanguageKey = "user-default-recognition-language"
+
 enum Language: String, CaseIterable, Identifiable {
     case ja
     case en
-
+    
+    init() {
+        self = .ja
+    }
+    
     // just for ForEach operation
     var id: String { rawValue }
 

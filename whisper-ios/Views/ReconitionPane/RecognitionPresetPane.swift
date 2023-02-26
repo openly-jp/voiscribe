@@ -34,9 +34,9 @@ struct RecognitionPresetPane: View {
 }
 
 struct RecognitionPresetRow: View {
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang(rawValue: "en")!
-    @AppStorage(UserDefaultASRLanguageKey) var defaultLanguageRawValue = Language.en.rawValue
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
+    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang()
+    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
     @EnvironmentObject var recognizer: WhisperRecognizer
 
     var modelSize: Size
@@ -53,7 +53,7 @@ struct RecognitionPresetRow: View {
     var isSelected: Bool {
         modelSize == recognizer.whisperModel.size &&
             modelLanguage == recognizer.whisperModel.language &&
-            recognitionLanguage.rawValue == defaultLanguageRawValue
+            recognitionLanguage == defaultRecognitionLanguage
     }
 
     // MARK: - design related constants
@@ -130,7 +130,7 @@ struct RecognitionPresetRow: View {
                             Image(systemName: "star.fill")
                                 .frame(width: geometryWidth / 15)
                         }
-                        ForEach(0 ..< 4 - modelSize.accuracy) { _ in
+                        ForEach(0 ..< 3 - modelSize.accuracy) { _ in
                             Image(systemName: "star")
                                 .frame(width: geometryWidth / 15)
                         }
@@ -143,7 +143,7 @@ struct RecognitionPresetRow: View {
                         Image(systemName: "car.side.fill")
                             .frame(width: geometryWidth / 15)
                     }
-                    ForEach(0 ..< 4 - modelSize.speed) { _ in
+                    ForEach(0 ..< 3 - modelSize.speed) { _ in
                         Image(systemName: "car.side")
                             .frame(width: geometryWidth / 15)
                     }
@@ -164,7 +164,7 @@ struct RecognitionPresetRow: View {
                 )
                 : Alert(
                     title: Text("モデルをダウンロードしますか?"),
-                    message: Text("\(modelSize.gigabytes, specifier: "%.3f") GBの通信容量が必要です。"),
+                    message: Text("\(modelSize.megabytes, specifier: "%.3f") MBの通信容量が必要です。"),
                     primaryButton: .cancel(Text("キャンセル")),
                     secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
                 )
@@ -182,7 +182,7 @@ struct RecognitionPresetRow: View {
             }
             defaultModelSize = modelSize
             defaultLanguage = modelLanguage
-            defaultLanguageRawValue = recognitionLanguage.rawValue
+            defaultRecognitionLanguage = recognitionLanguage
         }
     }
 

@@ -3,8 +3,6 @@ import DequeModule
 import PartialSheet
 import SwiftUI
 
-let UserDefaultASRLanguageKey = "asr-language"
-
 struct RecognitionPane: View {
     // MARK: - Recording state
 
@@ -36,9 +34,8 @@ struct RecognitionPane: View {
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @State var recognizingSpeech: RecognizedSpeech?
     @Binding var isRecordDetailActives: [Bool]
-    @State var language: Language = getUserLanguage()
     @State var title = ""
-
+    @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
     @AppStorage(PromptingActiveKey) var isPromptingActive = true
     @AppStorage(RemainingAudioConcatActiveKey) var isRemainingAudioConcatActive = true
@@ -150,7 +147,6 @@ struct RecognitionPane: View {
                 HStack(spacing: 50) {
                     StopButtonPane {
                         pauseRecording()
-                        language = getUserLanguage()
                         isConfirmOpen = true
                     }
                     RecordButtonPane(
@@ -232,7 +228,6 @@ struct RecognitionPane: View {
         isPaneOpen = true
         isRecognitionSettingPaneOpen = false
 
-        language = getUserLanguage()
         tmpAudioFileNumber = 0
         maxAmp = 0
         recognizingSpeech = RecognizedSpeech(
@@ -505,15 +500,6 @@ func getURLByName(fileName: String) -> URL {
     let docsDirect = paths[0]
     let url = docsDirect.appendingPathComponent(fileName)
     return url
-}
-
-func getUserLanguage() -> Language {
-    if let language = UserDefaults.standard.string(forKey: UserDefaultASRLanguageKey) {
-        return Language(rawValue: language)!
-    }
-
-    // default language
-    return .en
 }
 
 struct RecognitionPane_Previews: PreviewProvider {

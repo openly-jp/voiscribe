@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct RecognitionSettingPane: View {
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
-    @AppStorage(UserDefaultASRLanguageKey) var defaultLanguageRawValue = Language.en.rawValue
+    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
+    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
 
     let startAction: () -> Void
     let itemMinHeight: CGFloat = 50
@@ -49,7 +49,7 @@ struct RecognitionSettingPane: View {
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(Color.secondary)
-                        Text(Language(rawValue: defaultLanguageRawValue)!.displayName)
+                        Text(defaultRecognitionLanguage.displayName)
                             .font(.title)
                             .fontWeight(.medium)
                             .foregroundColor(Color.primary)
