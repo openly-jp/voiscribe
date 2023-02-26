@@ -4,31 +4,16 @@ let sideMenuWidth: CGFloat = 270
 let sideMenuOpenOffset: CGFloat = 0
 let sideMenuCloseOffset: CGFloat = -1 * sideMenuWidth
 
-//  let localeIdentifiers = ["en-US", "en-GB", "fr-FR", "ja-JP", "ja-US", "es-ES"]
-//  let uniqueLanguageCodes = Set(localeIdentifiers.map { Locale(identifier: $0).languageCode })
-//  print(uniqueLanguageCodes)
-//  Output: ["en", "fr", "ja", "es"]
-let uniqueLanguageCodes = Set(NSLocale.preferredLanguages.map { Locale(identifier: $0).languageCode })
-
 struct SideMenu: View {
     @Binding var isOpen: Bool
     @Binding var offset: CGFloat
 
-    let menuItems: [MenuItem] =
-        uniqueLanguageCodes.count > 1 ?
-        [
-            modelLoadMenuItem,
-            recognitionFrequencySecMenuItem,
-            languageSelectMenuItem,
-            appInfoMenuItem,
-            displayedLanguageSwitchMenuItem,
-        ] :
-        [
-            modelLoadMenuItem,
-            recognitionFrequencySecMenuItem,
-            languageSelectMenuItem,
-            appInfoMenuItem,
-        ]
+    let menuItems: [MenuItem] = [
+        modelLoadMenuItem,
+        recognitionFrequencySecMenuItem,
+        languageSelectMenuItem,
+        appInfoMenuItem,
+    ]
 
     var body: some View {
         GeometryReader {
