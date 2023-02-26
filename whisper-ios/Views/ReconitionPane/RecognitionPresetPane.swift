@@ -63,6 +63,7 @@ struct RecognitionPresetRow: View {
     let modelInformationItemCornerRadius: CGFloat = 20
     let iconSize: CGFloat = 20
     let downloadIconOffset: CGFloat = 5
+    let recommendTagOffset: CGFloat = 10
 
     init(
         modelSize: Size,
@@ -92,33 +93,43 @@ struct RecognitionPresetRow: View {
                 .font(.system(size: iconSize))
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, .green)
-            ZStack(alignment: .bottomTrailing) {
-                VStack {
-                    Text(recognitionLanguage.displayName)
-                        .font(.title2)
-                    Text(modelSize.displayName)
-                        .font(.title2)
-                }
-                .frame(maxWidth: geometryWidth / 5, minHeight: itemMinHeight)
-                .padding()
-                .background(modelInformationItemColor)
-                .cornerRadius(modelInformationItemCornerRadius)
-                if isDownloading {
-                    CircularProgressBar(progress: $progressValue)
-                        .frame(width: iconSize, height: iconSize)
-                } else {
-                    if isDownloaded {
-                        Image(systemName: "checkmark.icloud.fill")
-                            .font(.system(size: iconSize))
-                            .offset(x: downloadIconOffset)
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, .cyan)
-                    } else {
-                        Image(systemName: "icloud.and.arrow.down")
-                            .font(.system(size: iconSize))
-                            .offset(x: downloadIconOffset)
-                            .foregroundColor(.cyan)
+            ZStack(alignment: .topTrailing) {
+                ZStack(alignment: .bottomTrailing) {
+                    VStack {
+                        Text(recognitionLanguage.displayName)
+                            .font(.title2)
+                        Text(modelSize.displayName)
+                            .font(.title2)
                     }
+                    .frame(maxWidth: geometryWidth / 5, minHeight: itemMinHeight)
+                    .padding()
+                    .background(modelInformationItemColor)
+                    .cornerRadius(modelInformationItemCornerRadius)
+                    if isDownloading {
+                        CircularProgressBar(progress: $progressValue)
+                            .frame(width: iconSize, height: iconSize)
+                    } else {
+                        if isDownloaded {
+                            Image(systemName: "checkmark.icloud.fill")
+                                .font(.system(size: iconSize))
+                                .offset(x: downloadIconOffset)
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.white, .cyan)
+                        } else {
+                            Image(systemName: "icloud.and.arrow.down")
+                                .font(.system(size: iconSize))
+                                .offset(x: downloadIconOffset)
+                                .foregroundColor(.cyan)
+                        }
+                    }
+                }
+                if WhisperModelRepository.isModelBundled(size: modelSize, language: modelLanguage) {
+                    Text("おすすめ")
+                        .font(.caption)
+                        .foregroundColor(Color.black)
+                        .padding(.horizontal)
+                        .background(RoundedRectangle(cornerRadius: 4).fill(Color.yellow))
+                        .offset(x: recommendTagOffset)
                 }
             }
             VStack(alignment: .leading) {
