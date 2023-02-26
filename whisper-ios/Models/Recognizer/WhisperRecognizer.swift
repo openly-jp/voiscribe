@@ -6,6 +6,8 @@ class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
+    
+    var isRecognizing = false
 
     init(whisperModel: WhisperModel) throws {
         if whisperModel.localPath == nil {
@@ -110,6 +112,8 @@ class WhisperRecognizer: Recognizer {
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
+            // prohibit user from changing model
+            self.isRecognizing = true
             Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
             Logger.debug("Remaining Audio Concat: \(isRemainingAudioConcatActive ? "active" : "inactive")")
             guard let context = self.whisperModel.whisperContext else {
@@ -207,6 +211,7 @@ class WhisperRecognizer: Recognizer {
                     }
                 }
                 callback(recognizingSpeech)
+                self.isRecognizing = false
             }
         }
     }

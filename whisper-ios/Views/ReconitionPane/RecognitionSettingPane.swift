@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct RecognitionSettingPane: View {
+    @EnvironmentObject var recognizer: WhisperRecognizer
+    
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
     @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
 
@@ -8,7 +10,8 @@ struct RecognitionSettingPane: View {
     let itemMinHeight: CGFloat = 50
     let itemCornerRadius: CGFloat = 20
     let itemColor = Color(uiColor: .systemGray5).opacity(0.8)
-
+    
+    @State var isRecognizingAlertOpen = false
     @State var isRecognitionPresetSelectionPaneOpen = false
 
     var body: some View {
@@ -40,7 +43,11 @@ struct RecognitionSettingPane: View {
             .background(itemColor.clipShape(RoundedRectangle(cornerRadius: itemCornerRadius)))
             .padding(.horizontal)
             .onTapGesture {
-                isRecognitionPresetSelectionPaneOpen = true
+                if recognizer.isRecognizing {
+                    isRecognizingAlertOpen = true
+                } else {
+                    isRecognitionPresetSelectionPaneOpen = true
+                }
             }
             HStack {
                 Group {
@@ -69,7 +76,11 @@ struct RecognitionSettingPane: View {
             .background(itemColor.clipShape(RoundedRectangle(cornerRadius: itemCornerRadius)))
             .padding(.horizontal)
             .onTapGesture {
-                isRecognitionPresetSelectionPaneOpen = true
+                if recognizer.isRecognizing {
+                    isRecognizingAlertOpen = true
+                } else {
+                    isRecognitionPresetSelectionPaneOpen = true
+                }
             }
             Button(action: {
                 startAction()
@@ -84,6 +95,13 @@ struct RecognitionSettingPane: View {
             .padding()
             .sheet(isPresented: $isRecognitionPresetSelectionPaneOpen) {
                 RecognitionPresetPane()
+            }
+            .alert(isPresented: $isRecognizingAlertOpen) {
+                Alert(
+                    title: Text("認識中はモデルを変更できません。"),
+                    message:
+                        Text("現在の認識終了後にモデルを変更してください。"),
+                    dismissButton: .default(Text("了解")))
             }
         }
     }
