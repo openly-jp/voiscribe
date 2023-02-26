@@ -4,7 +4,6 @@ import SwiftUI
 struct HomeView: View {
     @State var showSideMenu = false
     @State var sideMenuOffset = sideMenuCloseOffset
-    @AppStorage(UserModeNumKey) var userModeNum = 0
     var body: some View {
         NavigationView {
             VStack {
@@ -32,17 +31,10 @@ struct HomeView: View {
 
                 GeometryReader {
                     geometry in
-                    if userModeNum == 0 {
-                        MainView()
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .disabled(showSideMenu)
-                            .overlay(showSideMenu ? Color.black.opacity(0.6) : nil)
-                    } else if userModeNum == 1 {
-                        DeveloperMainView()
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .disabled(showSideMenu)
-                            .overlay(showSideMenu ? Color.black.opacity(0.6) : nil)
-                    }
+                    MainView()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .disabled(showSideMenu)
+                        .overlay(showSideMenu ? Color.black.opacity(0.6) : nil)
 
                     SideMenu(isOpen: $showSideMenu, offset: $sideMenuOffset)
                 }

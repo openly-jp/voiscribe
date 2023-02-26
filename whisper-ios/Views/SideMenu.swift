@@ -10,7 +10,6 @@ struct SideMenu: View {
     let menuItems: [MenuItem] = [
         modelLoadMenuItem,
         recognitionFrequencySecMenuItem,
-        developerMenuItem,
         appInfoMenuItem,
     ]
 

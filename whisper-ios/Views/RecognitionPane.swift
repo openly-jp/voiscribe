@@ -37,8 +37,8 @@ struct RecognitionPane: View {
     @State var title = ""
     @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
     @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
-    @AppStorage(PromptingActiveKey) var isPromptingActive = true
-    @AppStorage(RemainingAudioConcatActiveKey) var isRemainingAudioConcatActive = true
+    var isPromptingActive = true
+    var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
