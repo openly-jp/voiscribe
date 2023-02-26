@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RecognitionSettingPane: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    
+
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
     @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
 
@@ -10,7 +10,7 @@ struct RecognitionSettingPane: View {
     let itemMinHeight: CGFloat = 50
     let itemCornerRadius: CGFloat = 20
     let itemColor = Color(uiColor: .systemGray5).opacity(0.8)
-    
+
     @State var isRecognizingAlertOpen = false
     @State var isRecognitionPresetSelectionPaneOpen = false
 
@@ -100,8 +100,9 @@ struct RecognitionSettingPane: View {
                 Alert(
                     title: Text("認識中はモデルを変更できません。"),
                     message:
-                        Text("現在の認識終了後にモデルを変更してください。"),
-                    dismissButton: .default(Text("了解")))
+                    Text("現在の認識終了後にモデルを変更してください。"),
+                    dismissButton: .default(Text("了解"))
+                )
             }
         }
     }

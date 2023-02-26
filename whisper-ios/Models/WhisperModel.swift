@@ -93,7 +93,7 @@ class WhisperModel: Identifiable, ObservableObject {
             )
             UserDefaults.standard.set(isModelExists, forKey: isDownloadedKey)
         }
-        self.isDownloaded = UserDefaults.standard.object(forKey: isDownloadedKey) as! Bool
+        isDownloaded = UserDefaults.standard.object(forKey: isDownloadedKey) as! Bool
 
         if isDownloaded {
             if WhisperModelRepository.isModelBundled(size: size, language: language) {
@@ -124,7 +124,7 @@ class WhisperModel: Identifiable, ObservableObject {
             )
             UserDefaults.standard.set(isModelExists, forKey: key)
         }
-        self.isDownloaded = UserDefaults.standard.object(forKey: key) as! Bool
+        isDownloaded = UserDefaults.standard.object(forKey: key) as! Bool
     }
 
     var name: String {
@@ -146,7 +146,7 @@ class WhisperModel: Identifiable, ObservableObject {
             switch result {
             case let .success(modelURL):
                 self.localPath = modelURL
-                DispatchQueue.main.async { 
+                DispatchQueue.main.async {
                     self.isDownloaded = true
                     let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
                     UserDefaults.standard.set(true, forKey: key)

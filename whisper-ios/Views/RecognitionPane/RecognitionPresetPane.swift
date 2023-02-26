@@ -76,10 +76,10 @@ struct RecognitionPresetRow: View {
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
         let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize)-\(modelLanguage)"
-        self._isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
+        _isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
         let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
-        self._isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
-        self.progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
+        _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
+        progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
 
         whisperModel = WhisperModel(
             size: self.modelSize,

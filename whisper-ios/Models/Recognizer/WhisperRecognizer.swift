@@ -6,7 +6,7 @@ class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
-    
+
     var isRecognizing = false
 
     init(whisperModel: WhisperModel) throws {

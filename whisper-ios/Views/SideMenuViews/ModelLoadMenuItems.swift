@@ -57,9 +57,9 @@ struct ModelLoadSubMenuItemView: View {
         self.language = language
         self.modelDisplayName = modelDisplayName
         let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize.rawValue)-\(language.rawValue)"
-        self._isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
+        _isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
         let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
-        self._isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
+        _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         whisperModel = WhisperModel(size: modelSize, language: language)
     }
 
