@@ -8,7 +8,7 @@ struct RecognitionFrequencySecMenuItemView: View {
             Image(systemName: "timer.circle.fill")
                 .imageScale(.large)
                 .frame(width: 32)
-            Text("認識頻度")
+            Text(NSLocalizedString("認識頻度", comment: ""))
                 .font(.headline)
             Spacer()
         }

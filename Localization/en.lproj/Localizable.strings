@@ -1,0 +1,191 @@
+/* No comment provided by engineer. */
+"%lld秒" = "%lld seconds";
+
+/* No comment provided by engineer. */
+"テキストを共有" = "Share Text";
+
+/* No comment provided by engineer. */
+"プライバシーポリシー" = "Privacy Policy";
+
+/* No comment provided by engineer. */
+"プロンプティング有効" = "Prompting Enabled";
+
+/* No comment provided by engineer. */
+"モデルをダウンロードしますか?" = "Do you want to download the model?";
+
+/* No comment provided by engineer. */
+"モデルを変更しますか？" = "Do you want to change the model?";
+
+/* No comment provided by engineer. */
+"了解" = "OK";
+
+/* No comment provided by engineer. */
+"保存" = "Save";
+
+/* No comment provided by engineer. */
+"再生速度の変更" = "Change playback speed";
+
+/* No comment provided by engineer. */
+"再開" = "Resume";
+
+/* No comment provided by engineer. */
+"利用規約" = "Terms of Service";
+
+/* No comment provided by engineer. */
+"削除" = "Delete";
+
+/* No comment provided by engineer. */
+"削除しますか？" = "Do you want to delete?";
+
+/* No comment provided by engineer. */
+"変更" = "Change";
+
+/* No comment provided by engineer. */
+"変更は完全に失われます。変更を破棄しますか？" = "Changes will be lost completely. Do you want to discard the changes?";
+
+/* No comment provided by engineer. */
+"変更を破棄" = "Discard changes";
+
+/* No comment provided by engineer. */
+"変更を破棄しますか？" = "Do you want to discard changes?";
+
+/* No comment provided by engineer. */
+"日本語" = "Japanese";
+
+/* No comment provided by engineer. */
+"書き起こし編集" = "Editing";
+
+/* No comment provided by engineer. */
+"未選択" = "Not selected";
+
+/* No comment provided by engineer. */
+"正解" = "Correct answer";
+
+/* No comment provided by engineer. */
+"申し訳ございません。" = "We apologize.";
+
+/* No comment provided by engineer. */
+"直前音声の結合" = "Concatenate previous audio";
+
+/* No comment provided by engineer. */
+"終了" = "Finish";
+
+/* No comment provided by engineer. */
+"経過時間: %@" = "Elapsed time: %@";
+
+/* No comment provided by engineer. */
+"編集" = "Edit";
+
+/* No comment provided by engineer. */
+"英語" = "English";
+
+/* No comment provided by engineer. */
+"認識モデル" = "Recognition model";
+
+/* No comment provided by engineer. */
+"認識中" = "Recognizing";
+
+/* No comment provided by engineer. */
+"認識中は編集できません" = "Cannot edit while recognizing";
+
+/* No comment provided by engineer. */
+"認識終了後に再度お試しください" = "Please try again after recognition finishes";
+
+/* No comment provided by engineer. */
+"認識結果" = "Recognition result";
+
+/* No comment provided by engineer. */
+"認識結果がありません。" = "No recognition results.";
+
+/* No comment provided by engineer. */
+"認識結果なし" = "No recognition result";
+
+/* No comment provided by engineer. */
+"認識言語" = "Recognition language";
+
+/* No comment provided by engineer. */
+"認識開始" = "Start Recognition";
+
+/* No comment provided by engineer. */
+"認識頻度" = "Recognition Frequency";
+
+/* No comment provided by engineer. */
+"通信容量にご注意ください。" = "Please be aware of the data usage.";
+
+/* No comment provided by engineer. */
+"録音された音声は破棄されます。本当に終了しますか？" = "The recorded audio will be discarded. Are you sure you want to exit?";
+
+/* No comment provided by engineer. */
+"録音を終了しますか？" = "Do you want to finish recording?";
+
+/* No comment provided by engineer. */
+"録音中止" = "Quit Recording";
+
+/* No comment provided by engineer. */
+"閉じる" = "Close";
+
+/* No comment provided by engineer. */
+"開発者" = "Developer";
+
+/* No comment provided by engineer. */
+"開発者メニュー" = "Developer Menu";
+
+/* No comment provided by engineer. */
+"音声を共有" = "Share Audio";
+
+/* No comment provided by engineer. */
+"音声認識をはじめましょう" = "Let's Start Speech Recognition!";
+
+/* No comment provided by engineer. */
+"アプリ情報" = "App Info";
+
+/* No comment provided by engineer. */
+"テキストをコピー" = "Copy Text";
+
+/* No comment provided by engineer. */
+"ライセンス" = "License";
+
+/* No comment provided by engineer. */
+"ユーザー画面" = "User Screen";
+
+/* No comment provided by engineer. */
+"開発者画面" = "Developer Screen";
+
+/* No comment provided by engineer. */
+"日本語" = "Japanese";
+
+/* No comment provided by engineer. */
+"未定" = "Untitled";
+
+/* No comment provided by engineer. */
+"ダウンロード" = "Download";
+
+/* No comment provided by engineer. */
+"キャンセル" = "Cancel";
+
+/* No comment provided by engineer. */
+"ロケール" = "en_US";
+
+/* No comment provided by engineer. */
+"日付フォーマット" = "MM/dd/yyyy HH:mm";
+
+/* No comment provided by engineer. */
+"表示言語" = "Display Language";
+
+/* No comment provided by engineer. */
+"言語切り替え_日本語" = "日本語";
+
+/* No comment provided by engineer. */
+"はじめの指示" = "Start recording by pressing the button below. \n Recognition results can be viewed from the list.";
+
+/* No comment provided by engineer. */
+"警告" = "Warning";
+
+/* No comment provided by engineer. */
+"開く" = "Open";
+
+/* No comment provided by engineer. */
+"閉じる" = "Close";
+
+/* No comment provided by engineer. */
+"タイトル" = "Title";
