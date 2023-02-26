@@ -1,15 +1,15 @@
 import SwiftUI
 
-struct LanguageSwitchItemView: View {
-    @State private var showingiOSAlert = false
-    @State private var showingAlert = false
+struct DisplayedLanguageSwitchItemView: View {
+    @State private var isShowingiOSAlert = false
+    @State private var isShowingAlert = false
 
     var body: some View {
         Group {
             Button(action: {
-                showingAlert = true
+                isShowingAlert = true
                 if !isRunningOnMacOS() {
-                    self.showingiOSAlert = true
+                    self.isShowingiOSAlert = true
                 }
             }) {
                 HStack {
@@ -23,8 +23,8 @@ struct LanguageSwitchItemView: View {
                     Spacer()
                 }
             }
-            .alert(isPresented: $showingAlert) {
-                showingiOSAlert
+            .alert(isPresented: $isShowingAlert) {
+                isShowingiOSAlert
                     ? Alert(
                         title: Text(NSLocalizedString("警告", comment: "")),
                         message: Text(NSLocalizedString("言語選択の警告", comment: "")),
@@ -53,4 +53,4 @@ struct LanguageSwitchItemView: View {
     }
 }
 
-let displayedLanguageSwitchMenuItem = MenuItem(view: AnyView(LanguageSwitchItemView()), subMenuItems: nil)
+let displayedLanguageSwitchMenuItem = MenuItem(view: AnyView(DisplayedLanguageSwitchItemView()), subMenuItems: nil)

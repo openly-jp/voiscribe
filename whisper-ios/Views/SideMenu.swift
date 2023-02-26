@@ -3,11 +3,11 @@ import SwiftUI
 let sideMenuWidth: CGFloat = 270
 let sideMenuOpenOffset: CGFloat = 0
 let sideMenuCloseOffset: CGFloat = -1 * sideMenuWidth
-///  We need to get unique language code.
-///  let localeIdentifiers = ["en-US", "en-GB", "fr-FR", "ja-JP", "ja-US", "es-ES"]
-///  let uniqueLanguageCodes = Set(localeIdentifiers.map { Locale(identifier: $0).languageCode })
-///  print(uniqueLanguageCodes)
-///   Output: ["en", "fr", "ja", "es"]
+
+//  let localeIdentifiers = ["en-US", "en-GB", "fr-FR", "ja-JP", "ja-US", "es-ES"]
+//  let uniqueLanguageCodes = Set(localeIdentifiers.map { Locale(identifier: $0).languageCode })
+//  print(uniqueLanguageCodes)
+//  Output: ["en", "fr", "ja", "es"]
 let uniqueLanguageCodes = Set(NSLocale.preferredLanguages.map { Locale(identifier: $0).languageCode })
 
 struct SideMenu: View {
@@ -20,7 +20,6 @@ struct SideMenu: View {
             modelLoadMenuItem,
             recognitionFrequencySecMenuItem,
             languageSelectMenuItem,
-            developerMenuItem,
             appInfoMenuItem,
             displayedLanguageSwitchMenuItem,
         ] :
@@ -28,7 +27,6 @@ struct SideMenu: View {
             modelLoadMenuItem,
             recognitionFrequencySecMenuItem,
             languageSelectMenuItem,
-            developerMenuItem,
             appInfoMenuItem,
         ]
 
