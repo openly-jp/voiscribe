@@ -36,7 +36,7 @@ struct RecognitionPane: View {
     @Binding var isRecordDetailActives: [Bool]
     @State var title = ""
     @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
-    @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
+    var recognitionFrequencySec = 30
     var isPromptingActive = true
     var isRemainingAudioConcatActive = true
 

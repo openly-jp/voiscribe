@@ -137,6 +137,9 @@
 "録音された音声は破棄されます。本当に終了しますか？" = "The recorded audio will be discarded. Are you sure you want to exit?";
 
 /* No comment provided by engineer. */
+"データは完全に失われます。本当に削除しますか？" = "The data will be completely discarded. Are you sure you want to delete?";
+
+/* No comment provided by engineer. */
 "録音を終了しますか？" = "Do you want to finish recording?";
 
 /* No comment provided by engineer. */

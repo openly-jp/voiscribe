@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
@@ -87,7 +86,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionFrequencySecMenuItems.swift; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoadMenuItems.swift; sourceTree = "<group>"; };
@@ -199,7 +197,6 @@
 				5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */,
 				5A8358B7299BA5CC00985983 /* AppInfoViews */,
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
-				132CA3022973FDA90015D310 /* RecognitionFrequencySecMenuItems.swift */,
 			);
 			path = SideMenuViews;
 			sourceTree = "<group>";
@@ -620,7 +617,6 @@
 				5A8F55282948CDB700E87D25 /* MainView.swift in Sources */,
 				13BB396829A894D900082D1F /* RecognitionPresetPane.swift in Sources */,
 				57CF69D62968897800DF0E3F /* Constant.swift in Sources */,
-				132CA3032973FDAA0015D310 /* RecognitionFrequencySecMenuItems.swift in Sources */,
 				57E460C52990FC93004FB6C2 /* RecordingController.swift in Sources */,
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
 				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
@@ -828,10 +824,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
+				PRODUCT_NAME = VoiScribe;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				PRODUCT_NAME = VoiScribe;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -863,10 +859,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
+				PRODUCT_NAME = VoiScribe;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				PRODUCT_NAME = VoiScribe;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
