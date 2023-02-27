@@ -1,4 +1,5 @@
 import AVFoundation
+import FirebaseCrashlytics
 import SwiftUI
 
 struct RecognitionPlayer: View {
@@ -83,7 +84,7 @@ struct RecognitionPlayer: View {
             player = try AVAudioPlayer(contentsOf: url)
             player!.enableRate = true
         } catch {
-            Logger.error("failed to init AVAudioPlayer.")
+            Crashlytics.crashlytics().log("failed to init AVAudioPlayer.")
         }
     }
 }

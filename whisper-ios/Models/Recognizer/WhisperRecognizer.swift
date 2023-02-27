@@ -1,5 +1,6 @@
 import AVFoundation
 import Dispatch
+import FirebaseCrashlytics
 import Foundation
 
 class WhisperRecognizer: Recognizer {
@@ -9,7 +10,9 @@ class WhisperRecognizer: Recognizer {
 
     init(whisperModel: WhisperModel) throws {
         if whisperModel.localPath == nil {
-            throw NSError(domain: "whisperModel.localPath is nil", code: -1)
+            let error = NSError(domain: "whisperModel.localPath is nil", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         } else {
             self.whisperModel = whisperModel
         }
@@ -17,21 +20,29 @@ class WhisperRecognizer: Recognizer {
 
     private func load_audio(url: URL) throws -> [Float32] {
         guard let audio = try? AVAudioFile(forReading: url, commonFormat: .pcmFormatFloat32, interleaved: false) else {
-            throw NSError(domain: "audio load error", code: -1)
+            let error = NSError(domain: "audio load error", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         }
         guard let buffer = AVAudioPCMBuffer(
             pcmFormat: audio.processingFormat,
             frameCapacity: AVAudioFrameCount(audio.length)
         ) else {
-            throw NSError(domain: "audio load error", code: -1)
+            let error = NSError(domain: "audio load error", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         }
         do {
             try audio.read(into: buffer)
         } catch {
-            throw NSError(domain: "audio load error", code: -1)
+            let error = NSError(domain: "audio load error", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         }
         guard let float32Data = buffer.floatChannelData else {
-            throw NSError(domain: "audio load error", code: -1)
+            let error = NSError(domain: "audio load error", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         }
         let audioData = Array(UnsafeBufferPointer(start: float32Data[0], count: Int(buffer.frameLength)))
         return audioData
@@ -43,11 +54,15 @@ class WhisperRecognizer: Recognizer {
         callback: @escaping (RecognizedSpeech) -> Void
     ) throws -> RecognizedSpeech {
         guard let context: OpaquePointer = whisperModel.whisperContext else {
-            throw NSError(domain: "model load error", code: -1)
+            let error = NSError(domain: "model load error", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         }
 
         guard let audioData = try? load_audio(url: audioFileURL) else {
-            throw NSError(domain: "audio load error", code: -1)
+            let error = NSError(domain: "audio load error", code: -1)
+            Crashlytics.crashlytics().record(error: error)
+            throw error
         }
 
         let recognizedSpeech = RecognizedSpeech(
@@ -113,11 +128,11 @@ class WhisperRecognizer: Recognizer {
             Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
             Logger.debug("Remaining Audio Concat: \(isRemainingAudioConcatActive ? "active" : "inactive")")
             guard let context = self.whisperModel.whisperContext else {
-                Logger.error("model load error")
+                Crashlytics.crashlytics().log("model load error")
                 return
             }
             guard var originalAudioData = try? self.load_audio(url: audioFileURL) else {
-                Logger.error("audio load error")
+                Crashlytics.crashlytics().log("audio load error")
                 return
             }
             recognizingSpeech.tmpAudioDataList.append(originalAudioData)
@@ -126,7 +141,7 @@ class WhisperRecognizer: Recognizer {
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
             } catch {
-                Logger.warning("failed to remove audio file")
+                Crashlytics.crashlytics().log("failed to remove audio file")
             }
             // check whether recognizingSpeech was removed (i.e. abort recording) or not
             if feasibilityCheck(recognizingSpeech) {

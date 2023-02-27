@@ -1,3 +1,4 @@
+import FirebaseCrashlytics
 import Foundation
 
 enum Size: String {
@@ -83,6 +84,7 @@ class WhisperModel: Identifiable, ObservableObject {
                     domain: "Failed to download model: \(error.localizedDescription)",
                     code: -1
                 )
+                Crashlytics.crashlytics().record(error: err!)
             }
 
             completeCallback(err)
@@ -92,7 +94,7 @@ class WhisperModel: Identifiable, ObservableObject {
     func loadModel(callback: @escaping (Error?) -> Void) {
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
         guard let modelUrl = localPath else {
-            Logger.error("Failed to parse model url")
+            Crashlytics.crashlytics().log("Failed to parse model url")
             return
         }
         DispatchQueue.global(qos: .userInitiated).async {
@@ -101,6 +103,7 @@ class WhisperModel: Identifiable, ObservableObject {
             var err: Error?
             if self.whisperContext == nil {
                 err = NSError(domain: "Failed to load model", code: -1)
+                Crashlytics.crashlytics().record(error: err!)
             }
 
             callback(err)
@@ -114,7 +117,9 @@ class WhisperModel: Identifiable, ObservableObject {
         )
         isDownloaded = false
         if !flag {
-            throw NSError(domain: "failed to delete model", code: -1)
+            let err = NSError(domain: "failed to delete model", code: -1)
+            Crashlytics.crashlytics().record(error: err)
+            throw err
         }
     }
 

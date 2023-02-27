@@ -1,4 +1,5 @@
 import Firebase
+import FirebaseCrashlytics
 import SwiftUI
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -42,7 +43,7 @@ struct StartView: View {
                                     language: defaultModelLanguage
                                 )
                                 whisperModel.loadModel { err in
-                                    if let err { Logger.error(err); return }
+                                    if let err { Crashlytics.crashlytics().record(error: err); return }
 
                                     recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
                                     isLoading = false

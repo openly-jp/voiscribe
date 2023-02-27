@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseCrashlytics
 import Foundation
 
 extension CoreDataRepository {
@@ -22,7 +23,8 @@ extension CoreDataRepository {
 
     static func deleteRecognizedSpeech(recognizedSpeech: RecognizedSpeech) {
         guard let rsEntity: RecognizedSpeechData = CoreDataRepository.getById(uuid: recognizedSpeech.id) else {
-            fatalError("object with id: \(recognizedSpeech.id.uuidString) is not found.")
+            Crashlytics.crashlytics()
+                .record(error: fatalError("object with id: \(recognizedSpeech.id.uuidString) is not found."))
         }
 
         CoreDataRepository.delete(rsEntity)

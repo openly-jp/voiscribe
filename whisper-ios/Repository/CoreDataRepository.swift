@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseCrashlytics
 import Foundation
 
 class CoreDataRepository {
@@ -8,7 +9,7 @@ class CoreDataRepository {
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores(completionHandler: { _, error in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                Crashlytics.crashlytics().record(error: fatalError("Unresolved error \(error), \(error.userInfo)"))
             }
         })
         return container
@@ -39,7 +40,7 @@ extension CoreDataRepository {
             let request = NSFetchRequest<T>(entityName: String(describing: T.self))
             return try context.fetch(request)
         } catch {
-            fatalError()
+            Crashlytics.crashlytics().record(error: fatalError())
         }
     }
 
@@ -49,7 +50,7 @@ extension CoreDataRepository {
             request.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
             return try context.fetch(request).first
         } catch {
-            fatalError()
+            Crashlytics.crashlytics().record(error: fatalError())
         }
     }
 
@@ -70,7 +71,7 @@ extension CoreDataRepository {
         do {
             try context.save()
         } catch let error as NSError {
-            Logger.error("\(error), \(error.userInfo)")
+            Crashlytics.crashlytics().log("\(error), \(error.userInfo)")
         }
     }
 
@@ -83,7 +84,7 @@ extension CoreDataRepository {
         do {
             return try context.fetch(request)
         } catch let error as NSError {
-            Logger.error("\(error), \(error.userInfo)")
+            Crashlytics.crashlytics().log("\(error), \(error.userInfo)")
             return []
         }
     }

@@ -1,3 +1,4 @@
+import FirebaseCrashlytics
 import SwiftUI
 
 let userDefaultModelSizeKey = "user-default-model-size"
@@ -136,7 +137,7 @@ struct ModelLoadSubMenuItemView: View {
             isLoading = false
 
             if let err {
-                Logger.error(err)
+                Crashlytics.crashlytics().record(error: err)
                 return
             }
 
@@ -150,7 +151,7 @@ struct ModelLoadSubMenuItemView: View {
         whisperModel.downloadModel { err in
             isDownloading = false
             if let err {
-                Logger.error(err)
+                Crashlytics.crashlytics().record(error: err)
             }
         } updateCallback: { num in
             progressValue = CGFloat(num)
@@ -161,7 +162,7 @@ struct ModelLoadSubMenuItemView: View {
         do {
             try whisperModel.deleteModel()
         } catch {
-            Logger.error(error)
+            Crashlytics.crashlytics().record(error: error)
         }
     }
 }
