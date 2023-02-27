@@ -80,7 +80,28 @@
 "英語" = "English";
 
 /* No comment provided by engineer. */
-"認識モデル" = "Recognition model";
+"認識モデル" = "Recognition Model";
+
+/* No comment provided by engineer. */
+"音声認識設定" = "Recognition Setting";
+
+/* No comment provided by engineer. */
+"速度" = "Speed";
+
+/* No comment provided by engineer. */
+"精度" = "Accuracy";
+
+/* No comment provided by engineer. */
+"録音開始" = "Start";
+
+/* No comment provided by engineer. */
+"認識中はモデルを変更できません" = "Cannot change recognition model";
+
+/* No comment provided by engineer. */
+"おすすめ" = "Recommend";
+
+/* No comment provided by engineer. */
+"%lld MBの通信容量が必要です" = "Require %lld MB data traffic";
 
 /* No comment provided by engineer. */
 "認識中" = "Recognizing";
@@ -101,7 +122,7 @@
 "認識結果なし" = "No recognition result";
 
 /* No comment provided by engineer. */
-"認識言語" = "Recognition language";
+"認識言語" = "Recognition Language";
 
 /* No comment provided by engineer. */
 "認識開始" = "Start Recognition";

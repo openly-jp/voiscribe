@@ -107,7 +107,8 @@ struct RecognitionPresetRow: View {
             ZStack(alignment: .topTrailing) {
                 ZStack(alignment: .bottomTrailing) {
                     VStack {
-                        Text(recognitionLanguage.displayName)
+                        // NSLocalizedString is needed for dynamic string
+                        Text(NSLocalizedString(recognitionLanguage.displayName, comment: ""))
                             .font(.title2)
                         Text(modelSize.displayName)
                             .font(.title2)
@@ -186,7 +187,7 @@ struct RecognitionPresetRow: View {
                 )
                 : Alert(
                     title: Text("モデルをダウンロードしますか?"),
-                    message: Text("\(modelSize.megabytes, specifier: "%d") MBの通信容量が必要です。"),
+                    message: Text("\(modelSize.megabytes) MBの通信容量が必要です"),
                     primaryButton: .cancel(Text("キャンセル")),
                     secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
                 )

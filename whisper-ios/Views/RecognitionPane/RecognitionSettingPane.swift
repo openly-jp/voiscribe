@@ -19,7 +19,7 @@ struct RecognitionSettingPane: View {
             HStack {
                 Group {
                     VStack(alignment: .leading) {
-                        Text("モデル")
+                        Text("認識モデル")
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(Color.secondary)
@@ -56,7 +56,7 @@ struct RecognitionSettingPane: View {
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(Color.secondary)
-                        Text(defaultRecognitionLanguage.displayName)
+                        Text(NSLocalizedString(defaultRecognitionLanguage.displayName, comment: ""))
                             .font(.title)
                             .fontWeight(.medium)
                             .foregroundColor(Color.primary)
@@ -99,9 +99,9 @@ struct RecognitionSettingPane: View {
             }
             .alert(isPresented: $isRecognizingAlertOpen) {
                 Alert(
-                    title: Text("認識中はモデルを変更できません。"),
+                    title: Text("認識中はモデルを変更できません"),
                     message:
-                    Text("現在の認識終了後にモデルを変更してください。"),
+                    Text("認識終了後に再度お試しください"),
                     dismissButton: .default(Text("了解"))
                 )
             }
