@@ -45,7 +45,7 @@ enum Size: String, CaseIterable, Identifiable {
         }
     }
 
-    var megabytes: Double {
+    var megabytes: Int {
         switch self {
         case .base:
             return 148
