@@ -100,19 +100,18 @@ struct ModelLoadSubMenuItemView: View {
             showPrompt = true
         }
         .alert(isPresented: $showPrompt) {
-                Alert(
-                    title: Text("モデルをダウンロードしますか?"),
-                    message: Text("通信容量にご注意ください。"),
-                    primaryButton: .cancel(Text("キャンセル")),
-                    secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
-                )
+            Alert(
+                title: Text("モデルをダウンロードしますか?"),
+                message: Text("通信容量にご注意ください。"),
+                primaryButton: .cancel(Text("キャンセル")),
+                secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
+            )
         }
     }
 
     var isModelSelected: Bool {
         recognizer.whisperModel.size == modelSize && recognizer.whisperModel.language == language
     }
-
 
     private func downloadModel() {
         isDownloading = true

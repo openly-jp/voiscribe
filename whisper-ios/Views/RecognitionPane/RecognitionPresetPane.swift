@@ -8,7 +8,7 @@ struct RecognitionPresetPane: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     HStack {
-                        ZStack(alignment: .trailing){
+                        ZStack(alignment: .trailing) {
                             Text("音声認識設定")
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -16,7 +16,7 @@ struct RecognitionPresetPane: View {
                                 .frame(maxWidth: .infinity)
                             Button(action: {
                                 isRecognitionPresetSelectionPaneOpen = false
-                            }){
+                            }) {
                                 Image(systemName: "xmark")
                                     .font(.title3)
                                     .foregroundColor(Color.secondary)
