@@ -50,6 +50,8 @@
 		57EAB6E9296207C600BB59BE /* RecognizedSpeechRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6E8296207C600BB59BE /* RecognizedSpeechRepository.swift */; };
 		57EAB6EC296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EA296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift */; };
 		57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */; };
+		5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284D029A79EA5008E848F /* Localizable.strings */; };
+		5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284D229A79F61008E848F /* InfoPlist.strings */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -131,7 +133,11 @@
 		57EAB6E8296207C600BB59BE /* RecognizedSpeechRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechRepository.swift; sourceTree = "<group>"; };
 		57EAB6EA296214D300BB59BE /* TranscriptionLineData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranscriptionLineData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/TranscriptionLineData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecognizedSpeechData+CoreDataProperties.swift"; path = "whisper-ios/Repository/CoreDataModels/RecognizedSpeechData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
-		5A8F54F12948CCDB00E87D25 /* whisper-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whisper-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A2284CF29A79EA5008E848F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5A2284D129A79EA9008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5A2284D329A79F61008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5A2284DF29ABB437008E848F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5A8F54F12948CCDB00E87D25 /* VoiScribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiScribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -311,6 +317,14 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		5A2284CB29A79E89008E848F /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				5A2284D029A79EA5008E848F /* Localizable.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		5A8358B7299BA5CC00985983 /* AppInfoViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +336,7 @@
 		5A8F54E82948CCDB00E87D25 = {
 			isa = PBXGroup;
 			children = (
+				5A2284CB29A79E89008E848F /* Localization */,
 				5A8F54F32948CCDB00E87D25 /* whisper-ios */,
 				5A8F55042948CCDD00E87D25 /* whisper-iosTests */,
 				5A8F550E2948CCDD00E87D25 /* whisper-iosUITests */,
@@ -334,7 +349,7 @@
 		5A8F54F22948CCDB00E87D25 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A8F54F12948CCDB00E87D25 /* whisper-ios.app */,
+				5A8F54F12948CCDB00E87D25 /* VoiScribe.app */,
 				5A8F55012948CCDD00E87D25 /* whisper-iosTests.xctest */,
 				5A8F550B2948CCDD00E87D25 /* whisper-iosUITests.xctest */,
 			);
@@ -349,6 +364,7 @@
 				57EAB6E52962028C00BB59BE /* Repository */,
 				13516D9729603679005013C8 /* Mocks */,
 				5766628A29603BBF00C27512 /* Info.plist */,
+				5A2284D229A79F61008E848F /* InfoPlist.strings */,
 				13D1E492295CE4120070090B /* Libraries */,
 				57C7229E295C959A009C8A20 /* Views */,
 				5A8F552C2948CEBD00E87D25 /* Resources */,
@@ -439,7 +455,7 @@
 				13DF2F2E29A0848C0030E39A /* PartialSheet */,
 			);
 			productName = "whisper-ios";
-			productReference = 5A8F54F12948CCDB00E87D25 /* whisper-ios.app */;
+			productReference = 5A8F54F12948CCDB00E87D25 /* VoiScribe.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5A8F55002948CCDD00E87D25 /* whisper-iosTests */ = {
@@ -486,7 +502,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = jp.openly;
 				TargetAttributes = {
 					5A8F54F02948CCDB00E87D25 = {
@@ -509,6 +525,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 5A8F54E82948CCDB00E87D25;
 			packageReferences = (
@@ -538,6 +555,8 @@
 				139FB99B29AB1ED20020ED17 /* ggml-small.multi.bin in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
 				139FB99929AB1EB80020ED17 /* ggml-base.en.bin in Resources */,
+				5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */,
+				5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -643,11 +662,33 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		5A2284D029A79EA5008E848F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A2284CF29A79EA5008E848F /* ja */,
+				5A2284D129A79EA9008E848F /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		5A2284D229A79F61008E848F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A2284D329A79F61008E848F /* en */,
+				5A2284DF29ABB437008E848F /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		5A8F55132948CCDD00E87D25 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -701,6 +742,7 @@
 				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -709,6 +751,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -755,6 +798,7 @@
 				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -784,10 +828,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				PRODUCT_NAME = VoiScribe;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -819,10 +863,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.openly.voiscribe;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				PRODUCT_NAME = VoiScribe;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Libraries/whisper-cpp/whisper-ios-test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

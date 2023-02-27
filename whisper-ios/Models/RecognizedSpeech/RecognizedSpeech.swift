@@ -39,7 +39,7 @@ class RecognizedSpeech: Identifiable {
     /// this is used in streaming recognition
     init(audioFileURL: URL, language: Language) {
         id = UUID()
-        title = "未定"
+        title = NSLocalizedString("未定", comment: "")
         self.audioFileURL = audioFileURL
         self.language = language
         transcriptionLines = []
@@ -49,7 +49,7 @@ class RecognizedSpeech: Identifiable {
 
     init(audioFileURL: URL, language: Language, transcriptionLines: [TranscriptionLine]) {
         id = UUID()
-        title = "未定"
+        title = NSLocalizedString("未定", comment: "")
         self.audioFileURL = audioFileURL
         self.language = language
         self.transcriptionLines = transcriptionLines
