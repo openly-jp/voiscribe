@@ -38,8 +38,6 @@ struct CircularProgressBar: View {
 
 struct ModelLoadSubMenuItemView: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
-    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang()
     @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
@@ -48,7 +46,6 @@ struct ModelLoadSubMenuItemView: View {
     @ObservedObject var whisperModel: WhisperModel
 
     @State private var showPrompt = false
-    @State private var isLoading = false
     @AppStorage var isDownloaded: Bool
     @AppStorage private var isDownloading: Bool
 
@@ -65,13 +62,6 @@ struct ModelLoadSubMenuItemView: View {
 
     var body: some View {
         HStack {
-            if isModelSelected {
-                Image(systemName: "checkmark.circle.fill")
-                    .imageScale(.large)
-            } else {
-                Image(systemName: "circle")
-                    .imageScale(.large)
-            }
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
@@ -88,9 +78,10 @@ struct ModelLoadSubMenuItemView: View {
                 }
             }
         }
+        // this enable user to tap on Spacer
+        .contentShape(Rectangle())
         .swipeActions(edge: .trailing) {
-            if !isLoading,
-               !WhisperModelRepository.isModelBundled(size: modelSize, language: language),
+            if !WhisperModelRepository.isModelBundled(size: modelSize, language: language),
                whisperModel.isDownloaded,
                !isModelSelected
             {
@@ -99,24 +90,17 @@ struct ModelLoadSubMenuItemView: View {
             }
         }
         .onTapGesture {
-            guard !isModelSelected else {
+            guard !isDownloading else {
                 return
             }
-
-            guard !isDownloading else {
+            guard !isDownloaded else {
                 return
             }
 
             showPrompt = true
         }
         .alert(isPresented: $showPrompt) {
-            isDownloaded
-                ? Alert(
-                    title: Text("モデルを変更しますか？"),
-                    primaryButton: .cancel(Text("キャンセル")),
-                    secondaryButton: .default(Text("変更"), action: loadModel)
-                )
-                : Alert(
+                Alert(
                     title: Text("モデルをダウンロードしますか?"),
                     message: Text("通信容量にご注意ください。"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -129,25 +113,6 @@ struct ModelLoadSubMenuItemView: View {
         recognizer.whisperModel.size == modelSize && recognizer.whisperModel.language == language
     }
 
-    private func loadModel() {
-        assert(isDownloaded)
-
-        recognizer.whisperModel.freeModel()
-        recognizer.whisperModel = whisperModel
-
-        isLoading = true
-        whisperModel.loadModel { err in
-            isLoading = false
-
-            if let err {
-                Logger.error(err)
-                return
-            }
-
-            defaultModelSize = modelSize
-            defaultLanguage = language
-        }
-    }
 
     private func downloadModel() {
         isDownloading = true
