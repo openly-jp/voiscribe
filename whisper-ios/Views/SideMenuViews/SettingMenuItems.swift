@@ -4,7 +4,7 @@ import SwiftUI
 struct SettingMenuItemView: View {
     var body: some View {
         HStack {
-            Image(systemName: "character.book.closed.fill")
+            Image(systemName: "gear")
                 .imageScale(.large)
                 .frame(width: 32)
             Text("設定")
