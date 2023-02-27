@@ -1,17 +1,28 @@
 import SwiftUI
 
 struct RecognitionPresetPane: View {
+    @Binding var isRecognitionPresetSelectionPaneOpen: Bool
     var body: some View {
         GeometryReader {
             geometry in
             ScrollView {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("音声認識設定")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            // this force the alignment center
-                            .frame(maxWidth: .infinity)
+                        ZStack(alignment: .trailing){
+                            Text("音声認識設定")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                // this force the alignment center
+                                .frame(maxWidth: .infinity)
+                            Button(action: {
+                                isRecognitionPresetSelectionPaneOpen = false
+                            }){
+                                Image(systemName: "xmark")
+                                    .font(.title3)
+                                    .foregroundColor(Color.secondary)
+                                    .padding(.trailing)
+                            }
+                        }
                     }
                     .padding(.top)
                     ForEach(Size.allCases) { size in
@@ -215,7 +226,8 @@ struct RecognitionPresetRow: View {
 }
 
 struct RecognitionPresetPane_Previews: PreviewProvider {
+    @State static var isRecognitionPresetSelectionPaneOpen = true
     static var previews: some View {
-        RecognitionPresetPane()
+        RecognitionPresetPane(isRecognitionPresetSelectionPaneOpen: $isRecognitionPresetSelectionPaneOpen)
     }
 }

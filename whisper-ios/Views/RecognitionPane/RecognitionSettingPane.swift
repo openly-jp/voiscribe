@@ -94,7 +94,8 @@ struct RecognitionSettingPane: View {
             .buttonStyle(.borderedProminent)
             .padding()
             .sheet(isPresented: $isRecognitionPresetSelectionPaneOpen) {
-                RecognitionPresetPane()
+                RecognitionPresetPane(isRecognitionPresetSelectionPaneOpen: $isRecognitionPresetSelectionPaneOpen)
+                    .environmentObject(recognizer)
             }
             .alert(isPresented: $isRecognizingAlertOpen) {
                 Alert(
