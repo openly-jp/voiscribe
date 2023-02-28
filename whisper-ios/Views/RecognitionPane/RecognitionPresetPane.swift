@@ -89,7 +89,7 @@ struct RecognitionPresetRow: View {
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
         let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize)-\(modelLanguage)"
-        _isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
+        _isDownloaded = AppStorage(wrappedValue: WhisperModelRepository.isModelBundled(size: modelSize, language: modelLanguage), isDownloadedKey)
         let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
@@ -172,7 +172,7 @@ struct RecognitionPresetRow: View {
                             Image(systemName: "star.fill")
                                 .frame(width: geometryWidth / 15)
                         }
-                        ForEach(0 ..< 3 - modelSize.accuracy) { _ in
+                        ForEach(0 ..< 4 - modelSize.accuracy) { _ in
                             Image(systemName: "star")
                                 .frame(width: geometryWidth / 15)
                         }
@@ -188,7 +188,7 @@ struct RecognitionPresetRow: View {
                         Image(systemName: "car.side.fill")
                             .frame(width: geometryWidth / 15)
                     }
-                    ForEach(0 ..< 3 - modelSize.speed) { _ in
+                    ForEach(0 ..< 4 - modelSize.speed) { _ in
                         Image(systemName: "car.side")
                             .frame(width: geometryWidth / 15)
                     }

@@ -4,17 +4,18 @@ enum Size: String, CaseIterable, Identifiable {
     case base
     case small
     case medium
+    case large
 
     init() {
         guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
-            self = .base
+            self = .small
             return
         }
 
         if deviceLanguageCode == "ja" {
             self = .small
         } else {
-            self = .base
+            self = .small
         }
     }
 
@@ -29,16 +30,20 @@ enum Size: String, CaseIterable, Identifiable {
             return "Small"
         case .medium:
             return "Medium"
+        case .large:
+            return "large"
         }
     }
 
     var speed: Int {
         switch self {
         case .base:
-            return 3
+            return 4
         case .small:
-            return 2
+            return 3
         case .medium:
+            return 2
+        case .large:
             return 1
         }
     }
@@ -51,17 +56,21 @@ enum Size: String, CaseIterable, Identifiable {
             return 2
         case .medium:
             return 3
+        case .large:
+            return 4
         }
     }
 
     var megabytes: Int {
         switch self {
         case .base:
-            return 148
+            return 49
         case .small:
-            return 488
+            return 152
         case .medium:
-            return 1530
+            return 469
+        case .large:
+            return 985
         }
     }
 }
