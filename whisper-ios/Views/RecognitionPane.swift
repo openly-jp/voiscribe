@@ -3,6 +3,52 @@ import DequeModule
 import PartialSheet
 import SwiftUI
 
+struct RecognitionSettingSheetModifier: ViewModifier {
+    @EnvironmentObject var recognizer: WhisperRecognizer
+
+    @Binding var isSheetOpen: Bool
+    let startAction: () -> Void
+
+    var isPhone = UIDevice.current.userInterfaceIdiom == .phone
+    
+    func body(content: Content) -> some View {
+        if isPhone {
+            content
+                .partialSheet(isPresented: $isSheetOpen) {
+                    RecognitionSettingPane(startAction: startAction)
+                        .environmentObject(recognizer)
+                }
+        } else {
+            content
+                .sheet(isPresented: $isSheetOpen) {
+                    VStack{
+                        HStack {
+                            ZStack(alignment: .leading) {
+                                Text("音声認識設定")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    // this force the alignment center
+                                    .frame(maxWidth: .infinity)
+                                Button(action: {
+                                    isSheetOpen = false
+                                }) {
+                                    Image(systemName: "xmark")
+                                        .font(.title3)
+                                        .foregroundColor(Color.secondary)
+                                        .padding(.leading)
+                                }
+                            }
+                        }
+                        .padding(.top)
+                        Spacer()
+                        RecognitionSettingPane(startAction: startAction)
+                            .environmentObject(recognizer)
+                    }
+                }
+        }
+    }
+}
+
 struct RecognitionPane: View {
     // MARK: - Recording state
 
@@ -77,10 +123,7 @@ struct RecognitionPane: View {
             )
             .frame(height: 0)
             .hidden()
-            .partialSheet(isPresented: $isRecognitionSettingPaneOpen) {
-                RecognitionSettingPane(startAction: startRecording)
-                    .environmentObject(recognizer)
-            }
+            .modifier(RecognitionSettingSheetModifier(isSheetOpen: $isRecognitionSettingPaneOpen, startAction: startRecording))
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
             .onChange(of: scenePhase) {
                 newPhase in

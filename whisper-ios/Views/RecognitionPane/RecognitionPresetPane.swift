@@ -8,7 +8,7 @@ struct RecognitionPresetPane: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     HStack {
-                        ZStack(alignment: .trailing) {
+                        ZStack(alignment: .leading) {
                             Text("音声認識設定")
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -20,7 +20,7 @@ struct RecognitionPresetPane: View {
                                 Image(systemName: "xmark")
                                     .font(.title3)
                                     .foregroundColor(Color.secondary)
-                                    .padding(.trailing)
+                                    .padding(.leading)
                             }
                         }
                     }
@@ -73,6 +73,8 @@ struct RecognitionPresetRow: View {
     let modelInformationItemColor = Color(uiColor: .systemGray5).opacity(0.8)
     let modelInformationItemCornerRadius: CGFloat = 20
     let iconSize: CGFloat = 20
+    let modelSelectedIconSize: CGFloat = 30
+    let modelSelectedMarginSize: CGFloat = 20
     let downloadIconOffset: CGFloat = 5
     let recommendTagOffset: CGFloat = 10
 
@@ -103,13 +105,16 @@ struct RecognitionPresetRow: View {
             Spacer()
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: iconSize))
+                    .font(.system(size: modelSelectedIconSize))
                     .symbolRenderingMode(.palette)
+                
                     .foregroundStyle(.white, .green)
             } else {
                 Image(systemName: "circle")
+                    .font(.system(size: modelSelectedIconSize))
+                    .foregroundColor(modelInformationItemColor)
             }
-            Spacer()
+            Spacer().frame(width: modelSelectedMarginSize)
 
             ZStack(alignment: .topTrailing) {
                 ZStack(alignment: .bottomTrailing) {
