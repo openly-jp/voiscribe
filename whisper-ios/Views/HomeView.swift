@@ -13,7 +13,7 @@ struct HomeView: View {
                             sideMenuOffset = showSideMenu ? sideMenuCloseOffset : sideMenuOpenOffset
                             showSideMenu.toggle()
                         }, label: {
-                            Image(systemName: "line.horizontal.3")
+                            Image(systemName: "sidebar.left")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 30, height: 30, alignment: .center)
