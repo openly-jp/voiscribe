@@ -224,6 +224,8 @@ struct RecognitionPresetRow: View {
         whisperModel.loadModel {
             err in
             if let err {
+                Logger.error("Failed to load model: \(modelSize)-\(modelLanguage)")
+                Logger.error(err)
                 return
             }
             defaultModelSize = modelSize
