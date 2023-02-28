@@ -75,7 +75,7 @@ struct LicenseView: View {
                     .padding(.horizontal)
                     Divider()
                 }
-                
+
                 VStack(alignment: .leading) {
                     Text("PartialSheet")
                         .font(.headline)

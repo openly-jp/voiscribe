@@ -17,19 +17,19 @@ struct RecognitionSettingPane: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                    VStack(alignment: .leading) {
-                        Text("認識モデル")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.secondary)
-                        Text(defaultModelSize.displayName)
-                            .font(.title)
-                            .fontWeight(.medium)
-                            .foregroundColor(Color.primary)
-                    }
-                    .padding()
-                    Spacer()
-                    Image(systemName: "chevron.right")
+                VStack(alignment: .leading) {
+                    Text("認識モデル")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.secondary)
+                    Text(defaultModelSize.displayName)
+                        .font(.title)
+                        .fontWeight(.medium)
+                        .foregroundColor(Color.primary)
+                }
+                .padding()
+                Spacer()
+                Image(systemName: "chevron.right")
                     .padding()
             }
             .frame(
@@ -49,20 +49,20 @@ struct RecognitionSettingPane: View {
                 }
             }
             HStack {
-                    VStack(alignment: .leading) {
-                        Text("認識言語")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.secondary)
-                        Text(NSLocalizedString(defaultRecognitionLanguage.displayName, comment: ""))
-                            .font(.title)
-                            .fontWeight(.medium)
-                            .foregroundColor(Color.primary)
-                    }
+                VStack(alignment: .leading) {
+                    Text("認識言語")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.secondary)
+                    Text(NSLocalizedString(defaultRecognitionLanguage.displayName, comment: ""))
+                        .font(.title)
+                        .fontWeight(.medium)
+                        .foregroundColor(Color.primary)
+                }
+                .padding()
+                Spacer()
+                Image(systemName: "chevron.right")
                     .padding()
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .padding()
             }
             .frame(
                 maxWidth: .infinity,

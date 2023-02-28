@@ -110,7 +110,7 @@ struct RecognitionPresetRow: View {
                 Image(systemName: "circle")
             }
             Spacer()
-            
+
             ZStack(alignment: .topTrailing) {
                 ZStack(alignment: .bottomTrailing) {
                     VStack {

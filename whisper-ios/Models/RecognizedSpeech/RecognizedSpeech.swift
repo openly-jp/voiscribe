@@ -11,7 +11,7 @@ enum Language: String, CaseIterable, Identifiable {
             self = .en
             return
         }
-        
+
         if deviceLanguageCode == "ja" {
             self = .ja
         } else {

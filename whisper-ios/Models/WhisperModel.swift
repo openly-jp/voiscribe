@@ -10,7 +10,7 @@ enum Size: String, CaseIterable, Identifiable {
             self = .base
             return
         }
-        
+
         if deviceLanguageCode == "ja" {
             self = .small
         } else {
@@ -79,7 +79,7 @@ enum Lang: String, Identifiable, CaseIterable {
             self = .en
             return
         }
-        
+
         if deviceLanguageCode == "ja" {
             self = .multi
         } else {
