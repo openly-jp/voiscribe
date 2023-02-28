@@ -6,7 +6,16 @@ enum Size: String, CaseIterable, Identifiable {
     case medium
 
     init() {
-        self = .small
+        guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
+            self = .base
+            return
+        }
+        
+        if deviceLanguageCode == "ja" {
+            self = .small
+        } else {
+            self = .base
+        }
     }
 
     // just for ForEach operation
@@ -66,7 +75,16 @@ enum Lang: String, Identifiable, CaseIterable {
     var id: String { rawValue }
 
     init() {
-        self = .multi
+        guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
+            self = .en
+            return
+        }
+        
+        if deviceLanguageCode == "ja" {
+            self = .multi
+        } else {
+            self = .en
+        }
     }
 }
 

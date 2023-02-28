@@ -7,7 +7,16 @@ enum Language: String, CaseIterable, Identifiable {
     case en
 
     init() {
-        self = .ja
+        guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
+            self = .en
+            return
+        }
+        
+        if deviceLanguageCode == "ja" {
+            self = .ja
+        } else {
+            self = .en
+        }
     }
 
     // just for ForEach operation
