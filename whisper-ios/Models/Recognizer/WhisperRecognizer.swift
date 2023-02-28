@@ -115,7 +115,7 @@ class WhisperRecognizer: Recognizer {
             defer {
                 self.isRecognizing = false
             }
-            
+
             // prohibit user from changing model
             self.isRecognizing = true
             Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
