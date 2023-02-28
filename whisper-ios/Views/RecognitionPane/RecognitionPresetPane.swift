@@ -107,7 +107,7 @@ struct RecognitionPresetRow: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: modelSelectedIconSize))
                     .symbolRenderingMode(.palette)
-                
+
                     .foregroundStyle(.white, .green)
             } else {
                 Image(systemName: "circle")

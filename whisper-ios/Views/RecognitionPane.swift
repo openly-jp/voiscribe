@@ -10,7 +10,7 @@ struct RecognitionSettingSheetModifier: ViewModifier {
     let startAction: () -> Void
 
     var isPhone = UIDevice.current.userInterfaceIdiom == .phone
-    
+
     func body(content: Content) -> some View {
         if isPhone {
             content
@@ -21,7 +21,7 @@ struct RecognitionSettingSheetModifier: ViewModifier {
         } else {
             content
                 .sheet(isPresented: $isSheetOpen) {
-                    VStack{
+                    VStack {
                         HStack {
                             ZStack(alignment: .leading) {
                                 Text("音声認識設定")
@@ -123,7 +123,8 @@ struct RecognitionPane: View {
             )
             .frame(height: 0)
             .hidden()
-            .modifier(RecognitionSettingSheetModifier(isSheetOpen: $isRecognitionSettingPaneOpen, startAction: startRecording))
+            .modifier(RecognitionSettingSheetModifier(isSheetOpen: $isRecognitionSettingPaneOpen,
+                                                      startAction: startRecording))
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
             .onChange(of: scenePhase) {
                 newPhase in
