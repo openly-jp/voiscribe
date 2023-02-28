@@ -1,4 +1,5 @@
 import AVFoundation
+import FirebaseCrashlytics
 import SwiftUI
 
 struct MainView: View {
@@ -127,7 +128,7 @@ struct MainView: View {
             let url = getURLByName(fileName: fileName)
             try FileManager.default.removeItem(at: url)
         } catch {
-            Logger.error("Failed to remove audio file.")
+            Crashlytics.crashlytics().log("Failed to remove audio file.")
         }
         recognizedSpeeches.remove(at: i)
         isRecordDetailActives.remove(at: i)

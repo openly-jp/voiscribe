@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseCrashlytics
 import Foundation
 
 @objc(RecognizedSpeechData)
@@ -63,7 +64,7 @@ public class RecognizedSpeechData: NSManagedObject {
     /// - Parameter rs: recognizedSpeech model
     static func update(_ rs: RecognizedSpeech) {
         guard let rsEntity: RecognizedSpeechData = CoreDataRepository.getById(uuid: rs.id) else {
-            fatalError("object with id: \(rs.id.uuidString) is not found.")
+            Crashlytics.crashlytics().record(error: fatalError("object with id: \(rs.id.uuidString) is not found."))
         }
 
         rsEntity.id = rs.id

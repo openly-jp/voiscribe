@@ -1,7 +1,19 @@
+import Firebase
+import FirebaseCrashlytics
 import SwiftUI
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_: UIApplication,
+                     didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool
+    {
+        FirebaseApp.configure()
+        return true
+    }
+}
 
 @main
 struct WhisperTestApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             StartView()
@@ -31,7 +43,7 @@ struct StartView: View {
                                     language: defaultModelLanguage
                                 )
                                 whisperModel.loadModel { err in
-                                    if let err { Logger.error(err); return }
+                                    if let err { Crashlytics.crashlytics().record(error: err); return }
 
                                     recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
                                     isLoading = false

@@ -1,3 +1,4 @@
+import FirebaseCrashlytics
 import Foundation
 
 class ProgressDelegatee: NSObject, URLSessionDownloadDelegate {
@@ -42,6 +43,7 @@ class FileDownloader {
         task?.delegate = ProgressDelegatee(update: progressHandler) {
             location, response, error in
             if let error {
+                Crashlytics.crashlytics().record(error: error)
                 completion(nil, error)
                 return
             }
@@ -49,12 +51,14 @@ class FileDownloader {
             guard let response = response as? HTTPURLResponse,
                   (200 ..< 299).contains(response.statusCode)
             else {
+                let error = NSError(
+                    domain: "FileDownloaderError", code: 1,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid response"]
+                )
+                Crashlytics.crashlytics().record(error: error)
                 completion(
                     nil,
-                    NSError(
-                        domain: "FileDownloaderError", code: 1,
-                        userInfo: [NSLocalizedDescriptionKey: "Invalid response"]
-                    )
+                    error
                 )
                 return
             }

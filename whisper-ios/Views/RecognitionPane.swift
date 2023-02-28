@@ -1,5 +1,6 @@
 import AVFoundation
 import DequeModule
+import FirebaseCrashlytics
 import SwiftUI
 
 let UserDefaultASRLanguageKey = "asr-language"
@@ -284,7 +285,7 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         guard let recognizingSpeech else {
-            Logger.error("recognizingSpeech is nil")
+            Crashlytics.crashlytics().log("recognizingSpeech is nil")
             return
         }
         // execute last streaming ASR、and create RecognizedSpeech model
@@ -350,7 +351,7 @@ struct RecognitionPane: View {
         audioRecorder!.record()
 
         guard let recognizingSpeech else {
-            Logger.error("recognizingSpeech is nil.")
+            Crashlytics.crashlytics().log("recognizingSpeech is nil.")
             return
         }
         // recognize past 10 ~ 30 sec speech
@@ -385,14 +386,14 @@ struct RecognitionPane: View {
             channels: 1,
             interleaved: false
         ) else {
-            Logger.error("format load error")
+            Crashlytics.crashlytics().log("format load error")
             return
         }
         guard let pcmBuffer = AVAudioPCMBuffer(
             pcmFormat: format,
             frameCapacity: AVAudioFrameCount(audioData.count)
         ) else {
-            Logger.error("audio load error")
+            Crashlytics.crashlytics().log("audio load error")
             return
         }
         for i in 0 ..< audioData.count {
@@ -401,11 +402,11 @@ struct RecognitionPane: View {
         pcmBuffer.frameLength = AVAudioFrameCount(audioData.count)
         let newURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
         guard let audioFile = try? AVAudioFile(forWriting: newURL, settings: recordSettings) else {
-            Logger.error("audio load error")
+            Crashlytics.crashlytics().log("audio load error")
             return
         }
         guard let _ = try? audioFile.write(from: pcmBuffer) else {
-            Logger.error("audio write error")
+            Crashlytics.crashlytics().log("audio write error")
             return
         }
         recognizedSpeech.audioFileURL = newURL
@@ -469,7 +470,7 @@ private func renameAudioFileURL(recognizedSpeech: RecognizedSpeech) {
     do {
         try FileManager.default.moveItem(at: tmpURL, to: newURL)
     } catch {
-        Logger.error("Failed to move file:", error)
+        Crashlytics.crashlytics().log("Failed to move file:")
     }
 }
 

@@ -1,3 +1,4 @@
+import FirebaseCrashlytics
 import Foundation
 
 let modelURLs: [String: String] = [
@@ -57,6 +58,7 @@ enum WhisperModelRepository {
                 completion(.success(destinationURL))
             } else {
                 print("File download failed with error: \(error!.localizedDescription)")
+                Crashlytics.crashlytics().log("File download failed with error: \(error!.localizedDescription)")
                 completion(.failure(error!))
             }
         }
@@ -83,6 +85,7 @@ enum WhisperModelRepository {
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if !FileManager.default.fileExists(atPath: destinationURL.path) {
             print("Designated file does not exist.")
+            Crashlytics.crashlytics().log("Designated file does not exist.")
             return false
         }
         do {
@@ -90,6 +93,7 @@ enum WhisperModelRepository {
             return true
         } catch {
             print("model deletion failed with error: \(error.localizedDescription)")
+            Crashlytics.crashlytics().log("model deletion failed with error: \(error.localizedDescription)")
             return false
         }
     }
