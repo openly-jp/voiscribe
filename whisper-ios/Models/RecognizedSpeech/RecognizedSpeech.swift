@@ -1,8 +1,35 @@
 import Foundation
 
-enum Language: String, CaseIterable {
+let userDefaultRecognitionLanguageKey = "user-default-recognition-language"
+
+enum Language: String, CaseIterable, Identifiable {
     case ja
     case en
+
+    init() {
+        guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
+            self = .en
+            return
+        }
+
+        if deviceLanguageCode == "ja" {
+            self = .ja
+        } else {
+            self = .en
+        }
+    }
+
+    // just for ForEach operation
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .ja:
+            return "日本語"
+        case .en:
+            return "英語"
+        }
+    }
 }
 
 class RecognizedSpeech: Identifiable {

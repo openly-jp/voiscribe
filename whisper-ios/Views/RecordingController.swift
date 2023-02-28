@@ -6,6 +6,7 @@ struct RecordingController: View {
     @Binding var isRecording: Bool
     @Binding var isPaused: Bool
     @Binding var isPaneOpen: Bool
+    @Binding var isRecognitionSettingOpen: Bool
 
     let startAction: () -> Void
     let stopAction: () -> Void
@@ -20,7 +21,9 @@ struct RecordingController: View {
         if isRecording {
             miniRecordingController
         } else {
-            StartRecordingButton(startAction: startAction)
+            StartRecordingButton(startAction: {
+                isRecognitionSettingOpen = true
+            })
         }
     }
 
@@ -118,6 +121,7 @@ struct RecordingController_Previews: PreviewProvider {
                 isRecording: .constant(true),
                 isPaused: .constant(true),
                 isPaneOpen: .constant(true),
+                isRecognitionSettingOpen: .constant(true),
                 startAction: {},
                 stopAction: {},
                 elapsedTime: 23,
@@ -129,6 +133,7 @@ struct RecordingController_Previews: PreviewProvider {
                 isRecording: .constant(false),
                 isPaused: .constant(false),
                 isPaneOpen: .constant(false),
+                isRecognitionSettingOpen: .constant(true),
                 startAction: {},
                 stopAction: {},
                 elapsedTime: 23,

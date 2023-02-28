@@ -1,8 +1,53 @@
 import AVFoundation
 import DequeModule
+import PartialSheet
 import SwiftUI
 
-let UserDefaultASRLanguageKey = "asr-language"
+struct RecognitionSettingSheetModifier: ViewModifier {
+    @EnvironmentObject var recognizer: WhisperRecognizer
+
+    @Binding var isSheetOpen: Bool
+    let startAction: () -> Void
+
+    var isPhone = UIDevice.current.userInterfaceIdiom == .phone
+
+    func body(content: Content) -> some View {
+        if isPhone {
+            content
+                .partialSheet(isPresented: $isSheetOpen) {
+                    RecognitionSettingPane(startAction: startAction)
+                        .environmentObject(recognizer)
+                }
+        } else {
+            content
+                .sheet(isPresented: $isSheetOpen) {
+                    VStack {
+                        HStack {
+                            ZStack(alignment: .leading) {
+                                Text("音声認識設定")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    // this force the alignment center
+                                    .frame(maxWidth: .infinity)
+                                Button(action: {
+                                    isSheetOpen = false
+                                }) {
+                                    Image(systemName: "xmark")
+                                        .font(.title3)
+                                        .foregroundColor(Color.secondary)
+                                        .padding(.leading)
+                                }
+                            }
+                        }
+                        .padding(.top)
+                        Spacer()
+                        RecognitionSettingPane(startAction: startAction)
+                            .environmentObject(recognizer)
+                    }
+                }
+        }
+    }
+}
 
 struct RecognitionPane: View {
     // MARK: - Recording state
@@ -35,15 +80,15 @@ struct RecognitionPane: View {
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @State var recognizingSpeech: RecognizedSpeech?
     @Binding var isRecordDetailActives: [Bool]
-    @State var language: Language = getUserLanguage()
     @State var title = ""
-
-    @AppStorage(UserDefaultRecognitionFrequencySecKey) var recognitionFrequencySec = 15
+    @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
+    var recognitionFrequencySec = 30
     var isPromptingActive = true
     var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
+    @State var isRecognitionSettingPaneOpen: Bool = false
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
@@ -58,6 +103,7 @@ struct RecognitionPane: View {
             isRecording: $isRecording,
             isPaused: $isPaused,
             isPaneOpen: $isPaneOpen,
+            isRecognitionSettingOpen: $isRecognitionSettingPaneOpen,
             startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
             stopAction: pauseRecording,
             elapsedTime: elapsedTime,
@@ -77,6 +123,8 @@ struct RecognitionPane: View {
             )
             .frame(height: 0)
             .hidden()
+            .modifier(RecognitionSettingSheetModifier(isSheetOpen: $isRecognitionSettingPaneOpen,
+                                                      startAction: startRecording))
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
             .onChange(of: scenePhase) {
                 newPhase in
@@ -143,7 +191,6 @@ struct RecognitionPane: View {
                 HStack(spacing: 50) {
                     StopButtonPane {
                         pauseRecording()
-                        language = getUserLanguage()
                         isConfirmOpen = true
                     }
                     RecordButtonPane(
@@ -223,8 +270,8 @@ struct RecognitionPane: View {
         isRecording = true
         isPaused = false
         isPaneOpen = true
+        isRecognitionSettingPaneOpen = false
 
-        language = getUserLanguage()
         tmpAudioFileNumber = 0
         maxAmp = 0
         recognizingSpeech = RecognizedSpeech(
@@ -497,15 +544,6 @@ func getURLByName(fileName: String) -> URL {
     let docsDirect = paths[0]
     let url = docsDirect.appendingPathComponent(fileName)
     return url
-}
-
-func getUserLanguage() -> Language {
-    if let language = UserDefaults.standard.string(forKey: UserDefaultASRLanguageKey) {
-        return Language(rawValue: language)!
-    }
-
-    // default language
-    return .en
 }
 
 struct RecognitionPane_Previews: PreviewProvider {

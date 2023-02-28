@@ -1,3 +1,4 @@
+import PartialSheet
 import SwiftUI
 
 @main
@@ -10,11 +11,23 @@ struct WhisperTestApp: App {
 }
 
 struct StartView: View {
-    @State var isLoading: Bool = true
+    @State var isLoading: Bool
     @State var recognizer: WhisperRecognizer?
 
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size(rawValue: "tiny")!
-    @AppStorage(userDefaultModelLanguageKey) var defaultModelLanguage = Lang(rawValue: "en")!
+    @AppStorage var defaultModelSize: Size
+    @AppStorage var defaultModelLanguage: Lang
+
+    init() {
+        isLoading = true
+        _defaultModelSize = AppStorage(wrappedValue: Size(), userDefaultModelSizeKey)
+        _defaultModelLanguage = AppStorage(wrappedValue: Lang(), userDefaultModelLanguageKey)
+        for modelSize in Size.allCases {
+            for modelLang in [Lang.en, Lang.multi] {
+                let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLang)"
+                UserDefaults.standard.set(false, forKey: isDownloadingKey)
+            }
+        }
+    }
 
     var body: some View {
         if isLoading {
@@ -47,6 +60,7 @@ struct StartView: View {
         } else {
             HomeView()
                 .environmentObject(recognizer!)
+                .attachPartialSheetToRoot()
         }
     }
 }

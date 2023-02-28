@@ -62,9 +62,19 @@ enum WhisperModelRepository {
         }
     }
 
+    static func isModelBundled(
+        size: Size,
+        language: Lang
+    ) -> Bool {
+        Bundle.main.path(
+            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
+            ofType: "bin"
+        ) == nil ? false : true
+    }
+
     static func modelExists(size: Size, language: Lang) -> Bool {
         let url: String
-        if size == .tiny {
+        if isModelBundled(size: size, language: language) {
             url = Bundle.main.path(
                 forResource: "ggml-\(size.rawValue).\(language.rawValue)",
                 ofType: "bin"
