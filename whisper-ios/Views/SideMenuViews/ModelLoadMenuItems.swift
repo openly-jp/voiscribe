@@ -6,7 +6,7 @@ let userDefaultModelLanguageKey = "user-default-model-language"
 struct ModelLoadMenuItemView: View {
     var body: some View {
         HStack {
-            Image(systemName: "hearingdevice.ear.fill")
+            Image(systemName: "ear.fill")
                 .imageScale(.large)
                 .frame(width: 32)
             Text("認識モデル")
