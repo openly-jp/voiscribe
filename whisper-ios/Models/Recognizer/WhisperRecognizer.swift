@@ -112,6 +112,10 @@ class WhisperRecognizer: Recognizer {
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
+            defer {
+                self.isRecognizing = false
+            }
+            
             // prohibit user from changing model
             self.isRecognizing = true
             Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
@@ -211,7 +215,6 @@ class WhisperRecognizer: Recognizer {
                     }
                 }
                 callback(recognizingSpeech)
-                self.isRecognizing = false
             }
         }
     }
