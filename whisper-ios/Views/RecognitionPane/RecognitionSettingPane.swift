@@ -17,7 +17,6 @@ struct RecognitionSettingPane: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                Group {
                     VStack(alignment: .leading) {
                         Text("認識モデル")
                             .font(.subheadline)
@@ -28,10 +27,10 @@ struct RecognitionSettingPane: View {
                             .fontWeight(.medium)
                             .foregroundColor(Color.primary)
                     }
+                    .padding()
                     Spacer()
                     Image(systemName: "chevron.right")
-                }
-                .padding()
+                    .padding()
             }
             .frame(
                 maxWidth: .infinity,
@@ -50,7 +49,6 @@ struct RecognitionSettingPane: View {
                 }
             }
             HStack {
-                Group {
                     VStack(alignment: .leading) {
                         Text("認識言語")
                             .font(.subheadline)
@@ -61,10 +59,10 @@ struct RecognitionSettingPane: View {
                             .fontWeight(.medium)
                             .foregroundColor(Color.primary)
                     }
+                    .padding()
                     Spacer()
                     Image(systemName: "chevron.right")
-                }
-                .padding()
+                        .padding()
             }
             .frame(
                 maxWidth: .infinity,

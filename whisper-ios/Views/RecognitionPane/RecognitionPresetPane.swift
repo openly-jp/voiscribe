@@ -100,18 +100,29 @@ struct RecognitionPresetRow: View {
 
     var body: some View {
         HStack {
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: iconSize))
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(.white, .green)
+            Spacer()
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: iconSize))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, .green)
+            } else {
+                Image(systemName: "circle")
+            }
+            Spacer()
+            
             ZStack(alignment: .topTrailing) {
                 ZStack(alignment: .bottomTrailing) {
                     VStack {
                         // NSLocalizedString is needed for dynamic string
                         Text(NSLocalizedString(recognitionLanguage.displayName, comment: ""))
-                            .font(.title2)
+                            .font(.title3)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                         Text(modelSize.displayName)
-                            .font(.title2)
+                            .font(.title3)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
                     .frame(maxWidth: geometryWidth / 5, minHeight: itemMinHeight)
                     .padding()
@@ -147,6 +158,9 @@ struct RecognitionPresetRow: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text("精度")
+                        .font(.caption)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
                     Group {
                         ForEach(0 ..< modelSize.accuracy) { _ in
@@ -161,6 +175,9 @@ struct RecognitionPresetRow: View {
                 }
                 HStack {
                     Text("速度")
+                        .font(.caption)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
                     ForEach(0 ..< modelSize.speed) { _ in
                         Image(systemName: "car.side.fill")
@@ -172,6 +189,7 @@ struct RecognitionPresetRow: View {
                     }
                 }
             }
+            Spacer()
         }
         .frame(maxWidth: .infinity, minHeight: itemMinHeight)
         .contentShape(Rectangle())
