@@ -71,8 +71,9 @@ struct AudioPlayer: View {
                     currentPlayingTime = player.currentTime
                 }
                 Spacer()
-
-                ShareButton(transcription: transcription)
+                PlayerButton(name: "doc.on.doc", size: 20) {
+                    UIPasteboard.general.string = transcription
+                }
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
@@ -152,6 +153,48 @@ struct PlayerButton: View {
             Image(systemName: name)
                 .font(.system(size: CGFloat(size)))
                 .foregroundColor(Color(.secondaryLabel))
+        }
+    }
+}
+
+// This view is used when recognition is on going
+// this is just for indicating that the audio is being recognized
+struct RecognizingAudioPlayer: View {
+    @State var isRotating = 0.0
+    @State var currentPlayingTime = 0.0
+    func speedRate2String(_ speedRate: Double) -> String {
+        "\(String(format: "%g", speedRate))x"
+    }
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Slider(value: $currentPlayingTime, in: 0 ... 0) {}
+            HStack {
+                Text(formatTime(0))
+                Spacer()
+                Text("認識中")
+            }
+            .font(.caption)
+
+            HStack {
+                Button(speedRate2String(availableSpeedRates[2])) {}
+                    .foregroundColor(Color(.secondaryLabel))
+                    .disabled(true)
+                Spacer()
+                PlayerButton(name: "gobackward.5", size: 35) {}
+                    .disabled(true)
+                Spacer()
+                ProgressView()
+                    .scaleEffect(2)
+                Spacer()
+                PlayerButton(name: "goforward.5", size: 35) {}
+                    .disabled(true)
+                Spacer()
+                PlayerButton(name: "nosign", size: 20) {}
+                    .disabled(true)
+            }
+            .padding(.horizontal, 30)
+            .padding(.bottom, 10)
         }
     }
 }

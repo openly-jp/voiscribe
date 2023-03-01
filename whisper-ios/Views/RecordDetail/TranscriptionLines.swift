@@ -135,13 +135,13 @@ struct TranscriptionLines: View {
                     isEditing = true
                     focusedTranscriptionLineId = transcriptionLine.id
                 } label: {
-                    Label("編集", systemImage: "pencil")
+                    Label(NSLocalizedString("編集", comment: ""), systemImage: "pencil")
                 }
 
                 Button {
                     UIPasteboard.general.string = transcriptionLine.text
                 } label: {
-                    Label("コピー", systemImage: "doc.on.doc")
+                    Label(NSLocalizedString("コピー", comment: ""), systemImage: "doc.on.doc")
                 }
             }
             Divider()
@@ -225,9 +225,47 @@ struct TranscriptionLines: View {
     }
 }
 
+struct RecognizingTranscriptionLines: View {
+    let recognizedSpeech: RecognizedSpeech
+    var body: some View {
+        ScrollViewReader { _ in
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.self.offset) {
+                        idx, transcriptionLine in
+                        Group {
+                            HStack(alignment: .center) {
+                                Text(formatTime(Double(transcriptionLine.startMSec) / 1000))
+                                    .frame(width: 50, alignment: .center)
+                                    .foregroundColor(Color.blue)
+                                    .padding()
+                                Spacer()
+                                Text(transcriptionLine.text)
+                                    .foregroundColor(Color(.label))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            .padding(10)
+                            .background(Color(.systemBackground))
+                            Divider()
+                        }
+                        .id(idx)
+                    }
+                }
+            }
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+        .padding()
+        .navigationBarTitle("", displayMode: .inline)
+    }
+}
+
 struct TranscriptionLines_Previews: PreviewProvider {
     static var previews: some View {
-        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(audioFileName: "sample_ja", csvFileName: "sample_ja")
+        let recognizedSpeech: RecognizedSpeech! = getRecognizedSpeechMock(
+            audioFileName: "sample_ja",
+            csvFileName: "sample_ja"
+        )
         let player = try! AVAudioPlayer(contentsOf: recognizedSpeech.audioFileURL)
 
         TranscriptionLines(

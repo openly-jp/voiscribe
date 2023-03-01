@@ -198,6 +198,8 @@ struct ggml_object;
 struct ggml_context;
 
 enum ggml_type {
+    GGML_TYPE_Q4_0,
+    GGML_TYPE_Q4_1,
     GGML_TYPE_I8,
     GGML_TYPE_I16,
     GGML_TYPE_I32,
@@ -301,6 +303,13 @@ struct ggml_cgraph {
     int64_t perf_time_us;
 };
 
+// scratch buffer
+struct ggml_scratch {
+    size_t offs;
+    size_t size;
+    void * data;
+};
+
 struct ggml_init_params {
     // memory pool
     size_t mem_size;   // bytes
@@ -319,13 +328,18 @@ void ggml_print_objects(const struct ggml_context * ctx);
 int    ggml_nelements(const struct ggml_tensor * tensor);
 size_t ggml_nbytes   (const struct ggml_tensor * tensor);
 
-size_t ggml_type_size   (enum ggml_type type);
+int    ggml_blck_size (enum ggml_type type);
+size_t ggml_type_size (enum ggml_type type); // size in bytes for all elements in a block
+float  ggml_type_sizef(enum ggml_type type); // ggml_type_size()/ggml_blck_size() as float
+
 size_t ggml_element_size(const struct ggml_tensor * tensor);
 
 struct ggml_context * ggml_init(struct ggml_init_params params);
 void ggml_free(struct ggml_context * ctx);
 
 size_t ggml_used_mem(const struct ggml_context * ctx);
+
+size_t ggml_set_scratch(struct ggml_context * ctx, struct ggml_scratch scratch);
 
 struct ggml_tensor * ggml_new_tensor(
         struct ggml_context * ctx,
@@ -731,6 +745,8 @@ int ggml_cpu_has_f16c(void);
 int ggml_cpu_has_fp16_va(void);
 int ggml_cpu_has_wasm_simd(void);
 int ggml_cpu_has_blas(void);
+int ggml_cpu_has_sse3(void);
+int ggml_cpu_has_vsx(void);
 
 #ifdef  __cplusplus
 }

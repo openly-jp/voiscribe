@@ -3,16 +3,17 @@ import SwiftUI
 
 struct HomeView: View {
     @State var showSideMenu = false
-    @AppStorage(UserModeNumKey) var userModeNum = 0
+    @State var sideMenuOffset = sideMenuCloseOffset
     var body: some View {
         NavigationView {
             VStack {
                 ZStack {
                     HStack(alignment: .center) {
                         Button(action: {
-                            self.showSideMenu = !self.showSideMenu
+                            sideMenuOffset = showSideMenu ? sideMenuCloseOffset : sideMenuOpenOffset
+                            showSideMenu.toggle()
                         }, label: {
-                            Image(systemName: "line.horizontal.3")
+                            Image(systemName: "sidebar.left")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 30, height: 30, alignment: .center)
@@ -30,22 +31,22 @@ struct HomeView: View {
 
                 GeometryReader {
                     geometry in
-                    if userModeNum == 0 {
-                        MainView()
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .disabled(self.showSideMenu)
-                            .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
-                    } else if userModeNum == 1 {
-                        DeveloperMainView()
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .disabled(self.showSideMenu)
-                            .overlay(self.showSideMenu ? Color.black.opacity(0.6) : nil)
-                    }
+                    MainView()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .disabled(showSideMenu)
+                        .overlay(showSideMenu ? Color.black.opacity(0.6) : nil)
 
-                    SideMenu(isOpen: self.$showSideMenu)
+                    SideMenu(isOpen: $showSideMenu, offset: $sideMenuOffset)
                 }
             }
-        }.navigationViewStyle(StackNavigationViewStyle())
+            // This is really strange bug of swiftUI.
+            // Without the following code, weird space is inserted
+            // above the content of NavigationView.
+            // https://stackoverflow.com/a/57518324/17445616
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

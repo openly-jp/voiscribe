@@ -1,46 +1,78 @@
+import PartialSheet
 import SwiftUI
 
 @main
-struct whisperTestApp: App {
-    init() {
-        #if DEBUG
-            var injectionBundlePath = "/Applications/InjectionIII.app/Contents/Resources"
-            #if targetEnvironment(macCatalyst)
-                injectionBundlePath = "\(injectionBundlePath)/macOSInjection.bundle"
-            #elseif os(iOS)
-                injectionBundlePath = "\(injectionBundlePath)/iOSInjection.bundle"
-            #endif
-            Bundle(path: injectionBundlePath)?.load()
-        #endif
-    }
-
+struct WhisperTestApp: App {
     var body: some Scene {
         WindowGroup {
-            startView()
+            StartView()
         }
     }
 }
 
-struct startView: View {
-    @State var isLoading: Bool = true
+struct StartView: View {
+    @State var isLoading: Bool
     @State var recognizer: WhisperRecognizer?
-    @AppStorage(UserDefaultASRModelNameKey) var defaultModelName = "ggml-tiny.en"
+
+    @AppStorage var defaultModelSize: Size
+    @AppStorage var defaultModelLanguage: Lang
+
+    init() {
+        isLoading = true
+        _defaultModelSize = AppStorage(wrappedValue: Size(), userDefaultModelSizeKey)
+        _defaultModelLanguage = AppStorage(wrappedValue: Lang(), userDefaultModelLanguageKey)
+        for modelSize in Size.allCases {
+            for modelLang in [Lang.en, Lang.multi] {
+                let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLang)"
+                UserDefaults.standard.set(false, forKey: isDownloadingKey)
+            }
+        }
+    }
 
     var body: some View {
         if isLoading {
-            Image("icon")
-                .resizable()
-                .frame(width: 60, height: 60)
-                .onAppear {
-                    DispatchQueue.global(qos: .userInteractive).async {
-                        recognizer = WhisperRecognizer(modelName: defaultModelName)
-                        isLoading = false
-                    }
+            ZStack {
+                ZStack {
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 0, green: 0.549, blue: 0.8352),
+                            Color(red: 0.15, green: 0.3333, blue: 0.6666),
+                            Color(red: 0.3725, green: 0.0901, blue: 0.3019),
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .aspectRatio(contentMode: .fill)
+                    .ignoresSafeArea()
                 }
-            Text(APP_NAME)
+                VStack {
+                    Image("iconwhite")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 128)
+                        .onAppear {
+                            DispatchQueue.global(qos: .userInteractive).async {
+                                let whisperModel = WhisperModel(
+                                    size: defaultModelSize,
+                                    language: defaultModelLanguage
+                                )
+                                whisperModel.loadModel { err in
+                                    if let err { Logger.error(err); return }
+
+                                    recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
+                                    isLoading = false
+                                }
+                            }
+                        }
+                    Spacer().frame(height: 15)
+                    Text(APP_NAME)
+                        .foregroundColor(.white)
+                }
+            }
         } else {
             HomeView()
                 .environmentObject(recognizer!)
+                .attachPartialSheetToRoot()
         }
     }
 }
