@@ -137,7 +137,10 @@ struct RecognitionPresetRow: View {
                         CircularProgressBar(progress: $progressValue)
                             .frame(width: iconSize, height: iconSize)
                     } else {
-                        if isDownloaded {
+                        if isDownloaded || WhisperModelRepository.isModelBundled(
+                            size: modelSize,
+                            language: modelLanguage
+                        ) {
                             Image(systemName: "checkmark.icloud.fill")
                                 .font(.system(size: iconSize))
                                 .offset(x: downloadIconOffset)
@@ -202,7 +205,7 @@ struct RecognitionPresetRow: View {
             isShowAlert = isDownloading || isSelected ? false : true
         }
         .alert(isPresented: $isShowAlert) {
-            isDownloaded ?
+            isDownloaded || WhisperModelRepository.isModelBundled(size: modelSize, language: modelLanguage) ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
