@@ -188,11 +188,11 @@ struct RecognitionPresetRow: View {
                         .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
                     ForEach(0 ..< modelSize.speed) { _ in
-                        Image(systemName: "car.side.fill")
+                        Image(systemName: "hare.fill")
                             .frame(width: geometryWidth / 15)
                     }
                     ForEach(0 ..< 3 - modelSize.speed) { _ in
-                        Image(systemName: "car.side")
+                        Image(systemName: "hare")
                             .frame(width: geometryWidth / 15)
                     }
                 }
