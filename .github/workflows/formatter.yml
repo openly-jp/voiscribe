@@ -15,7 +15,7 @@ jobs:
       uses: Cyberbeni/install-swift-tool@v2
       with:
         url: https://github.com/nicklockwood/SwiftFormat
-        branch: 'master'
+        version: "0.50.9"
         use-cache: true
     - name: Lint
-      run: swiftformat --lint --verbose .
+      run: swiftformat --lint .
