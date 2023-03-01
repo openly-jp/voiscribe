@@ -131,6 +131,7 @@ class WhisperRecognizer: Recognizer {
             recognizingSpeech.tmpAudioDataList.append(originalAudioData)
             // append remaining previous audioData to originalAudioData
             var audioData = recognizingSpeech.remainingAudioData + originalAudioData
+            let audioDataMSec = Int64(audioData.count / 16000 * 1000)
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
             } catch {
@@ -152,7 +153,8 @@ class WhisperRecognizer: Recognizer {
                     params.offset_ms = 0
                     params.no_context = true
                     params.single_segment = false
-                    params.suppress_non_speech_tokens = true
+                    // suppress hallucination for english
+                    params.suppress_non_speech_tokens = language == Language.en ? false : true
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
@@ -174,8 +176,16 @@ class WhisperRecognizer: Recognizer {
                 for i in 0 ..< nSegments {
                     let text = String(cString: whisper_full_get_segment_text(context, i))
                     let startMSec = whisper_full_get_segment_t0(context, i) * 10 + baseStartMSec
-                    let endMSec = whisper_full_get_segment_t1(context, i) * 10 + baseStartMSec
-                    lastEndMSec = whisper_full_get_segment_t1(context, i) * 10
+                    // whisper sometimes exceeds audioDataMSec, so we need to check it
+                    let segmentEndMSec = whisper_full_get_segment_t1(context, i) * 10
+                    var endMSec: Int64 = 0
+                    if segmentEndMSec > audioDataMSec {
+                        endMSec = audioDataMSec + baseStartMSec
+                        lastEndMSec = audioDataMSec
+                    } else {
+                        endMSec = segmentEndMSec + baseStartMSec
+                        lastEndMSec = segmentEndMSec
+                    }
                     let transcriptionLine = TranscriptionLine(
                         startMSec: startMSec,
                         endMSec: endMSec,
