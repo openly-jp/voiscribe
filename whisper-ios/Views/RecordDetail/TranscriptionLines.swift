@@ -135,13 +135,13 @@ struct TranscriptionLines: View {
                     isEditing = true
                     focusedTranscriptionLineId = transcriptionLine.id
                 } label: {
-                    Label("編集", systemImage: "pencil")
+                    Label(NSLocalizedString("編集", comment: ""), systemImage: "pencil")
                 }
 
                 Button {
                     UIPasteboard.general.string = transcriptionLine.text
                 } label: {
-                    Label("コピー", systemImage: "doc.on.doc")
+                    Label(NSLocalizedString("コピー", comment: ""), systemImage: "doc.on.doc")
                 }
             }
             Divider()
