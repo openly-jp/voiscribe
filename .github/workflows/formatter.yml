@@ -18,4 +18,4 @@ jobs:
         branch: 'master'
         use-cache: true
     - name: Lint
-      run: swiftformat --lint .
+      run: swiftformat --lint --verbose .
