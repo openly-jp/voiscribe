@@ -154,7 +154,7 @@ class WhisperRecognizer: Recognizer {
                     params.no_context = true
                     params.single_segment = false
                     // suppress hallucination for english
-                    params.suppress_non_speech_tokens = language == Language.en ? false : true
+                    params.suppress_non_speech_tokens = language == Language.en ? false : false
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
 
