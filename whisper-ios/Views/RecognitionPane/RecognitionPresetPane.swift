@@ -210,7 +210,7 @@ struct RecognitionPresetRow: View {
                 )
                 : Alert(
                     title: Text("モデルをダウンロードしますか?"),
-                    message: Text("\(modelSize.megabytes) MBの通信容量が必要です"),
+                    message: Text("\(getModelMegaBytes(size:modelSize, lang:modelLanguage)) MBの通信容量が必要です"),
                     primaryButton: .cancel(Text("キャンセル")),
                     secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
                 )

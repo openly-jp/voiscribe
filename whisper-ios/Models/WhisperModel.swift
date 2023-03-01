@@ -53,17 +53,6 @@ enum Size: String, CaseIterable, Identifiable {
             return 3
         }
     }
-
-    var megabytes: Int {
-        switch self {
-        case .base:
-            return 148
-        case .small:
-            return 488
-        case .medium:
-            return 1530
-        }
-    }
 }
 
 enum Lang: String, Identifiable, CaseIterable {
@@ -85,6 +74,28 @@ enum Lang: String, Identifiable, CaseIterable {
         } else {
             self = .en
         }
+    }
+}
+
+func getModelMegaBytes(
+    size: Size,
+    lang: Lang
+) -> Int {
+    switch (size, lang) {
+    case (Size.base, Lang.en):
+        return 148
+    case (Size.base, Lang.multi):
+        return 148
+    case (Size.small, Lang.en):
+        return 160
+    case (Size.small, Lang.multi):
+        return 488
+    case (Size.medium, Lang.en):
+        return 469
+    case (Size.medium, Lang.multi):
+        return 1530
+    default:
+        return -1
     }
 }
 
