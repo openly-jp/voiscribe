@@ -1,0 +1,6 @@
+/* Bundle name */
+"CFBundleName" = "VoiScribe";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "録音のためにマイクの使用を許可してください。";
+

@@ -7,10 +7,9 @@ let sideMenuCloseOffset: CGFloat = -1 * sideMenuWidth
 struct SideMenu: View {
     @Binding var isOpen: Bool
     @Binding var offset: CGFloat
+
     let menuItems: [MenuItem] = [
         modelLoadMenuItem,
-        recognitionFrequencySecMenuItem,
-        languageSelectMenuItem,
         appInfoMenuItem,
     ]
 

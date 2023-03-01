@@ -41,7 +41,7 @@ let AppInfoSubMenuItems = [
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
         NavigationLink(destination: LicenseView()) {
-            AppInfoSubMenuItemView(title: "ライセンス")
+            AppInfoSubMenuItemView(title: NSLocalizedString("ライセンス", comment: ""))
         }
     ), subMenuItems: nil),
 ]

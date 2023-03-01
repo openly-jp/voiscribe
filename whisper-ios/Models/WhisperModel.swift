@@ -1,40 +1,120 @@
 import Foundation
 
-enum Size: String {
-    case tiny
+enum Size: String, CaseIterable, Identifiable {
     case base
     case small
     case medium
 
     init() {
-        self = .tiny
+        guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
+            self = .base
+            return
+        }
+
+        if deviceLanguageCode == "ja" {
+            self = .small
+        } else {
+            self = .base
+        }
+    }
+
+    // just for ForEach operation
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .base:
+            return "Base"
+        case .small:
+            return "Small"
+        case .medium:
+            return "Medium"
+        }
+    }
+
+    var speed: Int {
+        switch self {
+        case .base:
+            return 3
+        case .small:
+            return 2
+        case .medium:
+            return 1
+        }
+    }
+
+    var accuracy: Int {
+        switch self {
+        case .base:
+            return 1
+        case .small:
+            return 2
+        case .medium:
+            return 3
+        }
+    }
+
+    var megabytes: Int {
+        switch self {
+        case .base:
+            return 148
+        case .small:
+            return 488
+        case .medium:
+            return 1530
+        }
     }
 }
 
-enum Lang: String {
+enum Lang: String, Identifiable, CaseIterable {
     case ja
     case en
     case multi
 
+    // just for ForEach operation
+    var id: String { rawValue }
+
     init() {
-        self = .en
+        guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
+            self = .en
+            return
+        }
+
+        if deviceLanguageCode == "ja" {
+            self = .multi
+        } else {
+            self = .en
+        }
     }
 }
+
+let userDefaultWhisperModelDownloadPrefix = "user-default-whisper-model-download" // "-" + size + "-" + lang
+let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
 
 class WhisperModel: Identifiable, ObservableObject {
     var localPath: URL?
     var size: Size
     var language: Lang
     var whisperContext: OpaquePointer?
-    @Published var isDownloaded: Bool
+
+    var isDownloaded: Bool
 
     init(size: Size, language: Lang) {
         self.size = size
         self.language = language
 
-        isDownloaded = WhisperModelRepository.modelExists(size: size, language: language)
+        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
+        if UserDefaults.standard.object(forKey: isDownloadedKey) == nil {
+            let isModelExists = WhisperModelRepository.modelExists(
+                size: size,
+                language: language
+            )
+            UserDefaults.standard.set(isModelExists, forKey: isDownloadedKey)
+        }
+        isDownloaded = UserDefaults.standard.object(forKey: isDownloadedKey) as! Bool
+
         if isDownloaded {
-            if size == .tiny {
+            if WhisperModelRepository.isModelBundled(size: size, language: language) {
                 let urlStr = Bundle.main.path(
                     forResource: "ggml-\(size.rawValue).\(language.rawValue)",
                     ofType: "bin"
@@ -54,7 +134,15 @@ class WhisperModel: Identifiable, ObservableObject {
         self.localPath = localPath
         self.size = size
         self.language = language
-        isDownloaded = true
+        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
+        if UserDefaults.standard.object(forKey: key) == nil {
+            let isModelExists = WhisperModelRepository.modelExists(
+                size: size,
+                language: language
+            )
+            UserDefaults.standard.set(isModelExists, forKey: key)
+        }
+        isDownloaded = UserDefaults.standard.object(forKey: key) as! Bool
     }
 
     var name: String {
@@ -76,7 +164,11 @@ class WhisperModel: Identifiable, ObservableObject {
             switch result {
             case let .success(modelURL):
                 self.localPath = modelURL
-                DispatchQueue.main.async { self.isDownloaded = true }
+                DispatchQueue.main.async {
+                    self.isDownloaded = true
+                    let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
+                    UserDefaults.standard.set(true, forKey: key)
+                }
             case let .failure(error):
                 self.isDownloaded = false
                 err = NSError(
