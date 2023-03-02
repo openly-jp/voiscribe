@@ -7,14 +7,14 @@ enum Size: String, CaseIterable, Identifiable {
 
     init() {
         guard let deviceLanguageCode = Locale(identifier: Locale.preferredLanguages.first!).languageCode else {
-            self = .base
+            self = .small
             return
         }
 
         if deviceLanguageCode == "ja" {
             self = .small
         } else {
-            self = .base
+            self = .small
         }
     }
 
