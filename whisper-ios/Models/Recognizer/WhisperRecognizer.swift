@@ -173,8 +173,18 @@ class WhisperRecognizer: Recognizer {
                     : 0
                 let nSegments = whisper_full_n_segments(context)
                 var lastEndMSec: Int64 = 0
+
+                var newPromptTokens: [Int32] = []
+                var previousSegmentText = ""
+
                 for i in 0 ..< nSegments {
-                    let text = String(cString: whisper_full_get_segment_text(context, i))
+                    var newSegmentTokens: [Int32] = []
+                    let tokenCount = whisper_full_n_tokens(context, i)
+                    for j in 0 ..< tokenCount {
+                        let tokenId = whisper_full_get_token_id(context, i, j)
+                        newSegmentTokens.append(tokenId)
+                    }
+                    let newSegmentText = String(cString: whisper_full_get_segment_text(context, i))
                     let startMSec = whisper_full_get_segment_t0(context, i) * 10 + baseStartMSec
                     // whisper sometimes exceeds audioDataMSec, so we need to check it
                     let segmentEndMSec = whisper_full_get_segment_t1(context, i) * 10
@@ -186,32 +196,27 @@ class WhisperRecognizer: Recognizer {
                         endMSec = segmentEndMSec + baseStartMSec
                         lastEndMSec = segmentEndMSec
                     }
-                    let transcriptionLine = TranscriptionLine(
-                        startMSec: startMSec,
-                        endMSec: endMSec,
-                        text: text,
-                        ordering: baseOrdering + i
-                    )
-                    recognizingSpeech.transcriptionLines.append(transcriptionLine)
+                    // suppress repetition
+                    if newSegmentText != previousSegmentText {
+                        newPromptTokens.append(contentsOf: newSegmentTokens)
+                        previousSegmentText = newSegmentText
+
+                        let transcriptionLine = TranscriptionLine(
+                            startMSec: startMSec,
+                            endMSec: endMSec,
+                            text: newSegmentText,
+                            ordering: baseOrdering + i
+                        )
+                        recognizingSpeech.transcriptionLines.append(transcriptionLine)
+                    }
                 }
+                // in some case, original last.endMsec is not accurate becase of repetition suppression
+                // to deal it, modify last.endMsec here
+                recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + lastEndMSec
                 // update promptTokens
                 if isPromptingActive {
-                    let oldPromptTokens = recognizingSpeech.promptTokens
-                    var newPromptTokens: [Int32] = []
                     recognizingSpeech.promptTokens.removeAll()
-                    for i in 0 ..< nSegments {
-                        let tokenCount = whisper_full_n_tokens(context, i)
-                        for j in 0 ..< tokenCount {
-                            let tokenId = whisper_full_get_token_id(context, i, j)
-                            newPromptTokens.append(tokenId)
-                        }
-                    }
-                    // reset promptTokens if new and old promptTokens are the same
-                    if newPromptTokens == oldPromptTokens {
-                        recognizingSpeech.promptTokens = []
-                    } else {
-                        recognizingSpeech.promptTokens = newPromptTokens
-                    }
+                    recognizingSpeech.promptTokens = newPromptTokens
                 }
                 // update remaining audioData
                 if isRemainingAudioConcatActive {
