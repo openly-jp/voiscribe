@@ -224,7 +224,7 @@ struct RecognitionPane: View {
     }
 
     var transcriptionLinesView: some View {
-        ScrollViewReader { scrollReader in
+        ScrollViewReader { _ in
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
@@ -248,18 +248,6 @@ struct RecognitionPane: View {
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
             .padding()
-            .onAppear {
-                // TODO: 毎秒スクロールを試行するのは負荷が大きいため、認識ごとにスクロールするようにしたい
-                recognizedResultsScrollTimer = Timer.scheduledTimer(
-                    withTimeInterval: 1,
-                    repeats: true
-                ) { _ in
-                    withAnimation {
-                        scrollReader.scrollTo(recognizingSpeech!.transcriptionLines.count - 1, anchor: .bottom)
-                    }
-                }
-                RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
-            }
         }
     }
 

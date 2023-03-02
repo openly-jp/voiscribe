@@ -51,6 +51,7 @@
 		57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */; };
 		5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284D029A79EA5008E848F /* Localizable.strings */; };
 		5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284D229A79F61008E848F /* InfoPlist.strings */; };
+		5A733C1929B10C59002B397C /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A733C1829B10C59002B397C /* ggml-small.en.bin */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -135,6 +136,7 @@
 		5A2284D129A79EA9008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A2284D329A79F61008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5A2284DF29ABB437008E848F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5A733C1829B10C59002B397C /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-small.en.bin"; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* VoiScribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiScribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -415,8 +417,8 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A733C1829B10C59002B397C /* ggml-small.en.bin */,
 				1324459829AFAA2A0063A4D5 /* ggml-small.multi.bin */,
-				1324459429AFA9370063A4D5 /* ggml-small.en.bin */,
 				572D0CA529A17F4800D62256 /* sample_ja.wav */,
 				572D0CA229A17BCA00D62256 /* sample_ja.csv */,
 			);
@@ -548,9 +550,9 @@
 			files = (
 				572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */,
 				1324459929AFAA2A0063A4D5 /* ggml-small.multi.bin in Resources */,
-				1324459529AFA9370063A4D5 /* ggml-small.en.bin in Resources */,
 				572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
+				5A733C1929B10C59002B397C /* ggml-small.en.bin in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
 				5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */,
 				5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */,
