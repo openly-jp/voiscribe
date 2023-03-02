@@ -98,7 +98,10 @@
 "録音開始" = "Start";
 
 /* No comment provided by engineer. */
-"認識中はモデルを変更できません" = "Cannot change recognition model";
+"現在はモデルを変更できません" = "Currently Cannot Change Recognition Model";
+
+/* No comment provided by engineer. */
+"録音は行えます" = "Recording is possible";
 
 /* No comment provided by engineer. */
 "おすすめ" = "Recommend";

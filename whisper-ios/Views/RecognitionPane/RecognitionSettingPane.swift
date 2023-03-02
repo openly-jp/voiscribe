@@ -97,9 +97,9 @@ struct RecognitionSettingPane: View {
             }
             .alert(isPresented: $isRecognizingAlertOpen) {
                 Alert(
-                    title: Text("認識中はモデルを変更できません"),
+                    title: Text("現在はモデルを変更できません"),
                     message:
-                    Text("認識終了後に再度お試しください"),
+                    Text("録音は行えます"),
                     dismissButton: .default(Text("了解"))
                 )
             }
