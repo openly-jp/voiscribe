@@ -173,10 +173,10 @@ class WhisperRecognizer: Recognizer {
                     : 0
                 let nSegments = whisper_full_n_segments(context)
                 var lastEndMSec: Int64 = 0
-                
+
                 var newPromptTokens: [Int32] = []
                 var previousSegmentText = ""
-                
+
                 for i in 0 ..< nSegments {
                     var newSegmentTokens: [Int32] = []
                     let tokenCount = whisper_full_n_tokens(context, i)
@@ -200,7 +200,7 @@ class WhisperRecognizer: Recognizer {
                     if newSegmentText != previousSegmentText {
                         newPromptTokens.append(contentsOf: newSegmentTokens)
                         previousSegmentText = newSegmentText
-                        
+
                         let transcriptionLine = TranscriptionLine(
                             startMSec: startMSec,
                             endMSec: endMSec,
