@@ -16,7 +16,7 @@ struct MainView: View {
         try! session.setCategory(
             .playAndRecord,
             mode: .default,
-            options: [.mixWithOthers, .defaultToSpeaker]
+            options: [.mixWithOthers, .defaultToSpeaker, .allowBluetooth]
         )
         try! session.setActive(true)
     }
