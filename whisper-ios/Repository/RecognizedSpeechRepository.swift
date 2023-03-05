@@ -13,6 +13,24 @@ extension CoreDataRepository {
         CoreDataRepository.save()
     }
 
+    static func addTranscriptionLinesToRecognizedSpeech(recognizedSpeech: RecognizedSpeech, transcriptionLines: [TranscriptionLine]) {
+        guard let rsEntity: RecognizedSpeechData = CoreDataRepository.getById(uuid: recognizedSpeech.id) else {
+            fatalError("object with id: \(recognizedSpeech.id.uuidString) is not found.")
+        }
+        guard let rsContext = rsEntity.managedObjectContext else {
+            fatalError("context with id: \(recognizedSpeech.id.uuidString) is not found.")
+        }
+        for tl in transcriptionLines {
+            let tlEntity = TranscriptionLineData.new(tl, inContext: rsContext)
+            tlEntity.recognizedSpeech = rsEntity
+            rsEntity.addToTranscriptionLines(tlEntity)
+            CoreDataRepository.add(tlEntity)
+        }
+
+        CoreDataRepository.update(rsEntity)
+        CoreDataRepository.save()
+    }
+
     static func getAllRecognizedSpeeches() -> [RecognizedSpeech] {
         let request = RecognizedSpeechData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]

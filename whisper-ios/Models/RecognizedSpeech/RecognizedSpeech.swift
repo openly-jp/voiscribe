@@ -41,7 +41,7 @@ class RecognizedSpeech: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    var tmpAudioDataList: [[Float32]] = []
+    var tmpAudioData: [Float32] = []
     var promptTokens: [Int32] = []
     var remainingAudioData: [Float32] = []
 
@@ -50,6 +50,22 @@ class RecognizedSpeech: Identifiable {
         id = UUID()
         title = NSLocalizedString("未定", comment: "")
         self.audioFileURL = audioFileURL
+        self.language = language
+        transcriptionLines = []
+        createdAt = Date()
+        updatedAt = Date()
+    }
+    
+    init(language: Language) {
+        id = UUID()
+        title = NSLocalizedString("未定", comment: "")
+        // create initial URL
+        let paths = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+        )
+        let docsDirect = paths[0]
+        audioFileURL = docsDirect.appendingPathComponent("\(id.uuidString).m4a")
         self.language = language
         transcriptionLines = []
         createdAt = Date()

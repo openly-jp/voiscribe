@@ -49,6 +49,13 @@ struct RecognitionSettingSheetModifier: ViewModifier {
     }
 }
 
+let recordSettings = [
+        AVFormatIDKey: Int(kAudioFormatLinearPCM),
+        AVSampleRateKey: 16000,
+        AVNumberOfChannelsKey: 1,
+        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
+    ]
+
 struct RecognitionPane: View {
     // MARK: - Recording state
 
@@ -65,13 +72,6 @@ struct RecognitionPane: View {
     @State var updateWaveformTimer: Timer?
     @State var streamingRecognitionTimer: Timer?
     @State var recognizedResultsScrollTimer: Timer?
-
-    let recordSettings = [
-        AVFormatIDKey: Int(kAudioFormatLinearPCM),
-        AVSampleRateKey: 16000,
-        AVNumberOfChannelsKey: 1,
-        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
-    ]
 
     // MARK: - ASR state
 
@@ -262,11 +262,21 @@ struct RecognitionPane: View {
 
         tmpAudioFileNumber = 0
         maxAmp = 0
+
+        // this audioFileURL is dummy
         recognizingSpeech = RecognizedSpeech(
-            audioFileURL: getTmpURLByNumber(number: tmpAudioFileNumber),
             language: language
         )
+        // save empty audioData
+        do {
+            try saveAudioData(audioFileURL: recognizingSpeech!.audioFileURL, audioData: [0])
+        } catch {
+            fatalError("failed to save audioData")
+        }
+        CoreDataRepository.saveRecognizedSpeech(recognizingSpeech!)
         recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
+        recognizedSpeeches.insert(recognizingSpeech!, at: 0)
+        isRecordDetailActives.insert(false, at: 0)
 
         elapsedTime = 0
         idAmps = []
@@ -337,8 +347,7 @@ struct RecognitionPane: View {
             callback: streamingRecognitionPostProcess,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
-        recognizedSpeeches.insert(recognizingSpeech, at: 0)
-        isRecordDetailActives.insert(true, at: 0)
+        isRecordDetailActives[0] = true
     }
 
     func abortRecording() {
@@ -353,7 +362,15 @@ struct RecognitionPane: View {
         isPaneOpen = false
         isConfirmOpen = false
 
+        CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizingSpeech!)
+        do {
+            try FileManager.default.removeItem(at: recognizingSpeech!.audioFileURL)
+        } catch {
+            Logger.error("failed to remove audioFileURL")
+        }
+        isRecordDetailActives.remove(at: 0)
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
+        recognizedSpeeches.removeAll(where: { $0.id == recognizingSpeech!.id })
     }
 
     func recordingInterruptionHandler(notification: Notification) {
@@ -409,44 +426,6 @@ struct RecognitionPane: View {
     /// post process (e.g. audio concatenation)
     /// this func is called in streaming recognizer
     func streamingRecognitionPostProcess(recognizedSpeech: RecognizedSpeech) {
-        var audioData: [Float32] = []
-        let tmpAudioDataList = recognizedSpeech.tmpAudioDataList
-        for tmpAudioData in tmpAudioDataList {
-            audioData = audioData + tmpAudioData
-        }
-        guard let format = AVAudioFormat(
-            commonFormat: .pcmFormatFloat32,
-            sampleRate: 16000,
-            channels: 1,
-            interleaved: false
-        ) else {
-            Logger.error("format load error")
-            return
-        }
-        guard let pcmBuffer = AVAudioPCMBuffer(
-            pcmFormat: format,
-            frameCapacity: AVAudioFrameCount(audioData.count)
-        ) else {
-            Logger.error("audio load error")
-            return
-        }
-        for i in 0 ..< audioData.count {
-            pcmBuffer.floatChannelData!.pointee[i] = Float(audioData[i])
-        }
-        pcmBuffer.frameLength = AVAudioFrameCount(audioData.count)
-        let newURL = getURLByName(fileName: "\(recognizedSpeech.id.uuidString).m4a")
-        guard let audioFile = try? AVAudioFile(forWriting: newURL, settings: recordSettings) else {
-            Logger.error("audio load error")
-            return
-        }
-        guard let _ = try? audioFile.write(from: pcmBuffer) else {
-            Logger.error("audio write error")
-            return
-        }
-        recognizedSpeech.audioFileURL = newURL
-
-        CoreDataRepository.saveRecognizedSpeech(recognizedSpeech)
-
         recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
 
@@ -532,6 +511,33 @@ func getURLByName(fileName: String) -> URL {
     let docsDirect = paths[0]
     let url = docsDirect.appendingPathComponent(fileName)
     return url
+}
+
+func saveAudioData(audioFileURL: URL, audioData: [Float32]) throws{
+    guard let format = AVAudioFormat(
+        commonFormat: .pcmFormatFloat32,
+        sampleRate: 16000,
+        channels: 1,
+        interleaved: false
+    ) else {
+        throw NSError(domain: "format load error", code: -1)
+    }
+    guard let pcmBuffer = AVAudioPCMBuffer(
+        pcmFormat: format,
+        frameCapacity: AVAudioFrameCount(audioData.count)
+    ) else {
+        throw NSError(domain: "audio load error", code: -1)
+    }
+    for i in 0 ..< audioData.count {
+        pcmBuffer.floatChannelData!.pointee[i] = Float(audioData[i])
+    }
+    pcmBuffer.frameLength = AVAudioFrameCount(audioData.count)
+    guard let audioFile = try? AVAudioFile(forWriting: audioFileURL, settings: recordSettings) else {
+        throw NSError(domain: "audio load error", code: -1)
+    }
+    guard let _ = try? audioFile.write(from: pcmBuffer) else {
+        throw NSError(domain: "audio write error", code: -1)
+    }
 }
 
 struct RecognitionPane_Previews: PreviewProvider {

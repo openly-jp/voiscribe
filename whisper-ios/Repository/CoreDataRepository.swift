@@ -29,6 +29,14 @@ extension CoreDataRepository {
         )!
         return T(entity: entityDescription, insertInto: nil)
     }
+
+    static func entity<T: NSManagedObject>(inContext: NSManagedObjectContext) -> T {
+        let entityDescription = NSEntityDescription.entity(
+            forEntityName: String(describing: T.self),
+            in: inContext
+        )!
+        return T(entity: entityDescription, insertInto: inContext)
+    }
 }
 
 // MARK: CRUD
@@ -55,6 +63,10 @@ extension CoreDataRepository {
 
     static func add(_ object: NSManagedObject) {
         context.insert(object)
+    }
+
+    static func update(_ object: NSManagedObject) {
+        context.refresh(object, mergeChanges: true)
     }
 
     static func delete(_ object: NSManagedObject) {
