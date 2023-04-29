@@ -101,6 +101,7 @@ struct RecognitionPane: View {
     @State var isBackground = false
 
     var body: some View {
+        VStack {
         RecordingController(
             isRecording: $isRecording,
             isPaused: $isPaused,
@@ -147,6 +148,7 @@ struct RecognitionPane: View {
                     isBackground = false
                 }
             }
+    }
     }
 
     var recordingSheet: some View {
