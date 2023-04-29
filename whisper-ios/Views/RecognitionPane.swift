@@ -13,6 +13,8 @@ struct RecognitionSettingSheetModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         if isPhone {
+            // Preview is not working with `.partialSheet` modifier somehow
+            // so normal `.sheet` can be used for the preview.
             content
                 .partialSheet(isPresented: $isSheetOpen) {
                     RecognitionSettingPane(startAction: startAction)
