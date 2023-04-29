@@ -175,7 +175,7 @@ struct RecognitionPane: View {
                     maxAmp: $maxAmp,
                     removeIdAmps: true
                 )
-                .frame(height: 250)
+                .frame(height: 100)
 
                 if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
                     Group {
