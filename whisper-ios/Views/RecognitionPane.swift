@@ -125,8 +125,10 @@ struct RecognitionPane: View {
             )
             .frame(height: 0)
             .hidden()
-            .modifier(RecognitionSettingSheetModifier(isSheetOpen: $isRecognitionSettingPaneOpen,
-                                                      startAction: startRecording))
+                .modifier(RecognitionSettingSheetModifier(
+                    isSheetOpen: $isRecognitionSettingPaneOpen,
+                    startAction: startRecording
+                ))
             .sheet(isPresented: $isPaneOpen) { recordingSheet }
             .onChange(of: scenePhase) {
                 newPhase in
