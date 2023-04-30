@@ -3,6 +3,9 @@ import DequeModule
 import PartialSheet
 import SwiftUI
 
+let RECORDING_SHEET_COLOR = Color(.systemBackground)
+let BOTTOM_ID = "bottom-id"
+
 struct RecognitionSettingSheetModifier: ViewModifier {
     @EnvironmentObject var recognizer: WhisperRecognizer
 
@@ -95,6 +98,32 @@ struct RecognitionPane: View {
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
 
+    // MARK: - scroll states
+
+    // Scroll management is quite complicated.
+    // Even if new transcriptions are added to `recognizingSpeech.transcriptionLines`,
+    // those are not rendered right after that
+    // because `recognizingSpeech` is not a `ObservableObject`.
+    // The new transcriptions are rendered a bit later
+    // when the view is updated with other state transitions like `idAmps`.
+    // By using the `callback` argument of `recognizer.streamingRecognize` function,
+    // we can detect when the new transcriptions are added,
+    // but automatic scroll cannot be done at the moment
+    // because those new transcriptions are not rendered yet.
+    // Thus we have to use Timer to wait until those are rendered.
+    //
+    // `wasScrollAtBottom` state represents that scroll was at the bottom
+    // before new transcriptions were rendered.
+    // `ProgressView` is always shown under the rendered transcriptions.
+    // This means that when user's scroll is at the bottom,
+    // `ProgressView` is hidden temporarily and `isScrollAtBottom` becomes `false`
+    // after new transcriptions are rendered.
+    // Therefore `wasScrollAtBottom=true && isScrollAtBottom=false` represents that
+    // new transcriptions are rendered and automatic scroll should be executed.
+    @State var isScrollAtTop = true
+    @State var wasScrollAtBottom = true
+    @State var isScrollAtBottom = true
+
     // MARK: - background related state
 
     @Environment(\.scenePhase) var scenePhase
@@ -102,61 +131,61 @@ struct RecognitionPane: View {
 
     var body: some View {
         VStack {
-        RecordingController(
-            isRecording: $isRecording,
-            isPaused: $isPaused,
-            isPaneOpen: $isPaneOpen,
-            isRecognitionSettingOpen: $isRecognitionSettingPaneOpen,
-            startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
-            stopAction: pauseRecording,
-            elapsedTime: elapsedTime,
-            idAmps: $idAmps,
-            maxAmp: $maxAmp
-        )
-
-        // The Views used inside RecordingController changes when recording starts,
-        // so if a sheet is defined for RecordingController,
-        // the animation of the sheet rising on top of the view is lost.
-        // To prevent this, provide an unchanged view with height 0 at the start of recording
-        // and define the sheet for it, so that the animation is performed correctly.
-        Rectangle()
-            .onReceive(
-                NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
-                perform: recordingInterruptionHandler
+            RecordingController(
+                isRecording: $isRecording,
+                isPaused: $isPaused,
+                isPaneOpen: $isPaneOpen,
+                isRecognitionSettingOpen: $isRecognitionSettingPaneOpen,
+                startAction: (isRecording && isPaused) ? resumeRecording : startRecording,
+                stopAction: pauseRecording,
+                elapsedTime: elapsedTime,
+                idAmps: $idAmps,
+                maxAmp: $maxAmp
             )
-            .frame(height: 0)
-            .hidden()
+
+            // The Views used inside RecordingController changes when recording starts,
+            // so if a sheet is defined for RecordingController,
+            // the animation of the sheet rising on top of the view is lost.
+            // To prevent this, provide an unchanged view with height 0 at the start of recording
+            // and define the sheet for it, so that the animation is performed correctly.
+            Rectangle()
+                .onReceive(
+                    NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+                    perform: recordingInterruptionHandler
+                )
+                .frame(height: 0)
+                .hidden()
                 .modifier(RecognitionSettingSheetModifier(
                     isSheetOpen: $isRecognitionSettingPaneOpen,
                     startAction: startRecording
                 ))
-            .sheet(isPresented: $isPaneOpen) { recordingSheet }
-            .onChange(of: scenePhase) {
-                newPhase in
-                if newPhase == .background, isRecording, !isPaused {
-                    streamingRecognitionTimer?.invalidate()
-                    // to distinguish background or inactive (e.g. Control Panel)
-                    isBackground = true
-                } else if newPhase == .active, isRecording, !isPaused, isBackground {
-                    streamingRecognitionTimer = Timer.scheduledTimer(
-                        withTimeInterval: Double(recognitionFrequencySec),
-                        repeats: true
-                    ) { _ in
-                        streamingRecognitionTimerFunc()
+                .sheet(isPresented: $isPaneOpen) { recordingSheet }
+                .onChange(of: scenePhase) {
+                    newPhase in
+                    if newPhase == .background, isRecording, !isPaused {
+                        streamingRecognitionTimer?.invalidate()
+                        // to distinguish background or inactive (e.g. Control Panel)
+                        isBackground = true
+                    } else if newPhase == .active, isRecording, !isPaused, isBackground {
+                        streamingRecognitionTimer = Timer.scheduledTimer(
+                            withTimeInterval: Double(recognitionFrequencySec),
+                            repeats: true
+                        ) { _ in
+                            streamingRecognitionTimerFunc()
+                        }
+                        RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
+                        isBackground = false
                     }
-                    RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
-                    isBackground = false
                 }
-            }
-    }
+        }
     }
 
     var recordingSheet: some View {
         NavigationView {
             VStack {
-                HStack { closeButton; Spacer() }
-
                 HStack(spacing: 10) {
+                    closeButton
+                    Spacer()
                     if isPaused {
                         Image(systemName: "pause.fill")
                             .foregroundColor(.gray)
@@ -167,7 +196,14 @@ struct RecognitionPane: View {
                             .blinkEffect()
                     }
                     Text(formatTime(Double(elapsedTime)))
+                    Spacer()
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .hidden()
                 }
+                .padding(.top, 30)
+                .padding(.horizontal, 30)
 
                 Waveform(
                     idAmps: $idAmps,
@@ -175,13 +211,10 @@ struct RecognitionPane: View {
                     maxAmp: $maxAmp,
                     removeIdAmps: true
                 )
-                .frame(height: 100)
+                .frame(height: 80)
 
-                if recognizingSpeech != nil, recognizingSpeech!.transcriptionLines.count > 0 {
-                    Group {
-                        Divider()
-                        transcriptionLinesView
-                    }
+                if recognizingSpeech != nil {
+                    transcriptionLinesView.padding()
                 } else {
                     Spacer()
                 }
@@ -207,7 +240,9 @@ struct RecognitionPane: View {
                     )
                 }
                 .padding(.bottom, 30)
-            }.navigationBarHidden(true)
+            }
+            .navigationBarHidden(true)
+            .background(RECORDING_SHEET_COLOR)
         }
     }
 
@@ -218,7 +253,6 @@ struct RecognitionPane: View {
                 .frame(width: 15, height: 15)
                 .foregroundColor(.gray)
         }
-        .padding(35)
         .alert(isPresented: $isCancelRecognitionAlertOpen) {
             Alert(
                 title: Text("録音を終了しますか？"),
@@ -230,30 +264,79 @@ struct RecognitionPane: View {
     }
 
     var transcriptionLinesView: some View {
-        ScrollViewReader { _ in
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
-                        idx, onGoingTranscriptionLine in
-                        HStack(alignment: .center) {
-                            Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
-                                .frame(width: 50, alignment: .center)
-                                .foregroundColor(Color.blue)
-                                .padding()
-                            Spacer()
-                            Text(onGoingTranscriptionLine.text)
-                                .foregroundColor(Color(.label))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .multilineTextAlignment(.leading)
+        ZStack(alignment: .top) {
+            ScrollViewReader { scrollReader in
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        // The following Rectangle is only used to detect the scroll position.
+                        // LazyVStack is necessary to use this hack.
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(RECORDING_SHEET_COLOR)
+                            .onAppear { isScrollAtTop = true }
+                            .onDisappear { isScrollAtTop = false }
+
+                        ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.element.id) {
+                            idx, onGoingTranscriptionLine in
+                            HStack(alignment: .top) {
+                                Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
+                                    .frame(width: 50, alignment: .center)
+                                    .foregroundColor(Color.blue)
+                                    .padding(.horizontal)
+                                Spacer()
+                                Text(onGoingTranscriptionLine.text)
+                                    .foregroundColor(Color(.label))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            .id(onGoingTranscriptionLine.id)
+                            .padding(.vertical, 10)
+
+                            // The following `.onAppear` and `.onDisappear` also requires
+                            // the parent view to be `LazyVStack`.
+                            .onAppear {
+                                if idx == recognizingSpeech!.transcriptionLines.count - 1 {
+                                    wasScrollAtBottom = true
+                                }
+                            }
+                            .onDisappear {
+                                if idx == recognizingSpeech!.transcriptionLines.count - 1 {
+                                    wasScrollAtBottom = false
+                                }
+                            }
                         }
-                        .padding(10)
-                        .background(getTextColor(lines: &recognizingSpeech!.transcriptionLines, idx))
-                        Divider()
+                        ProgressView()
+                            .id(BOTTOM_ID)
+                            .padding()
+                            .onAppear { isScrollAtBottom = true }
+                            .onDisappear { isScrollAtBottom = false }
+                            .opacity(isPaused ? 0 : 1)
                     }
                 }
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    minHeight: 0,
+                    maxHeight: .infinity,
+                    alignment: .topLeading
+                )
+                .onAppear {
+                    recognizedResultsScrollTimer = Timer.scheduledTimer(
+                        withTimeInterval: 1,
+                        repeats: true
+                    ) { _ in
+                        if wasScrollAtBottom, !isScrollAtBottom {
+                            withAnimation { scrollReader.scrollTo(BOTTOM_ID, anchor: .bottom) }
+                        }
+                    }
+                    RunLoop.main.add(recognizedResultsScrollTimer!, forMode: .common)
+                }
             }
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-            .padding()
+            VStack {
+                if !isScrollAtTop { GradientShadowBlock(isTop: true) }
+                Spacer()
+                if !isScrollAtBottom { GradientShadowBlock(isTop: false) }
+            }
         }
     }
 
@@ -491,14 +574,18 @@ struct RecognitionPane: View {
         RunLoop.main.add(updateWaveformTimer!, forMode: .common)
         RunLoop.main.add(streamingRecognitionTimer!, forMode: .common)
     }
+}
 
-    func getTextColor(lines: inout [TranscriptionLine], _ idx: Int) -> Color {
-        let startMSec = Double(lines[idx].startMSec)
-        let endMSec: Double = idx < lines.count - 1 ? Double(lines[idx + 1].startMSec) : .infinity
-        let currentMSec = Double(elapsedTime * 1000)
-        let isInside = startMSec <= currentMSec && currentMSec < endMSec
-        let uiColor: UIColor = isInside ? .systemGray5 : .systemBackground
-        return Color(uiColor)
+struct GradientShadowBlock: View {
+    let isTop: Bool
+    var body: some View {
+        Rectangle()
+            .fill(LinearGradient(
+                gradient: Gradient(colors: [.clear, RECORDING_SHEET_COLOR]),
+                startPoint: isTop ? .bottom : .top,
+                endPoint: isTop ? .top : .bottom
+            ))
+            .frame(height: 100)
     }
 }
 
