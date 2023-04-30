@@ -49,7 +49,7 @@ struct TranscriptionLines: View {
                 VStack(spacing: 0) {
                     ForEach(
                         Array(recognizedSpeech.transcriptionLines.enumerated()),
-                        id: \.self.element.id
+                        id: \.element.id
                     ) {
                         idx, transcriptionLine in
                         transcriptionLineRow(idx, transcriptionLine, scrollReader)
@@ -231,7 +231,7 @@ struct RecognizingTranscriptionLines: View {
         ScrollViewReader { _ in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.self.offset) {
+                    ForEach(Array(recognizedSpeech.transcriptionLines.enumerated()), id: \.offset) {
                         idx, transcriptionLine in
                         Group {
                             HStack(alignment: .center) {

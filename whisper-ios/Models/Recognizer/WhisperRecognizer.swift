@@ -235,7 +235,7 @@ class WhisperRecognizer: Recognizer {
                 }
                 // when recognizedSpeech deleted during recognizing, this may cause error
                 // to avoid it, do feasibility check before saving audio data and update RecognizedSpeech coredata
-                if feasibilityCheck(recognizingSpeech){
+                if feasibilityCheck(recognizingSpeech) {
                     // update audio data
                     do {
                         try saveAudioData(

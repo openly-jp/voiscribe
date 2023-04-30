@@ -13,7 +13,10 @@ extension CoreDataRepository {
         CoreDataRepository.save()
     }
 
-    static func addTranscriptionLinesToRecognizedSpeech(recognizedSpeech: RecognizedSpeech, transcriptionLines: [TranscriptionLine]) {
+    static func addTranscriptionLinesToRecognizedSpeech(
+        recognizedSpeech: RecognizedSpeech,
+        transcriptionLines: [TranscriptionLine]
+    ) {
         guard let rsEntity: RecognizedSpeechData = CoreDataRepository.getById(uuid: recognizedSpeech.id) else {
             fatalError("object with id: \(recognizedSpeech.id.uuidString) is not found.")
         }

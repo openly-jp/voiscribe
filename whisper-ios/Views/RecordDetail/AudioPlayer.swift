@@ -91,7 +91,7 @@ struct AudioPlayer: View {
         Group {
             NavigationView {
                 List {
-                    ForEach(Array(availableSpeedRates.enumerated()), id: \.self.offset) { idx, speedRate in
+                    ForEach(Array(availableSpeedRates.enumerated()), id: \.offset) { idx, speedRate in
                         Button {
                             speedRateIdx = idx
                             player.rate = Float(speedRate)

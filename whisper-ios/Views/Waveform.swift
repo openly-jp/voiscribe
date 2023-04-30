@@ -34,7 +34,7 @@ struct Waveform: View {
 
     var body: some View {
         GeometryReader { geometry in
-            ForEach(Array(idAmps.enumerated()), id: \.self.element.id) { idx, idAmp in
+            ForEach(Array(idAmps.enumerated()), id: \.element.id) { idx, idAmp in
                 // idAmp.amp: -160 ~ maxAmp
                 // expAmp: exp(-(160 + maxAmp) / sensitivity) ~ 1
                 let expAmp = CGFloat(powf(e, (idAmp.amp - maxAmp) / sensitivity))

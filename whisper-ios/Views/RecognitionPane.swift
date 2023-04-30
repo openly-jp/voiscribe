@@ -50,11 +50,11 @@ struct RecognitionSettingSheetModifier: ViewModifier {
 }
 
 let recordSettings = [
-        AVFormatIDKey: Int(kAudioFormatLinearPCM),
-        AVSampleRateKey: 16000,
-        AVNumberOfChannelsKey: 1,
-        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
-    ]
+    AVFormatIDKey: Int(kAudioFormatLinearPCM),
+    AVSampleRateKey: 16000,
+    AVNumberOfChannelsKey: 1,
+    AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
+]
 
 struct RecognitionPane: View {
     // MARK: - Recording state
@@ -227,7 +227,7 @@ struct RecognitionPane: View {
         ScrollViewReader { _ in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.self.offset) {
+                    ForEach(Array(recognizingSpeech!.transcriptionLines.enumerated()), id: \.offset) {
                         idx, onGoingTranscriptionLine in
                         HStack(alignment: .center) {
                             Text(formatTime(Double(onGoingTranscriptionLine.startMSec) / 1000))
@@ -263,7 +263,6 @@ struct RecognitionPane: View {
         tmpAudioFileNumber = 0
         maxAmp = 0
 
-        // this audioFileURL is dummy
         recognizingSpeech = RecognizedSpeech(
             language: language
         )
@@ -423,8 +422,6 @@ struct RecognitionPane: View {
         recognizingSpeechIds.contains(recognizedSpeech.id)
     }
 
-    /// post process (e.g. audio concatenation)
-    /// this func is called in streaming recognizer
     func streamingRecognitionPostProcess(recognizedSpeech: RecognizedSpeech) {
         recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
@@ -436,7 +433,7 @@ struct RecognitionPane: View {
             withTimeInterval: 1,
             repeats: true
         ) { _ in
-            self.elapsedTime += 1
+            elapsedTime += 1
         }
 
         updateWaveformTimer = Timer.scheduledTimer(
@@ -513,7 +510,7 @@ func getURLByName(fileName: String) -> URL {
     return url
 }
 
-func saveAudioData(audioFileURL: URL, audioData: [Float32]) throws{
+func saveAudioData(audioFileURL: URL, audioData: [Float32]) throws {
     guard let format = AVAudioFormat(
         commonFormat: .pcmFormatFloat32,
         sampleRate: 16000,

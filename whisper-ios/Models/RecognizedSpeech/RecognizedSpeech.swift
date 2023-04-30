@@ -55,14 +55,14 @@ class RecognizedSpeech: Identifiable {
         createdAt = Date()
         updatedAt = Date()
     }
-    
+
     init(language: Language) {
         id = UUID()
         title = NSLocalizedString("未定", comment: "")
         // create initial URL
         let paths = FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask
+            for: .documentDirectory,
+            in: .userDomainMask
         )
         let docsDirect = paths[0]
         audioFileURL = docsDirect.appendingPathComponent("\(id.uuidString).m4a")
