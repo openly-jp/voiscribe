@@ -128,7 +128,7 @@ class WhisperRecognizer: Recognizer {
                 Logger.error("audio load error")
                 return
             }
-            recognizingSpeech.tmpAudioData = recognizingSpeech.tmpAudioData + originalAudioData
+            recognizingSpeech.tmpAudioData += originalAudioData
 
             // append remaining previous audioData to originalAudioData
             var audioData = recognizingSpeech.remainingAudioData + originalAudioData
@@ -236,7 +236,6 @@ class WhisperRecognizer: Recognizer {
                 // when recognizedSpeech deleted during recognizing, this may cause error
                 // to avoid it, do feasibility check before saving audio data and update RecognizedSpeech coredata
                 if feasibilityCheck(recognizingSpeech) {
-                    // update audio data
                     do {
                         try saveAudioData(
                             audioFileURL: recognizingSpeech.audioFileURL,
