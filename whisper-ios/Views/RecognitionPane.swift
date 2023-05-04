@@ -274,8 +274,6 @@ struct RecognitionPane: View {
         }
         CoreDataRepository.saveRecognizedSpeech(recognizingSpeech!)
         recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
-        recognizedSpeeches.insert(recognizingSpeech!, at: 0)
-        isRecordDetailActives.insert(false, at: 0)
 
         elapsedTime = 0
         idAmps = []
@@ -346,7 +344,9 @@ struct RecognitionPane: View {
             callback: streamingRecognitionPostProcess,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
-        isRecordDetailActives[0] = true
+
+        recognizedSpeeches.insert(recognizingSpeech, at: 0)
+        isRecordDetailActives.insert(true, at: 0)
     }
 
     func abortRecording() {
