@@ -367,9 +367,7 @@ struct RecognitionPane: View {
         } catch {
             Logger.error("failed to remove audioFileURL")
         }
-        isRecordDetailActives.remove(at: 0)
         recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
-        recognizedSpeeches.removeAll(where: { $0.id == recognizingSpeech!.id })
     }
 
     func recordingInterruptionHandler(notification: Notification) {
