@@ -120,6 +120,7 @@ struct RecognitionPane: View {
     // after new transcriptions are rendered.
     // Therefore `wasScrollAtBottom=true && isScrollAtBottom=false` represents that
     // new transcriptions are rendered and automatic scroll should be executed.
+    // Refer to #270 for more details.
     @State var isScrollAtTop = true
     @State var wasScrollAtBottom = true
     @State var isScrollAtBottom = true
