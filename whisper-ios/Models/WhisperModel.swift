@@ -108,6 +108,7 @@ class WhisperModel: Identifiable, ObservableObject {
     var language: Lang
     var whisperContext: OpaquePointer?
 
+    @Published var isDownloaded: Bool
     var isDownloaded: Bool
 
     init(size: Size, language: Lang) {
@@ -115,9 +116,9 @@ class WhisperModel: Identifiable, ObservableObject {
         self.language = language
 
         isDownloaded = WhisperModelRepository.modelExists(
-                size: size,
-                language: language
-            )
+            size: size,
+            language: language
+        )
 
         if isDownloaded {
             if WhisperModelRepository.isModelBundled(size: size, language: language) {
@@ -141,9 +142,9 @@ class WhisperModel: Identifiable, ObservableObject {
         self.size = size
         self.language = language
         isDownloaded = WhisperModelRepository.modelExists(
-                size: size,
-                language: language
-            )
+            size: size,
+            language: language
+        )
     }
 
     var name: String {
