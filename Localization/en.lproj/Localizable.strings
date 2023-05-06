@@ -14,6 +14,9 @@
 "モデルをダウンロードしますか?" = "Do you want to download the model?";
 
 /* No comment provided by engineer. */
+"モデルを削除しますか?" = "Do you want to delete the model?";
+
+/* No comment provided by engineer. */
 "モデルを変更しますか？" = "Do you want to change the model?";
 
 /* No comment provided by engineer. */
@@ -138,6 +141,9 @@
 
 /* No comment provided by engineer. */
 "通信容量にご注意ください。" = "Please be aware of the data usage.";
+
+/* No comment provided by engineer. */
+"モデルは削除後も再びダウンロード可能です。" = "The model can be downloaded again after the deletion.";
 
 /* No comment provided by engineer. */
 "録音された音声は破棄されます。本当に終了しますか？" = "The recorded audio will be discarded. Are you sure you want to exit?";

@@ -109,7 +109,6 @@ class WhisperModel: Identifiable, ObservableObject {
     var whisperContext: OpaquePointer?
 
     @Published var isDownloaded: Bool
-    var isDownloaded: Bool
 
     init(size: Size, language: Lang) {
         self.size = size
