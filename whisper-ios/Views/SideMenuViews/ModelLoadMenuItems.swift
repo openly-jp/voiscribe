@@ -53,8 +53,6 @@ struct ModelLoadSubMenuItemView: View {
         self.modelSize = modelSize
         self.language = language
         self.modelDisplayName = modelDisplayName
-        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize.rawValue)-\(language.rawValue)"
-        _isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
         let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         whisperModel = WhisperModel(size: modelSize, language: language)
@@ -70,7 +68,7 @@ struct ModelLoadSubMenuItemView: View {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
                 } else {
-                    if isDownloaded {
+                    if whisperModel.isDownloaded {
                         Image(systemName: "checkmark.icloud.fill")
                     } else {
                         Image(systemName: "icloud.and.arrow.down")
@@ -93,7 +91,7 @@ struct ModelLoadSubMenuItemView: View {
             guard !isDownloading else {
                 return
             }
-            guard !isDownloaded else {
+            guard !whisperModel.isDownloaded else {
                 return
             }
 
