@@ -1,6 +1,7 @@
 import Foundation
 
 let userDefaultRecognitionLanguageKey = "user-default-recognition-language"
+let initialTitle = "未定"
 
 enum Language: String, CaseIterable, Identifiable {
     case ja
@@ -41,15 +42,15 @@ class RecognizedSpeech: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    var tmpAudioDataList: [[Float32]] = []
+    var tmpAudioData: [Float32] = []
     var promptTokens: [Int32] = []
     var remainingAudioData: [Float32] = []
 
-    /// this is used in streaming recognition
-    init(audioFileURL: URL, language: Language) {
+    init(language: Language) {
         id = UUID()
-        title = NSLocalizedString("未定", comment: "")
-        self.audioFileURL = audioFileURL
+        title = NSLocalizedString(initialTitle, comment: "")
+        // create initial Audio File URL
+        audioFileURL = getAudioFileURL(id: id)
         self.language = language
         transcriptionLines = []
         createdAt = Date()
@@ -58,7 +59,7 @@ class RecognizedSpeech: Identifiable {
 
     init(audioFileURL: URL, language: Language, transcriptionLines: [TranscriptionLine]) {
         id = UUID()
-        title = NSLocalizedString("未定", comment: "")
+        title = NSLocalizedString(initialTitle, comment: "")
         self.audioFileURL = audioFileURL
         self.language = language
         self.transcriptionLines = transcriptionLines

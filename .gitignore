@@ -35,6 +35,7 @@ xcuserdata/
 *.moved-aside
 !.gitkeep
 .vscode/*
+Brewfile.lock.json
 
 # ASR
 *.bin

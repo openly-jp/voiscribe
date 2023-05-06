@@ -128,7 +128,8 @@ class WhisperRecognizer: Recognizer {
                 Logger.error("audio load error")
                 return
             }
-            recognizingSpeech.tmpAudioDataList.append(originalAudioData)
+            recognizingSpeech.tmpAudioData += originalAudioData
+
             // append remaining previous audioData to originalAudioData
             var audioData = recognizingSpeech.remainingAudioData + originalAudioData
             let audioDataMSec = Int64(audioData.count / 16000 * 1000)
@@ -177,6 +178,8 @@ class WhisperRecognizer: Recognizer {
                 var newPromptTokens: [Int32] = []
                 var previousSegmentText = ""
 
+                var newTranscriptionLines: [TranscriptionLine] = []
+
                 for i in 0 ..< nSegments {
                     var newSegmentTokens: [Int32] = []
                     let tokenCount = whisper_full_n_tokens(context, i)
@@ -208,6 +211,7 @@ class WhisperRecognizer: Recognizer {
                             ordering: baseOrdering + i
                         )
                         recognizingSpeech.transcriptionLines.append(transcriptionLine)
+                        newTranscriptionLines.append(transcriptionLine)
                     }
                 }
                 // in some case, original last.endMsec is not accurate becase of repetition suppression
@@ -228,6 +232,23 @@ class WhisperRecognizer: Recognizer {
                     } else {
                         recognizingSpeech.remainingAudioData = []
                     }
+                }
+                // when recognizedSpeech deleted during recognizing, this may cause error
+                // to avoid it, do feasibility check before saving audio data and update RecognizedSpeech coredata
+                if feasibilityCheck(recognizingSpeech) {
+                    do {
+                        try saveAudioData(
+                            audioFileURL: recognizingSpeech.audioFileURL,
+                            audioData: recognizingSpeech.tmpAudioData
+                        )
+                    } catch {
+                        fatalError("failed to save audio data")
+                    }
+                    // if error cause here, try DispatchQueue.main.async
+                    CoreDataRepository.addTranscriptionLinesToRecognizedSpeech(
+                        recognizedSpeech: recognizingSpeech,
+                        transcriptionLines: newTranscriptionLines
+                    )
                 }
                 callback(recognizingSpeech)
             }
