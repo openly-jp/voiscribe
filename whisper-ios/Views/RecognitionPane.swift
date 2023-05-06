@@ -184,24 +184,25 @@ struct RecognitionPane: View {
     var recordingSheet: some View {
         NavigationView {
             VStack {
-                HStack(spacing: 10) {
-                    closeButton
-                    Spacer()
-                    if isPaused {
-                        Image(systemName: "pause.fill")
-                            .foregroundColor(.gray)
-                    } else {
-                        Circle()
-                            .fill(.red)
-                            .frame(width: 10, height: 10)
-                            .blinkEffect()
+                ZStack {
+                    HStack(spacing: 10) {
+                        closeButton
+                        Spacer()
                     }
-                    Text(formatTime(Double(elapsedTime)))
-                    Spacer()
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                        .hidden()
+                    HStack(spacing: 10) {
+                        Spacer()
+                        if isPaused {
+                            Image(systemName: "pause.fill")
+                                .foregroundColor(.gray)
+                        } else {
+                            Circle()
+                                .fill(.red)
+                                .frame(width: 10, height: 10)
+                                .blinkEffect()
+                        }
+                        Text(formatTime(Double(elapsedTime)))
+                        Spacer()
+                    }
                 }
                 .padding(.top, 30)
                 .padding(.horizontal, 30)
