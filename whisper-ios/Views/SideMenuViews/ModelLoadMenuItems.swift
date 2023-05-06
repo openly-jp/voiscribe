@@ -5,13 +5,15 @@ let userDefaultModelLanguageKey = "user-default-model-language"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
-        HStack {
-            Image(systemName: "ear.fill")
-                .imageScale(.large)
-                .frame(width: 32)
-            Text("認識モデル")
-                .font(.headline)
-            Spacer()
+        NavigationLink(destination: ModelManagementView()) {
+            HStack {
+                Image(systemName: "ear.fill")
+                    .imageScale(.large)
+                    .frame(width: 32)
+                Text("認識モデル")
+                    .font(.headline)
+                Spacer()
+            }
         }
     }
 }
@@ -36,7 +38,7 @@ struct CircularProgressBar: View {
     }
 }
 
-struct ModelLoadSubMenuItemView: View {
+struct ModelRow: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @State var progressValue: CGFloat = 0.0
 
@@ -45,16 +47,16 @@ struct ModelLoadSubMenuItemView: View {
     let modelDisplayName: String
     @ObservedObject var whisperModel: WhisperModel
 
+    // Only one `.alert` modifier can be used with one view,
+    // thus use `isDeletePrompt` flag to detect deletion alert or download alert
+    @State private var isDeletePrompt = false
     @State private var showPrompt = false
-    @AppStorage var isDownloaded: Bool
     @AppStorage private var isDownloading: Bool
 
     init(modelSize: Size, language: Lang, modelDisplayName: String) {
         self.modelSize = modelSize
         self.language = language
         self.modelDisplayName = modelDisplayName
-        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize.rawValue)-\(language.rawValue)"
-        _isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
         let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         whisperModel = WhisperModel(size: modelSize, language: language)
@@ -70,7 +72,7 @@ struct ModelLoadSubMenuItemView: View {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
                 } else {
-                    if isDownloaded {
+                    if whisperModel.isDownloaded {
                         Image(systemName: "checkmark.icloud.fill")
                     } else {
                         Image(systemName: "icloud.and.arrow.down")
@@ -81,26 +83,42 @@ struct ModelLoadSubMenuItemView: View {
         // this enable user to tap on Spacer
         .contentShape(Rectangle())
         .swipeActions(edge: .trailing) {
-            if !WhisperModelRepository.isModelBundled(size: modelSize, language: language),
-               whisperModel.isDownloaded,
-               !isModelSelected
-            {
-                Button(action: deleteModel) { Image(systemName: "trash.fill") }
-                    .tint(.red)
-            }
+            Button {
+                if !isDeleteDisabled {
+                    showPrompt = true
+                    isDeletePrompt = true
+                }
+            } label: { Image(systemName: "trash.fill") }
+                .tint(isDeleteDisabled ? .gray : .red)
         }
         .onTapGesture {
             guard !isDownloading else {
                 return
             }
-            guard !isDownloaded else {
+            guard !whisperModel.isDownloaded else {
                 return
             }
 
             showPrompt = true
+            isDeletePrompt = false
         }
-        .alert(isPresented: $showPrompt) {
-            Alert(
+        .alert(isPresented: $showPrompt) { alertView }
+    }
+
+    var isDeleteDisabled: Bool {
+        WhisperModelRepository.isModelBundled(size: modelSize, language: language) || !whisperModel.isDownloaded
+    }
+
+    var alertView: Alert {
+        if isDeletePrompt {
+            return Alert(
+                title: Text("モデルを削除しますか?"),
+                message: Text("モデルは削除後も再びダウンロード可能です。"),
+                primaryButton: .cancel(Text("キャンセル")),
+                secondaryButton: .destructive(Text("削除"), action: deleteModel)
+            )
+        } else {
+            return Alert(
                 title: Text("モデルをダウンロードしますか?"),
                 message: Text("通信容量にご注意ください。"),
                 primaryButton: .cancel(Text("キャンセル")),
@@ -134,54 +152,32 @@ struct ModelLoadSubMenuItemView: View {
     }
 }
 
-let modeLoadSubMenuItems = [
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "base")!,
-            language: Lang(rawValue: "multi")!,
-            modelDisplayName: "Base"
-        )),
-        subMenuItems: nil
-    ),
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "base")!,
-            language: Lang(rawValue: "en")!,
-            modelDisplayName: "Base(EN)"
-        )),
-        subMenuItems: nil
-    ),
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "small")!,
-            language: Lang(rawValue: "multi")!,
-            modelDisplayName: "Small"
-        )),
-        subMenuItems: nil
-    ),
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "small")!,
-            language: Lang(rawValue: "en")!,
-            modelDisplayName: "Small(EN)"
-        )),
-        subMenuItems: nil
-    ),
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "medium")!,
-            language: Lang(rawValue: "multi")!,
-            modelDisplayName: "Medium"
-        )),
-        subMenuItems: nil
-    ),
-    MenuItem(
-        view: AnyView(ModelLoadSubMenuItemView(
-            modelSize: Size(rawValue: "medium")!,
-            language: Lang(rawValue: "en")!,
-            modelDisplayName: "Medium(EN)"
-        )),
-        subMenuItems: nil
-    ),
-]
-let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: modeLoadSubMenuItems)
+struct ModelManagementView: View {
+    let models = [
+        ("base", "multi", "Base"),
+        ("base", "en", "Base(EN)"),
+        ("small", "multi", "Small"),
+        ("small", "en", "Small(EN)"),
+        ("medium", "multi", "Medium"),
+        ("medium", "en", "Medium(EN)"),
+    ]
+    var body: some View {
+        List {
+            ForEach(models, id: \.2) { model in
+                ModelRow(
+                    modelSize: Size(rawValue: model.0)!,
+                    language: Lang(rawValue: model.1)!,
+                    modelDisplayName: model.2
+                )
+            }
+        }
+    }
+}
+
+let modelLoadMenuItem = MenuItem(view: AnyView(ModelLoadMenuItemView()), subMenuItems: nil)
+
+struct ModelManagementView_Previews: PreviewProvider {
+    static var previews: some View {
+        ModelManagementView()
+    }
+}

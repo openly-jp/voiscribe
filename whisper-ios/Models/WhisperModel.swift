@@ -108,21 +108,16 @@ class WhisperModel: Identifiable, ObservableObject {
     var language: Lang
     var whisperContext: OpaquePointer?
 
-    var isDownloaded: Bool
+    @Published var isDownloaded: Bool
 
     init(size: Size, language: Lang) {
         self.size = size
         self.language = language
 
-        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
-        if UserDefaults.standard.object(forKey: isDownloadedKey) == nil {
-            let isModelExists = WhisperModelRepository.modelExists(
-                size: size,
-                language: language
-            )
-            UserDefaults.standard.set(isModelExists, forKey: isDownloadedKey)
-        }
-        isDownloaded = UserDefaults.standard.object(forKey: isDownloadedKey) as! Bool
+        isDownloaded = WhisperModelRepository.modelExists(
+            size: size,
+            language: language
+        )
 
         if isDownloaded {
             if WhisperModelRepository.isModelBundled(size: size, language: language) {
@@ -145,15 +140,10 @@ class WhisperModel: Identifiable, ObservableObject {
         self.localPath = localPath
         self.size = size
         self.language = language
-        let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
-        if UserDefaults.standard.object(forKey: key) == nil {
-            let isModelExists = WhisperModelRepository.modelExists(
-                size: size,
-                language: language
-            )
-            UserDefaults.standard.set(isModelExists, forKey: key)
-        }
-        isDownloaded = UserDefaults.standard.object(forKey: key) as! Bool
+        isDownloaded = WhisperModelRepository.modelExists(
+            size: size,
+            language: language
+        )
     }
 
     var name: String {
