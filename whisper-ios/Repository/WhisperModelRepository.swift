@@ -1,14 +1,12 @@
 import Foundation
 
 let modelURLs: [String: String] = [
-    // 4bit-integer quantization is used only for English,
-    // for base model, we use original model because of the accuracy
-    "base-multi": "models.openly.jp/ggml-base.multi.bin",
-    "base-en": "models.openly.jp/ggml-base.en.bin",
-    "small-multi": "models.openly.jp/ggml-small.multi.bin",
-    "small-en": "models.openly.jp/ggml-small.en.q4_0.bin",
-    "medium-multi": "models.openly.jp/ggml-medium.multi.bin",
-    "medium-en": "models.openly.jp/ggml-medium.en.q4_0.bin",
+    "base-multi": "models.openly.jp/ggml-base.q8_0.bin",
+    "base-en": "models.openly.jp/ggml-base.en.q8_0.bin",
+    "small-multi": "models.openly.jp/ggml-small.q8_0.bin",
+    "small-en": "models.openly.jp/ggml-small.en.q8_0.bin",
+    "medium-multi": "models.openly.jp/ggml-medium.q8_0.bin",
+    "medium-en": "models.openly.jp/ggml-medium.en.q8_0.bin",
 ]
 
 enum WhisperModelRepository {
