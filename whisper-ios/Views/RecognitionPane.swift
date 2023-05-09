@@ -323,6 +323,10 @@ struct RecognitionPane: View {
                     alignment: .topLeading
                 )
                 .onAppear {
+                    if let recognizedResultsScrollTimer {
+                        if recognizedResultsScrollTimer.isValid { return }
+                    }
+
                     recognizedResultsScrollTimer = Timer.scheduledTimer(
                         withTimeInterval: 1,
                         repeats: true
