@@ -51,14 +51,13 @@ struct ModelRow: View {
     // thus use `isDeletePrompt` flag to detect deletion alert or download alert
     @State private var isDeletePrompt = false
     @State private var showPrompt = false
-    @AppStorage private var isDownloading: Bool
+    @State private var isDownloading = false
 
     init(modelSize: Size, language: Lang, modelDisplayName: String) {
         self.modelSize = modelSize
         self.language = language
         self.modelDisplayName = modelDisplayName
-        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
-        _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
+
         whisperModel = WhisperModel(size: modelSize, language: language)
     }
 
