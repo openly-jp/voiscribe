@@ -140,8 +140,9 @@ class WhisperRecognizer: Recognizer {
             }
             let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
             let baseOrdering = Int32(recognizingSpeech.transcriptionLines.count)
-            let recognizingSpeechPointer = UnsafeMutablePointer<RecognizedSpeech>.allocate(capacity: 1)
-            recognizingSpeechPointer.pointee = recognizingSpeech
+            let recognizingSpeechPointer = withUnsafePointer(to: recognizingSpeech) {
+                pointer in return pointer
+            }
             var newSegmentCallbackData = NewSegmentCallbackData(
                 recognizingSpeech: recognizingSpeech,
                 audioDataMSec: audioDataMSec,
