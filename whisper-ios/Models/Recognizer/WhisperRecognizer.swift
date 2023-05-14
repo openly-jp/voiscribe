@@ -124,14 +124,14 @@ class WhisperRecognizer: Recognizer {
                 Logger.error("model load error")
                 return
             }
-            guard var originalAudioData = try? self.load_audio(url: audioFileURL) else {
+            guard let originalAudioData = try? self.load_audio(url: audioFileURL) else {
                 Logger.error("audio load error")
                 return
             }
             recognizingSpeech.tmpAudioData += originalAudioData
 
             // append remaining previous audioData to originalAudioData
-            var audioData = recognizingSpeech.remainingAudioData + originalAudioData
+            let audioData = recognizingSpeech.remainingAudioData + originalAudioData
             let audioDataMSec = Int64(audioData.count / 16000 * 1000)
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
@@ -140,9 +140,6 @@ class WhisperRecognizer: Recognizer {
             }
             let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
             let baseOrdering = Int32(recognizingSpeech.transcriptionLines.count)
-            let recognizingSpeechPointer = withUnsafePointer(to: recognizingSpeech) {
-                pointer in pointer
-            }
             var newSegmentCallbackData = NewSegmentCallbackData(
                 recognizingSpeech: recognizingSpeech,
                 audioDataMSec: audioDataMSec,
