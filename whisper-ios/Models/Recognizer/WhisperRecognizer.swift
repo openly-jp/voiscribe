@@ -264,7 +264,7 @@ func newSegmentCallback(
         return
     }
     // bind unsafe pointer to NewSegmentCallbackData
-    var newSegmentCallbackData = userData.bindMemory(to: NewSegmentCallbackData.self, capacity: 1).pointee
+    let newSegmentCallbackData = userData.bindMemory(to: NewSegmentCallbackData.self, capacity: 1).pointee
     let recognizingSpeech = newSegmentCallbackData.recognizingSpeech
     let baseStartMSec = newSegmentCallbackData.baseStartMSec
     let baseOrdering = newSegmentCallbackData.baseOrdering // 0-indexed
