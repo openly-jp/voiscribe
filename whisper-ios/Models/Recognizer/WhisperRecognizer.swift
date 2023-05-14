@@ -138,6 +138,19 @@ class WhisperRecognizer: Recognizer {
             } catch {
                 Logger.warning("failed to remove audio file")
             }
+            let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
+            let baseOrdering = Int32(recognizingSpeech.transcriptionLines.count)
+            let recognizingSpeechPointer = UnsafeMutablePointer<RecognizedSpeech>.allocate(capacity: 1)
+            recognizingSpeechPointer.pointee = recognizingSpeech
+            var newSegmentCallbackData = NewSegmentCallbackData(
+                recognizingSpeech: recognizingSpeech,
+                audioDataMSec: audioDataMSec,
+                baseStartMSec: baseStartMSec,
+                baseOrdering: baseOrdering
+            )
+            let newSegmentCallbackDataPointer = withUnsafeMutablePointer(to: &newSegmentCallbackData) { pointer in
+                return pointer
+            }
             // check whether recognizingSpeech was removed (i.e. abort recording) or not
             if feasibilityCheck(recognizingSpeech) {
                 let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
@@ -158,7 +171,9 @@ class WhisperRecognizer: Recognizer {
                     params.suppress_non_speech_tokens = language == Language.en ? false : false
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
-
+                    params.new_segment_callback = newSegmentCallback
+                    params.new_segment_callback_user_data = UnsafeMutableRawPointer(newSegmentCallbackDataPointer)
+                    
                     whisper_reset_timings(context)
                     audioData.withUnsafeBufferPointer { data in
                         if whisper_full(context, params, data.baseAddress, Int32(data.count)) != 0 {
@@ -168,64 +183,17 @@ class WhisperRecognizer: Recognizer {
                     }
                 }
 
-                let baseStartMSec = recognizingSpeech.transcriptionLines.last?.endMSec ?? 0
-                let baseOrdering = recognizingSpeech.transcriptionLines.last?.ordering != nil
-                    ? recognizingSpeech.transcriptionLines.last!.ordering + 1
-                    : 0
-                let nSegments = whisper_full_n_segments(context)
-                var lastEndMSec: Int64 = 0
-
-                var newPromptTokens: [Int32] = []
-                var previousSegmentText = ""
-
-                var newTranscriptionLines: [TranscriptionLine] = []
-
-                for i in 0 ..< nSegments {
-                    var newSegmentTokens: [Int32] = []
-                    let tokenCount = whisper_full_n_tokens(context, i)
-                    for j in 0 ..< tokenCount {
-                        let tokenId = whisper_full_get_token_id(context, i, j)
-                        newSegmentTokens.append(tokenId)
-                    }
-                    let newSegmentText = String(cString: whisper_full_get_segment_text(context, i))
-                    let startMSec = whisper_full_get_segment_t0(context, i) * 10 + baseStartMSec
-                    // whisper sometimes exceeds audioDataMSec, so we need to check it
-                    let segmentEndMSec = whisper_full_get_segment_t1(context, i) * 10
-                    var endMSec: Int64 = 0
-                    if segmentEndMSec > audioDataMSec {
-                        endMSec = audioDataMSec + baseStartMSec
-                        lastEndMSec = audioDataMSec
-                    } else {
-                        endMSec = segmentEndMSec + baseStartMSec
-                        lastEndMSec = segmentEndMSec
-                    }
-                    // suppress repetition
-                    if newSegmentText != previousSegmentText {
-                        newPromptTokens.append(contentsOf: newSegmentTokens)
-                        previousSegmentText = newSegmentText
-
-                        let transcriptionLine = TranscriptionLine(
-                            startMSec: startMSec,
-                            endMSec: endMSec,
-                            text: newSegmentText,
-                            ordering: baseOrdering + i
-                        )
-                        recognizingSpeech.transcriptionLines.append(transcriptionLine)
-                        newTranscriptionLines.append(transcriptionLine)
-                    }
-                }
-                // in some case, original last.endMsec is not accurate becase of repetition suppression
-                // to deal it, modify last.endMsec here
-                recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + lastEndMSec
+                // When some transcription line was suppressed because of repetition, we need to modify last endmsec
+                recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + newSegmentCallbackData.transcribedMSec
                 // update promptTokens
                 if isPromptingActive {
                     recognizingSpeech.promptTokens.removeAll()
-                    recognizingSpeech.promptTokens = newPromptTokens
+                    recognizingSpeech.promptTokens = newSegmentCallbackData.nextPromptTokens
                 }
                 // update remaining audioData
                 if isRemainingAudioConcatActive {
                     let audioDataCount: Int = audioData.count
-                    let usedAudioDataCount = Int(Float(lastEndMSec) / Float(1000) * self.samplingRate)
+                    let usedAudioDataCount = Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * self.samplingRate)
                     let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
                     if remainingAudioDataCount > 0 {
                         recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
@@ -247,11 +215,90 @@ class WhisperRecognizer: Recognizer {
                     // if error cause here, try DispatchQueue.main.async
                     CoreDataRepository.addTranscriptionLinesToRecognizedSpeech(
                         recognizedSpeech: recognizingSpeech,
-                        transcriptionLines: newTranscriptionLines
+                        transcriptionLines: newSegmentCallbackData.newTranscriptionLines
                     )
                 }
                 callback(recognizingSpeech)
             }
         }
+    }
+}
+
+class NewSegmentCallbackData {
+    var recognizingSpeech: RecognizedSpeech
+    var newTranscriptionLines: [TranscriptionLine]
+    let audioDataMSec: Int64
+    let baseStartMSec: Int64
+    let baseOrdering: Int32
+    var transcribedMSec: Int64
+    var nextPromptTokens: [Int32]
+
+    init(
+        recognizingSpeech: RecognizedSpeech,
+        audioDataMSec: Int64,
+        baseStartMSec: Int64,
+        baseOrdering: Int32
+    ) {
+        self.recognizingSpeech = recognizingSpeech
+        self.newTranscriptionLines = []
+        self.audioDataMSec = audioDataMSec
+        self.baseStartMSec = baseStartMSec
+        self.baseOrdering = baseOrdering
+        self.transcribedMSec = 0
+        self.nextPromptTokens = []
+    }
+}
+
+func newSegmentCallback(
+    ctx: OpaquePointer?,
+    sate: OpaquePointer?,
+    nNew: Int32,
+    userData: UnsafeMutableRawPointer?
+) {
+    guard let context = ctx else {
+        Logger.error("context is nil on new segment callback.")
+        return
+    }
+    guard let userData = userData else {
+        Logger.error("userData is nil on new segment callback.")
+        return
+    }
+    // bind unsafe pointer to NewSegmentCallbackData
+    var newSegmentCallbackData = userData.bindMemory(to: NewSegmentCallbackData.self, capacity: 1).pointee
+    let recognizingSpeech = newSegmentCallbackData.recognizingSpeech
+    let baseStartMSec = newSegmentCallbackData.baseStartMSec
+    let baseOrdering = newSegmentCallbackData.baseOrdering // 0-indexed
+    let previousSegmentText = newSegmentCallbackData.newTranscriptionLines.last?.text ?? ""
+
+    let nSegments = whisper_full_n_segments(context)
+
+    // whisper sometimes exceeds audioDataMSec, so we need to check it
+    let newSegmentStartMSec = min(whisper_full_get_segment_t0(context, nSegments - 1) * 10 + baseStartMSec, newSegmentCallbackData.audioDataMSec + baseStartMSec)
+    let newSegmentEndMSec = min(whisper_full_get_segment_t1(context, nSegments - 1) * 10 + baseStartMSec, newSegmentCallbackData.audioDataMSec + baseStartMSec)
+    let newSegmentOrdering = baseOrdering + Int32(nSegments) - 1
+    let newSegmentText = String(cString: whisper_full_get_segment_text(context, nSegments - 1))
+    newSegmentCallbackData.transcribedMSec = min(whisper_full_get_segment_t1(context, nSegments - 1) * 10, newSegmentCallbackData.audioDataMSec)
+    // suppress repetition
+    if newSegmentText != previousSegmentText {
+        // add new tokens to next prompt tokens
+        let tokenCount = whisper_full_n_tokens(context, nSegments - 1)
+        for j in 0 ..< tokenCount {
+            let tokenId = whisper_full_get_token_id(context, nSegments - 1, j)
+            newSegmentCallbackData.nextPromptTokens.append(tokenId)
+        }
+        // add new segment to recognizing speech
+        let newTranscriptionLine = TranscriptionLine(
+            startMSec: newSegmentStartMSec,
+            endMSec: newSegmentEndMSec,
+            text: newSegmentText,
+            ordering: newSegmentOrdering
+        )
+        recognizingSpeech.transcriptionLines.append(
+            newTranscriptionLine
+        )
+        // add new transcription line to new transcription lines to save it to coredata
+        newSegmentCallbackData.newTranscriptionLines.append(
+            newTranscriptionLine
+        )
     }
 }
