@@ -56,8 +56,8 @@ struct RecognitionPresetRow: View {
     var geometryWidth: Double
     var whisperModel: WhisperModel
 
-    @State var isDownloading = false
-    @State var progressValue: CGFloat = 0.0
+    @AppStorage private var isDownloading: Bool
+    @State var progressValue: CGFloat
     @State var isShowAlert = false
 
     var isSelected: Bool {
@@ -87,6 +87,9 @@ struct RecognitionPresetRow: View {
         self.modelLanguage = modelLanguage
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
+        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
+        _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
+        progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
 
         whisperModel = WhisperModel(
             size: self.modelSize,
