@@ -11,7 +11,7 @@ struct EditingAudioPlayer: View {
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
 
-    @State var updateRecordingTimeTimer: Timer? = nil
+    @State var updatePlayingTimeTimer: Timer? = nil
 
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
@@ -53,8 +53,8 @@ struct EditingAudioPlayer: View {
         .onAppear { player.delegate = isPlayingObject }
         .onDisappear {
             player.stop()
-            if let updateRecordingTimeTimer {
-                updateRecordingTimeTimer.invalidate()
+            if let updatePlayingTimeTimer {
+                updatePlayingTimeTimer.invalidate()
             }
         }
     }
@@ -106,16 +106,16 @@ struct EditingAudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
-            updateRecordingTimeTimer = Timer.scheduledTimer(
+            updatePlayingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
             ) { _ in
                 currentPlayingTime = player.currentTime
             }
-            RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
+            RunLoop.main.add(updatePlayingTimeTimer!, forMode: .common)
             player.play()
         } else {
-            updateRecordingTimeTimer?.invalidate()
+            updatePlayingTimeTimer?.invalidate()
             player.pause()
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
