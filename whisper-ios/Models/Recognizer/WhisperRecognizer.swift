@@ -239,7 +239,7 @@ struct NewSegmentCallbackData {
 
 func newSegmentCallback(
     ctx: OpaquePointer?,
-    sate _: OpaquePointer?,
+    state _: OpaquePointer?,
     nNew _: Int32,
     userData: UnsafeMutableRawPointer?
 ) {
@@ -251,7 +251,7 @@ func newSegmentCallback(
         Logger.error("userData is nil on new segment callback.")
         return
     }
-    var newSegmentCallbackDataPtr = userData.bindMemory(to: NewSegmentCallbackData.self, capacity: 1)
+    let newSegmentCallbackDataPtr = userData.bindMemory(to: NewSegmentCallbackData.self, capacity: 1)
     let baseStartMSec = newSegmentCallbackDataPtr.pointee.baseStartMSec
     let baseOrdering = newSegmentCallbackDataPtr.pointee.baseOrdering // 0-indexed
     let previousSegmentText = newSegmentCallbackDataPtr.pointee.newTranscriptionLines.last?.text ?? ""
