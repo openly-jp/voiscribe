@@ -118,8 +118,7 @@ class WhisperRecognizer: Recognizer {
 
             // prohibit user from changing model
             self.isRecognizing = true
-            Logger.debug("Prompting: \(isPromptingActive ? "active" : "inactive")")
-            Logger.debug("Remaining Audio Concat: \(isRemainingAudioConcatActive ? "active" : "inactive")")
+
             guard let context = self.whisperModel.whisperContext else {
                 Logger.error("model load error")
                 return
@@ -149,35 +148,38 @@ class WhisperRecognizer: Recognizer {
                 transcribedMSec: 0,
                 nextPromptTokens: []
             )
-            let newSegmentCallbackDataPtr = withUnsafeMutablePointer(to: &newSegmentCallbackData) { ptr in
-                ptr
-            }
             // check whether recognizingSpeech was removed (i.e. abort recording) or not
             if feasibilityCheck(recognizingSpeech) {
                 let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
                 var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
-                language.rawValue.withCString { lang in
-                    // Adapted from whisper.objc
+                withUnsafeMutablePointer(to: &newSegmentCallbackData) {
+                    newSegmentCallbackDataPtr in
+                    
+                    let languageNSString = language.rawValue as NSString
+                    guard let languageCString = languageNSString.utf8String else {
+                        Logger.error("failed to convert language to cString")
+                        return
+                    }
+
                     params.print_realtime = true
                     params.print_progress = false
                     params.print_timestamps = true
                     params.print_special = false
                     params.translate = false
-                    params.language = lang
+                    params.language = languageCString
                     params.n_threads = Int32(maxThreads)
                     params.offset_ms = 0
                     params.no_context = true
                     params.single_segment = false
-                    // suppress hallucination for english
-                    params.suppress_non_speech_tokens = language == Language.en ? false : false
+                    params.suppress_non_speech_tokens = false
                     params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
                     params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
                     params.new_segment_callback = newSegmentCallback
                     params.new_segment_callback_user_data = UnsafeMutableRawPointer(newSegmentCallbackDataPtr)
 
                     whisper_reset_timings(context)
-                    audioData.withUnsafeBufferPointer { data in
-                        if whisper_full(context, params, data.baseAddress, Int32(data.count)) != 0 {
+                    audioData.withUnsafeBufferPointer { audioDataBufferPtr in
+                        if whisper_full(context, params, audioDataBufferPtr.baseAddress, Int32(audioDataBufferPtr.count)) != 0 {
                         } else {
                             whisper_print_timings(context)
                         }
