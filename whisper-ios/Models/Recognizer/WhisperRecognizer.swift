@@ -154,7 +154,7 @@ class WhisperRecognizer: Recognizer {
                 var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
                 withUnsafeMutablePointer(to: &newSegmentCallbackData) {
                     newSegmentCallbackDataPtr in
-                    
+
                     let languageNSString = language.rawValue as NSString
                     guard let languageCString = languageNSString.utf8String else {
                         Logger.error("failed to convert language to cString")
@@ -179,7 +179,12 @@ class WhisperRecognizer: Recognizer {
 
                     whisper_reset_timings(context)
                     audioData.withUnsafeBufferPointer { audioDataBufferPtr in
-                        if whisper_full(context, params, audioDataBufferPtr.baseAddress, Int32(audioDataBufferPtr.count)) != 0 {
+                        if whisper_full(
+                            context,
+                            params,
+                            audioDataBufferPtr.baseAddress,
+                            Int32(audioDataBufferPtr.count)
+                        ) != 0 {
                         } else {
                             whisper_print_timings(context)
                         }
