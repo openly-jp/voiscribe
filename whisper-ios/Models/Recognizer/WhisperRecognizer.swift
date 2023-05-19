@@ -191,6 +191,8 @@ class WhisperRecognizer: Recognizer {
                     }
                 }
 
+                // The following code will be executed after all "new_segment_callback" have been processed
+
                 // When some transcription line was suppressed because of repetition, we need to modify last endmsec
                 recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + newSegmentCallbackData
                     .transcribedMSec
