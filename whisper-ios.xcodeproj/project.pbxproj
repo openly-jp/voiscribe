@@ -67,6 +67,7 @@
 		5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50929A245EE003AD311 /* FileDownloader.swift */; };
 		5AADC50C29A24623003AD311 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50B29A24623003AD311 /* LicenseView.swift */; };
 		5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */; };
+		DBCD3B5C2A11170600F081E6 /* FeedbackMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +156,7 @@
 		5AADC50929A245EE003AD311 /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		5AADC50B29A24623003AD311 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 		5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoMenuItems.swift; sourceTree = "<group>"; };
+		DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMenuItems.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +201,7 @@
 				5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */,
 				5A8358B7299BA5CC00985983 /* AppInfoViews */,
 				136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */,
+				DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */,
 			);
 			path = SideMenuViews;
 			sourceTree = "<group>";
@@ -586,6 +589,7 @@
 				5A8F55242948CD5000E87D25 /* RecordDetails.swift in Sources */,
 				57EAB6E02961F58700BB59BE /* RecognizedSpeechData+CoreDataClass.swift in Sources */,
 				578353052990E3C900081CF8 /* blinkEffect.swift in Sources */,
+				DBCD3B5C2A11170600F081E6 /* FeedbackMenuItems.swift in Sources */,
 				5A8F55202948CD1F00E87D25 /* Data.swift in Sources */,
 				578352F5298676D600081CF8 /* EditingAudioPlayer.swift in Sources */,
 				57EAB6E72962041000BB59BE /* CoreDataRepository.swift in Sources */,
