@@ -323,6 +323,10 @@ struct RecognitionPane: View {
                     alignment: .topLeading
                 )
                 .onAppear {
+                    if let recognizedResultsScrollTimer {
+                        if recognizedResultsScrollTimer.isValid { return }
+                    }
+
                     recognizedResultsScrollTimer = Timer.scheduledTimer(
                         withTimeInterval: 1,
                         repeats: true
@@ -518,6 +522,16 @@ struct RecognitionPane: View {
     // MARK: - general function
 
     func resetTimers() {
+        if let updateRecordingTimeTimer {
+            if updateRecordingTimeTimer.isValid { updateRecordingTimeTimer.invalidate() }
+        }
+        if let updateWaveformTimer {
+            if updateWaveformTimer.isValid { updateWaveformTimer.invalidate() }
+        }
+        if let streamingRecognitionTimer {
+            if streamingRecognitionTimer.isValid { streamingRecognitionTimer.invalidate() }
+        }
+
         updateRecordingTimeTimer = Timer.scheduledTimer(
             withTimeInterval: 1,
             repeats: true

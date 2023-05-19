@@ -56,7 +56,6 @@ struct RecognitionPresetRow: View {
     var geometryWidth: Double
     var whisperModel: WhisperModel
 
-    @AppStorage var isDownloaded: Bool
     @AppStorage private var isDownloading: Bool
     @State var progressValue: CGFloat
     @State var isShowAlert = false
@@ -88,8 +87,6 @@ struct RecognitionPresetRow: View {
         self.modelLanguage = modelLanguage
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
-        let isDownloadedKey = "\(userDefaultWhisperModelDownloadPrefix)-\(modelSize)-\(modelLanguage)"
-        _isDownloaded = AppStorage(wrappedValue: false, isDownloadedKey)
         let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
@@ -137,7 +134,7 @@ struct RecognitionPresetRow: View {
                         CircularProgressBar(progress: $progressValue)
                             .frame(width: iconSize, height: iconSize)
                     } else {
-                        if isDownloaded || WhisperModelRepository.isModelBundled(
+                        if whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
                             size: modelSize,
                             language: modelLanguage
                         ) {
@@ -205,7 +202,10 @@ struct RecognitionPresetRow: View {
             isShowAlert = isDownloading || isSelected ? false : true
         }
         .alert(isPresented: $isShowAlert) {
-            isDownloaded || WhisperModelRepository.isModelBundled(size: modelSize, language: modelLanguage) ?
+            whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
+                size: modelSize,
+                language: modelLanguage
+            ) ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -241,7 +241,7 @@ struct RecognitionPresetRow: View {
         isDownloading = true
         whisperModel.downloadModel { err in
             isDownloading = false
-            isDownloaded = true
+
             if let err {
                 Logger.error(err)
             }

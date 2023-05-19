@@ -5,7 +5,7 @@ import SwiftUI
 let availableSpeedRates = [0.5, 0.8, 1, 1.2, 1.5, 2, 2.5, 3.5, 4]
 
 class IsPlayingObject: NSObject, ObservableObject, AVAudioPlayerDelegate {
-    // This state is used for moitoring playing state
+    // This state is used for monitoring playing state
     // because SwiftUI doesn't detect state change of isPlaying in AVAudioPlayer
     @Published var isPlaying = false
 
@@ -26,7 +26,7 @@ struct AudioPlayer: View {
     @State var isChangingSpeedRate = false
     @State var speedRateIdx = 2 // speedRate = 1x
 
-    @State var updateRecordingTimeTimer: Timer? = nil
+    @State var updatePlayingTimeTimer: Timer? = nil
     let transcription: String
 
     // `audioPlayerDidFinishPlaying` method is delegated to
@@ -81,8 +81,8 @@ struct AudioPlayer: View {
         .onAppear { player.delegate = isPlayingObject }
         .onDisappear {
             player.stop()
-            if let updateRecordingTimeTimer {
-                updateRecordingTimeTimer.invalidate()
+            if let updatePlayingTimeTimer {
+                updatePlayingTimeTimer.invalidate()
             }
         }
     }
@@ -121,7 +121,7 @@ struct AudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
-            updateRecordingTimeTimer = Timer.scheduledTimer(
+            updatePlayingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
             ) { _ in
@@ -129,10 +129,10 @@ struct AudioPlayer: View {
                     currentPlayingTime = player.currentTime
                 }
             }
-            RunLoop.main.add(updateRecordingTimeTimer!, forMode: .common)
+            RunLoop.main.add(updatePlayingTimeTimer!, forMode: .common)
             player.play()
         } else {
-            updateRecordingTimeTimer?.invalidate()
+            updatePlayingTimeTimer?.invalidate()
             player.pause()
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
