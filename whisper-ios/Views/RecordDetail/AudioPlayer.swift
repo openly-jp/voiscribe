@@ -29,6 +29,8 @@ struct AudioPlayer: View {
     @State var updatePlayingTimeTimer: Timer? = nil
     let transcription: String
 
+    @State var isOtherAppIsRecordingAlertOpen = false
+
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
@@ -85,6 +87,13 @@ struct AudioPlayer: View {
                 updatePlayingTimeTimer.invalidate()
             }
         }
+        .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
+            Alert(
+                title: Text("音声を再生できません"),
+                message: Text("他のアプリで録音中は音声を再生できません。"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 
     var changeSpeedSheetView: some View {
@@ -121,6 +130,15 @@ struct AudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
+            // check if audio playing is possible
+            do {
+                let session = AVAudioSession.sharedInstance()
+                try session.setActive(true)
+            } catch {
+                isOtherAppIsRecordingAlertOpen = true
+                return
+            }
+
             updatePlayingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true

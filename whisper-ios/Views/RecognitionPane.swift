@@ -97,6 +97,7 @@ struct RecognitionPane: View {
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
+    @State var isOtherAppIsRecordingAlertOpen = false
 
     // MARK: - scroll states
 
@@ -178,6 +179,13 @@ struct RecognitionPane: View {
                         isBackground = false
                     }
                 }
+        }
+        .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
+            Alert(
+                title: Text("録音できません"),
+                message: Text("他のアプリで録音中は録音できません。"),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 
@@ -350,6 +358,15 @@ struct RecognitionPane: View {
 
     /// start recording
     func startRecording() {
+        // check if recording is possible
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setActive(true)
+        } catch {
+            isOtherAppIsRecordingAlertOpen = true
+            return
+        }
+
         isRecording = true
         isPaused = false
         isPaneOpen = true
