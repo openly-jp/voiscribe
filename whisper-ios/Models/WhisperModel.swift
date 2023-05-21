@@ -188,16 +188,17 @@ class WhisperModel: Identifiable, ObservableObject {
             Logger.error("Failed to parse model url")
             return
         }
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.whisperContext = whisper_init_from_file(modelUrl.path)
 
-            var err: Error?
-            if self.whisperContext == nil {
-                err = NSError(domain: "Failed to load model", code: -1)
-            }
+        // Do serial processing instead of parallel processing for model loading
+        // to prevent recognition from starting before model is loaded
+        whisperContext = whisper_init_from_file(modelUrl.path)
 
-            callback(err)
+        var err: Error?
+        if whisperContext == nil {
+            err = NSError(domain: "Failed to load model", code: -1)
         }
+
+        callback(err)
     }
 
     func deleteModel() throws {
