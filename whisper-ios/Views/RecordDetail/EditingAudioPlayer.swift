@@ -57,6 +57,13 @@ struct EditingAudioPlayer: View {
                 updatePlayingTimeTimer.invalidate()
             }
         }
+        .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
+            Alert(
+                title: Text("音声を再生できません"),
+                message: Text("他のアプリで通話中は音声を再生できません。"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 
     func keyboardButton() -> some View {
@@ -106,6 +113,15 @@ struct EditingAudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
+            // check if audio playing is possible
+            do {
+                let session = AVAudioSession.sharedInstance()
+                try session.setActive(true)
+            } catch {
+                isOtherAppIsRecordingAlertOpen = true
+                return
+            }
+
             updatePlayingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true

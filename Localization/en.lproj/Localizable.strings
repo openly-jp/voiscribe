@@ -233,10 +233,10 @@
 "音声を再生できません" = "Cannot play audio";
 
 /* No comment provided by engineer. */
-"他のアプリで録音中は音声を再生できません。" = "Cannot play audio while recording in other apps.";
+"他のアプリで通話中は音声を再生できません。" = "Cannot play audio while calling in other apps.";
 
 /* No comment provided by engineer. */
 "録音できません" = "Cannot record";
 
 /* No comment provided by engineer. */
-"他のアプリで録音中は録音できません。" = "Cannot record while recording in other apps.";
+"他のアプリで通話中は録音できません。" =　"Cannot record while calling in other apps.";

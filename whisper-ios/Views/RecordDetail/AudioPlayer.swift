@@ -90,7 +90,7 @@ struct AudioPlayer: View {
         .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
             Alert(
                 title: Text("音声を再生できません"),
-                message: Text("他のアプリで録音中は音声を再生できません。"),
+                message: Text("他のアプリで通話中は音声を再生できません。"),
                 dismissButton: .default(Text("OK"))
             )
         }

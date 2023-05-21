@@ -183,7 +183,7 @@ struct RecognitionPane: View {
         .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
             Alert(
                 title: Text("録音できません"),
-                message: Text("他のアプリで録音中は録音できません。"),
+                message: Text("他のアプリで通話中は録音できません。"),
                 dismissButton: .default(Text("OK"))
             )
         }
