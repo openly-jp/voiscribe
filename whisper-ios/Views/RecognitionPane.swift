@@ -402,6 +402,14 @@ struct RecognitionPane: View {
     }
 
     func resumeRecording() {
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setActive(true)
+        } catch {
+            isOtherAppIsRecordingAlertOpen = true
+            return
+        }
+
         isRecording = true
         isPaused = false
 

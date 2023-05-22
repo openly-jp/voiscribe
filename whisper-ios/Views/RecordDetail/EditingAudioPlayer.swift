@@ -13,6 +13,8 @@ struct EditingAudioPlayer: View {
 
     @State var updatePlayingTimeTimer: Timer? = nil
 
+    @State var isOtherAppIsRecordingAlertOpen = false
+
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
