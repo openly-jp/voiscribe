@@ -254,6 +254,13 @@ struct RecognitionPane: View {
             .navigationBarHidden(true)
             .background(RECORDING_SHEET_COLOR)
         }
+        .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
+            Alert(
+                title: Text("録音できません"),
+                message: Text("他のアプリで通話中は録音できません。"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 
     var closeButton: some View {
@@ -358,7 +365,6 @@ struct RecognitionPane: View {
 
     /// start recording
     func startRecording() {
-        // check if recording is possible
         do {
             let session = AVAudioSession.sharedInstance()
             try session.setActive(true)

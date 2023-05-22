@@ -94,6 +94,10 @@ struct AudioPlayer: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: audioPlayingInterruptionHandler
+        )
     }
 
     var changeSpeedSheetView: some View {
@@ -130,7 +134,6 @@ struct AudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
-            // check if audio playing is possible
             do {
                 let session = AVAudioSession.sharedInstance()
                 try session.setActive(true)
@@ -158,6 +161,18 @@ struct AudioPlayer: View {
 
     func speedRate2String(_ speedRate: Double) -> String {
         "\(String(format: "%g", speedRate))x"
+    }
+
+    func audioPlayingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isPlayingObject.isPlaying {
+            playOrPause()
+        }
     }
 }
 
