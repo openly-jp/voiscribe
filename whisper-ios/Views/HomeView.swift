@@ -7,26 +7,19 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ZStack {
-                    HStack(alignment: .center) {
-                        Button(action: {
-                            sideMenuOffset = showSideMenu ? sideMenuCloseOffset : sideMenuOpenOffset
-                            showSideMenu.toggle()
-                        }, label: {
-                            Image(systemName: "sidebar.left")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30, alignment: .center)
-                                .foregroundColor(Color.gray)
-                        })
-                        .padding(.horizontal)
-                        Spacer()
-                    }
-                    HStack(alignment: .center) {
-                        Text(APP_NAME)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
+                HStack(alignment: .center) {
+                    Button(action: {
+                        sideMenuOffset = showSideMenu ? sideMenuCloseOffset : sideMenuOpenOffset
+                        showSideMenu.toggle()
+                    }, label: {
+                        Image(systemName: "sidebar.left")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30, alignment: .center)
+                            .foregroundColor(Color.gray)
+                    })
+                    .padding(.horizontal)
+                    Spacer()
                 }
 
                 GeometryReader {
