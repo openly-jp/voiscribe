@@ -319,7 +319,7 @@ func newSegmentCallback(
 func sendBackgroundAlertNotification() {
     let BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER = "background-alert-notification"
     let BACKGROUND_ALERT_NOTIFICATION_TITLE = "VoiScribe"
-    let BACKGROUND_ALERT_NOTIFICATION_BODY = "30s以上バックグラウンド状態の場合、アプリの動作が停止します。"
+    let BACKGROUND_ALERT_NOTIFICATION_BODY = NSLocalizedString("30s以上バックグラウンド状態の場合、アプリの動作が停止します。", comment: "")
 
     let backgroundAlertNotificationContent = UNMutableNotificationContent()
     backgroundAlertNotificationContent.title = BACKGROUND_ALERT_NOTIFICATION_TITLE
