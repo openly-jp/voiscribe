@@ -1,6 +1,7 @@
 import AVFoundation
 import Dispatch
 import Foundation
+import SwiftUI
 
 class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
@@ -112,6 +113,9 @@ class WhisperRecognizer: Recognizer {
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
+            let identifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                Logger.warning("background task expired")
+            })
             defer {
                 self.isRecognizing = false
             }
@@ -232,6 +236,7 @@ class WhisperRecognizer: Recognizer {
                 }
                 callback(recognizingSpeech)
             }
+            UIApplication.shared.endBackgroundTask(identifier)
         }
     }
 }
