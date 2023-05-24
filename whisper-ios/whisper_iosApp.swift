@@ -3,9 +3,17 @@ import SwiftUI
 
 @main
 struct WhisperTestApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     var body: some Scene {
         WindowGroup {
             StartView()
+                .onChange(of: scenePhase) { phase in
+                    if phase == .background {
+                        if numRecognitionTasks > 0 {
+                            sendBackgroundAlertNotification()
+                        }
+                    }
+                }
         }
     }
 }
@@ -27,6 +35,8 @@ struct StartView: View {
                 UserDefaults.standard.set(false, forKey: isDownloadingKey)
             }
         }
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.requestAuthorization(options: .alert, completionHandler: { _, _ in })
     }
 
     var body: some View {

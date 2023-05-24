@@ -3,6 +3,8 @@ import Dispatch
 import Foundation
 import SwiftUI
 
+var numRecognitionTasks = 0
+
 class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
@@ -113,13 +115,15 @@ class WhisperRecognizer: Recognizer {
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
+            defer {
+                self.isRecognizing = false
+                numRecognitionTasks -= 1
+            }
             let identifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
                 Logger.warning("background task expired")
             })
-            defer {
-                self.isRecognizing = false
-            }
 
+            numRecognitionTasks += 1
             // prohibit user from changing model
             self.isRecognizing = true
 
@@ -310,4 +314,22 @@ func newSegmentCallback(
             newTranscriptionLine
         )
     }
+}
+
+func sendBackgroundAlertNotification() {
+    let BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER = "background-alert-notification"
+    let BACKGROUND_ALERT_NOTIFICATION_TITLE = "VoiScribe"
+    let BACKGROUND_ALERT_NOTIFICATION_BODY = "30s以上バックグラウンド状態の場合、アプリの動作が停止します。"
+
+    let backgroundAlertNotificationContent = UNMutableNotificationContent()
+    backgroundAlertNotificationContent.title = BACKGROUND_ALERT_NOTIFICATION_TITLE
+    backgroundAlertNotificationContent.body = BACKGROUND_ALERT_NOTIFICATION_BODY
+
+    let backgroundAlertNotificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+    let backgroundAlertNotificationRequest = UNNotificationRequest(
+        identifier: BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER,
+        content: backgroundAlertNotificationContent,
+        trigger: backgroundAlertNotificationTrigger
+    )
+    UNUserNotificationCenter.current().add(backgroundAlertNotificationRequest)
 }
