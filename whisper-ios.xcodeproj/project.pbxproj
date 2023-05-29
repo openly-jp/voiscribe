@@ -64,8 +64,8 @@
 		5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50929A245EE003AD311 /* FileDownloader.swift */; };
 		5AADC50C29A24623003AD311 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50B29A24623003AD311 /* LicenseView.swift */; };
 		5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */; };
-		DBCD3B622A1DE06400F081E6 /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = DBCD3B612A1DE06400F081E6 /* ggml-small.en.bin */; };
 		DBCD3B652A1DE42200F081E6 /* PartialSheet in Frameworks */ = {isa = PBXBuildFile; productRef = DBCD3B642A1DE42200F081E6 /* PartialSheet */; };
+		DBCD3B692A24C98100F081E6 /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,7 +152,7 @@
 		5AADC50929A245EE003AD311 /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		5AADC50B29A24623003AD311 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 		5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoMenuItems.swift; sourceTree = "<group>"; };
-		DBCD3B612A1DE06400F081E6 /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "ggml-small.en.bin"; path = "../../../ggml-whisper/ggml-small.en.bin"; sourceTree = "<group>"; };
+		DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-small.en.bin"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -415,7 +415,7 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DBCD3B612A1DE06400F081E6 /* ggml-small.en.bin */,
+				DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */,
 				1324459829AFAA2A0063A4D5 /* ggml-small.multi.bin */,
 				572D0CA529A17F4800D62256 /* sample_ja.wav */,
 				572D0CA229A17BCA00D62256 /* sample_ja.csv */,
@@ -547,10 +547,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */,
+				DBCD3B692A24C98100F081E6 /* ggml-small.en.bin in Resources */,
 				1324459929AFAA2A0063A4D5 /* ggml-small.multi.bin in Resources */,
 				572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
-				DBCD3B622A1DE06400F081E6 /* ggml-small.en.bin in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
 				5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */,
 				5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */,
