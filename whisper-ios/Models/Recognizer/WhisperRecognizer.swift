@@ -11,6 +11,8 @@ class WhisperRecognizer: Recognizer {
     let samplingRate: Float = 16000
 
     var isRecognizing = false
+    
+    var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
     init(whisperModel: WhisperModel) throws {
         if whisperModel.localPath == nil {
@@ -119,8 +121,10 @@ class WhisperRecognizer: Recognizer {
                 self.isRecognizing = false
                 numRecognitionTasks -= 1
             }
-            let identifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-                Logger.warning("background task expired")
+            self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                Logger.warning("Background recognition task was expired.")
+                UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
+                self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             })
 
             numRecognitionTasks += 1
@@ -240,7 +244,8 @@ class WhisperRecognizer: Recognizer {
                 }
                 callback(recognizingSpeech)
             }
-            UIApplication.shared.endBackgroundTask(identifier)
+            UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
+            self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
         }
     }
 }
@@ -319,7 +324,7 @@ func newSegmentCallback(
 func sendBackgroundAlertNotification() {
     let BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER = "background-alert-notification"
     let BACKGROUND_ALERT_NOTIFICATION_TITLE = "VoiScribe"
-    let BACKGROUND_ALERT_NOTIFICATION_BODY = NSLocalizedString("30s以上バックグラウンド状態の場合、アプリの動作が停止します。", comment: "")
+    let BACKGROUND_ALERT_NOTIFICATION_BODY = NSLocalizedString("バックグラウンド状態が継続した場合、アプリの動作が停止します。", comment: "")
 
     let backgroundAlertNotificationContent = UNMutableNotificationContent()
     backgroundAlertNotificationContent.title = BACKGROUND_ALERT_NOTIFICATION_TITLE

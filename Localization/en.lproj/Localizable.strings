@@ -230,4 +230,4 @@
 "もう一度認識をお願いいたします。" = "Please try again.";
 
 /* No comment provided by engineer. */
-"30s以上バックグラウンド状態の場合、アプリの動作が停止します。" = "Background for more than 30 seconds will stop the app.";
+"バックグラウンド状態が継続した場合、アプリの動作が停止します。" = "If background mode continues, app will stop working.";
