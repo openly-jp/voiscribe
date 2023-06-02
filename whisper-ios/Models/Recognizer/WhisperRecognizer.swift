@@ -11,7 +11,7 @@ class WhisperRecognizer: Recognizer {
     let samplingRate: Float = 16000
 
     var isRecognizing = false
-    
+
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
     init(whisperModel: WhisperModel) throws {
