@@ -184,23 +184,29 @@ struct RecognizingAudioPlayer: View {
                 Text("認識中")
             }
             .font(.caption)
-
-            HStack {
-                Button(speedRate2String(availableSpeedRates[2])) {}
-                    .foregroundColor(Color(.secondaryLabel))
-                    .disabled(true)
-                Spacer()
-                PlayerButton(name: "gobackward.5", size: 35) {}
-                    .disabled(true)
-                Spacer()
-                ProgressView()
-                    .scaleEffect(2)
-                Spacer()
-                PlayerButton(name: "goforward.5", size: 35) {}
-                    .disabled(true)
-                Spacer()
-                PlayerButton(name: "nosign", size: 20) {}
-                    .disabled(true)
+            ZStack{
+                HStack {
+                    Button(speedRate2String(availableSpeedRates[2])) {}
+                        .foregroundColor(Color(.secondaryLabel))
+                        .disabled(true)
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    PlayerButton(name: "gobackward.5", size: 35) {}
+                        .disabled(true)
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(2)
+                    Spacer()
+                    PlayerButton(name: "goforward.5", size: 35) {}
+                        .disabled(true)
+                    Spacer()
+                    /* Hide as future premium feature
+                    PlayerButton(name: "nosign", size: 20) {}
+                        .disabled(true)
+                    */
+                }
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
