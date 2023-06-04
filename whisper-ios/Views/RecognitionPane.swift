@@ -97,7 +97,7 @@ struct RecognitionPane: View {
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
-    @State var isOtherAppRecordingAlertOpen = false
+    @State var isPhoneCallingAlertOpen = false
 
     // MARK: - scroll states
 
@@ -180,7 +180,7 @@ struct RecognitionPane: View {
                     }
                 }
         }
-        .alert(isPresented: $isOtherAppRecordingAlertOpen) {
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
             Alert(
                 title: Text("録音できません"),
                 message: Text("他のアプリで通話中は録音できません。"),
@@ -254,7 +254,7 @@ struct RecognitionPane: View {
             .navigationBarHidden(true)
             .background(RECORDING_SHEET_COLOR)
         }
-        .alert(isPresented: $isOtherAppRecordingAlertOpen) {
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
             Alert(
                 title: Text("録音できません"),
                 message: Text("他のアプリで通話中は録音できません。"),
@@ -369,7 +369,7 @@ struct RecognitionPane: View {
             let session = AVAudioSession.sharedInstance()
             try session.setActive(true)
         } catch {
-            isOtherAppRecordingAlertOpen = true
+            isPhoneCallingAlertOpen = true
             return
         }
 
@@ -412,7 +412,7 @@ struct RecognitionPane: View {
             let session = AVAudioSession.sharedInstance()
             try session.setActive(true)
         } catch {
-            isOtherAppRecordingAlertOpen = true
+            isPhoneCallingAlertOpen = true
             return
         }
 

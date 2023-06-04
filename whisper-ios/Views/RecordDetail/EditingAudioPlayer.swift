@@ -13,7 +13,7 @@ struct EditingAudioPlayer: View {
 
     @State var updatePlayingTimeTimer: Timer? = nil
 
-    @State var isOtherAppIsRecordingAlertOpen = false
+    @State var isPhoneCallingAlertOpen = false
 
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
@@ -59,7 +59,7 @@ struct EditingAudioPlayer: View {
                 updatePlayingTimeTimer.invalidate()
             }
         }
-        .alert(isPresented: $isOtherAppIsRecordingAlertOpen) {
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
             Alert(
                 title: Text("音声を再生できません"),
                 message: Text("他のアプリで通話中は音声を再生できません。"),
@@ -123,7 +123,7 @@ struct EditingAudioPlayer: View {
                 let session = AVAudioSession.sharedInstance()
                 try session.setActive(true)
             } catch {
-                isOtherAppIsRecordingAlertOpen = true
+                isPhoneCallingAlertOpen = true
                 return
             }
 
