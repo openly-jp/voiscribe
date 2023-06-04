@@ -51,29 +51,38 @@ struct AudioPlayer: View {
             .font(.caption)
 
             HStack {
-                Button(speedRate2String(availableSpeedRates[speedRateIdx])) { isChangingSpeedRate = true }
-                    .foregroundColor(Color(.secondaryLabel))
-                    .sheet(isPresented: $isChangingSpeedRate) { changeSpeedSheetView }
-                Spacer()
-                PlayerButton(name: "gobackward.5", size: 35) {
-                    player.currentTime -= 5
-                    currentPlayingTime = player.currentTime
+                ZStack {
+                    HStack {
+                        Button(speedRate2String(availableSpeedRates[speedRateIdx])) { isChangingSpeedRate = true }
+                            .foregroundColor(Color(.secondaryLabel))
+                            .sheet(isPresented: $isChangingSpeedRate) { changeSpeedSheetView }
+                        Spacer()
+                    }
+                    HStack {
+                        Spacer()
+                        PlayerButton(name: "gobackward.5", size: 35) {
+                            player.currentTime -= 5
+                            currentPlayingTime = player.currentTime
+                        }
+                        Spacer()
+                        PlayerButton(
+                            name: isPlayingObject.isPlaying ? "pause.circle.fill" : "play.circle.fill",
+                            size: 55,
+                            action: playOrPause
+                        )
+                        Spacer()
+                        PlayerButton(name: "goforward.5", size: 35) {
+                            player.currentTime += 5
+                            currentPlayingTime = player.currentTime
+                        }
+                        Spacer()
+                    }
                 }
-                Spacer()
-                PlayerButton(
-                    name: isPlayingObject.isPlaying ? "pause.circle.fill" : "play.circle.fill",
-                    size: 55,
-                    action: playOrPause
-                )
-                Spacer()
-                PlayerButton(name: "goforward.5", size: 35) {
-                    player.currentTime += 5
-                    currentPlayingTime = player.currentTime
-                }
-                Spacer()
-                PlayerButton(name: "doc.on.doc", size: 20) {
-                    UIPasteboard.general.string = transcription
-                }
+                /* Hide as future premium feature
+                 PlayerButton(name: "doc.on.doc", size: 20) {
+                     UIPasteboard.general.string = transcription
+                 }
+                 */
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 10)
