@@ -369,7 +369,12 @@ struct RecognitionPane: View {
             let session = AVAudioSession.sharedInstance()
             try session.setActive(true)
         } catch {
-            isPhoneCallingAlertOpen = true
+            let nsError = error as NSError
+            if nsError.domain == NSOSStatusErrorDomain && nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue {
+                isPhoneCallingAlertOpen = true
+            } else {
+                Logger.error(error)
+            }
             return
         }
 
@@ -412,7 +417,12 @@ struct RecognitionPane: View {
             let session = AVAudioSession.sharedInstance()
             try session.setActive(true)
         } catch {
-            isPhoneCallingAlertOpen = true
+            let nsError = error as NSError
+            if nsError.domain == NSOSStatusErrorDomain && nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue {
+                isPhoneCallingAlertOpen = true
+            } else {
+                Logger.error(error)
+            }
             return
         }
 
