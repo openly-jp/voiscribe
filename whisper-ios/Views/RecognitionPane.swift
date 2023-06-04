@@ -169,6 +169,9 @@ struct RecognitionPane: View {
                         // to distinguish background or inactive (e.g. Control Panel)
                         isBackground = true
                     } else if newPhase == .active, isRecording, !isPaused, isBackground {
+                        if let streamingRecognitionTimer {
+                            if streamingRecognitionTimer.isValid { streamingRecognitionTimer.invalidate() }
+                        }
                         streamingRecognitionTimer = Timer.scheduledTimer(
                             withTimeInterval: Double(recognitionFrequencySec),
                             repeats: true
