@@ -184,7 +184,7 @@ struct RecognizingAudioPlayer: View {
                 Text("認識中")
             }
             .font(.caption)
-            ZStack{
+            ZStack {
                 HStack {
                     Button(speedRate2String(availableSpeedRates[2])) {}
                         .foregroundColor(Color(.secondaryLabel))
@@ -203,9 +203,9 @@ struct RecognizingAudioPlayer: View {
                         .disabled(true)
                     Spacer()
                     /* Hide as future premium feature
-                    PlayerButton(name: "nosign", size: 20) {}
-                        .disabled(true)
-                    */
+                     PlayerButton(name: "nosign", size: 20) {}
+                         .disabled(true)
+                     */
                 }
             }
             .padding(.horizontal, 30)
