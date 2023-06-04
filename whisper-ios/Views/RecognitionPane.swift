@@ -440,6 +440,12 @@ struct RecognitionPane: View {
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setActive(false)
+        } catch {
+            Logger.error(error)
+        }
     }
 
     /// discard all information about recording and close the pane
@@ -460,6 +466,13 @@ struct RecognitionPane: View {
         isPaused = false
         isPaneOpen = false
         isConfirmOpen = false
+        
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setActive(false)
+        } catch {
+            Logger.error(error)
+        }
 
         guard let recognizingSpeech else {
             Logger.error("recognizingSpeech is nil")
@@ -496,6 +509,13 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
+        
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setActive(false)
+        } catch {
+            Logger.error(error)
+        }
 
         CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizingSpeech!)
         do {

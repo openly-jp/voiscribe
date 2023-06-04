@@ -160,6 +160,12 @@ struct AudioPlayer: View {
         } else {
             updatePlayingTimeTimer?.invalidate()
             player.pause()
+            do {
+                let session = AVAudioSession.sharedInstance()
+                try session.setActive(false)
+            } catch {
+                Logger.error(error)
+            }
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
