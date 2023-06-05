@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1324459529AFA9370063A4D5 /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1324459429AFA9370063A4D5 /* ggml-small.en.bin */; };
 		1324459929AFAA2A0063A4D5 /* ggml-small.multi.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1324459829AFAA2A0063A4D5 /* ggml-small.multi.bin */; };
 		13516D992960369D005013C8 /* RecognizedSpeechMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D982960369D005013C8 /* RecognizedSpeechMock.swift */; };
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
-		13BB395A29A3548500082D1F /* PartialSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 13DF2F2E29A0848C0030E39A /* PartialSheet */; };
 		13BB395D29A3694200082D1F /* RecognitionSettingPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB395C29A3694200082D1F /* RecognitionSettingPane.swift */; };
 		13BB396629A7AED600082D1F /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
 		13BB396829A894D900082D1F /* RecognitionPresetPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB396729A894D900082D1F /* RecognitionPresetPane.swift */; };
@@ -51,7 +49,6 @@
 		57EAB6ED296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EAB6EB296214D300BB59BE /* RecognizedSpeechData+CoreDataProperties.swift */; };
 		5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284D029A79EA5008E848F /* Localizable.strings */; };
 		5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A2284D229A79F61008E848F /* InfoPlist.strings */; };
-		5A733C1929B10C59002B397C /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5A733C1829B10C59002B397C /* ggml-small.en.bin */; };
 		5A8F54F52948CCDB00E87D25 /* whisper_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */; };
 		5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54F82948CCDD00E87D25 /* Assets.xcassets */; };
 		5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A8F54FB2948CCDD00E87D25 /* Preview Assets.xcassets */; };
@@ -67,6 +64,8 @@
 		5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50929A245EE003AD311 /* FileDownloader.swift */; };
 		5AADC50C29A24623003AD311 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50B29A24623003AD311 /* LicenseView.swift */; };
 		5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */; };
+		DBCD3B652A1DE42200F081E6 /* PartialSheet in Frameworks */ = {isa = PBXBuildFile; productRef = DBCD3B642A1DE42200F081E6 /* PartialSheet */; };
+		DBCD3B692A24C98100F081E6 /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */; };
 		DBCD3B5C2A11170600F081E6 /* FeedbackMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,7 +87,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1324459429AFA9370063A4D5 /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "ggml-small.en.bin"; path = "../../../../Downloads/ggml-small.en.bin"; sourceTree = "<group>"; };
 		1324459829AFAA2A0063A4D5 /* ggml-small.multi.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-small.multi.bin"; sourceTree = "<group>"; };
 		13516D982960369D005013C8 /* RecognizedSpeechMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedSpeechMock.swift; sourceTree = "<group>"; };
 		13516D9C2961A900005013C8 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 		5A2284D129A79EA9008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A2284D329A79F61008E848F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5A2284DF29ABB437008E848F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		5A733C1829B10C59002B397C /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-small.en.bin"; sourceTree = "<group>"; };
 		5A8F54F12948CCDB00E87D25 /* VoiScribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiScribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8F54F42948CCDB00E87D25 /* whisper_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whisper_iosApp.swift; sourceTree = "<group>"; };
 		5A8F54F82948CCDD00E87D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -156,6 +153,7 @@
 		5AADC50929A245EE003AD311 /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		5AADC50B29A24623003AD311 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 		5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoMenuItems.swift; sourceTree = "<group>"; };
+		DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-small.en.bin"; sourceTree = "<group>"; };
 		DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMenuItems.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -164,8 +162,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBCD3B652A1DE42200F081E6 /* PartialSheet in Frameworks */,
 				13BB396629A7AED600082D1F /* SafariServicesUI in Frameworks */,
-				13BB395A29A3548500082D1F /* PartialSheet in Frameworks */,
 				57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,7 +418,7 @@
 		5A8F552C2948CEBD00E87D25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5A733C1829B10C59002B397C /* ggml-small.en.bin */,
+				DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */,
 				1324459829AFAA2A0063A4D5 /* ggml-small.multi.bin */,
 				572D0CA529A17F4800D62256 /* sample_ja.wav */,
 				572D0CA229A17BCA00D62256 /* sample_ja.csv */,
@@ -454,7 +452,7 @@
 			packageProductDependencies = (
 				57B26A2829649A7F007A7B9B /* DequeModule */,
 				5A91ACE62999514D004BE94A /* SafariServicesUI */,
-				13DF2F2E29A0848C0030E39A /* PartialSheet */,
+				DBCD3B642A1DE42200F081E6 /* PartialSheet */,
 			);
 			productName = "whisper-ios";
 			productReference = 5A8F54F12948CCDB00E87D25 /* VoiScribe.app */;
@@ -533,7 +531,7 @@
 			packageReferences = (
 				57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */,
 				5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */,
-				13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */,
+				DBCD3B632A1DE42200F081E6 /* XCRemoteSwiftPackageReference "PartialSheet" */,
 			);
 			productRefGroup = 5A8F54F22948CCDB00E87D25 /* Products */;
 			projectDirPath = "";
@@ -552,10 +550,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				572D0CA429A17CF300D62256 /* sample_ja.csv in Resources */,
+				DBCD3B692A24C98100F081E6 /* ggml-small.en.bin in Resources */,
 				1324459929AFAA2A0063A4D5 /* ggml-small.multi.bin in Resources */,
 				572D0CA629A17F4800D62256 /* sample_ja.wav in Resources */,
 				5A8F54FC2948CCDD00E87D25 /* Preview Assets.xcassets in Resources */,
-				5A733C1929B10C59002B397C /* ggml-small.en.bin in Resources */,
 				5A8F54F92948CCDD00E87D25 /* Assets.xcassets in Resources */,
 				5A2284CE29A79EA5008E848F /* Localizable.strings in Resources */,
 				5A2284D429A79F61008E848F /* InfoPlist.strings in Resources */,
@@ -990,14 +988,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AndreaMiotto/PartialSheet.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
@@ -1014,14 +1004,17 @@
 				minimumVersion = 0.1.0;
 			};
 		};
+		DBCD3B632A1DE42200F081E6 /* XCRemoteSwiftPackageReference "PartialSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/openly-jp/PartialSheet";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		13DF2F2E29A0848C0030E39A /* PartialSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 13DF2F2D29A0848C0030E39A /* XCRemoteSwiftPackageReference "PartialSheet" */;
-			productName = PartialSheet;
-		};
 		57B26A2829649A7F007A7B9B /* DequeModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */;
@@ -1031,6 +1024,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */;
 			productName = SafariServicesUI;
+		};
+		DBCD3B642A1DE42200F081E6 /* PartialSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DBCD3B632A1DE42200F081E6 /* XCRemoteSwiftPackageReference "PartialSheet" */;
+			productName = PartialSheet;
 		};
 /* End XCSwiftPackageProductDependency section */
 
