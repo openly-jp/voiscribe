@@ -97,6 +97,7 @@ struct RecognitionPane: View {
     @State var isPaneOpen: Bool = false
     @State var isConfirmOpen: Bool = false
     @State var isCancelRecognitionAlertOpen = false
+    @State var isPhoneCallingAlertOpen = false
 
     // MARK: - scroll states
 
@@ -168,6 +169,9 @@ struct RecognitionPane: View {
                         // to distinguish background or inactive (e.g. Control Panel)
                         isBackground = true
                     } else if newPhase == .active, isRecording, !isPaused, isBackground {
+                        if let streamingRecognitionTimer {
+                            if streamingRecognitionTimer.isValid { streamingRecognitionTimer.invalidate() }
+                        }
                         streamingRecognitionTimer = Timer.scheduledTimer(
                             withTimeInterval: Double(recognitionFrequencySec),
                             repeats: true
@@ -178,6 +182,13 @@ struct RecognitionPane: View {
                         isBackground = false
                     }
                 }
+        }
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
+            Alert(
+                title: Text("録音できません"),
+                message: Text("他のアプリで通話中は録音できません。"),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 
@@ -245,6 +256,13 @@ struct RecognitionPane: View {
             }
             .navigationBarHidden(true)
             .background(RECORDING_SHEET_COLOR)
+        }
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
+            Alert(
+                title: Text("録音できません"),
+                message: Text("他のアプリで通話中は録音できません。"),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 
@@ -350,6 +368,14 @@ struct RecognitionPane: View {
 
     /// start recording
     func startRecording() {
+        do {
+            try sessionActivation {
+                isPhoneCallingAlertOpen = true
+            }
+        } catch {
+            return
+        }
+
         isRecording = true
         isPaused = false
         isPaneOpen = true
@@ -385,6 +411,14 @@ struct RecognitionPane: View {
     }
 
     func resumeRecording() {
+        do {
+            try sessionActivation {
+                isPhoneCallingAlertOpen = true
+            }
+        } catch {
+            return
+        }
+
         isRecording = true
         isPaused = false
 
@@ -399,6 +433,9 @@ struct RecognitionPane: View {
         updateRecordingTimeTimer?.invalidate()
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
+        do {
+            try sessionDeactivation()
+        } catch {}
     }
 
     /// discard all information about recording and close the pane
@@ -419,6 +456,10 @@ struct RecognitionPane: View {
         isPaused = false
         isPaneOpen = false
         isConfirmOpen = false
+
+        do {
+            try sessionDeactivation()
+        } catch {}
 
         guard let recognizingSpeech else {
             Logger.error("recognizingSpeech is nil")
@@ -455,6 +496,10 @@ struct RecognitionPane: View {
         isRecording = false
         isPaneOpen = false
         isConfirmOpen = false
+
+        do {
+            try sessionDeactivation()
+        } catch {}
 
         CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizingSpeech!)
         do {

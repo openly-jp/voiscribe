@@ -18,7 +18,6 @@ struct MainView: View {
             mode: .default,
             options: [.mixWithOthers, .defaultToSpeaker, .allowBluetooth]
         )
-        try! session.setActive(true)
     }
 
     var body: some View {

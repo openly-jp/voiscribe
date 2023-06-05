@@ -29,6 +29,8 @@ struct AudioPlayer: View {
     @State var updatePlayingTimeTimer: Timer? = nil
     let transcription: String
 
+    @State var isPhoneCallingAlertOpen = false
+
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
@@ -85,6 +87,17 @@ struct AudioPlayer: View {
                 updatePlayingTimeTimer.invalidate()
             }
         }
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
+            Alert(
+                title: Text("音声を再生できません"),
+                message: Text("他のアプリで通話中は音声を再生できません。"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: audioPlayingInterruptionHandler
+        )
     }
 
     var changeSpeedSheetView: some View {
@@ -121,6 +134,14 @@ struct AudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
+            do {
+                try sessionActivation {
+                    isPhoneCallingAlertOpen = true
+                }
+            } catch {
+                return
+            }
+
             updatePlayingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
@@ -134,12 +155,57 @@ struct AudioPlayer: View {
         } else {
             updatePlayingTimeTimer?.invalidate()
             player.pause()
+            do {
+                try sessionDeactivation()
+            } catch {}
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
 
     func speedRate2String(_ speedRate: Double) -> String {
         "\(String(format: "%g", speedRate))x"
+    }
+
+    func audioPlayingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isPlayingObject.isPlaying {
+            playOrPause()
+        }
+    }
+}
+
+func sessionActivation(
+    insufficientPriorityErrorCallback: () -> Void
+) throws {
+    do {
+        let session = AVAudioSession.sharedInstance()
+        try session.setActive(true)
+    } catch {
+        let nsError = error as NSError
+        if nsError.domain == NSOSStatusErrorDomain,
+           nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue
+        {
+            // do not need to logging because insufficientPriorityError is not a error
+            insufficientPriorityErrorCallback()
+        } else {
+            Logger.error(error)
+        }
+        throw error
+    }
+}
+
+func sessionDeactivation() throws {
+    do {
+        let session = AVAudioSession.sharedInstance()
+        try session.setActive(false)
+    } catch {
+        Logger.error(error)
+        throw error
     }
 }
 

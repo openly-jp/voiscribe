@@ -13,6 +13,8 @@ struct EditingAudioPlayer: View {
 
     @State var updatePlayingTimeTimer: Timer? = nil
 
+    @State var isPhoneCallingAlertOpen = false
+
     // `audioPlayerDidFinishPlaying` method is delegated to
     // the following object from `AVAudioPlayer`
     @StateObject var isPlayingObject = IsPlayingObject()
@@ -57,6 +59,17 @@ struct EditingAudioPlayer: View {
                 updatePlayingTimeTimer.invalidate()
             }
         }
+        .alert(isPresented: $isPhoneCallingAlertOpen) {
+            Alert(
+                title: Text("音声を再生できません"),
+                message: Text("他のアプリで通話中は音声を再生できません。"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification),
+            perform: audioPlayingInterruptionHandler
+        )
     }
 
     func keyboardButton() -> some View {
@@ -106,6 +119,14 @@ struct EditingAudioPlayer: View {
 
     func playOrPause() {
         if !isPlayingObject.isPlaying {
+            do {
+                try sessionActivation {
+                    isPhoneCallingAlertOpen = true
+                }
+            } catch {
+                return
+            }
+
             updatePlayingTimeTimer = Timer.scheduledTimer(
                 withTimeInterval: 0.1,
                 repeats: true
@@ -117,12 +138,27 @@ struct EditingAudioPlayer: View {
         } else {
             updatePlayingTimeTimer?.invalidate()
             player.pause()
+            do {
+                try sessionDeactivation()
+            } catch {}
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
 
     func speedRate2String(_ speedRate: Double) -> String {
         "\(String(format: "%g", speedRate))x"
+    }
+
+    func audioPlayingInterruptionHandler(notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began, isPlayingObject.isPlaying {
+            playOrPause()
+        }
     }
 }
 
