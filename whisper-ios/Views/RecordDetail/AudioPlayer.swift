@@ -135,17 +135,10 @@ struct AudioPlayer: View {
     func playOrPause() {
         if !isPlayingObject.isPlaying {
             do {
-                let session = AVAudioSession.sharedInstance()
-                try session.setActive(true)
-            } catch {
-                let nsError = error as NSError
-                if nsError.domain == NSOSStatusErrorDomain,
-                   nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue
-                {
+                try sessionActivation {
                     isPhoneCallingAlertOpen = true
-                } else {
-                    Logger.error(error)
                 }
+            } catch {
                 return
             }
 
@@ -163,11 +156,8 @@ struct AudioPlayer: View {
             updatePlayingTimeTimer?.invalidate()
             player.pause()
             do {
-                let session = AVAudioSession.sharedInstance()
-                try session.setActive(false)
-            } catch {
-                Logger.error(error)
-            }
+                try sessionDeactivation()
+            } catch {}
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
@@ -186,6 +176,36 @@ struct AudioPlayer: View {
         if type == .began, isPlayingObject.isPlaying {
             playOrPause()
         }
+    }
+}
+
+func sessionActivation(
+    insufficientPriorityErrorCallback: () -> Void
+) throws {
+    do {
+        let session = AVAudioSession.sharedInstance()
+        try session.setActive(true)
+    } catch {
+        let nsError = error as NSError
+        if nsError.domain == NSOSStatusErrorDomain,
+           nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue
+        {
+            // do not need to logging because insufficientPriorityError is not a error
+            insufficientPriorityErrorCallback()
+        } else {
+            Logger.error(error)
+        }
+        throw error
+    }
+}
+
+func sessionDeactivation() throws {
+    do {
+        let session = AVAudioSession.sharedInstance()
+        try session.setActive(false)
+    } catch {
+        Logger.error(error)
+        throw error
     }
 }
 

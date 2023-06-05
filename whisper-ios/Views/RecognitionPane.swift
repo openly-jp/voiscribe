@@ -369,17 +369,10 @@ struct RecognitionPane: View {
     /// start recording
     func startRecording() {
         do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setActive(true)
-        } catch {
-            let nsError = error as NSError
-            if nsError.domain == NSOSStatusErrorDomain,
-               nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue
-            {
+            try sessionActivation {
                 isPhoneCallingAlertOpen = true
-            } else {
-                Logger.error(error)
             }
+        } catch {
             return
         }
 
@@ -419,17 +412,10 @@ struct RecognitionPane: View {
 
     func resumeRecording() {
         do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setActive(true)
-        } catch {
-            let nsError = error as NSError
-            if nsError.domain == NSOSStatusErrorDomain,
-               nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue
-            {
+            try sessionActivation {
                 isPhoneCallingAlertOpen = true
-            } else {
-                Logger.error(error)
             }
+        } catch {
             return
         }
 
@@ -448,11 +434,8 @@ struct RecognitionPane: View {
         updateWaveformTimer?.invalidate()
         streamingRecognitionTimer?.invalidate()
         do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setActive(false)
-        } catch {
-            Logger.error(error)
-        }
+            try sessionDeactivation()
+        } catch {}
     }
 
     /// discard all information about recording and close the pane
@@ -475,11 +458,8 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setActive(false)
-        } catch {
-            Logger.error(error)
-        }
+            try sessionDeactivation()
+        } catch {}
 
         guard let recognizingSpeech else {
             Logger.error("recognizingSpeech is nil")
@@ -518,11 +498,8 @@ struct RecognitionPane: View {
         isConfirmOpen = false
 
         do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setActive(false)
-        } catch {
-            Logger.error(error)
-        }
+            try sessionDeactivation()
+        } catch {}
 
         CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizingSpeech!)
         do {

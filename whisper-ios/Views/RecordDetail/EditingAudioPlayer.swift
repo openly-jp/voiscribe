@@ -120,17 +120,10 @@ struct EditingAudioPlayer: View {
     func playOrPause() {
         if !isPlayingObject.isPlaying {
             do {
-                let session = AVAudioSession.sharedInstance()
-                try session.setActive(true)
-            } catch {
-                let nsError = error as NSError
-                if nsError.domain == NSOSStatusErrorDomain,
-                   nsError.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue
-                {
+                try sessionActivation {
                     isPhoneCallingAlertOpen = true
-                } else {
-                    Logger.error(error)
                 }
+            } catch {
                 return
             }
 
@@ -146,11 +139,8 @@ struct EditingAudioPlayer: View {
             updatePlayingTimeTimer?.invalidate()
             player.pause()
             do {
-                let session = AVAudioSession.sharedInstance()
-                try session.setActive(false)
-            } catch {
-                Logger.error(error)
-            }
+                try sessionDeactivation()
+            } catch {}
         }
         isPlayingObject.isPlaying = !isPlayingObject.isPlaying
     }
