@@ -1,6 +1,9 @@
 import AVFoundation
 import Dispatch
 import Foundation
+import SwiftUI
+
+var numRecognitionTasks = 0
 
 class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
@@ -8,6 +11,8 @@ class WhisperRecognizer: Recognizer {
     let samplingRate: Float = 16000
 
     var isRecognizing = false
+
+    var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
     init(whisperModel: WhisperModel) throws {
         if whisperModel.localPath == nil {
@@ -114,8 +119,15 @@ class WhisperRecognizer: Recognizer {
         serialDispatchQueue.async {
             defer {
                 self.isRecognizing = false
+                numRecognitionTasks -= 1
             }
+            self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                Logger.warning("Background recognition task was expired.")
+                UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
+                self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            })
 
+            numRecognitionTasks += 1
             // prohibit user from changing model
             self.isRecognizing = true
 
@@ -232,6 +244,8 @@ class WhisperRecognizer: Recognizer {
                 }
                 callback(recognizingSpeech)
             }
+            UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
+            self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
         }
     }
 }
@@ -305,4 +319,22 @@ func newSegmentCallback(
             newTranscriptionLine
         )
     }
+}
+
+func sendBackgroundAlertNotification() {
+    let BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER = "background-alert-notification"
+    let BACKGROUND_ALERT_NOTIFICATION_TITLE = "VoiScribe"
+    let BACKGROUND_ALERT_NOTIFICATION_BODY = NSLocalizedString("バックグラウンド状態が継続した場合、アプリの動作が停止します。", comment: "")
+
+    let backgroundAlertNotificationContent = UNMutableNotificationContent()
+    backgroundAlertNotificationContent.title = BACKGROUND_ALERT_NOTIFICATION_TITLE
+    backgroundAlertNotificationContent.body = BACKGROUND_ALERT_NOTIFICATION_BODY
+
+    let backgroundAlertNotificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+    let backgroundAlertNotificationRequest = UNNotificationRequest(
+        identifier: BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER,
+        content: backgroundAlertNotificationContent,
+        trigger: backgroundAlertNotificationTrigger
+    )
+    UNUserNotificationCenter.current().add(backgroundAlertNotificationRequest)
 }

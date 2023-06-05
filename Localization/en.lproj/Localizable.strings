@@ -240,3 +240,9 @@
 
 /* No comment provided by engineer. */
 "他のアプリで通話中は録音できません。" = "Cannot record while calling in other apps.";
+
+/* No comment provided by engineer. */
+"バックグラウンド状態が継続した場合、アプリの動作が停止します。" = "If background mode continues, app will stop working.";
+
+/* No comment provided by engineer. */
+"フィードバック" = "Feedback";
