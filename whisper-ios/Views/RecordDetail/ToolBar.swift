@@ -23,38 +23,41 @@ struct ToolBar: ToolbarContent {
                     Image(systemName: "highlighter")
                         .foregroundColor(Color(.label))
                 }
+                /* Hide as future premium feature
+                 Menu {
+                     Button(
+                         action: { isOpenShareSheetTxt = true },
+                         label: {
+                             Label("テキストを共有", systemImage: "textformat.alt")
+                         }
+                     )
+                     Button(
+                         action: { isOpenShareSheetM4a = true },
+                         label: {
+                             Label("音声を共有", systemImage: "waveform")
+                         }
+                     )
+                 } label: {
+                     Image(systemName: "square.and.arrow.up")
+                         .foregroundColor(Color(.label))
+                 }
+                 .sheet(isPresented: $isOpenShareSheetTxt) {
+                     ActivityViewTXT(text: allTranscription)
+                 }
+                 .sheet(isPresented: $isOpenShareSheetM4a) {
+                     ActivityViewM4A(recognizedSpeech: recognizedSpeech)
+                 }
+                 */
 
                 Menu {
-                    Button(
-                        action: { isOpenShareSheetTxt = true },
-                        label: {
-                            Label("テキストを共有", systemImage: "textformat.alt")
-                        }
-                    )
-                    Button(
-                        action: { isOpenShareSheetM4a = true },
-                        label: {
-                            Label("音声を共有", systemImage: "waveform")
-                        }
-                    )
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(Color(.label))
-                }
-                .sheet(isPresented: $isOpenShareSheetTxt) {
-                    ActivityViewTXT(text: allTranscription)
-                }
-                .sheet(isPresented: $isOpenShareSheetM4a) {
-                    ActivityViewM4A(recognizedSpeech: recognizedSpeech)
-                }
-
-                Menu {
-                    Button(
-                        action: { UIPasteboard.general.string = allTranscription },
-                        label: {
-                            Label("テキストをコピー", systemImage: "doc.on.doc")
-                        }
-                    )
+                    /* Hide as future premium feature
+                     Button(
+                         action: { UIPasteboard.general.string = allTranscription },
+                         label: {
+                             Label("テキストをコピー", systemImage: "doc.on.doc")
+                         }
+                     )
+                     */
                     Button(
                         role: .destructive,
                         action: { isOpenDeleteAlert = true },
