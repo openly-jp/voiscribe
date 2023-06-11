@@ -10,6 +10,9 @@ class WhisperRecognizer: Recognizer {
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
 
+    // `isRecognizing` becomes temprorarily `false`
+    // from the end of a previous task in the `serialDispatchQueue`
+    // to the start of the next task
     var isRecognizing = false
 
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
