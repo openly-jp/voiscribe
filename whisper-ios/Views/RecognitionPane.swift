@@ -477,8 +477,11 @@ struct RecognitionPane: View {
             recognizingSpeech: recognizingSpeech,
             isPromptingActive: isPromptingActive,
             isRemainingAudioConcatActive: isRemainingAudioConcatActive,
-            callback: streamingRecognitionPostProcess,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
+        )
+        recognizer.completeRecognition(
+            recognizingSpeech: recognizingSpeech,
+            cleanUp: streamingRecognitionPostProcess
         )
 
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
@@ -549,7 +552,6 @@ struct RecognitionPane: View {
             recognizingSpeech: recognizingSpeech,
             isPromptingActive: isPromptingActive,
             isRemainingAudioConcatActive: isRemainingAudioConcatActive,
-            callback: { _ in },
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
     }

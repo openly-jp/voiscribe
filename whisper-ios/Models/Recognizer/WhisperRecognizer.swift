@@ -53,7 +53,6 @@ class WhisperRecognizer: Recognizer {
         recognizingSpeech: RecognizedSpeech,
         isPromptingActive: Bool,
         isRemainingAudioConcatActive: Bool,
-        callback: @escaping (RecognizedSpeech) -> Void,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         serialDispatchQueue.async {
@@ -182,10 +181,20 @@ class WhisperRecognizer: Recognizer {
                         transcriptionLines: newSegmentCallbackData.newTranscriptionLines
                     )
                 }
-                callback(recognizingSpeech)
             }
             UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
             self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        }
+    }
+
+    /// Notify the recognizer that a user terminate the recognition
+    /// and `streamingRecognize` isn't called anymore
+    func completeRecognition(
+        recognizingSpeech: RecognizedSpeech,
+        cleanUp: @escaping (RecognizedSpeech) -> Void = { _ in }
+    ) {
+        serialDispatchQueue.async {
+            cleanUp(recognizingSpeech)
         }
     }
 }
