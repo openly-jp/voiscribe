@@ -5,6 +5,9 @@ struct RecordDetails: View {
     let deleteRecognizedSpeech: (UUID) -> Void
 
     let isRecognizing: Bool
+
+    @EnvironmentObject var recognizer: WhisperRecognizer
+
     func getLocaleDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: NSLocalizedString("ロケール", comment: ""))
@@ -14,15 +17,27 @@ struct RecordDetails: View {
         return dateFormatter.string(from: date)
     }
 
+    var progressString: String {
+        String(format: "%d", Int(recognizer.progressRate * 100))
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
-            Title(recognizedSpeech: recognizedSpeech, isEditable: !isRecognizing)
-            Rectangle()
-                .frame(height: 2)
-                .foregroundColor(Color.gray)
+
+            HStack(alignment: .bottom) {
+                Title(recognizedSpeech: recognizedSpeech, isEditable: !isRecognizing)
+                Spacer()
+                if isRecognizing {
+                    Text("認識中...(\(progressString)%終了)")
+                        .font(.system(size: 10))
+                        .foregroundColor(.gray)
+                        .padding(.horizontal)
+                }
+            }
+            ProgressView(value: isRecognizing ? recognizer.progressRate : 0)
                 .padding(.horizontal)
             if !isRecognizing, recognizedSpeech.transcriptionLines.count == 0 {
                 Spacer()

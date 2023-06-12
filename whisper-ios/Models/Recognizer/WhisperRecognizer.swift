@@ -5,10 +5,49 @@ import SwiftUI
 
 var numRecognitionTasks = 0
 
+enum RecognizerState {
+    case recognizing
+    case completed
+    case done
+}
+
+struct RecognitionState {
+    var recognizerState: RecognizerState
+    var numTotalTasks: Int
+    var numRemainingTasks: Int
+
+    // after refactoring of recognizer, the following properties will be added.
+    // var progressPercentage: Float;
+    // var startUnixTime: Int;
+    // var avgTaskExecutionSecond: Int;
+
+    init() {
+        recognizerState = .recognizing
+        numTotalTasks = 1
+        numRemainingTasks = 1
+    }
+
+    mutating func beginTask() {
+        numTotalTasks += 1
+        numRemainingTasks += 1
+    }
+
+    mutating func endTask() {
+        numRemainingTasks -= 1
+    }
+}
+
 class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
     let samplingRate: Float = 16000
+
+    // key is recognizingSpeechId
+    var taskDict = [UUID: RecognitionState]()
+
+    // this progressRate is correctly calculated only when there is only one recognition task
+    // this will be fixed after refactoring of recognizer
+    @Published var progressRate: Float = 0 // 0 ~ 1.0
 
     // `isRecognizing` becomes temprorarily `false`
     // from the end of a previous task in the `serialDispatchQueue`
@@ -55,6 +94,11 @@ class WhisperRecognizer: Recognizer {
         isRemainingAudioConcatActive: Bool,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
+        let taskId = recognizingSpeech.id
+
+        if taskDict[taskId] == nil { taskDict[taskId] = RecognitionState() }
+        else { taskDict[taskId]?.beginTask() }
+
         serialDispatchQueue.async {
             defer {
                 self.isRecognizing = false
@@ -181,9 +225,24 @@ class WhisperRecognizer: Recognizer {
                         transcriptionLines: newSegmentCallbackData.newTranscriptionLines
                     )
                 }
+
+                if self.taskDict[taskId] == nil { return }
+                self.taskDict[taskId]?.endTask()
+
+                self.updateProgressRate(taskId)
             }
             UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
             self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        }
+    }
+
+    func updateProgressRate(_ taskId: UUID) {
+        if let recognitionState = taskDict[taskId] {
+            let numRemainingTasks = Float(recognitionState.numRemainingTasks)
+            let numTotalTasks = Float(recognitionState.numTotalTasks)
+            DispatchQueue.main.async {
+                self.progressRate = (numTotalTasks - numRemainingTasks) / numTotalTasks
+            }
         }
     }
 
@@ -193,7 +252,11 @@ class WhisperRecognizer: Recognizer {
         recognizingSpeech: RecognizedSpeech,
         cleanUp: @escaping (RecognizedSpeech) -> Void = { _ in }
     ) {
+        let taskId = recognizingSpeech.id
+        updateProgressRate(taskId)
         serialDispatchQueue.async {
+            self.taskDict[taskId]?.recognizerState = .done
+            self.taskDict[taskId] = nil
             cleanUp(recognizingSpeech)
         }
     }
