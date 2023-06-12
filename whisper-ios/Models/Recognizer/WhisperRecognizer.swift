@@ -47,69 +47,6 @@ class WhisperRecognizer: Recognizer {
         return audioData
     }
 
-    func recognize(
-        audioFileURL: URL,
-        language: Language,
-        callback: @escaping (RecognizedSpeech) -> Void
-    ) throws -> RecognizedSpeech {
-        guard let context: OpaquePointer = whisperModel.whisperContext else {
-            throw NSError(domain: "model load error", code: -1)
-        }
-
-        guard let audioData = try? load_audio(url: audioFileURL) else {
-            throw NSError(domain: "audio load error", code: -1)
-        }
-
-        let recognizedSpeech = RecognizedSpeech(
-            audioFileURL: audioFileURL,
-            language: language,
-            transcriptionLines: []
-        )
-        DispatchQueue.global(qos: .userInteractive).async {
-            let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
-            var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
-            language.rawValue.withCString { en in
-                // Adapted from whisper.objc
-                params.print_realtime = true
-                params.print_progress = false
-                params.print_timestamps = true
-                params.print_special = false
-                params.translate = false
-                params.language = en
-                params.n_threads = Int32(maxThreads)
-                params.offset_ms = 0
-                params.no_context = true
-                params.single_segment = false
-
-                whisper_reset_timings(context)
-                audioData.withUnsafeBufferPointer { data in
-                    if whisper_full(context, params, data.baseAddress, Int32(data.count)) != 0 {
-                    } else {
-                        whisper_print_timings(context)
-                    }
-                }
-            }
-
-            let n_segments = whisper_full_n_segments(context)
-            for i in 0 ..< n_segments {
-                let text = String(cString: whisper_full_get_segment_text(context, i))
-                let startMSec = whisper_full_get_segment_t0(context, i) * 10
-                let endMSec = whisper_full_get_segment_t1(context, i) * 10
-                let transcriptionLine = TranscriptionLine(
-                    startMSec: startMSec,
-                    endMSec: endMSec,
-                    text: text,
-                    ordering: i
-                )
-                recognizedSpeech.transcriptionLines.append(transcriptionLine)
-            }
-
-            callback(recognizedSpeech)
-        }
-
-        return recognizedSpeech
-    }
-
     func streamingRecognize(
         audioFileURL: URL,
         language: Language,
