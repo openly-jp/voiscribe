@@ -5,6 +5,8 @@ import SwiftUI
 
 var numRecognitionTasks = 0
 
+let SAMPLING_RATE: Float = 16000
+
 enum RecognizerState {
     case recognizing
     case completed
@@ -40,7 +42,6 @@ struct RecognitionState {
 class WhisperRecognizer: Recognizer {
     @Published var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
-    let samplingRate: Float = 16000
 
     // key is recognizingSpeechId
     var taskDict = [UUID: RecognitionState]()
@@ -196,8 +197,7 @@ class WhisperRecognizer: Recognizer {
 
                 // update remaining audioData
                     let audioDataCount: Int = audioData.count
-                    let usedAudioDataCount = Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * self
-                        .samplingRate)
+                let usedAudioDataCount = Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * SAMPLING_RATE)
                     let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
                     if remainingAudioDataCount > 0 {
                         recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
