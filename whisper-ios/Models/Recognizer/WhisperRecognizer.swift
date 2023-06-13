@@ -40,7 +40,7 @@ struct RecognitionState {
 }
 
 class WhisperRecognizer: Recognizer {
-    @Published var whisperModel: WhisperModel
+    var whisperModel: WhisperModel
     let serialDispatchQueue = DispatchQueue(label: "recognize")
 
     // key is recognizingSpeechId
