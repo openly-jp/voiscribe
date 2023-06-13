@@ -90,8 +90,6 @@ class WhisperRecognizer: Recognizer {
         audioFileURL: URL,
         language: Language,
         recognizingSpeech: RecognizedSpeech,
-        isPromptingActive: Bool,
-        isRemainingAudioConcatActive: Bool,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
         let taskId = recognizingSpeech.id
@@ -191,13 +189,12 @@ class WhisperRecognizer: Recognizer {
                 // When some transcription line was suppressed because of repetition, we need to modify last endmsec
                 recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + newSegmentCallbackData
                     .transcribedMSec
+
                 // update promptTokens
-                if isPromptingActive {
                     recognizingSpeech.promptTokens.removeAll()
                     recognizingSpeech.promptTokens = newSegmentCallbackData.nextPromptTokens
-                }
+
                 // update remaining audioData
-                if isRemainingAudioConcatActive {
                     let audioDataCount: Int = audioData.count
                     let usedAudioDataCount = Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * self
                         .samplingRate)
@@ -207,7 +204,7 @@ class WhisperRecognizer: Recognizer {
                     } else {
                         recognizingSpeech.remainingAudioData = []
                     }
-                }
+
                 // when recognizedSpeech deleted during recognizing, this may cause error
                 // to avoid it, do feasibility check before saving audio data and update RecognizedSpeech coredata
                 if feasibilityCheck(recognizingSpeech) {

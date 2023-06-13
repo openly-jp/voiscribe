@@ -88,8 +88,6 @@ struct RecognitionPane: View {
     @State var title = ""
     @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
     var recognitionFrequencySec = 30
-    var isPromptingActive = true
-    var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
@@ -475,8 +473,6 @@ struct RecognitionPane: View {
             audioFileURL: url,
             language: language,
             recognizingSpeech: recognizingSpeech,
-            isPromptingActive: isPromptingActive,
-            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
         recognizer.completeRecognition(
@@ -550,8 +546,6 @@ struct RecognitionPane: View {
             audioFileURL: url,
             language: language,
             recognizingSpeech: recognizingSpeech,
-            isPromptingActive: isPromptingActive,
-            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
             feasibilityCheck: streamingRecognitionFeasibilityCheck
         )
     }
