@@ -50,7 +50,7 @@ class WhisperRecognizer: Recognizer {
     // this will be fixed after refactoring of recognizer
     @Published var progressRate: Float = 0 // 0 ~ 1.0
 
-    // `isRecognizing` becomes temprorarily `false`
+    // `isRecognizing` becomes temporarily `false`
     // from the end of a previous task in the `serialDispatchQueue`
     // to the start of the next task
     var isRecognizing = false
