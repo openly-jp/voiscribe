@@ -2,7 +2,7 @@ import PartialSheet
 import SwiftUI
 
 @main
-struct WhisperTestApp: App {
+struct VoiscribeApp: App {
     @Environment(\.scenePhase) private var scenePhase
     var body: some Scene {
         WindowGroup {
