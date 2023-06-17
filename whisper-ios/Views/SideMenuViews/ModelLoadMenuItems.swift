@@ -52,6 +52,7 @@ struct ModelRow: View {
     @State private var isDeletePrompt = false
     @State private var showPrompt = false
     @AppStorage private var isDownloading: Bool
+    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
 
     init(modelSize: Size, language: ModelLanguage, modelDisplayName: String) {
         self.modelSize = modelSize
@@ -128,7 +129,7 @@ struct ModelRow: View {
     }
 
     var isModelSelected: Bool {
-        recognizer.whisperModel.size == modelSize && recognizer.whisperModel.language == language
+        whisperModel.equalsTo(recognizer.whisperModel) && recognitionLanguage == defaultRecognitionLanguage
     }
 
     private func downloadModel() {

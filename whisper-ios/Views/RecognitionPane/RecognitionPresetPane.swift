@@ -60,9 +60,8 @@ struct RecognitionPresetRow: View {
     @State var isShowAlert = false
 
     var isSelected: Bool {
-        modelSize == recognizer.whisperModel.size &&
-            modelLanguage == recognizer.whisperModel.language &&
-            recognitionLanguage == defaultRecognitionLanguage
+        whisperModel.equalsTo(recognizer.whisperModel)
+            && recognitionLanguage == defaultRecognitionLanguage
     }
 
     // MARK: - design related constants
@@ -218,6 +217,11 @@ struct RecognitionPresetRow: View {
     }
 
     private func loadModel() {
+        if whisperModel.equalsTo(recognizer.whisperModel) {
+            defaultRecognitionLanguage = recognitionLanguage
+            return
+        }
+
         recognizer.whisperModel.freeModel()
         recognizer.whisperModel = whisperModel
 

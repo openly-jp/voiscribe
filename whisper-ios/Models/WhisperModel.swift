@@ -181,6 +181,10 @@ class WhisperModel: Identifiable, ObservableObject {
         whisper_free(whisperContext)
     }
 
+    func equalsTo(_ model: WhisperModel) -> Bool {
+        model.size == size && model.language == language
+    }
+
     func getModelMegaBytes() -> Int {
         switch (size, language) {
         case (Size.base, .en):
