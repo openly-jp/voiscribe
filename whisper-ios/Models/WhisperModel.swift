@@ -77,28 +77,6 @@ enum Lang: String, Identifiable, CaseIterable {
     }
 }
 
-func getModelMegaBytes(
-    size: Size,
-    lang: Lang
-) -> Int {
-    switch (size, lang) {
-    case (Size.base, Lang.en):
-        return 148
-    case (Size.base, Lang.multi):
-        return 148
-    case (Size.small, Lang.en):
-        return 160
-    case (Size.small, Lang.multi):
-        return 488
-    case (Size.medium, Lang.en):
-        return 469
-    case (Size.medium, Lang.multi):
-        return 1530
-    default:
-        return -1
-    }
-}
-
 let userDefaultWhisperModelDownloadPrefix = "user-default-whisper-model-download" // "-" + size + "-" + lang
 let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
 
@@ -216,5 +194,24 @@ class WhisperModel: Identifiable, ObservableObject {
     // (for a short amout of time)
     func freeModel() {
         whisper_free(whisperContext)
+    }
+
+    func getModelMegaBytes() -> Int {
+        switch (size, language) {
+        case (Size.base, .en):
+            return 148
+        case (Size.base, .multi):
+            return 148
+        case (Size.small, .en):
+            return 160
+        case (Size.small, .multi):
+            return 488
+        case (Size.medium, .en):
+            return 469
+        case (Size.medium, .multi):
+            return 1530
+        default:
+            return -1
+        }
     }
 }
