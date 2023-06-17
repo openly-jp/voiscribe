@@ -30,8 +30,8 @@ struct StartView: View {
         _defaultModelSize = AppStorage(wrappedValue: Size(), userDefaultModelSizeKey)
         _defaultModelLanguage = AppStorage(wrappedValue: Lang(), userDefaultModelLanguageKey)
         for modelSize in Size.allCases {
-            for modelLang in [Lang.en, Lang.multi] {
-                let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLang)"
+            ModelLanguage.allCases.map { modelLanguage in
+                let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
                 UserDefaults.standard.set(false, forKey: isDownloadingKey)
             }
         }

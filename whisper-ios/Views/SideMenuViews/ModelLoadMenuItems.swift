@@ -43,7 +43,7 @@ struct ModelRow: View {
     @State var progressValue: CGFloat = 0.0
 
     let modelSize: Size
-    let language: Lang
+    let language: ModelLanguage
     let modelDisplayName: String
     @ObservedObject var whisperModel: WhisperModel
 
@@ -53,7 +53,7 @@ struct ModelRow: View {
     @State private var showPrompt = false
     @AppStorage private var isDownloading: Bool
 
-    init(modelSize: Size, language: Lang, modelDisplayName: String) {
+    init(modelSize: Size, language: ModelLanguage, modelDisplayName: String) {
         self.modelSize = modelSize
         self.language = language
         self.modelDisplayName = modelDisplayName
@@ -166,7 +166,7 @@ struct ModelManagementView: View {
             ForEach(models, id: \.2) { model in
                 ModelRow(
                     modelSize: Size(rawValue: model.0)!,
-                    language: Lang(rawValue: model.1)!,
+                    language: ModelLanguage(rawValue: model.1)!,
                     modelDisplayName: model.2
                 )
             }

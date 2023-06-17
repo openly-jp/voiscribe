@@ -55,12 +55,11 @@ enum Size: String, CaseIterable, Identifiable {
     }
 }
 
-enum Lang: String, Identifiable, CaseIterable {
-    case ja
+enum ModelLanguage: String, Identifiable, CaseIterable {
     case en
     case multi
 
-    // just for ForEach operation
+    // SwiftUI ForEach needs elements to conrfom `Identifiable` protocol
     var id: String { rawValue }
 
     init() {
@@ -83,12 +82,12 @@ let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downl
 class WhisperModel: Identifiable, ObservableObject {
     var localPath: URL?
     var size: Size
-    var language: Lang
+    var language: ModelLanguage
     var whisperContext: OpaquePointer?
 
     @Published var isDownloaded: Bool
 
-    init(size: Size, language: Lang) {
+    init(size: Size, language: ModelLanguage) {
         self.size = size
         self.language = language
 
