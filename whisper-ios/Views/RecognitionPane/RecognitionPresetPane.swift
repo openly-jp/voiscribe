@@ -197,9 +197,7 @@ struct RecognitionPresetRow: View {
         }
         .frame(maxWidth: .infinity, minHeight: itemMinHeight)
         .contentShape(Rectangle())
-        .onTapGesture {
-            isShowAlert = isDownloading || isSelected ? false : true
-        }
+        .onTapGesture { isShowAlert = !isDownloading && !isSelected }
         .alert(isPresented: $isShowAlert) {
             whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
                 size: modelSize,
