@@ -28,8 +28,7 @@ struct RecognitionPresetPane: View {
                     ForEach(Size.allCases) { size in
                         ForEach(RecognitionLanguage.allCases) { lang in
                             RecognitionPresetRow(
-                                modelSize: size,
-                                modelLanguage: lang == Language.en ? ModelLanguage.en : ModelLanguage.multi,
+                                whisperModel: WhisperModel(size: size, recognitionLanguage: lang),
                                 recognitionLanguage: lang,
                                 geometryWidth: geometry.size.width
                             )
@@ -45,12 +44,9 @@ struct RecognitionPresetPane: View {
 
 struct RecognitionPresetRow: View {
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
-    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = ModelLanguage()
     @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
     @EnvironmentObject var recognizer: WhisperRecognizer
 
-    var modelSize: Size
-    var modelLanguage: Lang
     var recognitionLanguage: RecognitionLanguage
     var geometryWidth: Double
     var whisperModel: WhisperModel
@@ -76,23 +72,17 @@ struct RecognitionPresetRow: View {
     let recommendTagOffset: CGFloat = 10
 
     init(
-        modelSize: Size,
-        modelLanguage: ModelLanguage,
+        whisperModel: WhisperModel,
         recognitionLanguage: RecognitionLanguage,
         geometryWidth: Double
     ) {
-        self.modelSize = modelSize
-        self.modelLanguage = modelLanguage
+        self.whisperModel = whisperModel
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
-        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
+
+        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(whisperModel.name)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
-
-        whisperModel = WhisperModel(
-            size: self.modelSize,
-            recognitionLanguage: self.recognitionLanguage
-        )
     }
 
     var body: some View {
@@ -119,7 +109,7 @@ struct RecognitionPresetRow: View {
                             .font(.title3)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
-                        Text(modelSize.displayName)
+                        Text(whisperModel.size.displayName)
                             .font(.title3)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
@@ -163,11 +153,11 @@ struct RecognitionPresetRow: View {
                         .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
                     Group {
-                        ForEach(0 ..< modelSize.accuracy) { _ in
+                        ForEach(0 ..< whisperModel.size.accuracy) { _ in
                             Image(systemName: "star.fill")
                                 .frame(width: geometryWidth / 15)
                         }
-                        ForEach(0 ..< 3 - modelSize.accuracy) { _ in
+                        ForEach(0 ..< 3 - whisperModel.size.accuracy) { _ in
                             Image(systemName: "star")
                                 .frame(width: geometryWidth / 15)
                         }
@@ -179,11 +169,11 @@ struct RecognitionPresetRow: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
-                    ForEach(0 ..< modelSize.speed) { _ in
+                    ForEach(0 ..< whisperModel.size.speed) { _ in
                         Image(systemName: "hare.fill")
                             .frame(width: geometryWidth / 15)
                     }
-                    ForEach(0 ..< 3 - modelSize.speed) { _ in
+                    ForEach(0 ..< 3 - whisperModel.size.speed) { _ in
                         Image(systemName: "hare")
                             .frame(width: geometryWidth / 15)
                     }
@@ -222,12 +212,11 @@ struct RecognitionPresetRow: View {
         whisperModel.loadModel {
             err in
             if let err {
-                Logger.error("Failed to load model: \(modelSize)-\(modelLanguage)")
+                Logger.error("Failed to load model: \(whisperModel.name)")
                 Logger.error(err)
                 return
             }
-            defaultModelSize = modelSize
-            defaultLanguage = modelLanguage
+            defaultModelSize = whisperModel.size
             defaultRecognitionLanguage = recognitionLanguage
         }
     }

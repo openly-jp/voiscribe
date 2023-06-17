@@ -192,19 +192,19 @@ class WhisperRecognizer: Recognizer {
                     .transcribedMSec
 
                 // update promptTokens
-                    recognizingSpeech.promptTokens.removeAll()
-                    recognizingSpeech.promptTokens = newSegmentCallbackData.nextPromptTokens
+                recognizingSpeech.promptTokens.removeAll()
+                recognizingSpeech.promptTokens = newSegmentCallbackData.nextPromptTokens
 
                 // update remaining audioData
-                    let audioDataCount: Int = audioData.count
+                let audioDataCount: Int = audioData.count
                 let usedAudioDataCount =
                     Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * SAMPLING_RATE)
-                    let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
-                    if remainingAudioDataCount > 0 {
-                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
-                    } else {
-                        recognizingSpeech.remainingAudioData = []
-                    }
+                let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
+                if remainingAudioDataCount > 0 {
+                    recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
+                } else {
+                    recognizingSpeech.remainingAudioData = []
+                }
 
                 // when recognizedSpeech deleted during recognizing, this may cause error
                 // to avoid it, do feasibility check before saving audio data and update RecognizedSpeech coredata

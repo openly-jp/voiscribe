@@ -1,7 +1,6 @@
 import SwiftUI
 
 let userDefaultModelSizeKey = "user-default-model-size"
-let userDefaultModelLanguageKey = "user-default-model-language"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
@@ -42,9 +41,8 @@ struct ModelRow: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @State var progressValue: CGFloat = 0.0
 
-    let modelSize: Size
-    let language: ModelLanguage
     let modelDisplayName: String
+    let recognitionLanguage: RecognitionLanguage
     @ObservedObject var whisperModel: WhisperModel
 
     // Only one `.alert` modifier can be used with one view,
@@ -54,13 +52,14 @@ struct ModelRow: View {
     @AppStorage private var isDownloading: Bool
     @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
 
-    init(modelSize: Size, language: ModelLanguage, modelDisplayName: String) {
-        self.modelSize = modelSize
-        self.language = language
+    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage, modelDisplayName: String) {
         self.modelDisplayName = modelDisplayName
-        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
+        self.whisperModel = whisperModel
+        self.recognitionLanguage = recognitionLanguage
+
+        let isDownloadingKey =
+            "\(userDefaultWhisperModelDownloadingPrefix)-\(whisperModel.size)-\(whisperModel.language)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
-        whisperModel = WhisperModel(size: modelSize, language: language)
     }
 
     var body: some View {
@@ -154,21 +153,26 @@ struct ModelRow: View {
 }
 
 struct ModelManagementView: View {
-    let models = [
-        ("base", "multi", "Base"),
+    let args = [
+        ("base", "ja", "Base"),
         ("base", "en", "Base(EN)"),
-        ("small", "multi", "Small"),
+        ("small", "ja", "Small"),
         ("small", "en", "Small(EN)"),
-        ("medium", "multi", "Medium"),
+        ("medium", "ja", "Medium"),
         ("medium", "en", "Medium(EN)"),
     ]
     var body: some View {
         List {
-            ForEach(models, id: \.2) { model in
+            ForEach(args, id: \.2) { arg in
+                let recognitionLanguage = RecognitionLanguage(rawValue: arg.1)!
+                let model = WhisperModel(
+                    size: Size(rawValue: arg.0)!,
+                    recognitionLanguage: recognitionLanguage
+                )
                 ModelRow(
-                    modelSize: Size(rawValue: model.0)!,
-                    language: ModelLanguage(rawValue: model.1)!,
-                    modelDisplayName: model.2
+                    whisperModel: model,
+                    recognitionLanguage: recognitionLanguage,
+                    modelDisplayName: arg.2
                 )
             }
         }
