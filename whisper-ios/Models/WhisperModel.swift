@@ -76,7 +76,6 @@ enum ModelLanguage: String, Identifiable, CaseIterable {
     }
 }
 
-let userDefaultWhisperModelDownloadPrefix = "user-default-whisper-model-download" // "-" + size + "-" + lang
 let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
 
 class WhisperModel: Identifiable, ObservableObject {
@@ -136,11 +135,7 @@ class WhisperModel: Identifiable, ObservableObject {
 
             switch result {
             case .success:
-                DispatchQueue.main.async {
-                    self.isDownloaded = true
-                    let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
-                    UserDefaults.standard.set(true, forKey: key)
-                }
+                DispatchQueue.main.async { self.isDownloaded = true }
             case let .failure(error):
                 self.isDownloaded = false
                 err = NSError(
