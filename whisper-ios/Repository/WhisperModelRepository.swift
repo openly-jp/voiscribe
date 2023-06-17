@@ -60,30 +60,6 @@ enum WhisperModelRepository {
         }
     }
 
-    static func isModelBundled(
-        size: Size,
-        language: Lang
-    ) -> Bool {
-        Bundle.main.path(
-            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-            ofType: "bin"
-        ) == nil ? false : true
-    }
-
-    static func modelExists(size: Size, language: ModelLanguage) -> Bool {
-        let url: String
-        if isModelBundled(size: size, language: language) {
-            url = Bundle.main.path(
-                forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-                ofType: "bin"
-            )!
-        } else {
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            url = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin").path
-        }
-        return FileManager.default.fileExists(atPath: url)
-    }
-
     /// Delete a model from local storage.
     /// - Parameter model: The model to delete.
     static func deleteWhisperModel(size: Size, language: ModelLanguage) -> Bool {

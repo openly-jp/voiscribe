@@ -80,32 +80,41 @@ let userDefaultWhisperModelDownloadPrefix = "user-default-whisper-model-download
 let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
 
 class WhisperModel: Identifiable, ObservableObject {
-    var localPath: URL?
     var size: Size
     var language: ModelLanguage
     var whisperContext: OpaquePointer?
 
+    // if this retunrs `nil`, this model is not bundled
+    private let bundledPath: String?
     @Published var isDownloaded: Bool
 
-    init(size: Size, recognitionLanguage _: RecognitionLanguage) {
+    init(size: Size, recognitionLanguage: RecognitionLanguage) {
         self.size = size
         language = recognitionLanguage == .en ? .en : .multi
 
-        isDownloaded = WhisperModelRepository.modelExists(
-            size: size,
-            language: language
+        bundledPath = Bundle.main.path(
+            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
+            ofType: "bin"
         )
 
-        if isDownloaded {
-            if WhisperModelRepository.isModelBundled(size: size, language: language) {
-                let urlStr = Bundle.main.path(
-                    forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-                    ofType: "bin"
-                )
-                localPath = URL(string: urlStr!)!
-            } else {
-                localPath = getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
-            }
+        let localPath = WhisperModel.getLocalPath(size, language, bundledPath)
+        isDownloaded = FileManager.default.fileExists(atPath: localPath.path)
+    }
+
+    var localPath: URL { WhisperModel.getLocalPath(size, language, bundledPath) }
+    var isBundled: Bool { bundledPath != nil }
+
+    // this should be instance method but this function is called from `init` function
+    // of this class, so information about model must be passed as arguments.
+    private static func getLocalPath(
+        _ size: Size,
+        _ language: ModelLanguage,
+        _ bundledPath: String?
+    ) -> URL {
+        if let bundledPath {
+            return URL(string: bundledPath)!
+        } else {
+            return getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
         }
     }
 
@@ -126,8 +135,7 @@ class WhisperModel: Identifiable, ObservableObject {
             var err: Error?
 
             switch result {
-            case let .success(modelURL):
-                self.localPath = modelURL
+            case .success:
                 DispatchQueue.main.async {
                     self.isDownloaded = true
                     let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
@@ -147,12 +155,8 @@ class WhisperModel: Identifiable, ObservableObject {
 
     func loadModel(callback: @escaping (Error?) -> Void) {
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
-        guard let modelUrl = localPath else {
-            Logger.error("Failed to parse model url")
-            return
-        }
         DispatchQueue.global(qos: .userInitiated).async {
-            self.whisperContext = whisper_init_from_file(modelUrl.path)
+            self.whisperContext = whisper_init_from_file(self.localPath.path)
 
             var err: Error?
             if self.whisperContext == nil {

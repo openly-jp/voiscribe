@@ -132,10 +132,7 @@ struct RecognitionPresetRow: View {
                         CircularProgressBar(progress: $progressValue)
                             .frame(width: iconSize, height: iconSize)
                     } else {
-                        if whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
-                            size: modelSize,
-                            language: modelLanguage
-                        ) {
+                        if whisperModel.isDownloaded || whisperModel.isBundled {
                             Image(systemName: "checkmark.icloud.fill")
                                 .font(.system(size: iconSize))
                                 .offset(x: downloadIconOffset)
@@ -149,7 +146,7 @@ struct RecognitionPresetRow: View {
                         }
                     }
                 }
-                if WhisperModelRepository.isModelBundled(size: modelSize, language: modelLanguage) {
+                if whisperModel.isBundled {
                     Text("おすすめ")
                         .font(.caption)
                         .foregroundColor(Color.black)
@@ -198,10 +195,7 @@ struct RecognitionPresetRow: View {
         .contentShape(Rectangle())
         .onTapGesture { isShowAlert = !isDownloading && !isSelected }
         .alert(isPresented: $isShowAlert) {
-            whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
-                size: modelSize,
-                language: modelLanguage
-            ) ?
+            whisperModel.isDownloaded || whisperModel.isBundled ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),

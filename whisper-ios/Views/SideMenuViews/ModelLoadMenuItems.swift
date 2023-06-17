@@ -68,7 +68,7 @@ struct ModelRow: View {
             Text(modelDisplayName)
                 .font(.headline)
             Spacer()
-            if !WhisperModelRepository.isModelBundled(size: modelSize, language: language) {
+            if !whisperModel.isBundled {
                 if isDownloading {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
@@ -107,7 +107,7 @@ struct ModelRow: View {
     }
 
     var isDeleteDisabled: Bool {
-        WhisperModelRepository.isModelBundled(size: modelSize, language: language) || !whisperModel.isDownloaded
+        whisperModel.isBundled || !whisperModel.isDownloaded
     }
 
     var alertView: Alert {
