@@ -35,5 +35,5 @@ func getRecognizedSpeechMock(audioFileName: String, csvFileName: String) -> Reco
     }
     let transcriptionLines = loadTranscriptionLinesFromCSV(fileName: csvFileName)
 
-    return RecognizedSpeech(audioFileURL: audioFileURL, language: Language.ja, transcriptionLines: transcriptionLines)
+    return RecognizedSpeech(audioFileURL: audioFileURL, language: .ja, transcriptionLines: transcriptionLines)
 }
