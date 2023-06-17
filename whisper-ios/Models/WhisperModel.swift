@@ -110,20 +110,6 @@ class WhisperModel: Identifiable, ObservableObject {
         }
     }
 
-    init(
-        localPath: URL?,
-        size: Size,
-        language: Lang
-    ) {
-        self.localPath = localPath
-        self.size = size
-        self.language = language
-        isDownloaded = WhisperModelRepository.modelExists(
-            size: size,
-            language: language
-        )
-    }
-
     var name: String {
         "\(size.rawValue)-\(language.rawValue)"
     }
