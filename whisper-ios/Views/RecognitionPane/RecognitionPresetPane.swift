@@ -58,6 +58,9 @@ struct RecognitionPresetRow: View {
     var isSelected: Bool {
         whisperModel.equalsTo(recognizer.whisperModel)
             && recognitionLanguage == defaultRecognitionLanguage
+            // the following condition check is necessary to trigger rerender of the view,
+            // although the check is done by "whisperModel.equalsTo" above
+            && whisperModel.size == defaultModelSize
     }
 
     // MARK: - design related constants
