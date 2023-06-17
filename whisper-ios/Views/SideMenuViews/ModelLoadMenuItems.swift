@@ -41,7 +41,6 @@ struct ModelRow: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
     @State var progressValue: CGFloat = 0.0
 
-    let modelDisplayName: String
     let recognitionLanguage: RecognitionLanguage
     @ObservedObject var whisperModel: WhisperModel
 
@@ -52,8 +51,7 @@ struct ModelRow: View {
     @AppStorage private var isDownloading: Bool
     @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
 
-    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage, modelDisplayName: String) {
-        self.modelDisplayName = modelDisplayName
+    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) {
         self.whisperModel = whisperModel
         self.recognitionLanguage = recognitionLanguage
 
@@ -64,7 +62,9 @@ struct ModelRow: View {
 
     var body: some View {
         HStack {
-            Text(modelDisplayName)
+            Text("\(whisperModel.size.displayName) - ").font(.headline)
+            // NSLocalizedString is needed for dynamic string
+            Text(NSLocalizedString(recognitionLanguage.displayName, comment: ""))
                 .font(.headline)
             Spacer()
             if !whisperModel.isBundled {
@@ -128,7 +128,8 @@ struct ModelRow: View {
     }
 
     var isModelSelected: Bool {
-        whisperModel.equalsTo(recognizer.whisperModel) && recognitionLanguage == defaultRecognitionLanguage
+        whisperModel.equalsTo(recognizer.whisperModel)
+            && recognitionLanguage == defaultRecognitionLanguage
     }
 
     private func downloadModel() {
@@ -153,27 +154,19 @@ struct ModelRow: View {
 }
 
 struct ModelManagementView: View {
-    let args = [
-        ("base", "ja", "Base"),
-        ("base", "en", "Base(EN)"),
-        ("small", "ja", "Small"),
-        ("small", "en", "Small(EN)"),
-        ("medium", "ja", "Medium"),
-        ("medium", "en", "Medium(EN)"),
-    ]
     var body: some View {
         List {
-            ForEach(args, id: \.2) { arg in
-                let recognitionLanguage = RecognitionLanguage(rawValue: arg.1)!
-                let model = WhisperModel(
-                    size: Size(rawValue: arg.0)!,
-                    recognitionLanguage: recognitionLanguage
-                )
-                ModelRow(
-                    whisperModel: model,
-                    recognitionLanguage: recognitionLanguage,
-                    modelDisplayName: arg.2
-                )
+            ForEach(Size.allCases) { size in
+                ForEach(RecognitionLanguage.allCases) { lang in
+                    let model = WhisperModel(
+                        size: size,
+                        recognitionLanguage: lang
+                    )
+                    ModelRow(
+                        whisperModel: model,
+                        recognitionLanguage: lang
+                    )
+                }
             }
         }
     }
