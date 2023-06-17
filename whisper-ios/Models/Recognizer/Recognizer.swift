@@ -3,7 +3,7 @@ import Foundation
 protocol Recognizer: ObservableObject {
     func streamingRecognize(
         audioFileURL: URL,
-        language: Language,
+        language: RecognitionLanguage,
         recognizingSpeech: RecognizedSpeech,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     )

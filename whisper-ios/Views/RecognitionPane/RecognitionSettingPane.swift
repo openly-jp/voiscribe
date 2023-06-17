@@ -4,7 +4,7 @@ struct RecognitionSettingPane: View {
     @EnvironmentObject var recognizer: WhisperRecognizer
 
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
-    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
+    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
 
     let startAction: () -> Void
     let itemMinHeight: CGFloat = 50

@@ -26,8 +26,7 @@ struct RecognitionPresetPane: View {
                     }
                     .padding(.top)
                     ForEach(Size.allCases) { size in
-                        ForEach([Language.en, Language.ja]) {
-                            lang in
+                        ForEach(RecognitionLanguage.allCases) { lang in
                             RecognitionPresetRow(
                                 modelSize: size,
                                 modelLanguage: lang == Language.en ? Lang.en : Lang.multi,
@@ -47,12 +46,12 @@ struct RecognitionPresetPane: View {
 struct RecognitionPresetRow: View {
     @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
     @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang()
-    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
+    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
     @EnvironmentObject var recognizer: WhisperRecognizer
 
     var modelSize: Size
     var modelLanguage: Lang
-    var recognitionLanguage: Language
+    var recognitionLanguage: RecognitionLanguage
     var geometryWidth: Double
     var whisperModel: WhisperModel
 
@@ -80,7 +79,7 @@ struct RecognitionPresetRow: View {
     init(
         modelSize: Size,
         modelLanguage: Lang,
-        recognitionLanguage: Language,
+        recognitionLanguage: RecognitionLanguage,
         geometryWidth: Double
     ) {
         self.modelSize = modelSize

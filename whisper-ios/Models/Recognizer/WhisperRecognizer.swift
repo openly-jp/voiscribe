@@ -89,7 +89,7 @@ class WhisperRecognizer: Recognizer {
 
     func streamingRecognize(
         audioFileURL: URL,
-        language: Language,
+        language: RecognitionLanguage,
         recognizingSpeech: RecognizedSpeech,
         feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
     ) {
@@ -197,7 +197,8 @@ class WhisperRecognizer: Recognizer {
 
                 // update remaining audioData
                     let audioDataCount: Int = audioData.count
-                let usedAudioDataCount = Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * SAMPLING_RATE)
+                let usedAudioDataCount =
+                    Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * SAMPLING_RATE)
                     let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
                     if remainingAudioDataCount > 0 {
                         recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])

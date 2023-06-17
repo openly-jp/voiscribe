@@ -4,7 +4,7 @@ struct ConfirmPane: View {
     let finishRecording: () -> Void
     let abortRecording: () -> Void
 
-    @Binding var language: Language
+    @Binding var language: RecognitionLanguage
     @Binding var title: String
 
     var body: some View {

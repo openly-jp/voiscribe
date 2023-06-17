@@ -33,7 +33,7 @@ public class RecognizedSpeechData: NSManagedObject {
             id: recognizedSpeechData.id,
             title: recognizedSpeechData.title,
             audioFileURL: recognizedSpeechData.audioFileURL,
-            language: Language(rawValue: recognizedSpeechData.language)!,
+            language: RecognitionLanguage(rawValue: recognizedSpeechData.language)!,
             transcriptionLines: [],
             createdAt: recognizedSpeechData.createdAt,
             updatedAt: recognizedSpeechData.updatedAt

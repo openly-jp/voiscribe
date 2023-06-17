@@ -86,7 +86,7 @@ struct RecognitionPane: View {
     @State var recognizingSpeech: RecognizedSpeech?
     @Binding var isRecordDetailActives: [Bool]
     @State var title = ""
-    @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
+    @AppStorage(userDefaultRecognitionLanguageKey) var language = RecognitionLanguage()
     var recognitionFrequencySec = 30
 
     // MARK: - pane management state
