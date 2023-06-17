@@ -87,9 +87,9 @@ class WhisperModel: Identifiable, ObservableObject {
 
     @Published var isDownloaded: Bool
 
-    init(size: Size, language: ModelLanguage) {
+    init(size: Size, recognitionLanguage _: RecognitionLanguage) {
         self.size = size
-        self.language = language
+        language = recognitionLanguage == .en ? .en : .multi
 
         isDownloaded = WhisperModelRepository.modelExists(
             size: size,

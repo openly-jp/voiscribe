@@ -92,7 +92,7 @@ struct RecognitionPresetRow: View {
 
         whisperModel = WhisperModel(
             size: self.modelSize,
-            language: self.modelLanguage
+            recognitionLanguage: self.recognitionLanguage
         )
     }
 

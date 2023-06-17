@@ -22,13 +22,14 @@ struct StartView: View {
     @State var isLoading: Bool
     @State var recognizer: WhisperRecognizer?
 
+    @AppStorage var defaultRecognitionLanguage: RecognitionLanguage
     @AppStorage var defaultModelSize: Size
-    @AppStorage var defaultModelLanguage: Lang
 
     init() {
         isLoading = true
         _defaultModelSize = AppStorage(wrappedValue: Size(), userDefaultModelSizeKey)
-        _defaultModelLanguage = AppStorage(wrappedValue: Lang(), userDefaultModelLanguageKey)
+        _defaultRecognitionLanguage = AppStorage(wrappedValue: RecognitionLanguage(), userDefaultRecognitionLanguageKey)
+
         for modelSize in Size.allCases {
             ModelLanguage.allCases.map { modelLanguage in
                 let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
@@ -64,7 +65,7 @@ struct StartView: View {
                             DispatchQueue.global(qos: .userInteractive).async {
                                 let whisperModel = WhisperModel(
                                     size: defaultModelSize,
-                                    language: defaultModelLanguage
+                                    recognitionLanguage: defaultRecognitionLanguage
                                 )
                                 whisperModel.loadModel { err in
                                     if let err { Logger.error(err); return }
