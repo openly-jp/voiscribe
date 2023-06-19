@@ -38,7 +38,7 @@ struct CircularProgressBar: View {
 }
 
 struct ModelRow: View {
-    @EnvironmentObject var recognizer: WhisperRecognizer
+    @EnvironmentObject var recognitionManager: RecognitionManager
     @State var progressValue: CGFloat = 0.0
 
     let recognitionLanguage: RecognitionLanguage
@@ -49,7 +49,6 @@ struct ModelRow: View {
     @State private var isDeletePrompt = false
     @State private var showPrompt = false
     @AppStorage private var isDownloading: Bool
-    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
 
     init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) {
         self.whisperModel = whisperModel
@@ -106,7 +105,7 @@ struct ModelRow: View {
     }
 
     var isDeleteDisabled: Bool {
-        whisperModel.isBundled || !whisperModel.isDownloaded
+        whisperModel.isBundled || !whisperModel.isDownloaded || isModelSelected
     }
 
     var alertView: Alert {
@@ -128,8 +127,8 @@ struct ModelRow: View {
     }
 
     var isModelSelected: Bool {
-        whisperModel.equalsTo(recognizer.whisperModel)
-            && recognitionLanguage == defaultRecognitionLanguage
+        recognitionManager.isModelSelected(whisperModel)
+            && recognitionLanguage == recognitionManager.currentRecognitionLanguage
     }
 
     private func downloadModel() {

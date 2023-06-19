@@ -20,15 +20,10 @@ struct VoiscribeApp: App {
 
 struct StartView: View {
     @State var isLoading: Bool
-    @State var recognizer: WhisperRecognizer?
-
-    @AppStorage var defaultRecognitionLanguage: RecognitionLanguage
-    @AppStorage var defaultModelSize: Size
+    @State var recognitionManager: RecognitionManager?
 
     init() {
         isLoading = true
-        _defaultModelSize = AppStorage(wrappedValue: Size(), userDefaultModelSizeKey)
-        _defaultRecognitionLanguage = AppStorage(wrappedValue: RecognitionLanguage(), userDefaultRecognitionLanguageKey)
 
         for modelSize in Size.allCases {
             ModelLanguage.allCases.map { modelLanguage in
@@ -45,11 +40,11 @@ struct StartView: View {
             splashScreen
         } else {
             HomeView()
-                .environmentObject(recognizer!)
+                .environmentObject(recognitionManager!)
                 .attachPartialSheetToRoot()
         }
     }
-    
+
     var splashScreen: some View {
         ZStack {
             ZStack {
@@ -70,20 +65,7 @@ struct StartView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 128)
-                    .onAppear {
-                        DispatchQueue.global(qos: .userInteractive).async {
-                            let whisperModel = WhisperModel(
-                                size: defaultModelSize,
-                                recognitionLanguage: defaultRecognitionLanguage
-                            )
-                            whisperModel.loadModel { err in
-                                if let err { Logger.error(err); return }
-
-                                recognizer = try! WhisperRecognizer(whisperModel: whisperModel)
-                                isLoading = false
-                            }
-                        }
-                    }
+                    .onAppear { recognitionManager = RecognitionManager { isLoading = false } }
                 Spacer().frame(height: 15)
                 Text(APP_NAME)
                     .foregroundColor(.white)

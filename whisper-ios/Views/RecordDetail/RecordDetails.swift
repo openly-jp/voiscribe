@@ -4,9 +4,9 @@ struct RecordDetails: View {
     let recognizedSpeech: RecognizedSpeech
     let deleteRecognizedSpeech: (UUID) -> Void
 
-    let isRecognizing: Bool
+    @EnvironmentObject var recognitionManager: RecognitionManager
 
-    @EnvironmentObject var recognizer: WhisperRecognizer
+    var isRecognizing: Bool { recognitionManager.isRecognizing(recognizedSpeech.id) }
 
     func getLocaleDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -17,28 +17,21 @@ struct RecordDetails: View {
         return dateFormatter.string(from: date)
     }
 
-    var progressString: String {
-        String(format: "%d", Int(recognizer.progressRate * 100))
-    }
-
     var body: some View {
         VStack(alignment: .leading) {
             Text(getLocaleDateString(date: recognizedSpeech.createdAt))
                 .foregroundColor(Color.gray)
                 .padding(.horizontal)
 
-            HStack(alignment: .bottom) {
-                Title(recognizedSpeech: recognizedSpeech, isEditable: !isRecognizing)
-                Spacer()
-                if isRecognizing {
-                    Text("認識中...(\(progressString)%終了)")
-                        .font(.system(size: 10))
-                        .foregroundColor(.gray)
-                        .padding(.horizontal)
-                }
+            if isRecognizing {
+                RecognizingTitleBar(
+                    recognizer: recognitionManager.getRecognizer(recognizedSpeech.id),
+                    recognizedSpeech: recognizedSpeech
+                )
+            } else {
+                StandardTitleBar(recognizedSpeech: recognizedSpeech)
             }
-            ProgressView(value: isRecognizing ? recognizer.progressRate : 0)
-                .padding(.horizontal)
+
             if !isRecognizing, recognizedSpeech.transcriptionLines.count == 0 {
                 Spacer()
                 NoRecognitionView()
@@ -51,6 +44,44 @@ struct RecordDetails: View {
                 )
             }
         }.navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct RecognizingTitleBar: View {
+    @ObservedObject var recognizer: WhisperRecognizer
+    let recognizedSpeech: RecognizedSpeech
+
+    var progressString: String {
+        String(format: "%d", Int(recognizer.progressRate * 100))
+    }
+
+    var body: some View {
+        VStack {
+            HStack(alignment: .bottom) {
+                Title(recognizedSpeech: recognizedSpeech, isEditable: false)
+                Spacer()
+                Text("認識中...(\(progressString)%終了)")
+                    .font(.system(size: 10))
+                    .foregroundColor(.gray)
+                    .padding(.horizontal)
+            }
+            ProgressView(value: recognizer.progressRate)
+                .padding(.horizontal)
+        }
+    }
+}
+
+struct StandardTitleBar: View {
+    let recognizedSpeech: RecognizedSpeech
+
+    var body: some View {
+        VStack {
+            HStack(alignment: .bottom) {
+                Title(recognizedSpeech: recognizedSpeech, isEditable: true)
+                Spacer()
+            }
+            ProgressView(value: 0).padding(.horizontal)
+        }
     }
 }
 
@@ -127,8 +158,7 @@ class RecordDetails_Previews: PreviewProvider {
         NavigationView {
             RecordDetails(
                 recognizedSpeech: recognizedSpeech,
-                deleteRecognizedSpeech: { _ in },
-                isRecognizing: false
+                deleteRecognizedSpeech: { _ in }
             )
         }
         .previewDevice(PreviewDevice(rawValue: "iPhone 12 mini"))
@@ -137,8 +167,7 @@ class RecordDetails_Previews: PreviewProvider {
         NavigationView {
             RecordDetails(
                 recognizedSpeech: recognizedSpeech,
-                deleteRecognizedSpeech: { _ in },
-                isRecognizing: false
+                deleteRecognizedSpeech: { _ in }
             )
         }
         .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
@@ -147,8 +176,7 @@ class RecordDetails_Previews: PreviewProvider {
         NavigationView {
             RecordDetails(
                 recognizedSpeech: recognizedSpeech,
-                deleteRecognizedSpeech: { _ in },
-                isRecognizing: false
+                deleteRecognizedSpeech: { _ in }
             )
         }
         .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (4th generation)"))
@@ -157,8 +185,7 @@ class RecordDetails_Previews: PreviewProvider {
         NavigationView {
             RecordDetails(
                 recognizedSpeech: recognizedSpeech,
-                deleteRecognizedSpeech: { _ in },
-                isRecognizing: true
+                deleteRecognizedSpeech: { _ in }
             )
         }
         .previewDisplayName("Record Details (recognizing)")

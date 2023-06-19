@@ -64,9 +64,10 @@
 		5AADC50A29A245EE003AD311 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50929A245EE003AD311 /* FileDownloader.swift */; };
 		5AADC50C29A24623003AD311 /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50B29A24623003AD311 /* LicenseView.swift */; };
 		5AADC50E29A24636003AD311 /* AppInfoMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */; };
+		72DBABA92A3DEDFE0005BA76 /* RecognitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DBABA82A3DEDFE0005BA76 /* RecognitionManager.swift */; };
+		DBCD3B5C2A11170600F081E6 /* FeedbackMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */; };
 		DBCD3B652A1DE42200F081E6 /* PartialSheet in Frameworks */ = {isa = PBXBuildFile; productRef = DBCD3B642A1DE42200F081E6 /* PartialSheet */; };
 		DBCD3B692A24C98100F081E6 /* ggml-small.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */; };
-		DBCD3B5C2A11170600F081E6 /* FeedbackMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +155,7 @@
 		5AADC50B29A24623003AD311 /* LicenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
 		5AADC50D29A24636003AD311 /* AppInfoMenuItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoMenuItems.swift; sourceTree = "<group>"; };
 		DBCD3B682A24C98100F081E6 /* ggml-small.en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-small.en.bin"; sourceTree = "<group>"; };
+		72DBABA82A3DEDFE0005BA76 /* RecognitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognitionManager.swift; sourceTree = "<group>"; };
 		DBCD3B5B2A11170600F081E6 /* FeedbackMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMenuItems.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -238,6 +240,7 @@
 			children = (
 				13D1E49B295CE4370070090B /* Recognizer.swift */,
 				13D1E49C295CE4370070090B /* WhisperRecognizer.swift */,
+				72DBABA82A3DEDFE0005BA76 /* RecognitionManager.swift */,
 			);
 			path = Recognizer;
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				57C722A0295C979B009C8A20 /* HomeView.swift in Sources */,
 				13D1E4A1295CE4370070090B /* RecognizedSpeech.swift in Sources */,
 				578352F829890CF400081CF8 /* ToolBar.swift in Sources */,
+				72DBABA92A3DEDFE0005BA76 /* RecognitionManager.swift in Sources */,
 				387B6FCE0F7C83F953692C3A /* README.md in Sources */,
 				13D1E4A0295CE4370070090B /* WhisperRecognizer.swift in Sources */,
 			);

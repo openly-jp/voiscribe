@@ -43,9 +43,7 @@ struct RecognitionPresetPane: View {
 }
 
 struct RecognitionPresetRow: View {
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
-    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
-    @EnvironmentObject var recognizer: WhisperRecognizer
+    @EnvironmentObject var recognitionManager: RecognitionManager
 
     var recognitionLanguage: RecognitionLanguage
     var geometryWidth: Double
@@ -56,11 +54,8 @@ struct RecognitionPresetRow: View {
     @State var isShowAlert = false
 
     var isSelected: Bool {
-        whisperModel.equalsTo(recognizer.whisperModel)
-            && recognitionLanguage == defaultRecognitionLanguage
-            // the following condition check is necessary to trigger rerender of the view,
-            // although the check is done by "whisperModel.equalsTo" above
-            && whisperModel.size == defaultModelSize
+        recognitionManager.isModelSelected(whisperModel)
+            && recognitionLanguage == recognitionManager.currentRecognitionLanguage
     }
 
     // MARK: - design related constants
@@ -204,23 +199,14 @@ struct RecognitionPresetRow: View {
     }
 
     private func loadModel() {
-        if whisperModel.equalsTo(recognizer.whisperModel) {
-            defaultRecognitionLanguage = recognitionLanguage
-            return
-        }
+        recognitionManager.changeModel(
+            newModel: whisperModel,
+            recognitionLanguage: recognitionLanguage
+        ) { err in
+            guard let err else { return }
 
-        recognizer.whisperModel.freeModel()
-        recognizer.whisperModel = whisperModel
-
-        whisperModel.loadModel {
-            err in
-            if let err {
-                Logger.error("Failed to load model: \(whisperModel.name)")
-                Logger.error(err)
-                return
-            }
-            defaultModelSize = whisperModel.size
-            defaultRecognitionLanguage = recognitionLanguage
+            Logger.error("Failed to load model: \(whisperModel.name)")
+            Logger.error(err)
         }
     }
 

@@ -3,7 +3,7 @@ import Foundation
 let userDefaultRecognitionLanguageKey = "user-default-recognition-language"
 let initialTitle = "未定"
 
-enum RecognitionLanguage: String, Identifiable, CaseIterable {
+enum RecognitionLanguage: String, Identifiable, CaseIterable, Codable {
     case ja
     case en
 

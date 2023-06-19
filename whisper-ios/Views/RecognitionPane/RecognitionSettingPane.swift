@@ -1,10 +1,7 @@
 import SwiftUI
 
 struct RecognitionSettingPane: View {
-    @EnvironmentObject var recognizer: WhisperRecognizer
-
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
-    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = RecognitionLanguage()
+    @EnvironmentObject var recognitionManager: RecognitionManager
 
     let startAction: () -> Void
     let itemMinHeight: CGFloat = 50
@@ -22,7 +19,7 @@ struct RecognitionSettingPane: View {
                         .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundColor(Color.secondary)
-                    Text(defaultModelSize.displayName)
+                    Text(recognitionManager.currentModelSize.displayName)
                         .font(.title)
                         .fontWeight(.medium)
                         .foregroundColor(Color.primary)
@@ -42,7 +39,7 @@ struct RecognitionSettingPane: View {
             .background(itemColor.clipShape(RoundedRectangle(cornerRadius: itemCornerRadius)))
             .padding(.horizontal)
             .onTapGesture {
-                if recognizer.isRecognizing {
+                if recognitionManager.isRecognizing {
                     isRecognizingAlertOpen = true
                 } else {
                     isRecognitionPresetSelectionPaneOpen = true
@@ -54,7 +51,7 @@ struct RecognitionSettingPane: View {
                         .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundColor(Color.secondary)
-                    Text(NSLocalizedString(defaultRecognitionLanguage.displayName, comment: ""))
+                    Text(NSLocalizedString(recognitionManager.currentRecognitionLanguage.displayName, comment: ""))
                         .font(.title)
                         .fontWeight(.medium)
                         .foregroundColor(Color.primary)
@@ -74,7 +71,7 @@ struct RecognitionSettingPane: View {
             .background(itemColor.clipShape(RoundedRectangle(cornerRadius: itemCornerRadius)))
             .padding(.horizontal)
             .onTapGesture {
-                if recognizer.isRecognizing {
+                if recognitionManager.isRecognizing {
                     isRecognizingAlertOpen = true
                 } else {
                     isRecognitionPresetSelectionPaneOpen = true
@@ -93,7 +90,7 @@ struct RecognitionSettingPane: View {
             .padding()
             .sheet(isPresented: $isRecognitionPresetSelectionPaneOpen) {
                 RecognitionPresetPane(isRecognitionPresetSelectionPaneOpen: $isRecognitionPresetSelectionPaneOpen)
-                    .environmentObject(recognizer)
+                    .environmentObject(recognitionManager)
             }
             .alert(isPresented: $isRecognizingAlertOpen) {
                 Alert(

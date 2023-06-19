@@ -1,6 +1,6 @@
 import Foundation
 
-enum Size: String, CaseIterable, Identifiable {
+enum Size: String, CaseIterable, Identifiable, Codable {
     case base
     case small
     case medium
@@ -59,7 +59,7 @@ enum ModelLanguage: String, Identifiable, CaseIterable {
     case en
     case multi
 
-    // SwiftUI ForEach needs elements to conrfom `Identifiable` protocol
+    // SwiftUI ForEach needs elements to conform `Identifiable` protocol
     var id: String { rawValue }
 
     init() {
@@ -86,6 +86,15 @@ class WhisperModel: Identifiable, ObservableObject {
     // if this retunrs `nil`, this model is not bundled
     private let bundledPath: String?
     @Published var isDownloaded: Bool
+
+    convenience init(recognitionLanguage: RecognitionLanguage) {
+        let size = CustomUserDefaults.get_(
+            key: USER_DEFAULT_MODEL_SIZE_KEY,
+            defaultValue: Size()
+        )
+        Logger.debug("get size", size)
+        self.init(size: size, recognitionLanguage: recognitionLanguage)
+    }
 
     init(size: Size, recognitionLanguage: RecognitionLanguage) {
         self.size = size
