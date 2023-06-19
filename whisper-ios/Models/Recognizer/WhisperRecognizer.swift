@@ -20,7 +20,7 @@ class WhisperRecognizer: Recognizer, ObservableObject {
     var numTotalTasks = 0
     var numRemainingTasks = 0
     @Published var progressRate: Float = 0 // 0 ~ 1.0
-    
+
     var tmpAudioData: [Float32] = []
     var promptTokens: [Int32] = []
     var remainingAudioData: [Float32] = []
