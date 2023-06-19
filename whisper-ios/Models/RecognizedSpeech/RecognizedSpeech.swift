@@ -42,10 +42,6 @@ class RecognizedSpeech: Identifiable {
     var createdAt: Date
     var updatedAt: Date
 
-    var tmpAudioData: [Float32] = []
-    var promptTokens: [Int32] = []
-    var remainingAudioData: [Float32] = []
-
     init(language: RecognitionLanguage) {
         id = UUID()
         title = NSLocalizedString(initialTitle, comment: "")

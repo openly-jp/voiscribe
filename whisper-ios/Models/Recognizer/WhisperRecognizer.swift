@@ -20,6 +20,10 @@ class WhisperRecognizer: Recognizer, ObservableObject {
     var numTotalTasks = 0
     var numRemainingTasks = 0
     @Published var progressRate: Float = 0 // 0 ~ 1.0
+    
+    var tmpAudioData: [Float32] = []
+    var promptTokens: [Int32] = []
+    var remainingAudioData: [Float32] = []
 
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
@@ -71,10 +75,10 @@ class WhisperRecognizer: Recognizer, ObservableObject {
                 Logger.error("audio load error")
                 return
             }
-            recognizingSpeech.tmpAudioData += originalAudioData
+            self.tmpAudioData += originalAudioData
 
             // append remaining previous audioData to originalAudioData
-            let audioData = recognizingSpeech.remainingAudioData + originalAudioData
+            let audioData = self.remainingAudioData + originalAudioData
             let audioDataMSec = Int64(audioData.count / 16000 * 1000)
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
@@ -115,8 +119,8 @@ class WhisperRecognizer: Recognizer, ObservableObject {
                 params.no_context = true
                 params.single_segment = false
                 params.suppress_non_speech_tokens = false
-                params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
-                params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
+                params.prompt_tokens = UnsafePointer(self.promptTokens)
+                params.prompt_n_tokens = Int32(self.promptTokens.count)
                 params.new_segment_callback = newSegmentCallback
                 params.new_segment_callback_user_data = UnsafeMutableRawPointer(newSegmentCallbackDataPtr)
 
@@ -141,8 +145,8 @@ class WhisperRecognizer: Recognizer, ObservableObject {
                 .transcribedMSec
 
             // update promptTokens
-            recognizingSpeech.promptTokens.removeAll()
-            recognizingSpeech.promptTokens = newSegmentCallbackData.nextPromptTokens
+            self.promptTokens.removeAll()
+            self.promptTokens = newSegmentCallbackData.nextPromptTokens
 
             // update remaining audioData
             let audioDataCount: Int = audioData.count
@@ -150,15 +154,15 @@ class WhisperRecognizer: Recognizer, ObservableObject {
                 Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * SAMPLING_RATE)
             let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
             if remainingAudioDataCount > 0 {
-                recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
+                self.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
             } else {
-                recognizingSpeech.remainingAudioData = []
+                self.remainingAudioData = []
             }
 
             do {
                 try saveAudioData(
                     audioFileURL: recognizingSpeech.audioFileURL,
-                    audioData: recognizingSpeech.tmpAudioData
+                    audioData: self.tmpAudioData
                 )
             } catch {
                 fatalError("failed to save audio data")
