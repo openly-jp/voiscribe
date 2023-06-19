@@ -57,12 +57,8 @@ class WhisperRecognizer: Recognizer {
 
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
-    init(whisperModel: WhisperModel) throws {
-        if whisperModel.localPath == nil {
-            throw NSError(domain: "whisperModel.localPath is nil", code: -1)
-        } else {
+    init(whisperModel: WhisperModel) {
             self.whisperModel = whisperModel
-        }
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
