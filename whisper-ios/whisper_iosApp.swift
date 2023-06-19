@@ -3,28 +3,19 @@ import SwiftUI
 
 @main
 struct VoiscribeApp: App {
-    @Environment(\.scenePhase) private var scenePhase
     var body: some Scene {
         WindowGroup {
             StartView()
-                .onChange(of: scenePhase) { phase in
-                    if phase == .background {
-                        if numRecognitionTasks > 0 {
-                            sendBackgroundAlertNotification()
-                        }
-                    }
-                }
         }
     }
 }
 
 struct StartView: View {
-    @State var isLoading: Bool
+    @Environment(\.scenePhase) private var scenePhase
+    @State var isLoading = true
     @State var recognitionManager: RecognitionManager?
 
     init() {
-        isLoading = true
-
         for modelSize in Size.allCases {
             ModelLanguage.allCases.map { modelLanguage in
                 let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
@@ -42,6 +33,11 @@ struct StartView: View {
             HomeView()
                 .environmentObject(recognitionManager!)
                 .attachPartialSheetToRoot()
+                .onChange(of: scenePhase) { phase in
+                    if phase == .background, recognitionManager!.isRecognizing {
+                        sendBackgroundAlertNotification()
+                    }
+                }
         }
     }
 

@@ -3,8 +3,6 @@ import Dispatch
 import Foundation
 import SwiftUI
 
-var numRecognitionTasks = 0
-
 let SAMPLING_RATE: Float = 16000
 
 enum RecognizerState {
@@ -64,8 +62,6 @@ class WhisperRecognizer: Recognizer, ObservableObject {
                 UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
                 self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             })
-
-            numRecognitionTasks += 1
 
             guard let context = self.whisperModel.whisperContext else {
                 Logger.error("model load error")
