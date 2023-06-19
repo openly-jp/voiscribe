@@ -48,7 +48,7 @@ class RecognitionManager: ObservableObject {
             callback(nil)
             return
         }
-        
+
         CustomUserDefaults.set_(key: USER_DEFAULT_MODEL_SIZE_KEY, value: newModel.size)
 
         model.freeModel()
@@ -106,16 +106,16 @@ class RecognitionManager: ObservableObject {
         }
     }
 
-    func isRecognizing(_ recogniziedSpeechId: UUID) -> Bool {
-        guard let recognizer = recognizerDict[recogniziedSpeechId] else{
+    func isRecognizing(_ recognizedSpeechId: UUID) -> Bool {
+        guard let recognizer = recognizerDict[recognizedSpeechId] else {
             return false
         }
-        
+
         return recognizer.state == .recognizing
     }
 
-    func getRecognizer(_ recogniziedSpeechId: UUID) -> WhisperRecognizer {
-        recognizerDict[recogniziedSpeechId]!
+    func getRecognizer(_ recognizedSpeechId: UUID) -> WhisperRecognizer {
+        recognizerDict[recognizedSpeechId]!
     }
 
     func isModelSelected(_ selectedModel: WhisperModel) -> Bool {
