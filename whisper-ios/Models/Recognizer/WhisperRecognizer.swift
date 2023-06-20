@@ -55,6 +55,7 @@ class WhisperRecognizer: Recognizer, ObservableObject {
     }
 
     func streamingRecognize(audioFileURL: URL, recognizingSpeech: RecognizedSpeech) {
+        // TODO: the following increments aren't thread safe (#296)
         numTotalTasks += 1
         numRemainingTasks += 1
 
