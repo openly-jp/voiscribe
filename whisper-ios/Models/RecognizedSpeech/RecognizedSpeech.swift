@@ -33,12 +33,15 @@ enum RecognitionLanguage: String, Identifiable, CaseIterable, Codable {
     }
 }
 
-class RecognizedSpeech: Identifiable {
+class RecognizedSpeech: Identifiable, ObservableObject {
     let id: UUID
     var title: String
     var audioFileURL: URL
     var language: RecognitionLanguage
-    var transcriptionLines: [TranscriptionLine]
+
+    // @Publish is used for `RecordDetails` page to update view
+    // when new transcription line is added while recognizing
+    @Published var transcriptionLines: [TranscriptionLine]
     var createdAt: Date
     var updatedAt: Date
 
