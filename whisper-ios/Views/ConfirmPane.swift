@@ -4,7 +4,6 @@ struct ConfirmPane: View {
     let finishRecording: () -> Void
     let abortRecording: () -> Void
 
-    @Binding var language: RecognitionLanguage
     @Binding var title: String
 
     var body: some View {
@@ -39,7 +38,6 @@ struct ConfirmPane_Previews: PreviewProvider {
         ConfirmPane(
             finishRecording: {},
             abortRecording: {},
-            language: .constant(.ja),
             title: .constant(NSLocalizedString("タイトル", comment: ""))
         )
     }

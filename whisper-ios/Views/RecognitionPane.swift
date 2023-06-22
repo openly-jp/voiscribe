@@ -85,7 +85,6 @@ struct RecognitionPane: View {
     @State var recognizingSpeech: RecognizedSpeech?
     @Binding var isRecordDetailActives: [Bool]
     @State var title = ""
-    @AppStorage(userDefaultRecognitionLanguageKey) var language = RecognitionLanguage()
     var recognitionFrequencySec = 30
 
     // MARK: - pane management state
@@ -232,7 +231,6 @@ struct RecognitionPane: View {
                     destination: ConfirmPane(
                         finishRecording: finishRecording,
                         abortRecording: abortRecording,
-                        language: $language,
                         title: $title
                     ),
                     isActive: $isConfirmOpen
