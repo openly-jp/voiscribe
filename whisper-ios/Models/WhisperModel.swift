@@ -85,6 +85,9 @@ class WhisperModel: Identifiable, ObservableObject {
 
     // if this returns `nil`, this model is not bundled
     private let bundledPath: String?
+
+    // this property becomes true even if the model is bundled
+    // and can be used for checking
     @Published var isDownloaded: Bool
 
     convenience init(recognitionLanguage: RecognitionLanguage) {
