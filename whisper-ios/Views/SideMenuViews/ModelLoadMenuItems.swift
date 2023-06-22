@@ -105,7 +105,9 @@ struct ModelRow: View {
     }
 
     var isDeleteDisabled: Bool {
-        whisperModel.isBundled || !whisperModel.isDownloaded || isModelSelected
+        whisperModel.isBundled
+            || !whisperModel.isDownloaded
+            || recognitionManager.isModelSelected(whisperModel)
     }
 
     var alertView: Alert {
@@ -124,11 +126,6 @@ struct ModelRow: View {
                 secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
             )
         }
-    }
-
-    var isModelSelected: Bool {
-        recognitionManager.isModelSelected(whisperModel)
-            && recognitionLanguage == recognitionManager.currentRecognitionLanguage
     }
 
     private func downloadModel() {
