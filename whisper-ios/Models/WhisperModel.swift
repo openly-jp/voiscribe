@@ -83,7 +83,7 @@ class WhisperModel: Identifiable, ObservableObject {
     var language: ModelLanguage
     var whisperContext: OpaquePointer?
 
-    // if this retunrs `nil`, this model is not bundled
+    // if this returns `nil`, this model is not bundled
     private let bundledPath: String?
     @Published var isDownloaded: Bool
 
