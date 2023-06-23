@@ -123,7 +123,9 @@ class RecognitionManager: ObservableObject {
     }
 }
 
-enum CustomUserDefaults {
+class CustomUserDefaults {
+    init() {}
+
     static func get_<T: Codable>(key: String, defaultValue: T) -> T {
         let data = UserDefaults.standard.object(forKey: key) as? Data
         guard let data else { return defaultValue }
