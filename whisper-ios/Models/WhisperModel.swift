@@ -199,9 +199,9 @@ class WhisperModel: Identifiable, ObservableObject {
         }
     }
 
-    // prefer this fucntion to deinit cause
-    // we can avoid two models are loaded simultaneouly
-    // (for a short amout of time)
+    // prefer this function to deinit cause
+    // we can avoid two models are loaded simultaneously
+    // (for a short amount of time)
     func freeModel() {
         whisper_free(whisperContext)
         whisperContext = nil
