@@ -38,6 +38,10 @@ class RecognitionManager: ObservableObject {
         }
     }
 
+    /// Change model to another model specified in arguments and load the model
+    ///
+    /// This function can be called while recognizing
+    /// because loading of the model is appended to the queue for recognition tasks
     func changeModel(
         newModel: WhisperModel,
         recognitionLanguage: RecognitionLanguage,
