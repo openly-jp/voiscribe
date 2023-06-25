@@ -87,7 +87,7 @@ class WhisperModel: Identifiable, ObservableObject {
     private let bundledPath: String?
 
     // this property becomes true even if the model is bundled
-    // and can be used for checking
+    // and can be used for checking if model can be loaded
     @Published var isDownloaded: Bool
 
     convenience init(recognitionLanguage: RecognitionLanguage) {
