@@ -18,22 +18,9 @@ enum WhisperModelRepository {
         size: Size,
         language: ModelLanguage,
         update: ((Float) -> Void)?,
+        destinationURL: URL,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
-        // if model is in bundled resource or in local storage, return it
-        let path = Bundle.main.path(
-            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-            ofType: "bin"
-        )
-        if path != nil {
-            // return the bundled resource path of the model
-            let modelUrl = URL(string: Bundle.main
-                .path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
-            completion(.success(modelUrl))
-            return
-        }
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if FileManager.default.fileExists(atPath: destinationURL.path) {
             completion(.success(destinationURL))
             return

@@ -148,7 +148,8 @@ class WhisperModel: Identifiable, ObservableObject {
         WhisperModelRepository.fetchWhisperModel(
             size: size,
             language: language,
-            update: updateCallback
+            update: updateCallback,
+            destinationURL: localPath
         ) { result in
             var err: Error?
 
