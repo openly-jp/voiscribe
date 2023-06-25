@@ -13,7 +13,7 @@ enum RecognizerState {
 
 class WhisperRecognizer: Recognizer, ObservableObject {
     var whisperModel: WhisperModel
-    let serialDispatchQueue = DispatchQueue(label: "recognize")
+    let serialDispatchQueue = DispatchQueue(label: RECOGNITION_DISPATCH_QUEUE_NAME)
     let recognitionLanguage: RecognitionLanguage
 
     var state = RecognizerState.recognizing
