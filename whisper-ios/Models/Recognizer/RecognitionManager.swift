@@ -19,6 +19,8 @@ class RecognitionManager: ObservableObject {
     // TODO: use Reocgnizer protocol instead of concrete type class
     @Published private var recognizerDict = [UUID: WhisperRecognizer]()
 
+    let recognitionQueue = DispatchQueue(label: RECOGNITION_DISPATCH_QUEUE_NAME)
+
     var isRecognizing: Bool {
         recognizerDict.values.reduce(false) { $0 || $1.state == .recognizing }
     }
@@ -30,7 +32,8 @@ class RecognitionManager: ObservableObject {
         )
         currentRecognitionLanguage = defaultRecognitionLanguage
         model = WhisperModel(recognitionLanguage: defaultRecognitionLanguage)
-        DispatchQueue.global(qos: .userInteractive).async {
+
+        recognitionQueue.async {
             try! self.model.loadModel { err in
                 if let err { Logger.error(err); return }
                 modelLoadCallback()
@@ -55,16 +58,21 @@ class RecognitionManager: ObservableObject {
 
         CustomUserDefaults.set_(key: USER_DEFAULT_MODEL_SIZE_KEY, value: newModel.size)
 
-        model.freeModel()
+        // changing model reference must be executed on the fly
+        // to update the view of which model is loaded
         model = newModel
-        try! newModel.loadModel { err in callback(err) }
+        recognitionQueue.async {
+            self.model.freeModel()
+            try! newModel.loadModel { err in callback(err) }
+        }
     }
 
     func startRecognition() -> RecognizedSpeech {
         let recognizingSpeech = RecognizedSpeech(language: currentRecognitionLanguage)
         recognizerDict[recognizingSpeech.id] = try! WhisperRecognizer(
             whisperModel: model,
-            recognitionLanguage: currentRecognitionLanguage
+            recognitionLanguage: currentRecognitionLanguage,
+            recognitionQueue: recognitionQueue
         )
         return recognizingSpeech
     }

@@ -213,14 +213,10 @@ struct RecognitionPresetRow: View {
     private func downloadModel() {
         isDownloading = true
         try! whisperModel.downloadModel { err in
-            isDownloading = false
+            if let err { Logger.error(err) }
 
-            if let err {
-                Logger.error(err)
-            }
-            DispatchQueue.main.async {
-                loadModel()
-            }
+            isDownloading = false
+            loadModel()
         } updateCallback: { num in
             progressValue = CGFloat(num)
         }

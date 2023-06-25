@@ -13,7 +13,7 @@ enum RecognizerState {
 
 class WhisperRecognizer: Recognizer, ObservableObject {
     var whisperModel: WhisperModel
-    let serialDispatchQueue = DispatchQueue(label: RECOGNITION_DISPATCH_QUEUE_NAME)
+    let serialDispatchQueue: DispatchQueue
     let recognitionLanguage: RecognitionLanguage
 
     var state = RecognizerState.recognizing
@@ -27,15 +27,13 @@ class WhisperRecognizer: Recognizer, ObservableObject {
 
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
-    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) throws {
-        guard whisperModel.isLoaded else {
-            throw NSError(
-                domain: "The model should be loaded before initialization of Recognizer",
-                code: -1
-            )
-        }
-
+    init(
+        whisperModel: WhisperModel,
+        recognitionLanguage: RecognitionLanguage,
+        recognitionQueue: DispatchQueue
+    ) {
         self.whisperModel = whisperModel
+        serialDispatchQueue = recognitionQueue
         self.recognitionLanguage = recognitionLanguage
     }
 
@@ -79,6 +77,7 @@ class WhisperRecognizer: Recognizer, ObservableObject {
                 Logger.error("model load error")
                 return
             }
+
             guard let originalAudioData = try? self.load_audio(url: audioFileURL) else {
                 Logger.error("audio load error")
                 return

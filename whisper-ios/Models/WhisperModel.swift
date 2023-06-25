@@ -176,16 +176,14 @@ class WhisperModel: Identifiable, ObservableObject {
         }
 
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.whisperContext = whisper_init_from_file(self.localPath.path)
+        whisperContext = whisper_init_from_file(localPath.path)
 
-            var err: Error?
-            if self.whisperContext == nil {
-                err = NSError(domain: "Failed to load model", code: -1)
-            }
-
-            callback(err)
+        var err: Error?
+        if whisperContext == nil {
+            err = NSError(domain: "Failed to load model", code: -1)
         }
+
+        callback(err)
     }
 
     func deleteModel() throws {
