@@ -27,7 +27,14 @@ class WhisperRecognizer: Recognizer, ObservableObject {
 
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
-    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) {
+    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) throws {
+        guard whisperModel.isLoaded else {
+            throw NSError(
+                domain: "The model should be loaded before initialization of Recognizer",
+                code: -1
+            )
+        }
+
         self.whisperModel = whisperModel
         self.recognitionLanguage = recognitionLanguage
     }

@@ -114,6 +114,7 @@ class WhisperModel: Identifiable, ObservableObject {
 
     var localPath: URL { WhisperModel.getLocalPath(size, language, bundledPath) }
     var isBundled: Bool { bundledPath != nil }
+    var isLoaded: Bool { whisperContext != nil }
 
     // this should be instance method but this function is called from `init` function
     // of this class, so information about model must be passed as arguments.
@@ -136,8 +137,14 @@ class WhisperModel: Identifiable, ObservableObject {
     func downloadModel(
         completeCallback: @escaping (Error?) -> Void,
         updateCallback: @escaping (Float) -> Void
-    ) {
-        assert(!isDownloaded)
+    ) throws {
+        guard isDownloaded else {
+            throw NSError(
+                domain: "The model is already downloaded.",
+                code: -1
+            )
+        }
+
         WhisperModelRepository.fetchWhisperModel(
             size: size,
             language: language,
@@ -160,7 +167,14 @@ class WhisperModel: Identifiable, ObservableObject {
         }
     }
 
-    func loadModel(callback: @escaping (Error?) -> Void) {
+    func loadModel(callback: @escaping (Error?) -> Void) throws {
+        guard isDownloaded else {
+            throw NSError(
+                domain: "The model parameter must be downloaded before loading.",
+                code: -1
+            )
+        }
+
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
         DispatchQueue.global(qos: .userInitiated).async {
             self.whisperContext = whisper_init_from_file(self.localPath.path)
@@ -190,6 +204,7 @@ class WhisperModel: Identifiable, ObservableObject {
     // (for a short amout of time)
     func freeModel() {
         whisper_free(whisperContext)
+        whisperContext = nil
     }
 
     func equalsTo(_ model: WhisperModel) -> Bool {

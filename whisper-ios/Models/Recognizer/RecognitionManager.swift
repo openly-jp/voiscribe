@@ -31,7 +31,7 @@ class RecognitionManager: ObservableObject {
         currentRecognitionLanguage = defaultRecognitionLanguage
         model = WhisperModel(recognitionLanguage: defaultRecognitionLanguage)
         DispatchQueue.global(qos: .userInteractive).async {
-            self.model.loadModel { err in
+            try! self.model.loadModel { err in
                 if let err { Logger.error(err); return }
                 modelLoadCallback()
             }
@@ -53,12 +53,12 @@ class RecognitionManager: ObservableObject {
 
         model.freeModel()
         model = newModel
-        newModel.loadModel { err in callback(err) }
+        try! newModel.loadModel { err in callback(err) }
     }
 
     func startRecognition() -> RecognizedSpeech {
         let recognizingSpeech = RecognizedSpeech(language: currentRecognitionLanguage)
-        recognizerDict[recognizingSpeech.id] = WhisperRecognizer(
+        recognizerDict[recognizingSpeech.id] = try! WhisperRecognizer(
             whisperModel: model,
             recognitionLanguage: currentRecognitionLanguage
         )

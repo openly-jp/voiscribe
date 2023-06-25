@@ -130,7 +130,7 @@ struct ModelRow: View {
 
     private func downloadModel() {
         isDownloading = true
-        whisperModel.downloadModel { err in
+        try! whisperModel.downloadModel { err in
             isDownloading = false
             if let err {
                 Logger.error(err)
