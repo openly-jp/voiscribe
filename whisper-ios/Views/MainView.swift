@@ -2,13 +2,12 @@ import AVFoundation
 import SwiftUI
 
 struct MainView: View {
-    @State var recognizingSpeechIds: [UUID]
     @State var recognizedSpeeches: [RecognizedSpeech]
     @State var isRecordDetailActives: [Bool]
+    @EnvironmentObject var recognitionManager: RecognitionManager
 
     init() {
         let initialRecognizedSpeeches = CoreDataRepository.getAllRecognizedSpeeches()
-        recognizingSpeechIds = []
         recognizedSpeeches = initialRecognizedSpeeches
         isRecordDetailActives = [Bool](repeating: false, count: initialRecognizedSpeeches.count)
 
@@ -31,7 +30,6 @@ struct MainView: View {
             }
             Spacer()
             RecognitionPane(
-                recognizingSpeechIds: $recognizingSpeechIds,
                 recognizedSpeeches: $recognizedSpeeches,
                 isRecordDetailActives: $isRecordDetailActives
             )
@@ -60,8 +58,7 @@ struct MainView: View {
                 NavigationLink(
                     destination: LazyView(RecordDetails(
                         recognizedSpeech: recognizedSpeech,
-                        deleteRecognizedSpeech: deleteRecognizedSpeech,
-                        isRecognizing: recognizingSpeechIds.contains(recognizedSpeech.id)
+                        deleteRecognizedSpeech: deleteRecognizedSpeech
                     )),
                     isActive: $isRecordDetailActives[idx]
                 ) {
@@ -73,7 +70,7 @@ struct MainView: View {
 
                         VStack(alignment: .leading) {
                             Text(recognizedSpeech.title).font(.headline)
-                            if recognizingSpeechIds.contains(recognizedSpeech.id) {
+                            if recognitionManager.isRecognizing(recognizedSpeech.id) {
                                 Text("認識中").foregroundColor(.red)
                             } else {
                                 if recognizedSpeech.transcriptionLines.count > 0 {
@@ -112,22 +109,27 @@ struct MainView: View {
     }
 
     private func deleteRecognizedSpeech(at i: Int) {
-        // RecognizedSpeech is inserted to recognizedSpeeches array right after
-        // finishing recording, but saved to coredata after ASR is completed.
-        if recognizingSpeechIds.contains(recognizedSpeeches[i].id) {
-            recognizingSpeechIds.removeAll { id in id == recognizedSpeeches[i].id }
-        } else {
+        func cleanUp() {
             CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizedSpeeches[i])
+            do {
+                // TODO: fix this (issue #25)
+                let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
+                let url = getURLByName(fileName: fileName)
+                try FileManager.default.removeItem(at: url)
+            } catch {
+                Logger.error("Failed to remove audio file.")
+            }
         }
 
-        do {
-            // TODO: fix this (issue #25)
-            let fileName = recognizedSpeeches[i].audioFileURL.lastPathComponent
-            let url = getURLByName(fileName: fileName)
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            Logger.error("Failed to remove audio file.")
+        if recognitionManager.isRecognizing(recognizedSpeeches[i].id) {
+            recognitionManager.abortRecognition(
+                recognizingSpeech: recognizedSpeeches[i],
+                cleanUp: cleanUp
+            )
+        } else {
+            cleanUp()
         }
+
         recognizedSpeeches.remove(at: i)
         isRecordDetailActives.remove(at: i)
     }

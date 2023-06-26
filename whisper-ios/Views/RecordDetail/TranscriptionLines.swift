@@ -226,7 +226,7 @@ struct TranscriptionLines: View {
 }
 
 struct RecognizingTranscriptionLines: View {
-    let recognizedSpeech: RecognizedSpeech
+    @ObservedObject var recognizedSpeech: RecognizedSpeech
     var body: some View {
         ScrollViewReader { _ in
             ScrollView {

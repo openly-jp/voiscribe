@@ -7,7 +7,7 @@ let RECORDING_SHEET_COLOR = Color(.systemBackground)
 let BOTTOM_ID = "bottom-id"
 
 struct RecognitionSettingSheetModifier: ViewModifier {
-    @EnvironmentObject var recognizer: WhisperRecognizer
+    @EnvironmentObject var recognitionManager: RecognitionManager
 
     @Binding var isSheetOpen: Bool
     let startAction: () -> Void
@@ -21,7 +21,7 @@ struct RecognitionSettingSheetModifier: ViewModifier {
             content
                 .partialSheet(isPresented: $isSheetOpen) {
                     RecognitionSettingPane(startAction: startAction)
-                        .environmentObject(recognizer)
+                        .environmentObject(recognitionManager)
                 }
         } else {
             content
@@ -47,7 +47,7 @@ struct RecognitionSettingSheetModifier: ViewModifier {
                         .padding(.top)
                         Spacer()
                         RecognitionSettingPane(startAction: startAction)
-                            .environmentObject(recognizer)
+                            .environmentObject(recognitionManager)
                     }
                 }
         }
@@ -80,16 +80,12 @@ struct RecognitionPane: View {
 
     // MARK: - ASR state
 
-    @EnvironmentObject var recognizer: WhisperRecognizer
-    @Binding var recognizingSpeechIds: [UUID]
+    @EnvironmentObject var recognitionManager: RecognitionManager
     @Binding var recognizedSpeeches: [RecognizedSpeech]
     @State var recognizingSpeech: RecognizedSpeech?
     @Binding var isRecordDetailActives: [Bool]
     @State var title = ""
-    @AppStorage(userDefaultRecognitionLanguageKey) var language = Language()
     var recognitionFrequencySec = 30
-    var isPromptingActive = true
-    var isRemainingAudioConcatActive = true
 
     // MARK: - pane management state
 
@@ -107,7 +103,7 @@ struct RecognitionPane: View {
     // because `recognizingSpeech` is not a `ObservableObject`.
     // The new transcriptions are rendered a bit later
     // when the view is updated with other state transitions like `idAmps`.
-    // By using the `callback` argument of `recognizer.streamingRecognize` function,
+    // By using the `callback` argument of `recognitionManager.streamingRecognize` function,
     // we can detect when the new transcriptions are added,
     // but automatic scroll cannot be done at the moment
     // because those new transcriptions are not rendered yet.
@@ -235,7 +231,6 @@ struct RecognitionPane: View {
                     destination: ConfirmPane(
                         finishRecording: finishRecording,
                         abortRecording: abortRecording,
-                        language: $language,
                         title: $title
                     ),
                     isActive: $isConfirmOpen
@@ -384,9 +379,8 @@ struct RecognitionPane: View {
         tmpAudioFileNumber = 0
         maxAmp = 0
 
-        recognizingSpeech = RecognizedSpeech(
-            language: language
-        )
+        recognizingSpeech = recognitionManager.startRecognition()
+
         // save empty audioData
         do {
             try saveAudioData(audioFileURL: recognizingSpeech!.audioFileURL, audioData: [0])
@@ -394,7 +388,6 @@ struct RecognitionPane: View {
             fatalError("failed to save audioData")
         }
         CoreDataRepository.saveRecognizedSpeech(recognizingSpeech!)
-        recognizingSpeechIds.insert(recognizingSpeech!.id, at: 0)
 
         elapsedTime = 0
         idAmps = []
@@ -471,15 +464,11 @@ struct RecognitionPane: View {
         if title != "" {
             recognizingSpeech.title = title
         }
-        recognizer.streamingRecognize(
+        recognitionManager.streamingRecognize(
             audioFileURL: url,
-            language: language,
-            recognizingSpeech: recognizingSpeech,
-            isPromptingActive: isPromptingActive,
-            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
-            callback: streamingRecognitionPostProcess,
-            feasibilityCheck: streamingRecognitionFeasibilityCheck
+            recognizingSpeech: recognizingSpeech
         )
+        recognitionManager.completeRecognition(recognizingSpeech: recognizingSpeech)
 
         recognizedSpeeches.insert(recognizingSpeech, at: 0)
         isRecordDetailActives.insert(true, at: 0)
@@ -501,13 +490,14 @@ struct RecognitionPane: View {
             try sessionDeactivation()
         } catch {}
 
-        CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizingSpeech!)
-        do {
-            try FileManager.default.removeItem(at: recognizingSpeech!.audioFileURL)
-        } catch {
-            Logger.error("failed to remove audioFileURL")
+        recognitionManager.abortRecognition(recognizingSpeech: recognizingSpeech!) {
+            CoreDataRepository.deleteRecognizedSpeech(recognizedSpeech: recognizingSpeech!)
+            do {
+                try FileManager.default.removeItem(at: recognizingSpeech!.audioFileURL)
+            } catch {
+                Logger.error("failed to remove audioFileURL")
+            }
         }
-        recognizingSpeechIds.removeAll(where: { $0 == recognizingSpeech!.id })
     }
 
     func recordingInterruptionHandler(notification: Notification) {
@@ -543,25 +533,10 @@ struct RecognitionPane: View {
             return
         }
         // recognize past 10 ~ 30 sec speech
-        recognizer.streamingRecognize(
+        recognitionManager.streamingRecognize(
             audioFileURL: url,
-            language: language,
-            recognizingSpeech: recognizingSpeech,
-            isPromptingActive: isPromptingActive,
-            isRemainingAudioConcatActive: isRemainingAudioConcatActive,
-            callback: { _ in },
-            feasibilityCheck: streamingRecognitionFeasibilityCheck
+            recognizingSpeech: recognizingSpeech
         )
-    }
-
-    /// check whether ASR has to be executed or not
-    /// this func is called in streaming recognizer
-    func streamingRecognitionFeasibilityCheck(recognizedSpeech: RecognizedSpeech) -> Bool {
-        recognizingSpeechIds.contains(recognizedSpeech.id)
-    }
-
-    func streamingRecognitionPostProcess(recognizedSpeech: RecognizedSpeech) {
-        recognizingSpeechIds.removeAll(where: { $0 == recognizedSpeech.id })
     }
 
     // MARK: - general function
@@ -696,7 +671,6 @@ struct RecognitionPane_Previews: PreviewProvider {
             csvFileName: "sample_ja"
         )
         RecognitionPane(
-            recognizingSpeechIds: .constant([]),
             recognizedSpeeches: .constant([mock!]),
             isRecordDetailActives: .constant([])
         )

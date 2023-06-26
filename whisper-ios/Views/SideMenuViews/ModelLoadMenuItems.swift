@@ -1,7 +1,6 @@
 import SwiftUI
 
 let userDefaultModelSizeKey = "user-default-model-size"
-let userDefaultModelLanguageKey = "user-default-model-language"
 
 struct ModelLoadMenuItemView: View {
     var body: some View {
@@ -39,12 +38,10 @@ struct CircularProgressBar: View {
 }
 
 struct ModelRow: View {
-    @EnvironmentObject var recognizer: WhisperRecognizer
+    @EnvironmentObject var recognitionManager: RecognitionManager
     @State var progressValue: CGFloat = 0.0
 
-    let modelSize: Size
-    let language: Lang
-    let modelDisplayName: String
+    let recognitionLanguage: RecognitionLanguage
     @ObservedObject var whisperModel: WhisperModel
 
     // Only one `.alert` modifier can be used with one view,
@@ -53,21 +50,23 @@ struct ModelRow: View {
     @State private var showPrompt = false
     @AppStorage private var isDownloading: Bool
 
-    init(modelSize: Size, language: Lang, modelDisplayName: String) {
-        self.modelSize = modelSize
-        self.language = language
-        self.modelDisplayName = modelDisplayName
-        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(language)"
+    init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) {
+        self.whisperModel = whisperModel
+        self.recognitionLanguage = recognitionLanguage
+
+        let isDownloadingKey =
+            "\(userDefaultWhisperModelDownloadingPrefix)-\(whisperModel.size)-\(whisperModel.language)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
-        whisperModel = WhisperModel(size: modelSize, language: language)
     }
 
     var body: some View {
         HStack {
-            Text(modelDisplayName)
+            Text("\(whisperModel.size.displayName) - ").font(.headline)
+            // NSLocalizedString is needed for dynamic string
+            Text(NSLocalizedString(recognitionLanguage.displayName, comment: ""))
                 .font(.headline)
             Spacer()
-            if !WhisperModelRepository.isModelBundled(size: modelSize, language: language) {
+            if !whisperModel.isBundled {
                 if isDownloading {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
@@ -106,7 +105,9 @@ struct ModelRow: View {
     }
 
     var isDeleteDisabled: Bool {
-        WhisperModelRepository.isModelBundled(size: modelSize, language: language) || !whisperModel.isDownloaded
+        whisperModel.isBundled
+            || !whisperModel.isDownloaded
+            || recognitionManager.isModelSelected(whisperModel)
     }
 
     var alertView: Alert {
@@ -127,13 +128,9 @@ struct ModelRow: View {
         }
     }
 
-    var isModelSelected: Bool {
-        recognizer.whisperModel.size == modelSize && recognizer.whisperModel.language == language
-    }
-
     private func downloadModel() {
         isDownloading = true
-        whisperModel.downloadModel { err in
+        try! whisperModel.downloadModel { err in
             isDownloading = false
             if let err {
                 Logger.error(err)
@@ -153,22 +150,19 @@ struct ModelRow: View {
 }
 
 struct ModelManagementView: View {
-    let models = [
-        ("base", "multi", "Base"),
-        ("base", "en", "Base(EN)"),
-        ("small", "multi", "Small"),
-        ("small", "en", "Small(EN)"),
-        ("medium", "multi", "Medium"),
-        ("medium", "en", "Medium(EN)"),
-    ]
     var body: some View {
         List {
-            ForEach(models, id: \.2) { model in
-                ModelRow(
-                    modelSize: Size(rawValue: model.0)!,
-                    language: Lang(rawValue: model.1)!,
-                    modelDisplayName: model.2
-                )
+            ForEach(Size.allCases) { size in
+                ForEach(RecognitionLanguage.allCases) { lang in
+                    let model = WhisperModel(
+                        size: size,
+                        recognitionLanguage: lang
+                    )
+                    ModelRow(
+                        whisperModel: model,
+                        recognitionLanguage: lang
+                    )
+                }
             }
         }
     }

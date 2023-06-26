@@ -246,3 +246,6 @@
 
 /* No comment provided by engineer. */
 "フィードバック" = "Feedback";
+
+/* No comment provided by engineer. */
+"認識中...(%@%%終了)" = "Recognizing...(%@%% finished)";

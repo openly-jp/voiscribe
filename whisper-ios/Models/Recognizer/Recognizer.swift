@@ -1,9 +1,8 @@
 import Foundation
 
 protocol Recognizer: ObservableObject {
-    func recognize(
+    func streamingRecognize(
         audioFileURL: URL,
-        language: Language,
-        callback: @escaping (RecognizedSpeech) -> Void
-    ) throws -> RecognizedSpeech
+        recognizingSpeech: RecognizedSpeech
+    )
 }

@@ -3,23 +3,38 @@ import Dispatch
 import Foundation
 import SwiftUI
 
-var numRecognitionTasks = 0
+let SAMPLING_RATE: Float = 16000
 
-class WhisperRecognizer: Recognizer {
-    @Published var whisperModel: WhisperModel
-    let serialDispatchQueue = DispatchQueue(label: "recognize")
-    let samplingRate: Float = 16000
+enum RecognizerState {
+    case recognizing
+    case aborted
+    case done
+}
 
-    var isRecognizing = false
+class WhisperRecognizer: Recognizer, ObservableObject {
+    var whisperModel: WhisperModel
+    let serialDispatchQueue: DispatchQueue
+    let recognitionLanguage: RecognitionLanguage
+
+    var state = RecognizerState.recognizing
+    var numTotalTasks = 0
+    var numRemainingTasks = 0
+    @Published var progressRate: Float = 0 // 0 ~ 1.0
+
+    var tmpAudioData: [Float32] = []
+    var promptTokens: [Int32] = []
+    var remainingAudioData: [Float32] = []
 
     var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
 
-    init(whisperModel: WhisperModel) throws {
-        if whisperModel.localPath == nil {
-            throw NSError(domain: "whisperModel.localPath is nil", code: -1)
-        } else {
-            self.whisperModel = whisperModel
-        }
+    init(
+        whisperModel: WhisperModel,
+        recognitionLanguage: RecognitionLanguage,
+        recognitionQueue: DispatchQueue
+    ) {
+        self.whisperModel = whisperModel
+        serialDispatchQueue = recognitionQueue
+        self.recognitionLanguage = recognitionLanguage
     }
 
     private func load_audio(url: URL) throws -> [Float32] {
@@ -44,105 +59,33 @@ class WhisperRecognizer: Recognizer {
         return audioData
     }
 
-    func recognize(
-        audioFileURL: URL,
-        language: Language,
-        callback: @escaping (RecognizedSpeech) -> Void
-    ) throws -> RecognizedSpeech {
-        guard let context: OpaquePointer = whisperModel.whisperContext else {
-            throw NSError(domain: "model load error", code: -1)
-        }
+    func streamingRecognize(audioFileURL: URL, recognizingSpeech: RecognizedSpeech) {
+        // TODO: the following increments aren't thread safe (#296)
+        numTotalTasks += 1
+        numRemainingTasks += 1
 
-        guard let audioData = try? load_audio(url: audioFileURL) else {
-            throw NSError(domain: "audio load error", code: -1)
-        }
-
-        let recognizedSpeech = RecognizedSpeech(
-            audioFileURL: audioFileURL,
-            language: language,
-            transcriptionLines: []
-        )
-        DispatchQueue.global(qos: .userInteractive).async {
-            let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
-            var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
-            language.rawValue.withCString { en in
-                // Adapted from whisper.objc
-                params.print_realtime = true
-                params.print_progress = false
-                params.print_timestamps = true
-                params.print_special = false
-                params.translate = false
-                params.language = en
-                params.n_threads = Int32(maxThreads)
-                params.offset_ms = 0
-                params.no_context = true
-                params.single_segment = false
-
-                whisper_reset_timings(context)
-                audioData.withUnsafeBufferPointer { data in
-                    if whisper_full(context, params, data.baseAddress, Int32(data.count)) != 0 {
-                    } else {
-                        whisper_print_timings(context)
-                    }
-                }
-            }
-
-            let n_segments = whisper_full_n_segments(context)
-            for i in 0 ..< n_segments {
-                let text = String(cString: whisper_full_get_segment_text(context, i))
-                let startMSec = whisper_full_get_segment_t0(context, i) * 10
-                let endMSec = whisper_full_get_segment_t1(context, i) * 10
-                let transcriptionLine = TranscriptionLine(
-                    startMSec: startMSec,
-                    endMSec: endMSec,
-                    text: text,
-                    ordering: i
-                )
-                recognizedSpeech.transcriptionLines.append(transcriptionLine)
-            }
-
-            callback(recognizedSpeech)
-        }
-
-        return recognizedSpeech
-    }
-
-    func streamingRecognize(
-        audioFileURL: URL,
-        language: Language,
-        recognizingSpeech: RecognizedSpeech,
-        isPromptingActive: Bool,
-        isRemainingAudioConcatActive: Bool,
-        callback: @escaping (RecognizedSpeech) -> Void,
-        feasibilityCheck: @escaping (RecognizedSpeech) -> Bool
-    ) {
         serialDispatchQueue.async {
-            defer {
-                self.isRecognizing = false
-                numRecognitionTasks -= 1
-            }
+            if self.state == .aborted { return }
+
             self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
                 Logger.warning("Background recognition task was expired.")
                 UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
                 self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             })
 
-            numRecognitionTasks += 1
-            // prohibit user from changing model
-            self.isRecognizing = true
-
             guard let context = self.whisperModel.whisperContext else {
                 Logger.error("model load error")
                 return
             }
+
             guard let originalAudioData = try? self.load_audio(url: audioFileURL) else {
                 Logger.error("audio load error")
                 return
             }
-            recognizingSpeech.tmpAudioData += originalAudioData
+            self.tmpAudioData += originalAudioData
 
             // append remaining previous audioData to originalAudioData
-            let audioData = recognizingSpeech.remainingAudioData + originalAudioData
+            let audioData = self.remainingAudioData + originalAudioData
             let audioDataMSec = Int64(audioData.count / 16000 * 1000)
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
@@ -160,93 +103,113 @@ class WhisperRecognizer: Recognizer {
                 transcribedMSec: 0,
                 nextPromptTokens: []
             )
-            // check whether recognizingSpeech was removed (i.e. abort recording) or not
-            if feasibilityCheck(recognizingSpeech) {
-                let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
-                var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
-                withUnsafeMutablePointer(to: &newSegmentCallbackData) {
-                    newSegmentCallbackDataPtr in
 
-                    let languageNSString = language.rawValue as NSString
-                    guard let languageCString = languageNSString.utf8String else {
-                        Logger.error("failed to convert language to cString")
-                        return
-                    }
+            let maxThreads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
+            var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
+            withUnsafeMutablePointer(to: &newSegmentCallbackData) {
+                newSegmentCallbackDataPtr in
 
-                    params.print_realtime = true
-                    params.print_progress = false
-                    params.print_timestamps = true
-                    params.print_special = false
-                    params.translate = false
-                    params.language = languageCString
-                    params.n_threads = Int32(maxThreads)
-                    params.offset_ms = 0
-                    params.no_context = true
-                    params.single_segment = false
-                    params.suppress_non_speech_tokens = false
-                    params.prompt_tokens = UnsafePointer(recognizingSpeech.promptTokens)
-                    params.prompt_n_tokens = Int32(recognizingSpeech.promptTokens.count)
-                    params.new_segment_callback = newSegmentCallback
-                    params.new_segment_callback_user_data = UnsafeMutableRawPointer(newSegmentCallbackDataPtr)
-
-                    whisper_reset_timings(context)
-                    audioData.withUnsafeBufferPointer { audioDataBufferPtr in
-                        if whisper_full(
-                            context,
-                            params,
-                            audioDataBufferPtr.baseAddress,
-                            Int32(audioDataBufferPtr.count)
-                        ) != 0 {
-                        } else {
-                            whisper_print_timings(context)
-                        }
-                    }
+                let languageNSString = self.recognitionLanguage.rawValue as NSString
+                guard let languageCString = languageNSString.utf8String else {
+                    Logger.error("failed to convert language to cString")
+                    return
                 }
 
-                // The following code will be executed after all "new_segment_callback" have been processed
+                params.print_realtime = true
+                params.print_progress = false
+                params.print_timestamps = true
+                params.print_special = false
+                params.translate = false
+                params.language = languageCString
+                params.n_threads = Int32(maxThreads)
+                params.offset_ms = 0
+                params.no_context = true
+                params.single_segment = false
+                params.suppress_non_speech_tokens = false
+                params.prompt_tokens = UnsafePointer(self.promptTokens)
+                params.prompt_n_tokens = Int32(self.promptTokens.count)
+                params.new_segment_callback = newSegmentCallback
+                params.new_segment_callback_user_data = UnsafeMutableRawPointer(newSegmentCallbackDataPtr)
 
-                // When some transcription line was suppressed because of repetition, we need to modify last endmsec
-                recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + newSegmentCallbackData
-                    .transcribedMSec
-                // update promptTokens
-                if isPromptingActive {
-                    recognizingSpeech.promptTokens.removeAll()
-                    recognizingSpeech.promptTokens = newSegmentCallbackData.nextPromptTokens
-                }
-                // update remaining audioData
-                if isRemainingAudioConcatActive {
-                    let audioDataCount: Int = audioData.count
-                    let usedAudioDataCount = Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * self
-                        .samplingRate)
-                    let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
-                    if remainingAudioDataCount > 0 {
-                        recognizingSpeech.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
+                whisper_reset_timings(context)
+                audioData.withUnsafeBufferPointer { audioDataBufferPtr in
+                    if whisper_full(
+                        context,
+                        params,
+                        audioDataBufferPtr.baseAddress,
+                        Int32(audioDataBufferPtr.count)
+                    ) != 0 {
                     } else {
-                        recognizingSpeech.remainingAudioData = []
+                        whisper_print_timings(context)
                     }
                 }
-                // when recognizedSpeech deleted during recognizing, this may cause error
-                // to avoid it, do feasibility check before saving audio data and update RecognizedSpeech coredata
-                if feasibilityCheck(recognizingSpeech) {
-                    do {
-                        try saveAudioData(
-                            audioFileURL: recognizingSpeech.audioFileURL,
-                            audioData: recognizingSpeech.tmpAudioData
-                        )
-                    } catch {
-                        fatalError("failed to save audio data")
-                    }
-                    // if error cause here, try DispatchQueue.main.async
-                    CoreDataRepository.addTranscriptionLinesToRecognizedSpeech(
-                        recognizedSpeech: recognizingSpeech,
-                        transcriptionLines: newSegmentCallbackData.newTranscriptionLines
-                    )
-                }
-                callback(recognizingSpeech)
             }
+
+            // The following code will be executed after all "new_segment_callback" have been processed
+
+            // When some transcription line was suppressed because of repetition, we need to modify last endmsec
+            recognizingSpeech.transcriptionLines.last?.endMSec = baseStartMSec + newSegmentCallbackData
+                .transcribedMSec
+
+            // update promptTokens
+            self.promptTokens.removeAll()
+            self.promptTokens = newSegmentCallbackData.nextPromptTokens
+
+            // update remaining audioData
+            let audioDataCount: Int = audioData.count
+            let usedAudioDataCount =
+                Int(Float(newSegmentCallbackData.transcribedMSec) / Float(1000) * SAMPLING_RATE)
+            let remainingAudioDataCount: Int = audioDataCount - usedAudioDataCount
+            if remainingAudioDataCount > 0 {
+                self.remainingAudioData = Array(audioData[usedAudioDataCount ..< audioDataCount])
+            } else {
+                self.remainingAudioData = []
+            }
+
+            do {
+                try saveAudioData(
+                    audioFileURL: recognizingSpeech.audioFileURL,
+                    audioData: self.tmpAudioData
+                )
+            } catch {
+                fatalError("failed to save audio data")
+            }
+            // if error cause here, try DispatchQueue.main.async
+            CoreDataRepository.addTranscriptionLinesToRecognizedSpeech(
+                recognizedSpeech: recognizingSpeech,
+                transcriptionLines: newSegmentCallbackData.newTranscriptionLines
+            )
+
+            self.numRemainingTasks -= 1
+            self.updateProgressRate()
+
             UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
             self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
         }
+    }
+
+    func updateProgressRate() {
+        let numRemainingTasks = Float(numRemainingTasks)
+        let numTotalTasks = Float(numTotalTasks)
+        DispatchQueue.main.async {
+            self.progressRate = (numTotalTasks - numRemainingTasks) / numTotalTasks
+        }
+    }
+
+    /// Notify the recognizer that a user terminate the recognition
+    /// and `streamingRecognize` isn't called anymore
+    func completeRecognition(cleanUp: @escaping () -> Void = {}) {
+        updateProgressRate()
+        serialDispatchQueue.async {
+            self.state = .done
+            cleanUp()
+            Logger.debug("finish all recognition tasks in queue")
+        }
+    }
+
+    func abortRecognition(cleanUp: @escaping () -> Void = {}) {
+        state = .aborted
+        serialDispatchQueue.async { cleanUp() }
     }
 }
 

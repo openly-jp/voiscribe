@@ -26,11 +26,9 @@ struct RecognitionPresetPane: View {
                     }
                     .padding(.top)
                     ForEach(Size.allCases) { size in
-                        ForEach([Language.en, Language.ja]) {
-                            lang in
+                        ForEach(RecognitionLanguage.allCases) { lang in
                             RecognitionPresetRow(
-                                modelSize: size,
-                                modelLanguage: lang == Language.en ? Lang.en : Lang.multi,
+                                whisperModel: WhisperModel(size: size, recognitionLanguage: lang),
                                 recognitionLanguage: lang,
                                 geometryWidth: geometry.size.width
                             )
@@ -45,14 +43,9 @@ struct RecognitionPresetPane: View {
 }
 
 struct RecognitionPresetRow: View {
-    @AppStorage(userDefaultModelSizeKey) var defaultModelSize = Size()
-    @AppStorage(userDefaultModelLanguageKey) var defaultLanguage = Lang()
-    @AppStorage(userDefaultRecognitionLanguageKey) var defaultRecognitionLanguage = Language()
-    @EnvironmentObject var recognizer: WhisperRecognizer
+    @EnvironmentObject var recognitionManager: RecognitionManager
 
-    var modelSize: Size
-    var modelLanguage: Lang
-    var recognitionLanguage: Language
+    var recognitionLanguage: RecognitionLanguage
     var geometryWidth: Double
     var whisperModel: WhisperModel
 
@@ -61,9 +54,8 @@ struct RecognitionPresetRow: View {
     @State var isShowAlert = false
 
     var isSelected: Bool {
-        modelSize == recognizer.whisperModel.size &&
-            modelLanguage == recognizer.whisperModel.language &&
-            recognitionLanguage == defaultRecognitionLanguage
+        recognitionManager.isModelSelected(whisperModel)
+            && recognitionLanguage == recognitionManager.currentRecognitionLanguage
     }
 
     // MARK: - design related constants
@@ -78,23 +70,17 @@ struct RecognitionPresetRow: View {
     let recommendTagOffset: CGFloat = 10
 
     init(
-        modelSize: Size,
-        modelLanguage: Lang,
-        recognitionLanguage: Language,
+        whisperModel: WhisperModel,
+        recognitionLanguage: RecognitionLanguage,
         geometryWidth: Double
     ) {
-        self.modelSize = modelSize
-        self.modelLanguage = modelLanguage
+        self.whisperModel = whisperModel
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
-        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
+
+        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(whisperModel.name)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
         progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
-
-        whisperModel = WhisperModel(
-            size: self.modelSize,
-            language: self.modelLanguage
-        )
     }
 
     var body: some View {
@@ -121,7 +107,7 @@ struct RecognitionPresetRow: View {
                             .font(.title3)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
-                        Text(modelSize.displayName)
+                        Text(whisperModel.size.displayName)
                             .font(.title3)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
@@ -134,10 +120,7 @@ struct RecognitionPresetRow: View {
                         CircularProgressBar(progress: $progressValue)
                             .frame(width: iconSize, height: iconSize)
                     } else {
-                        if whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
-                            size: modelSize,
-                            language: modelLanguage
-                        ) {
+                        if whisperModel.isDownloaded || whisperModel.isBundled {
                             Image(systemName: "checkmark.icloud.fill")
                                 .font(.system(size: iconSize))
                                 .offset(x: downloadIconOffset)
@@ -151,7 +134,7 @@ struct RecognitionPresetRow: View {
                         }
                     }
                 }
-                if WhisperModelRepository.isModelBundled(size: modelSize, language: modelLanguage) {
+                if whisperModel.isBundled {
                     Text("おすすめ")
                         .font(.caption)
                         .foregroundColor(Color.black)
@@ -168,11 +151,11 @@ struct RecognitionPresetRow: View {
                         .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
                     Group {
-                        ForEach(0 ..< modelSize.accuracy) { _ in
+                        ForEach(0 ..< whisperModel.size.accuracy) { _ in
                             Image(systemName: "star.fill")
                                 .frame(width: geometryWidth / 15)
                         }
-                        ForEach(0 ..< 3 - modelSize.accuracy) { _ in
+                        ForEach(0 ..< 3 - whisperModel.size.accuracy) { _ in
                             Image(systemName: "star")
                                 .frame(width: geometryWidth / 15)
                         }
@@ -184,11 +167,11 @@ struct RecognitionPresetRow: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                         .frame(width: geometryWidth / 8)
-                    ForEach(0 ..< modelSize.speed) { _ in
+                    ForEach(0 ..< whisperModel.size.speed) { _ in
                         Image(systemName: "hare.fill")
                             .frame(width: geometryWidth / 15)
                     }
-                    ForEach(0 ..< 3 - modelSize.speed) { _ in
+                    ForEach(0 ..< 3 - whisperModel.size.speed) { _ in
                         Image(systemName: "hare")
                             .frame(width: geometryWidth / 15)
                     }
@@ -198,14 +181,9 @@ struct RecognitionPresetRow: View {
         }
         .frame(maxWidth: .infinity, minHeight: itemMinHeight)
         .contentShape(Rectangle())
-        .onTapGesture {
-            isShowAlert = isDownloading || isSelected ? false : true
-        }
+        .onTapGesture { isShowAlert = !isDownloading && !isSelected }
         .alert(isPresented: $isShowAlert) {
-            whisperModel.isDownloaded || WhisperModelRepository.isModelBundled(
-                size: modelSize,
-                language: modelLanguage
-            ) ?
+            whisperModel.isDownloaded || whisperModel.isBundled ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -213,7 +191,7 @@ struct RecognitionPresetRow: View {
                 )
                 : Alert(
                     title: Text("モデルをダウンロードしますか?"),
-                    message: Text("\(getModelMegaBytes(size: modelSize, lang: modelLanguage)) MBの通信容量が必要です"),
+                    message: Text("\(whisperModel.getModelMegaBytes()) MBの通信容量が必要です"),
                     primaryButton: .cancel(Text("キャンセル")),
                     secondaryButton: .default(Text("ダウンロード"), action: downloadModel)
                 )
@@ -221,33 +199,24 @@ struct RecognitionPresetRow: View {
     }
 
     private func loadModel() {
-        recognizer.whisperModel.freeModel()
-        recognizer.whisperModel = whisperModel
+        recognitionManager.changeModel(
+            newModel: whisperModel,
+            recognitionLanguage: recognitionLanguage
+        ) { err in
+            guard let err else { return }
 
-        whisperModel.loadModel {
-            err in
-            if let err {
-                Logger.error("Failed to load model: \(modelSize)-\(modelLanguage)")
-                Logger.error(err)
-                return
-            }
-            defaultModelSize = modelSize
-            defaultLanguage = modelLanguage
-            defaultRecognitionLanguage = recognitionLanguage
+            Logger.error("Failed to load model: \(whisperModel.name)")
+            Logger.error(err)
         }
     }
 
     private func downloadModel() {
         isDownloading = true
-        whisperModel.downloadModel { err in
-            isDownloading = false
+        try! whisperModel.downloadModel { err in
+            if let err { Logger.error(err) }
 
-            if let err {
-                Logger.error(err)
-            }
-            DispatchQueue.main.async {
-                loadModel()
-            }
+            isDownloading = false
+            loadModel()
         } updateCallback: { num in
             progressValue = CGFloat(num)
         }

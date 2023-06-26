@@ -16,24 +16,11 @@ enum WhisperModelRepository {
     /// - Returns: local path of the model
     static func fetchWhisperModel(
         size: Size,
-        language: Lang,
+        language: ModelLanguage,
         update: ((Float) -> Void)?,
+        destinationURL: URL,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
-        // if model is in bundled resource or in local storage, return it
-        let path = Bundle.main.path(
-            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-            ofType: "bin"
-        )
-        if path != nil {
-            // return the bundled resource path of the model
-            let modelUrl = URL(string: Bundle.main
-                .path(forResource: "ggml-\(size.rawValue).\(language.rawValue)", ofType: "bin")!)!
-            completion(.success(modelUrl))
-            return
-        }
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if FileManager.default.fileExists(atPath: destinationURL.path) {
             completion(.success(destinationURL))
             return
@@ -60,33 +47,9 @@ enum WhisperModelRepository {
         }
     }
 
-    static func isModelBundled(
-        size: Size,
-        language: Lang
-    ) -> Bool {
-        Bundle.main.path(
-            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-            ofType: "bin"
-        ) == nil ? false : true
-    }
-
-    static func modelExists(size: Size, language: Lang) -> Bool {
-        let url: String
-        if isModelBundled(size: size, language: language) {
-            url = Bundle.main.path(
-                forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-                ofType: "bin"
-            )!
-        } else {
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            url = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin").path
-        }
-        return FileManager.default.fileExists(atPath: url)
-    }
-
     /// Delete a model from local storage.
     /// - Parameter model: The model to delete.
-    static func deleteWhisperModel(size: Size, language: Lang) -> Bool {
+    static func deleteWhisperModel(size: Size, language: ModelLanguage) -> Bool {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if !FileManager.default.fileExists(atPath: destinationURL.path) {

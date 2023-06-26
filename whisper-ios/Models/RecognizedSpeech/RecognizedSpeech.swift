@@ -3,7 +3,7 @@ import Foundation
 let userDefaultRecognitionLanguageKey = "user-default-recognition-language"
 let initialTitle = "未定"
 
-enum Language: String, CaseIterable, Identifiable {
+enum RecognitionLanguage: String, Identifiable, CaseIterable, Codable {
     case ja
     case en
 
@@ -20,7 +20,7 @@ enum Language: String, CaseIterable, Identifiable {
         }
     }
 
-    // just for ForEach operation
+    // SwiftUI `ForEach` needs elements to conform `Identifiable` protocol
     var id: String { rawValue }
 
     var displayName: String {
@@ -33,20 +33,19 @@ enum Language: String, CaseIterable, Identifiable {
     }
 }
 
-class RecognizedSpeech: Identifiable {
+class RecognizedSpeech: Identifiable, ObservableObject {
     let id: UUID
     var title: String
     var audioFileURL: URL
-    var language: Language
-    var transcriptionLines: [TranscriptionLine]
+    var language: RecognitionLanguage
+
+    // @Publish is used for `RecordDetails` page to update view
+    // when new transcription line is added while recognizing
+    @Published var transcriptionLines: [TranscriptionLine]
     var createdAt: Date
     var updatedAt: Date
 
-    var tmpAudioData: [Float32] = []
-    var promptTokens: [Int32] = []
-    var remainingAudioData: [Float32] = []
-
-    init(language: Language) {
+    init(language: RecognitionLanguage) {
         id = UUID()
         title = NSLocalizedString(initialTitle, comment: "")
         // create initial Audio File URL
@@ -57,7 +56,7 @@ class RecognizedSpeech: Identifiable {
         updatedAt = Date()
     }
 
-    init(audioFileURL: URL, language: Language, transcriptionLines: [TranscriptionLine]) {
+    init(audioFileURL: URL, language: RecognitionLanguage, transcriptionLines: [TranscriptionLine]) {
         id = UUID()
         title = NSLocalizedString(initialTitle, comment: "")
         self.audioFileURL = audioFileURL
@@ -72,7 +71,7 @@ class RecognizedSpeech: Identifiable {
         id: UUID,
         title: String,
         audioFileURL: URL,
-        language: Language,
+        language: RecognitionLanguage,
         transcriptionLines: [TranscriptionLine],
         createdAt: Date,
         updatedAt: Date

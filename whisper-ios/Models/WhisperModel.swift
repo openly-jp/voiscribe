@@ -1,6 +1,6 @@
 import Foundation
 
-enum Size: String, CaseIterable, Identifiable {
+enum Size: String, CaseIterable, Identifiable, Codable {
     case base
     case small
     case medium
@@ -55,12 +55,11 @@ enum Size: String, CaseIterable, Identifiable {
     }
 }
 
-enum Lang: String, Identifiable, CaseIterable {
-    case ja
+enum ModelLanguage: String, Identifiable, CaseIterable {
     case en
     case multi
 
-    // just for ForEach operation
+    // SwiftUI ForEach needs elements to conform `Identifiable` protocol
     var id: String { rawValue }
 
     init() {
@@ -77,73 +76,58 @@ enum Lang: String, Identifiable, CaseIterable {
     }
 }
 
-func getModelMegaBytes(
-    size: Size,
-    lang: Lang
-) -> Int {
-    switch (size, lang) {
-    case (Size.base, Lang.en):
-        return 148
-    case (Size.base, Lang.multi):
-        return 148
-    case (Size.small, Lang.en):
-        return 160
-    case (Size.small, Lang.multi):
-        return 488
-    case (Size.medium, Lang.en):
-        return 469
-    case (Size.medium, Lang.multi):
-        return 1530
-    default:
-        return -1
-    }
-}
-
-let userDefaultWhisperModelDownloadPrefix = "user-default-whisper-model-download" // "-" + size + "-" + lang
 let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
 
 class WhisperModel: Identifiable, ObservableObject {
-    var localPath: URL?
     var size: Size
-    var language: Lang
+    var language: ModelLanguage
     var whisperContext: OpaquePointer?
 
+    // if this returns `nil`, this model is not bundled
+    private let bundledPath: String?
+
+    // this property becomes true even if the model is bundled
+    // and can be used for checking if model can be loaded
     @Published var isDownloaded: Bool
 
-    init(size: Size, language: Lang) {
-        self.size = size
-        self.language = language
-
-        isDownloaded = WhisperModelRepository.modelExists(
-            size: size,
-            language: language
+    convenience init(recognitionLanguage: RecognitionLanguage) {
+        let size = CustomUserDefaults.get_(
+            key: USER_DEFAULT_MODEL_SIZE_KEY,
+            defaultValue: Size()
         )
-
-        if isDownloaded {
-            if WhisperModelRepository.isModelBundled(size: size, language: language) {
-                let urlStr = Bundle.main.path(
-                    forResource: "ggml-\(size.rawValue).\(language.rawValue)",
-                    ofType: "bin"
-                )
-                localPath = URL(string: urlStr!)!
-            } else {
-                localPath = getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
-            }
-        }
+        Logger.debug("get size", size)
+        self.init(size: size, recognitionLanguage: recognitionLanguage)
     }
 
-    init(
-        localPath: URL?,
-        size: Size,
-        language: Lang
-    ) {
-        self.localPath = localPath
+    init(size: Size, recognitionLanguage: RecognitionLanguage) {
         self.size = size
-        self.language = language
-        isDownloaded = WhisperModelRepository.modelExists(
-            size: size,
-            language: language
+        language = recognitionLanguage == .en ? .en : .multi
+
+        bundledPath = Bundle.main.path(
+            forResource: "ggml-\(size.rawValue).\(language.rawValue)",
+            ofType: "bin"
         )
+
+        let localPath = WhisperModel.getLocalPath(size, language, bundledPath)
+        isDownloaded = FileManager.default.fileExists(atPath: localPath.path)
+    }
+
+    var localPath: URL { WhisperModel.getLocalPath(size, language, bundledPath) }
+    var isBundled: Bool { bundledPath != nil }
+    var isLoaded: Bool { whisperContext != nil }
+
+    // this should be instance method but this function is called from `init` function
+    // of this class, so information about model must be passed as arguments.
+    private static func getLocalPath(
+        _ size: Size,
+        _ language: ModelLanguage,
+        _ bundledPath: String?
+    ) -> URL {
+        if let bundledPath {
+            return URL(string: bundledPath)!
+        } else {
+            return getURLByName(fileName: "ggml-\(size.rawValue).\(language.rawValue).bin")
+        }
     }
 
     var name: String {
@@ -153,23 +137,25 @@ class WhisperModel: Identifiable, ObservableObject {
     func downloadModel(
         completeCallback: @escaping (Error?) -> Void,
         updateCallback: @escaping (Float) -> Void
-    ) {
-        assert(!isDownloaded)
+    ) throws {
+        if isDownloaded {
+            throw NSError(
+                domain: "The model is already downloaded.",
+                code: -1
+            )
+        }
+
         WhisperModelRepository.fetchWhisperModel(
             size: size,
             language: language,
-            update: updateCallback
+            update: updateCallback,
+            destinationURL: localPath
         ) { result in
             var err: Error?
 
             switch result {
-            case let .success(modelURL):
-                self.localPath = modelURL
-                DispatchQueue.main.async {
-                    self.isDownloaded = true
-                    let key = "\(userDefaultWhisperModelDownloadPrefix)-\(self.size.rawValue)-\(self.language.rawValue)"
-                    UserDefaults.standard.set(true, forKey: key)
-                }
+            case .success:
+                DispatchQueue.main.async { self.isDownloaded = true }
             case let .failure(error):
                 self.isDownloaded = false
                 err = NSError(
@@ -182,22 +168,23 @@ class WhisperModel: Identifiable, ObservableObject {
         }
     }
 
-    func loadModel(callback: @escaping (Error?) -> Void) {
+    func loadModel(callback: @escaping (Error?) -> Void) throws {
+        guard isDownloaded else {
+            throw NSError(
+                domain: "The model parameter must be downloaded before loading.",
+                code: -1
+            )
+        }
+
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
-        guard let modelUrl = localPath else {
-            Logger.error("Failed to parse model url")
-            return
-        }
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.whisperContext = whisper_init_from_file(modelUrl.path)
+        whisperContext = whisper_init_from_file(localPath.path)
 
-            var err: Error?
-            if self.whisperContext == nil {
-                err = NSError(domain: "Failed to load model", code: -1)
-            }
-
-            callback(err)
+        var err: Error?
+        if whisperContext == nil {
+            err = NSError(domain: "Failed to load model", code: -1)
         }
+
+        callback(err)
     }
 
     func deleteModel() throws {
@@ -211,10 +198,34 @@ class WhisperModel: Identifiable, ObservableObject {
         }
     }
 
-    // prefer this fucntion to deinit cause
-    // we can avoid two models are loaded simultaneouly
-    // (for a short amout of time)
+    // prefer this function to deinit cause
+    // we can avoid two models are loaded simultaneously
+    // (for a short amount of time)
     func freeModel() {
         whisper_free(whisperContext)
+        whisperContext = nil
+    }
+
+    func equalsTo(_ model: WhisperModel) -> Bool {
+        model.size == size && model.language == language
+    }
+
+    func getModelMegaBytes() -> Int {
+        switch (size, language) {
+        case (Size.base, .en):
+            return 148
+        case (Size.base, .multi):
+            return 148
+        case (Size.small, .en):
+            return 160
+        case (Size.small, .multi):
+            return 488
+        case (Size.medium, .en):
+            return 469
+        case (Size.medium, .multi):
+            return 1530
+        default:
+            return -1
+        }
     }
 }
