@@ -138,7 +138,7 @@ class WhisperModel: Identifiable, ObservableObject {
         completeCallback: @escaping (Error?) -> Void,
         updateCallback: @escaping (Float) -> Void
     ) throws {
-        guard isDownloaded else {
+        if isDownloaded {
             throw NSError(
                 domain: "The model is already downloaded.",
                 code: -1
