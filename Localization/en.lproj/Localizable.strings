@@ -146,16 +146,22 @@
 "モデルは削除後も再びダウンロード可能です。" = "The model can be downloaded again after the deletion.";
 
 /* No comment provided by engineer. */
-"録音された音声は破棄されます。本当に終了しますか？" = "The recorded audio will be discarded. Are you sure you want to exit?";
-
-/* No comment provided by engineer. */
 "データは完全に失われます。本当に削除しますか？" = "The data will be completely discarded. Are you sure you want to delete?";
 
 /* No comment provided by engineer. */
 "録音を終了しますか？" = "Do you want to finish recording?";
 
 /* No comment provided by engineer. */
-"録音中止" = "Quit Recording";
+"録音を中止しますか？" = "Do you want to abort recording?";
+
+/* No comment provided by engineer. */
+"録音された音声は破棄されます。\n本当に中止しますか？" = "The recorded audio will be discarded.\nAre you sure you want to abort?";
+
+/* No comment provided by engineer. */
+"中止" = "Abort";
+
+/* No comment provided by engineer. */
+"録音中止" = "Abort";
 
 /* No comment provided by engineer. */
 "閉じる" = "Close";
@@ -230,10 +236,10 @@
 "もう一度認識をお願いいたします。" = "Please try again.";
 
 /* No comment provided by engineer. */
-"音声を再生できません" = "Cannot play audio";
+"音声を再生できません" = "Cannot playback audio";
 
 /* No comment provided by engineer. */
-"他のアプリで通話中は音声を再生できません。" = "Cannot play audio while calling in other apps.";
+"他のアプリで通話中は音声を再生できません。" = "Cannot playback audio while calling in other apps.";
 
 /* No comment provided by engineer. */
 "録音できません" = "Cannot record";
@@ -242,7 +248,7 @@
 "他のアプリで通話中は録音できません。" = "Cannot record while calling in other apps.";
 
 /* No comment provided by engineer. */
-"バックグラウンド状態が継続した場合、アプリの動作が停止します。" = "If background mode continues, app will stop working.";
+"バックグラウンド状態が継続した場合、アプリの動作が停止します。" = "Do not continue background mode! App will be killed soon.";
 
 /* No comment provided by engineer. */
 "フィードバック" = "Feedback";
