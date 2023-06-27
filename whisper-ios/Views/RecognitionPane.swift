@@ -270,9 +270,9 @@ struct RecognitionPane: View {
         }
         .alert(isPresented: $isCancelRecognitionAlertOpen) {
             Alert(
-                title: Text("録音を終了しますか？"),
-                message: Text("録音された音声は破棄されます。本当に終了しますか？"),
-                primaryButton: .destructive(Text("終了"), action: abortRecording),
+                title: Text("録音を中止しますか？"),
+                message: Text("録音された音声は破棄されます。\n本当に中止しますか？"),
+                primaryButton: .destructive(Text("中止"), action: abortRecording),
                 secondaryButton: .cancel()
             )
         }
