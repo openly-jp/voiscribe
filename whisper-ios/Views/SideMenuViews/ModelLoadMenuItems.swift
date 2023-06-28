@@ -50,7 +50,7 @@ struct ModelRow: View {
 
     // TODO: remove the following states and store the states in a class for managing models (#282)
     @AppStorage private var isDownloading: Bool
-    @AppStorage private var isDownloadedAppStorage: Bool
+    @AppStorage private var isDownloaded: Bool
     @AppStorage private var progressValue: Double
 
     init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) {
@@ -61,7 +61,7 @@ struct ModelRow: View {
         let isDownloadedKey = "\(USER_DEFAULT_MODEL_DOWNLOADED_PREFIX)-\(whisperModel.name)"
         let progressValueKey = "\(USER_DEFAULT_MODEL_PROGRESS_PREFIX)-\(whisperModel.name)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
-        _isDownloadedAppStorage = AppStorage(wrappedValue: whisperModel.isDownloaded, isDownloadedKey)
+        _isDownloaded = AppStorage(wrappedValue: whisperModel.isDownloaded, isDownloadedKey)
         _progressValue = AppStorage(wrappedValue: 0, progressValueKey)
     }
 
@@ -77,7 +77,7 @@ struct ModelRow: View {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
                 } else {
-                    if isDownloadedAppStorage {
+                    if isDownloaded {
                         Image(systemName: "checkmark.icloud.fill")
                     } else {
                         Image(systemName: "icloud.and.arrow.down")
@@ -100,7 +100,7 @@ struct ModelRow: View {
             guard !isDownloading else {
                 return
             }
-            guard !isDownloadedAppStorage else {
+            guard !isDownloaded else {
                 return
             }
 
@@ -112,7 +112,7 @@ struct ModelRow: View {
 
     var isDeleteDisabled: Bool {
         whisperModel.isBundled
-            || !isDownloadedAppStorage
+            || !isDownloaded
             || recognitionManager.isModelSelected(whisperModel)
     }
 
@@ -138,7 +138,7 @@ struct ModelRow: View {
         isDownloading = true
         try! whisperModel.downloadModel { err in
             isDownloading = false
-            isDownloadedAppStorage = true
+            isDownloaded = true
             progressValue = 0
 
             if let err {
@@ -152,7 +152,7 @@ struct ModelRow: View {
     func deleteModel() {
         do {
             try whisperModel.deleteModel()
-            isDownloadedAppStorage = false
+            isDownloaded = false
         } catch {
             Logger.error(error)
         }

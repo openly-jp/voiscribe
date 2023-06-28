@@ -51,7 +51,7 @@ struct RecognitionPresetRow: View {
 
     // TODO: remove the following states and store the states in a class for managing models (#282)
     @AppStorage private var isDownloading: Bool
-    @AppStorage private var isDownloadedAppStorage: Bool
+    @AppStorage private var isDownloaded: Bool
     @AppStorage private var progressValue: Double
 
     @State var isShowAlert = false
@@ -85,7 +85,7 @@ struct RecognitionPresetRow: View {
         let isDownloadedKey = "\(USER_DEFAULT_MODEL_DOWNLOADED_PREFIX)-\(whisperModel.name)"
         let progressValueKey = "\(USER_DEFAULT_MODEL_PROGRESS_PREFIX)-\(whisperModel.name)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
-        _isDownloadedAppStorage = AppStorage(wrappedValue: whisperModel.isDownloaded, isDownloadedKey)
+        _isDownloaded = AppStorage(wrappedValue: whisperModel.isDownloaded, isDownloadedKey)
         _progressValue = AppStorage(wrappedValue: 0, progressValueKey)
     }
 
@@ -126,7 +126,7 @@ struct RecognitionPresetRow: View {
                         CircularProgressBar(progress: $progressValue)
                             .frame(width: iconSize, height: iconSize)
                     } else {
-                        if isDownloadedAppStorage || whisperModel.isBundled {
+                        if isDownloaded || whisperModel.isBundled {
                             Image(systemName: "checkmark.icloud.fill")
                                 .font(.system(size: iconSize))
                                 .offset(x: downloadIconOffset)
@@ -189,7 +189,7 @@ struct RecognitionPresetRow: View {
         .contentShape(Rectangle())
         .onTapGesture { isShowAlert = !isDownloading && !isSelected }
         .alert(isPresented: $isShowAlert) {
-            isDownloadedAppStorage || whisperModel.isBundled ?
+            isDownloaded || whisperModel.isBundled ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -222,7 +222,7 @@ struct RecognitionPresetRow: View {
             if let err { Logger.error(err) }
 
             isDownloading = false
-            isDownloadedAppStorage = true
+            isDownloaded = true
             progressValue = 0
 
             loadModel()
