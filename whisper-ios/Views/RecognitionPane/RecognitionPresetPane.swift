@@ -49,8 +49,11 @@ struct RecognitionPresetRow: View {
     var geometryWidth: Double
     var whisperModel: WhisperModel
 
+    // TODO: remove the following states and store the states in a class for managing models (#282)
     @AppStorage private var isDownloading: Bool
-    @State var progressValue: CGFloat
+    @AppStorage private var isDownloaded: Bool
+    @AppStorage private var progressValue: Double
+
     @State var isShowAlert = false
 
     var isSelected: Bool {
@@ -78,9 +81,12 @@ struct RecognitionPresetRow: View {
         self.recognitionLanguage = recognitionLanguage
         self.geometryWidth = geometryWidth
 
-        let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(whisperModel.name)"
+        let isDownloadingKey = "\(USER_DEFAULT_MODEL_DOWNLOADING_PREFIX)-\(whisperModel.name)"
+        let isDownloadedKey = "\(USER_DEFAULT_MODEL_DOWNLOADED_PREFIX)-\(whisperModel.name)"
+        let progressValueKey = "\(USER_DEFAULT_MODEL_PROGRESS_PREFIX)-\(whisperModel.name)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
-        progressValue = UserDefaults.standard.bool(forKey: isDownloadingKey) ? 0.5 : 0.0
+        _isDownloaded = AppStorage(wrappedValue: whisperModel.isDownloaded, isDownloadedKey)
+        _progressValue = AppStorage(wrappedValue: 0, progressValueKey)
     }
 
     var body: some View {
@@ -120,7 +126,7 @@ struct RecognitionPresetRow: View {
                         CircularProgressBar(progress: $progressValue)
                             .frame(width: iconSize, height: iconSize)
                     } else {
-                        if whisperModel.isDownloaded || whisperModel.isBundled {
+                        if isDownloaded || whisperModel.isBundled {
                             Image(systemName: "checkmark.icloud.fill")
                                 .font(.system(size: iconSize))
                                 .offset(x: downloadIconOffset)
@@ -183,7 +189,7 @@ struct RecognitionPresetRow: View {
         .contentShape(Rectangle())
         .onTapGesture { isShowAlert = !isDownloading && !isSelected }
         .alert(isPresented: $isShowAlert) {
-            whisperModel.isDownloaded || whisperModel.isBundled ?
+            isDownloaded || whisperModel.isBundled ?
                 Alert(
                     title: Text("モデルを変更しますか？"),
                     primaryButton: .cancel(Text("キャンセル")),
@@ -216,6 +222,9 @@ struct RecognitionPresetRow: View {
             if let err { Logger.error(err) }
 
             isDownloading = false
+            isDownloaded = true
+            progressValue = 0
+
             loadModel()
         } updateCallback: { num in
             progressValue = CGFloat(num)
