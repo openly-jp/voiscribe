@@ -1,4 +1,3 @@
-import SafariServicesUI
 import SwiftUI
 
 struct AppInfoMenuItemView: View {
@@ -29,13 +28,11 @@ struct AppInfoSubMenuItemView: View {
 let AppInfoSubMenuItems = [
     MenuItem(view: AnyView(
         Link("利用規約", destination: URL(string: "https://openly.jp/company/voiscribe")!)
-            .openURLInSafariView()
             .tint(Color(.label))
             .font(.headline)
     ), subMenuItems: nil),
     MenuItem(view: AnyView(
         Link("プライバシーポリシー", destination: URL(string: "https://openly.jp/company/privacy-policy")!)
-            .openURLInSafariView()
             .tint(Color(.label))
             .font(.headline)
     ), subMenuItems: nil),
