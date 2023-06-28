@@ -28,7 +28,11 @@ enum WhisperModelRepository {
         // clean up tmp dir because some garbage files may be left
         do {
             let tmpDirURL = FileManager.default.temporaryDirectory
-            let tmpDirectory = try FileManager.default.contentsOfDirectory(at: tmpDirURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            let tmpDirectory = try FileManager.default.contentsOfDirectory(
+                at: tmpDirURL,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles
+            )
             for fileURL in tmpDirectory {
                 try FileManager.default.removeItem(at: fileURL)
             }
