@@ -25,20 +25,6 @@ enum WhisperModelRepository {
             completion(.success(destinationURL))
             return
         }
-        // clean up tmp dir because some garbage files may be left
-        do {
-            let tmpDirURL = FileManager.default.temporaryDirectory
-            let tmpDirectory = try FileManager.default.contentsOfDirectory(
-                at: tmpDirURL,
-                includingPropertiesForKeys: nil,
-                options: .skipsHiddenFiles
-            )
-            for fileURL in tmpDirectory {
-                try FileManager.default.removeItem(at: fileURL)
-            }
-        } catch {
-            Logger.warning("Failed to delete some files in tmp dir.")
-        }
 
         let fileDownloader = FileDownloader()
         let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
