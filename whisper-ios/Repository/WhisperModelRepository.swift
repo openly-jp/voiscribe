@@ -25,6 +25,16 @@ enum WhisperModelRepository {
             completion(.success(destinationURL))
             return
         }
+        // clean up tmp dir because some garbage files may be left
+        do {
+            let tmpDirURL = FileManager.default.temporaryDirectory
+            let tmpDirectory = try FileManager.default.contentsOfDirectory(at: tmpDirURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            for fileURL in tmpDirectory {
+                try FileManager.default.removeItem(at: fileURL)
+            }
+        } catch {
+            Logger.warning("Failed to delete some files in tmp dir.")
+        }
 
         let fileDownloader = FileDownloader()
         let modelURL = modelURLs["\(size.rawValue)-\(language.rawValue)"]!
@@ -33,15 +43,15 @@ enum WhisperModelRepository {
             if update != nil {
                 update!(progress)
             }
-            print("Download progress: \(Int(progress * 100))%")
+            Logger.info("Download progress: \(Int(progress * 100))%")
         }) { location, error in
             if error == nil {
-                print("File download was successful")
+                Logger.info("File download was successful.")
                 try? FileManager.default.moveItem(at: location!, to: destinationURL)
 
                 completion(.success(destinationURL))
             } else {
-                print("File download failed with error: \(error!.localizedDescription)")
+                Logger.info("File download failed with error: \(error!.localizedDescription)")
                 completion(.failure(error!))
             }
         }
@@ -53,14 +63,14 @@ enum WhisperModelRepository {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let destinationURL = documentsURL.appendingPathComponent("ggml-\(size.rawValue).\(language.rawValue).bin")
         if !FileManager.default.fileExists(atPath: destinationURL.path) {
-            print("Designated file does not exist.")
+            Logger.error("Designated file does not exist.")
             return false
         }
         do {
             try FileManager.default.removeItem(at: destinationURL)
             return true
         } catch {
-            print("model deletion failed with error: \(error.localizedDescription)")
+            Logger.error("model deletion failed with error: \(error.localizedDescription)")
             return false
         }
     }
