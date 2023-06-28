@@ -18,7 +18,7 @@ struct StartView: View {
     init() {
         for modelSize in Size.allCases {
             ModelLanguage.allCases.map { modelLanguage in
-                let isDownloadingKey = "\(userDefaultWhisperModelDownloadingPrefix)-\(modelSize)-\(modelLanguage)"
+                let isDownloadingKey = "\(USER_DEFAULT_MODEL_DOWNLOADING_PREFIX)-\(modelSize)-\(modelLanguage)"
                 UserDefaults.standard.set(false, forKey: isDownloadingKey)
             }
         }

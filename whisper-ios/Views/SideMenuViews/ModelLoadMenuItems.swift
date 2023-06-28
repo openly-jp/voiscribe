@@ -19,7 +19,7 @@ struct ModelLoadMenuItemView: View {
 
 // https://dev.classmethod.jp/articles/ios-circular-progress-bar-with-swiftui/
 struct CircularProgressBar: View {
-    @Binding var progress: CGFloat
+    @Binding var progress: Double
 
     var body: some View {
         ZStack {
@@ -29,7 +29,7 @@ struct CircularProgressBar: View {
                 .foregroundColor(.gray)
 
             Circle()
-                .trim(from: 0.0, to: min(progress, 1.0))
+                .trim(from: 0.0, to: min(CGFloat(progress), 1.0))
                 .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 .foregroundColor(.blue)
                 .rotationEffect(Angle(degrees: 270.0))
@@ -39,7 +39,6 @@ struct CircularProgressBar: View {
 
 struct ModelRow: View {
     @EnvironmentObject var recognitionManager: RecognitionManager
-    @State var progressValue: CGFloat = 0.0
 
     let recognitionLanguage: RecognitionLanguage
     @ObservedObject var whisperModel: WhisperModel
@@ -48,15 +47,22 @@ struct ModelRow: View {
     // thus use `isDeletePrompt` flag to detect deletion alert or download alert
     @State private var isDeletePrompt = false
     @State private var showPrompt = false
+
+    // TODO: remove the following states and store the states in a class for managing models (#282)
     @AppStorage private var isDownloading: Bool
+    @AppStorage private var isDownloadedAppStorage: Bool
+    @AppStorage private var progressValue: Double
 
     init(whisperModel: WhisperModel, recognitionLanguage: RecognitionLanguage) {
         self.whisperModel = whisperModel
         self.recognitionLanguage = recognitionLanguage
 
-        let isDownloadingKey =
-            "\(userDefaultWhisperModelDownloadingPrefix)-\(whisperModel.size)-\(whisperModel.language)"
+        let isDownloadingKey = "\(USER_DEFAULT_MODEL_DOWNLOADING_PREFIX)-\(whisperModel.name)"
+        let isDownloadedKey = "\(USER_DEFAULT_MODEL_DOWNLOADED_PREFIX)-\(whisperModel.name)"
+        let progressValueKey = "\(USER_DEFAULT_MODEL_PROGRESS_PREFIX)-\(whisperModel.name)"
         _isDownloading = AppStorage(wrappedValue: false, isDownloadingKey)
+        _isDownloadedAppStorage = AppStorage(wrappedValue: whisperModel.isDownloaded, isDownloadedKey)
+        _progressValue = AppStorage(wrappedValue: 0, progressValueKey)
     }
 
     var body: some View {
@@ -71,7 +77,7 @@ struct ModelRow: View {
                     CircularProgressBar(progress: $progressValue)
                         .frame(width: 18, height: 18)
                 } else {
-                    if whisperModel.isDownloaded {
+                    if isDownloadedAppStorage {
                         Image(systemName: "checkmark.icloud.fill")
                     } else {
                         Image(systemName: "icloud.and.arrow.down")
@@ -94,7 +100,7 @@ struct ModelRow: View {
             guard !isDownloading else {
                 return
             }
-            guard !whisperModel.isDownloaded else {
+            guard !isDownloadedAppStorage else {
                 return
             }
 
@@ -106,7 +112,7 @@ struct ModelRow: View {
 
     var isDeleteDisabled: Bool {
         whisperModel.isBundled
-            || !whisperModel.isDownloaded
+            || !isDownloadedAppStorage
             || recognitionManager.isModelSelected(whisperModel)
     }
 
@@ -132,6 +138,9 @@ struct ModelRow: View {
         isDownloading = true
         try! whisperModel.downloadModel { err in
             isDownloading = false
+            isDownloadedAppStorage = true
+            progressValue = 0
+
             if let err {
                 Logger.error(err)
             }
@@ -143,6 +152,7 @@ struct ModelRow: View {
     func deleteModel() {
         do {
             try whisperModel.deleteModel()
+            isDownloadedAppStorage = false
         } catch {
             Logger.error(error)
         }

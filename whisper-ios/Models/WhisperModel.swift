@@ -76,8 +76,6 @@ enum ModelLanguage: String, Identifiable, CaseIterable {
     }
 }
 
-let userDefaultWhisperModelDownloadingPrefix = "user-default-whisper-model-downloading" // "-" + size + "-" + lang
-
 class WhisperModel: Identifiable, ObservableObject {
     var size: Size
     var language: ModelLanguage
@@ -169,12 +167,17 @@ class WhisperModel: Identifiable, ObservableObject {
     }
 
     func loadModel(callback: @escaping (Error?) -> Void) throws {
-        guard isDownloaded else {
-            throw NSError(
-                domain: "The model parameter must be downloaded before loading.",
-                code: -1
-            )
-        }
+        // The following check should be done,
+        // but `WhisperModel` is instaciated separately in `ModelLoadMenuItems` and `RecognitionPresetPane`
+        // therefore if a user start downloading in `ModelLoadMenuItems`,
+        // `isDownloaded` doesn't become true in `RecognitionPresetPane`.
+        // This should be resolved in #282
+        // guard isDownloaded else {
+        //     throw NSError(
+        //         domain: "The model parameter must be downloaded before loading.",
+        //         code: -1
+        //     )
+        // }
 
         Logger.debug("Loading Model: model size \(size), model language \(language.rawValue), model name \(name)")
         whisperContext = whisper_init_from_file(localPath.path)
