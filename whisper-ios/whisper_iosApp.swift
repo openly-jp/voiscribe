@@ -16,6 +16,20 @@ struct StartView: View {
     @State var recognitionManager: RecognitionManager?
 
     init() {
+        // clean up tmp dir because some garbage files may be left
+        do {
+            let tmpDirURL = FileManager.default.temporaryDirectory
+            let tmpDirectory = try FileManager.default.contentsOfDirectory(
+                at: tmpDirURL,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles
+            )
+            for fileURL in tmpDirectory {
+                try FileManager.default.removeItem(at: fileURL)
+            }
+        } catch {
+            Logger.warning("Failed to delete some files in tmp dir.")
+        }
         for modelSize in Size.allCases {
             ModelLanguage.allCases.map { modelLanguage in
                 let isDownloadingKey = "\(USER_DEFAULT_MODEL_DOWNLOADING_PREFIX)-\(modelSize)-\(modelLanguage)"
