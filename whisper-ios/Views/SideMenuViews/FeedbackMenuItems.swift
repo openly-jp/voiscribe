@@ -1,4 +1,3 @@
-import SafariServicesUI
 import SwiftUI
 
 struct FeedbackMenuItemView: View {
@@ -13,7 +12,6 @@ struct FeedbackMenuItemView: View {
                     string: "https://docs.google.com/forms/d/e/1FAIpQLSenR12P7JP6EYw_881j_5jxiRYeULsApx9Mp6-Vb5a-DhAm2w/viewform?usp=sf_link"
                 )!
             )
-            .openURLInSafariView()
             .tint(Color(.label))
             .font(.headline)
             Spacer()

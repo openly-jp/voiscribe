@@ -12,7 +12,6 @@
 		13516D9D2961A900005013C8 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13516D9C2961A900005013C8 /* SideMenu.swift */; };
 		136E051F2965F57F00DEC112 /* ModelLoadMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E051E2965F57F00DEC112 /* ModelLoadMenuItems.swift */; };
 		13BB395D29A3694200082D1F /* RecognitionSettingPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB395C29A3694200082D1F /* RecognitionSettingPane.swift */; };
-		13BB396629A7AED600082D1F /* SafariServicesUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91ACE62999514D004BE94A /* SafariServicesUI */; };
 		13BB396829A894D900082D1F /* RecognitionPresetPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BB396729A894D900082D1F /* RecognitionPresetPane.swift */; };
 		13D1E499295CE4130070090B /* ggml.c in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E496295CE4120070090B /* ggml.c */; settings = {COMPILER_FLAGS = "-DGGML_USE_ACCELERATE"; }; };
 		13D1E49A295CE4130070090B /* whisper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D1E497295CE4120070090B /* whisper.cpp */; };
@@ -165,7 +164,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBCD3B652A1DE42200F081E6 /* PartialSheet in Frameworks */,
-				13BB396629A7AED600082D1F /* SafariServicesUI in Frameworks */,
 				57B26A2929649A7F007A7B9B /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,7 +452,6 @@
 			name = "whisper-ios";
 			packageProductDependencies = (
 				57B26A2829649A7F007A7B9B /* DequeModule */,
-				5A91ACE62999514D004BE94A /* SafariServicesUI */,
 				DBCD3B642A1DE42200F081E6 /* PartialSheet */,
 			);
 			productName = "whisper-ios";
@@ -533,7 +530,6 @@
 			mainGroup = 5A8F54E82948CCDB00E87D25;
 			packageReferences = (
 				57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */,
-				5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */,
 				DBCD3B632A1DE42200F081E6 /* XCRemoteSwiftPackageReference "PartialSheet" */,
 			);
 			productRefGroup = 5A8F54F22948CCDB00E87D25 /* Products */;
@@ -1000,14 +996,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/cockscomb/SafariServicesUI";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
-			};
-		};
 		DBCD3B632A1DE42200F081E6 /* XCRemoteSwiftPackageReference "PartialSheet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/openly-jp/PartialSheet";
@@ -1023,11 +1011,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 57B26A2729649A7E007A7B9B /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = DequeModule;
-		};
-		5A91ACE62999514D004BE94A /* SafariServicesUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5A91ACE52999514D004BE94A /* XCRemoteSwiftPackageReference "SafariServicesUI" */;
-			productName = SafariServicesUI;
 		};
 		DBCD3B642A1DE42200F081E6 /* PartialSheet */ = {
 			isa = XCSwiftPackageProductDependency;
