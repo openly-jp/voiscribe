@@ -225,7 +225,7 @@ struct RecognitionPresetRow: View {
             isDownloaded = true
             progressValue = 0
 
-            loadModel()
+            DispatchQueue.main.async { loadModel() }
         } updateCallback: { num in
             progressValue = CGFloat(num)
         }
