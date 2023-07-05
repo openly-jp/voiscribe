@@ -44,7 +44,9 @@ class RecognitionManager: ObservableObject {
     /// Change model to another model specified in arguments and load the model
     ///
     /// This function can be called while recognizing
-    /// because loading of the model is appended to the queue for recognition tasks
+    /// because loading of the model is appended to the queue for recognition tasks.
+    /// This function should be executed in the main thread
+    /// bacause this function modifies a published property
     func changeModel(
         newModel: WhisperModel,
         recognitionLanguage: RecognitionLanguage,
@@ -60,9 +62,11 @@ class RecognitionManager: ObservableObject {
 
         // changing model reference must be executed on the fly
         // to update the view of which model is loaded
+        let oldModel = model
         model = newModel
+
         recognitionQueue.async {
-            self.model.freeModel()
+            oldModel.freeModel()
             try! newModel.loadModel { err in callback(err) }
         }
     }
