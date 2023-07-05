@@ -287,7 +287,7 @@ func newSegmentCallback(
 func sendBackgroundAlertNotification() {
     let BACKGROUND_ALERT_NOTIFICATION_IDENTIFIER = "background-alert-notification"
     let BACKGROUND_ALERT_NOTIFICATION_TITLE = "VoiScribe"
-    let BACKGROUND_ALERT_NOTIFICATION_BODY = NSLocalizedString("バックグラウンド状態が継続した場合、アプリの動作が停止します。", comment: "")
+    let BACKGROUND_ALERT_NOTIFICATION_BODY = NSLocalizedString("認識を継続するため、アプリを開き続けてください。", comment: "")
 
     let backgroundAlertNotificationContent = UNMutableNotificationContent()
     backgroundAlertNotificationContent.title = BACKGROUND_ALERT_NOTIFICATION_TITLE

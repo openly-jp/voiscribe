@@ -248,7 +248,7 @@
 "他のアプリで通話中は録音できません。" = "Cannot record while calling in other apps.";
 
 /* No comment provided by engineer. */
-"バックグラウンド状態が継続した場合、アプリの動作が停止します。" = "Do not continue background mode! App will be killed soon.";
+"認識を継続するため、アプリを開き続けてください。" = "Keep the application open for continued recognition.";
 
 /* No comment provided by engineer. */
 "フィードバック" = "Feedback";
